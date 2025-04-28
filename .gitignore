@@ -1,0 +1,29 @@
+node_modules/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+/downloads/
+/dist/
+*.tgz
+
+### IntelliJ IDEA ###
+.idea/**/*
+!.idea/runConfigurations
+!.idea/runConfigurations/**/*
+!.idea/codeStyles/**/*
+!.idea/inspectionProfiles/**/*
+*.iws
+*.iml
+*.ipr
+out/
+!**/src/main/**/out/
+!**/src/test/**/out/
+
+### VS Code ###
+.vscode/
+
+### ENV VARS ###
+.env
+
+### MacOS ###
+.DS_Store

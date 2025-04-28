@@ -1,0 +1,19 @@
+{
+  "name": "hmpps-manage-people-on-probation-ui-e2e-tests",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@faker-js/faker": "^9.7.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.73.0",
+    "@playwright/test": "^1.51.1",
+    "@types/node": "^22.14.1",
+    "dotenv": "^16.5.0",
+    "luxon": "^3.6.1",
+    "tsx": "^4.19.3"
+  }
+}
