@@ -1,11 +1,14 @@
 name: Playwright Tests
 on:
+  # Run manually via GitHub API
+  workflow_dispatch:
   push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
+    # Every weekday at 08:00 UTC
   schedule:
-    - cron: 30 7 * * 1-5
+    - cron: "0 8 * * MON-FRI"
 jobs:
   test:
     timeout-minutes: 60
@@ -20,10 +23,53 @@ jobs:
     - name: Install Playwright Browsers
       run: npx playwright install --with-deps
     - name: Run Playwright tests
-      run: NODE_OPTIONS='--import tsx' npx playwright test
+      id: tests
+      run: NODE_OPTIONS='--import tsx' npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
+      env:
+        TZ: Europe/London
+        ENV: test
+        TEST_DIR: ${{ inputs.directory || 'tests' }}
+        WORKERS: ${{ inputs.workers || '16' }}
+        PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit.xml
+        PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
+
+        # URLs
+        DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
+        MANAGE_PEOPLE_ON_PROBATION_URL: https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk
+
+        # Credentials
+        DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
+        DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+
+    - name: Publish JUnit report
+      if: always()
+      uses: mikepenz/action-junit-report@cf701569b05ccdd861a76b8607a66d76f6fd4857 # v5.5.1
+      id: junit
+      with:
+        check_name: End-to-end test results
+        report_paths: junit.xml
+
+    - name: Publish HTML report
+      if: always()
+      uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8 # v4
+      with:
+        folder: playwright-report
+        target-folder: ${{ env.report-dir || 'playwright-report'}}
+
+    - name: Output HTML report URL
+      id: html
+      if: always()
+      run: |
+        echo "[🎭 Playwright HTML Report](https://ministryofjustice.github.io/hmpps-manage-people-on-probation-ui-e2e-tests/$report_dir)" | tee -a "$GITHUB_STEP_SUMMARY"
+        echo "report-url=https://ministryofjustice.github.io/hmpps-manage-people-on-probation-ui-e2e-tests/$report_dir" | tee -a "$GITHUB_OUTPUT"
+      env:
+        report_dir: ${{ env.report-dir || 'playwright-report'}}
+
+
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
       with:
         name: playwright-report
         path: playwright-report/
         retention-days: 30
+
