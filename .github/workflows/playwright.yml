@@ -21,7 +21,7 @@ jobs:
     - name: Install dependencies
       run: npm ci
     - name: Install Playwright Browsers
-      run: npx playwright install --with-deps
+      run: npx playwright install
     - name: Run Playwright tests
       id: tests
       run: NODE_OPTIONS='--import tsx' npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
