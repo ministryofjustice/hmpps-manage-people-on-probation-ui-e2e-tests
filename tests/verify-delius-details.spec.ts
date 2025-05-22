@@ -12,10 +12,9 @@ import addPersonalDetails from '../steps/delius/add-personal-details/addPersonal
 import { createPersonalContact } from '../steps/delius/create-personal-contact/createPersonalContact'
 import addAddress from '../steps/delius/add-address/addAddress'
 import {
-  assertAddressDetails,
-  loginMasAndGoToPersonalDetails,
+  assertAddressDetails, loginMPoPAndGoToPersonalDetails,
   searchForCrn,
-} from '../steps/mas/personal-details/personalDetails'
+} from '../steps/mpop/personal-details/personalDetails'
 import { formatDate } from '../steps/delius/utils/utils'
 
 dotenv.config({ path: '.env' }) // read environment variables into process.env
@@ -66,7 +65,7 @@ test.describe('Delius Details Verification', () => {
     await context.close()
   })
 
-  // const crn = 'X756510'
+
 
   test('Verify the header details', async ({ page: innerPage }) => {
     // Login to MaS and search for Crn
@@ -83,7 +82,7 @@ test.describe('Delius Details Verification', () => {
 
   test('Verify that the personal details of a person in MAS match those in Delius', async ({ page: innerPage }) => {
     // Login to MaS and search for Crn
-    await loginMasAndGoToPersonalDetails(innerPage, crn)
+    await loginMPoPAndGoToPersonalDetails(innerPage, crn)
 
     // Verify that the personal details match those in Delius
     await Promise.all([

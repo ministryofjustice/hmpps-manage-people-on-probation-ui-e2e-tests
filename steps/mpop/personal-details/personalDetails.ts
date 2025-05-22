@@ -1,7 +1,7 @@
 import { Page, expect, Locator } from '@playwright/test'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login'
 
-export const loginMasAndGoToPersonalDetails = async (page: Page, crn: string) => {
+export const loginMPoPAndGoToPersonalDetails = async (page: Page, crn: string) => {
   await loginToManageMySupervision(page)
   await searchForCrn(page, crn)
   await page.getByRole('link', { name: 'Personal details' }).first().click()

@@ -1,4 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
+import {
+  secondsToMilliseconds
+} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time'
 
 /**
  * Read environment variables from file.
@@ -25,13 +28,13 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
-
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    actionTimeout: secondsToMilliseconds(30),
+    timezoneId: 'Europe/London',
+    launchOptions: { slowMo: 150 },
+    screenshot: 'only-on-failure',
+    trace: process.env.CI ? 'off' : 'on',
+    ...devices['Desktop Chrome'],
   },
-
   /* Configure projects for major browsers */
   projects: [
     {

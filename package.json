@@ -9,10 +9,11 @@
   "description": "",
   "devDependencies": {
     "@faker-js/faker": "^9.7.0",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.73.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.78.0",
     "@playwright/test": "^1.51.1",
     "@types/node": "^22.14.1",
     "dotenv": "^16.5.0",
+    "eslint": "^9.27.0",
     "luxon": "^3.6.1",
     "tsx": "^4.19.3"
   }
