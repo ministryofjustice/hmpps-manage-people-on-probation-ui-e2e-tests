@@ -74,7 +74,6 @@ test.describe('MPoP Risk Page - View OASys assessments', () => {
     for (const need of lowNeeds) await expect(page.locator('[data-qa="lowScoringNeedsValue"]')).toContainText(need)
     for (const need of noScoreNeeds) await expect(page.locator('[data-qa="noScoreNeedsValue"]')).toContainText(need)
 
-
     // Verify the Risk flags
     const riskFlags = [
       {
