@@ -27,9 +27,8 @@ let context: BrowserContext
 let page: Page
 
 test.describe('MPoP Risk Page - View OASys assessments', () => {
-  test.beforeAll(async ({ browser: b }) => {
+  test.beforeAll(async ({ browser }) => {
     test.setTimeout(360000)
-    browser = b
     context = await browser.newContext()
     page = await context.newPage()
 
