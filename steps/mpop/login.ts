@@ -6,6 +6,6 @@ export const login = async (page: Page) => {
     await page.fill('#username', process.env.DELIUS_USERNAME!)
     await page.fill('#password', process.env.DELIUS_PASSWORD!)
     await page.click('#submit')
-    // await expect(page).toHaveTitle('Short-Term Accommodation (CAS-2)')
+    await expect(page.locator('[data-qa="pageHeading"]')).toContainText('Manage people on probation')
 }
 
