@@ -35,10 +35,7 @@ test.describe('MPoP Risk Page - View OASys assessments', () => {
 
     // Create a Person and Event
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-    await Promise.all([
-      page.waitForEvent('framenavigated'),
-      createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } }),
-    ])
+    awaitcreateCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
     // Create a Mappa registration & NSI
     await createRegistration(page, crn, 'MAPPA', 'Automated Allocation Team', 'AutomatedTestUser, AutomatedTestUser (PS - PSO)', 'MAPPA Cat 4', 'MAPPA Level 3')
