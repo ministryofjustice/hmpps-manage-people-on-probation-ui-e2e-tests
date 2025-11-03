@@ -23,10 +23,13 @@ export const createNSI = async (
     await page.locator('#navigation-include\\:linkNavigation2OffenderIndex').click()
     await page.click('#navigation-include\\:linkNavigation3OffenderNsi')
     await expect(page).toHaveTitle(/Non Statutory Intervention List/)
-    await doUntil(
-      () => innerPage.locator('[value="Add Non Statutory Intervention"]').click(),
-      () => expect(page).toHaveTitle(/Non Statutory Intervention/)
-    )
+    await innerPage.locator('[value="Add Non Statutory Intervention"]').click()
+    // const btn = innerPage.locator('[value="Add Non Statutory Intervention"]')
+    await page.waitForNavigation();
+    // await doUntil(
+    //   () => btn.click(),
+    //   () => expect(page).toHaveTitle(/Add Non Statutory Intervention/)
+    // )
     await selectOption(page, '#NsiProvider\\:selectOneMenu', NsiProvider)
     await selectOption(page, '#NsiType\\:selectOneMenu', NsiType)
     await selectOption(page, '#NsiSubType\\:selectOneMenu', NsiSubType)
