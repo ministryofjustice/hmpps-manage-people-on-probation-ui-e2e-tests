@@ -1,6 +1,6 @@
 import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.js'
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
@@ -34,7 +34,7 @@ test.describe('MPoP Risk Page - View OASys assessments', () => {
 
     // Create a Person and Event
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-    awaitcreateCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
     // Create a Mappa registration & NSI
     await createRegistration(page, crn, 'MAPPA', 'Automated Allocation Team', 'AutomatedTestUser, AutomatedTestUser (PS - PSO)', 'MAPPA Cat 4', 'MAPPA Level 3')

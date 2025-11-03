@@ -1,13 +1,14 @@
 import { Page, expect } from '@playwright/test'
-import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs'
+import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs.mjs'
 import { retryOnError } from '../utils/utils'
 import { DateTime } from 'luxon';
 import {
     DeliusDateFormatter
-} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time'
+} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs'
 import {
   findOffenderByCRN
-} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender'
+} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs'
+import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh.mjs';
 
 export const createNSI = async (
     page: Page,
@@ -22,7 +23,10 @@ export const createNSI = async (
     await page.locator('#navigation-include\\:linkNavigation2OffenderIndex').click()
     await page.click('#navigation-include\\:linkNavigation3OffenderNsi')
     await expect(page).toHaveTitle(/Non Statutory Intervention List/)
-    await innerPage.locator('[value="Add Non Statutory Intervention"]').click()
+    await doUntil(
+      () => innerPage.locator('[value="Add Non Statutory Intervention"]').click(),
+      () => expect(page).toHaveTitle(/Non Statutory Intervention/)
+    )
     await selectOption(page, '#NsiProvider\\:selectOneMenu', NsiProvider)
     await selectOption(page, '#NsiType\\:selectOneMenu', NsiType)
     await selectOption(page, '#NsiSubType\\:selectOneMenu', NsiSubType)

@@ -1,8 +1,8 @@
 import { Page, expect } from '@playwright/test'
 import { faker } from '@faker-js/faker/locale/en_GB'
-import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs'
-import { Address } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/address/create-address'
-import { findOffenderByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender'
+import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs.mjs'
+import { Address } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/address/create-address.mjs'
+import { findOffenderByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs'
 import { formatDate, retryOnError } from '../utils/utils'
 
 export const createPersonalContact = async (page: Page, crn: string, options: Address) => {

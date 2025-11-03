@@ -1,9 +1,9 @@
 import { Page, expect } from '@playwright/test'
-import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs'
+import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs.mjs'
 import {
   findOffenderByCRN
-} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender'
-import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh'
+} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs'
+import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh.mjs'
 
 export const createRegistration = async (
     page: Page,
