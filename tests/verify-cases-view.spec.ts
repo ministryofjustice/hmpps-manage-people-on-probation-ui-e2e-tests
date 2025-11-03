@@ -1,6 +1,6 @@
 import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.js'
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
