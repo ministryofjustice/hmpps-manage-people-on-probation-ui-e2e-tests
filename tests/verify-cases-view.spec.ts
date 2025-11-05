@@ -7,7 +7,7 @@ import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-pro
 import { loginMPoPAndGoToCases } from '../steps/mpop/personal-details/cases'
 import { automatedTestUser1 } from '../steps/test-data'
 import { mpopFormatDate, plus3Months } from '../steps/mpop/utils'
-import { createAppointmentMPop, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
+import { Attendee, createAppointmentMPop, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -51,13 +51,34 @@ test.describe('Person Details Verification in Cases', () => {
     await expect(page.locator('[data-qa="sentenceValue1"]')).toContainText(sentence.outcome)
   })
 
+
+})
+
+test.describe('Create an appointment', () => {
+    test.beforeAll(async ({ browser: b }) => {
+    test.setTimeout(120000)
+    browser = b
+    context = await browser.newContext()
+    page = await context.newPage()
+  })
+
+  test.afterAll(async () => {
+    await context.close()
+  })
+
   test('Create an Appointment', async () => {
+    test.setTimeout(120_000)
     const dateTime: mpopDateTime = {
-      date: "11/11/2025",
-      startTime: "09:15",
-      endTime: "10:15"
+      date: "12/11/2025",
+      startTime: "15:15",
+      endTime: "16:15"
     }
-    await createAppointmentMPop(page, 'X933295', 0, 0, dateTime, 0, "hello world", true)
+    const attendee: Attendee = {
+      provider: "N53",
+      team: "N53HPT",
+      user: "FredMarecesche"
+    }
+    await createAppointmentMPop(page, 'X756510', 0, 0, dateTime, 0, "hello world", true, {}, true)
   })
 })
 
