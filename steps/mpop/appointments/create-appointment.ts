@@ -28,10 +28,10 @@ export const createAppointmentMPop = async (page: Page, crn: string, sentenceId:
   await completeTypeAttendancePage(page, typeId, attendee, isVisor)
   await completeLocationDateTimePage(page, dateTime, locationId)
   await completeSupportingInformationPage(page, note, sensitivity)
-  await completeCYAPage(page)
+  await completeCYAPage(page, isVisor)
   await completeConfirmationPage(page)
 
-  expect(page.locator('[data-qa="pageHeading"]')).toContainText("Do you want to arrange the next appointment with James?")
+  expect(page.locator('[data-qa="pageHeading"]')).toContainText("Do you want to arrange the next appointment with")
 }
 
 export const completeSentencePage = async(page: Page, id: number) => {
@@ -84,16 +84,20 @@ export const completeSupportingInformationPage = async(page: Page, note: string,
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const completeCYAPage = async(page: Page) => {  
+export const completeCYAPage = async(page: Page, isVisor: boolean=null) => {  
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Check your answers then confirm the appointment")  
   await expect(page.locator('[class="govuk-summary-list__key"]').nth(0)).toContainText("Appointment for")
   await expect(page.locator('[class="govuk-summary-list__key"]').nth(1)).toContainText("Appointment type")
-  await expect(page.locator('[class="govuk-summary-list__key"]').nth(2)).toContainText("VISOR report")
-  await expect(page.locator('[class="govuk-summary-list__key"]').nth(3)).toContainText("Attending")
-  await expect(page.locator('[class="govuk-summary-list__key"]').nth(4)).toContainText("Location")
-  await expect(page.locator('[class="govuk-summary-list__key"]').nth(5)).toContainText("Date and time")
-  await expect(page.locator('[class="govuk-summary-list__key"]').nth(6)).toContainText("Supporting information")
-  await expect(page.locator('[class="govuk-summary-list__key"]').nth(7)).toContainText("Sensitivity")
+  let count = 2
+  if (isVisor){
+    await expect(page.locator('[class="govuk-summary-list__key"]').nth(2)).toContainText("VISOR report")
+    count += 1
+  }
+  await expect(page.locator('[class="govuk-summary-list__key"]').nth(count)).toContainText("Attending")
+  await expect(page.locator('[class="govuk-summary-list__key"]').nth(count+1)).toContainText("Location")
+  await expect(page.locator('[class="govuk-summary-list__key"]').nth(count+2)).toContainText("Date and time")
+  await expect(page.locator('[class="govuk-summary-list__key"]').nth(count+3)).toContainText("Supporting information")
+  await expect(page.locator('[class="govuk-summary-list__key"]').nth(count+4)).toContainText("Sensitivity")
   await page.locator('[data-qa="submit-btn"]').click()
 }
 

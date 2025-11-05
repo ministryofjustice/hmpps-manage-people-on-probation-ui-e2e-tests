@@ -60,6 +60,9 @@ test.describe('Create an appointment', () => {
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
+
+     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
   })
 
   test.afterAll(async () => {
@@ -78,7 +81,7 @@ test.describe('Create an appointment', () => {
       team: "N53HPT",
       user: "FredMarecesche"
     }
-    await createAppointmentMPop(page, 'X756510', 0, 0, dateTime, 0, "hello world", true, {}, true)
+    await createAppointmentMPop(page, crn, 0, 0, dateTime, 0, "hello world", true, {})
   })
 })
 
