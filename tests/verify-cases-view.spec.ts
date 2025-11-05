@@ -6,7 +6,8 @@ import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/t
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
 import { loginMPoPAndGoToCases } from '../steps/mpop/personal-details/cases'
 import { automatedTestUser1 } from '../steps/test-data'
-import { mpopFormatDate } from '../steps/mpop/utils'
+import { mpopFormatDate, plus3Months } from '../steps/mpop/utils'
+import { createAppointmentMPop, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -48,6 +49,15 @@ test.describe('Person Details Verification in Cases', () => {
     await expect(page.locator('[data-qa="nameOrCrnValue1"]').first()).toContainText(crn)
     await expect(page.locator('[data-qa="dobValue1"]')).toContainText(mpopFormatDate(person.dob))
     await expect(page.locator('[data-qa="sentenceValue1"]')).toContainText(sentence.outcome)
+  })
+
+  test('Create an Appointment', async () => {
+    const dateTime: mpopDateTime = {
+      date: "11/11/2025",
+      startTime: "09:15",
+      endTime: "10:15"
+    }
+    await createAppointmentMPop(page, 'X933295', 0, 0, dateTime, 0, "hello world", true)
   })
 })
 
