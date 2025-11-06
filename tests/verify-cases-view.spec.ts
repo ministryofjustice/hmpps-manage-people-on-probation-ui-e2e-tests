@@ -76,12 +76,16 @@ test.describe('Create an appointment', () => {
       startTime: "15:15",
       endTime: "16:15"
     }
-    const attendee: Attendee = {
-      provider: "N53",
-      team: "N53HPT",
-      user: "FredMarecesche"
+    const dateTime_another: mpopDateTime = {
+      date: "13/11/2025",
+      startTime: "15:15",
+      endTime: "16:15"
     }
-    await createAppointmentMPop(page, crn, 0, 0, dateTime, 0, "hello world", true, {})
+    const attendee: Attendee = {
+      team: "N07T02",
+      user: "AndyAdamczak1"
+    }
+    await createAppointmentMPop(page, crn, 0, 0, dateTime, 0, "hello world", true, 0, dateTime_another, "hello world 2", false, attendee)
   })
 })
 

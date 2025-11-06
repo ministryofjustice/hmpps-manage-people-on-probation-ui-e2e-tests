@@ -14,7 +14,21 @@ export interface mpopDateTime {
   endTime: string
 }
 
-export const createAppointmentMPop = async (page: Page, crn: string, sentenceId: number, typeId: number, dateTime: mpopDateTime, locationId: number, note: string, sensitivity: boolean, attendee: Attendee=null, isVisor: boolean=null) => {
+export const createAppointmentMPop = async (page: Page, 
+  crn: string, 
+  sentenceId: number, 
+  typeId: number, 
+  dateTime: mpopDateTime, 
+  locationId: number, 
+  note: string, 
+  sensitivity: boolean, 
+  nextId: number, 
+  dateTime_another: mpopDateTime, 
+  note_another: string, 
+  sensitivity_another: boolean, 
+  attendee: Attendee=null, 
+  isVisor: boolean=null) => 
+{
   await loginToManageMySupervision(page)
 
   await page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${crn}/appointments/`)
@@ -30,8 +44,11 @@ export const createAppointmentMPop = async (page: Page, crn: string, sentenceId:
   await completeSupportingInformationPage(page, note, sensitivity)
   await completeCYAPage(page, isVisor)
   await completeConfirmationPage(page)
+  await completeNextAppointmentPage(page, nextId)
+  await completeArrangeAnotherAppointmentPage(page, dateTime_another, note_another, sensitivity_another)
 
-  expect(page.locator('[data-qa="pageHeading"]')).toContainText("Do you want to arrange the next appointment with")
+  await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
+
 }
 
 export const completeSentencePage = async(page: Page, id: number) => {
@@ -44,7 +61,7 @@ export const completeTypeAttendancePage = async(page: Page, id: number, attendee
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment type and attendance")
   if (attendee){
     await page.getByRole('link', {name: 'change'}).click()
-    completeAttendingPage(page, attendee)
+    await completeAttendingPage(page, attendee)
   }
   await page.locator('[data-qa="type"]').getByRole('radio').nth(id).click()
   if (isVisor != null){
@@ -56,13 +73,13 @@ export const completeTypeAttendancePage = async(page: Page, id: number, attendee
 export const completeAttendingPage = async(page: Page, attendee: Attendee) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Who will attend the appointment?")
   if (attendee.provider){
-    await page.locator('[data-qa="providerCode"]').getByRole("option").selectOption(attendee.provider)
+    await page.locator('[data-qa="providerCode"]').selectOption(attendee.provider)
   }
   if (attendee.team){
-    await page.locator('[data-qa="teamCode"]').getByRole("option").selectOption(attendee.team)
+    await page.locator('[data-qa="teamCode"]').selectOption(attendee.team)
   }
   if (attendee.user){
-    await page.locator('[data-qa="username"]').getByRole("option").selectOption(attendee.user)
+    await page.locator('[data-qa="username"]').selectOption(attendee.user)
   }
   await page.locator('[data-qa="submit-btn"]').click()
 }
@@ -105,4 +122,27 @@ export const completeConfirmationPage = async(page: Page) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
   await expect(page.locator('[data-qa="what-happens-next"]')).toContainText("What happens next")  
   await page.getByRole('link', {name: 'arrange another appointment'}).click()
+}
+
+export const completeNextAppointmentPage = async(page:Page, id: number) => {
+  await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Do you want to arrange the next appointment with")  
+  await page.locator('[data-qa="option"]').getByRole('radio').nth(id).click()
+  await page.locator('[data-qa="submit-btn"]').click()
+}
+
+export const completeArrangeAnotherAppointmentPage = async(page:Page, dateTime: mpopDateTime, note: string, sensitivity: boolean) => {
+  await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Arrange another appointment")
+  
+  await page.getByRole('link', {name: 'Choose date and time'}).click()
+  await page.getByRole("button").filter({hasText: "Choose date"}).click()
+  await page.getByTestId(dateTime.date).click()
+  await page.locator('[data-qa="startTime"]').locator('[type="text"]').fill(dateTime.startTime)
+  await page.locator('[data-qa="endTime"]').locator('[type="text"]').fill(dateTime.endTime)
+  await page.locator('[data-qa="submit-btn"]').click()
+
+  await page.locator('[data-qa="notes"]').getByRole('textbox').fill(note)
+  await page.locator('[data-qa="visorReport"]').getByRole('radio').nth(sensitivity ? 0 : 1).click()
+  await page.locator('[data-qa="submit-btn"]').click()
+
+  await page.locator('[data-qa="submit-btn"]').click()
 }
