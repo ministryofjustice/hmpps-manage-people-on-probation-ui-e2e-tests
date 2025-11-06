@@ -61,6 +61,7 @@ test.describe('Create an appointment', () => {
     context = await browser.newContext()
     page = await context.newPage()
 
+    await page.clock.setSystemTime(new Date('2030-11-11T10:00:00')) 
      ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
   })
@@ -72,12 +73,12 @@ test.describe('Create an appointment', () => {
   test('Create an Appointment', async () => {
     test.setTimeout(120_000)
     const dateTime: mpopDateTime = {
-      date: "12/11/2025",
+      date: "12/11/2030",
       startTime: "15:15",
       endTime: "16:15"
     }
     const dateTime_another: mpopDateTime = {
-      date: "13/11/2025",
+      date: "13/11/2030",
       startTime: "15:15",
       endTime: "16:15"
     }
