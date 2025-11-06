@@ -1,0 +1,46 @@
+import { expect, Page } from "@playwright/test";
+import MPopPage from "../page";
+import { mpopDateTime } from "../../appointments/create-appointment";
+import TypeAttendancePage from "./type-attendance.page";
+
+export default class LocationDateTimePage extends MPopPage {
+    constructor(page: Page) {
+        super(page, "Appointment date, time and location")
+    }
+
+    async checkOnPage() {
+        await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title)
+    }
+
+    async completePage(dateTime?: mpopDateTime, locationId?: number) {
+        if (dateTime != undefined){
+            await this.selectDate(dateTime.date)
+            await this.fillText("startTime", dateTime.startTime)
+            await this.fillText("endTime", dateTime.endTime)
+        }
+        if (locationId != undefined){
+            await this.clickRadio("locationCode", locationId)
+        }
+        await this.submit()
+    }
+
+    async testBacklink(change: boolean) {
+        await this.clickBackLink()
+        if (change){
+            //change case
+        }else{
+            const typeAttendancePage = new TypeAttendancePage(this.page)
+            typeAttendancePage.submit()
+        }
+        await this.checkOnPage()
+    }
+
+    async fillText(qa: string, text: string){
+       await this.page.locator(`[data-qa="${qa}"]`).locator('[type="text"]').fill(text)
+    }
+
+    async selectDate(date: string){
+        await this.page.getByRole("button").filter({hasText: "Choose date"}).click()
+        await this.page.getByTestId(date).click()
+    }
+}
