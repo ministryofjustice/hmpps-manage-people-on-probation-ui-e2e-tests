@@ -59,6 +59,8 @@ export const completeTypeAttendancePage = async(page: Page, id: number, attendee
 
 export const completeAttendingPage = async(page: Page, attendee: mpopAttendee) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Who will attend the appointment?")
+  await page.getByRole('link', {name: 'Back'}).click()
+  await page.getByRole('link', {name: 'change'}).click()
   if (attendee.provider){
     await page.locator('[data-qa="providerCode"]').selectOption(attendee.provider)
   }
