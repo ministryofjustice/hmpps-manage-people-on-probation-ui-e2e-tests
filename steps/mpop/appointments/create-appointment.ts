@@ -1,8 +1,19 @@
-import { Page, expect, Locator } from '@playwright/test'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh.mjs'
+import { Page, expect } from '@playwright/test'
+import { testBackLink } from '../utils'
 
-export interface Attendee {
+export interface mpopArrangeAppointment {
+  crn: string
+  sentenceId: number
+  typeId: number
+  attendee?: mpopAttendee
+  isVisor?: boolean
+  dateTime: mpopDateTime
+  locationId: number
+  note?: string
+  sensitivity: boolean
+}
+
+export interface mpopAttendee {
   provider?: string
   team?: string
   user?: string
@@ -15,40 +26,15 @@ export interface mpopDateTime {
 }
 
 export const createAppointmentMPop = async (page: Page, 
-  crn: string, 
-  sentenceId: number, 
-  typeId: number, 
-  dateTime: mpopDateTime, 
-  locationId: number, 
-  note: string, 
-  sensitivity: boolean, 
-  nextId: number, 
-  dateTime_another: mpopDateTime, 
-  note_another: string, 
-  sensitivity_another: boolean, 
-  attendee: Attendee=null, 
-  isVisor: boolean=null) => 
+  appointment: mpopArrangeAppointment) => 
 {
-  await loginToManageMySupervision(page)
-
-  await page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${crn}/appointments/`)
-
-  await doUntil (
-    () => page.locator('[data-qa="arrange-appointment-btn"]').click(),
-    () => expect(page.locator('[data-qa="pageHeading"]')).toContainText("What is this appointment for?")
-  )
-
-  await completeSentencePage(page, sentenceId)
-  await completeTypeAttendancePage(page, typeId, attendee, isVisor)
-  await completeLocationDateTimePage(page, dateTime, locationId)
-  await completeSupportingInformationPage(page, note, sensitivity)
-  await completeCYAPage(page, isVisor)
-  await completeConfirmationPage(page)
-  await completeNextAppointmentPage(page, nextId)
-  await completeArrangeAnotherAppointmentPage(page, dateTime_another, note_another, sensitivity_another)
+  await completeSentencePage(page, appointment.sentenceId)
+  await completeTypeAttendancePage(page, appointment.typeId, appointment.attendee, appointment.isVisor)
+  await completeLocationDateTimePage(page, appointment.dateTime, appointment.locationId)
+  await completeSupportingInformationPage(page, appointment.sensitivity, appointment.note)
+  await completeCYAPage(page, appointment.isVisor)
 
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
-
 }
 
 export const completeSentencePage = async(page: Page, id: number) => {
@@ -57,21 +43,21 @@ export const completeSentencePage = async(page: Page, id: number) => {
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const completeTypeAttendancePage = async(page: Page, id: number, attendee:Attendee=null, isVisor:boolean=null) => {
+export const completeTypeAttendancePage = async(page: Page, id: number, attendee?:mpopAttendee, isVisor?:boolean) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment type and attendance")
   await testBackLink(page)
-  if (attendee){
+  if (attendee != undefined){
     await page.getByRole('link', {name: 'change'}).click()
     await completeAttendingPage(page, attendee)
   }
   await page.locator('[data-qa="type"]').getByRole('radio').nth(id).click()
-  if (isVisor != null){
+  if (isVisor != undefined){
     await page.locator('[data-qa="visorReport"]').getByRole('radio').nth(isVisor ? 0 : 1).click()
   }
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const completeAttendingPage = async(page: Page, attendee: Attendee) => {
+export const completeAttendingPage = async(page: Page, attendee: mpopAttendee) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Who will attend the appointment?")
   if (attendee.provider){
     await page.locator('[data-qa="providerCode"]').selectOption(attendee.provider)
@@ -96,10 +82,12 @@ export const completeLocationDateTimePage = async(page: Page, dateTime: mpopDate
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const completeSupportingInformationPage = async(page: Page, note: string, sensitivity: boolean) => {
+export const completeSupportingInformationPage = async(page: Page, sensitivity: boolean, note?: string) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Add supporting information (optional)")
   await testBackLink(page)
-  await page.locator('[data-qa="notes"]').getByRole('textbox').fill(note)
+  if (note != undefined){
+    await page.locator('[data-qa="notes"]').getByRole('textbox').fill(note)
+  }
   await page.locator('[data-qa="visorReport"]').getByRole('radio').nth(sensitivity ? 0 : 1).click()
   await page.locator('[data-qa="submit-btn"]').click()
 }
@@ -109,7 +97,7 @@ export const completeCYAPage = async(page: Page, isVisor: boolean=null) => {
   await expect(page.locator('[class="govuk-summary-list__key"]').nth(0)).toContainText("Appointment for")
   await expect(page.locator('[class="govuk-summary-list__key"]').nth(1)).toContainText("Appointment type")
   let count = 2
-  if (isVisor){
+  if (isVisor != undefined){
     await expect(page.locator('[class="govuk-summary-list__key"]').nth(2)).toContainText("VISOR report")
     count += 1
   }
@@ -121,10 +109,28 @@ export const completeCYAPage = async(page: Page, isVisor: boolean=null) => {
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const completeConfirmationPage = async(page: Page) => {  
+export const createSimilarAppointmentMPop = async(page:Page, dateTime: mpopDateTime, sensitivity: boolean, note?: string) => {
+  await completeConfirmationPage(page, "createAnother")
+  await completeNextAppointmentPage(page, 0)
+  await completeArrangeAnotherAppointmentPage(page, dateTime, sensitivity, note)
+}
+
+export const createAnotherAppointmentMPop = async(page:Page, appointment: mpopArrangeAppointment) => {
+  await completeConfirmationPage(page, "createAnother")
+  await completeNextAppointmentPage(page, 1)
+  await createAppointmentMPop(page, appointment)
+}
+
+export const completeConfirmationPage = async(page: Page, option: string) => {  
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
   await expect(page.locator('[data-qa="what-happens-next"]')).toContainText("What happens next")  
-  await page.getByRole('link', {name: 'arrange another appointment'}).click()
+  if (option === "createAnother"){
+    await page.getByRole('link', {name: 'arrange another appointment'}).click()
+  } else if (option === "returnToAll") {
+    await page.getByRole('link', {name: 'Return to all cases'}).click()
+  } else {
+    await page.locator('[data-qa="submit-btn"]').click()
+  }
 }
 
 export const completeNextAppointmentPage = async(page:Page, id: number) => {
@@ -133,7 +139,7 @@ export const completeNextAppointmentPage = async(page:Page, id: number) => {
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const completeArrangeAnotherAppointmentPage = async(page:Page, dateTime: mpopDateTime, note: string, sensitivity: boolean) => {
+export const completeArrangeAnotherAppointmentPage = async(page:Page, dateTime: mpopDateTime, sensitivity: boolean, note?: string) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Arrange another appointment")
   
   await page.getByRole('link', {name: 'Choose date and time'}).click()
@@ -143,14 +149,11 @@ export const completeArrangeAnotherAppointmentPage = async(page:Page, dateTime: 
   await page.locator('[data-qa="endTime"]').locator('[type="text"]').fill(dateTime.endTime)
   await page.locator('[data-qa="submit-btn"]').click()
 
-  await page.locator('[data-qa="notes"]').getByRole('textbox').fill(note)
+  if (note != undefined){
+    await page.locator('[data-qa="notes"]').getByRole('textbox').fill(note)
+  }
   await page.locator('[data-qa="visorReport"]').getByRole('radio').nth(sensitivity ? 0 : 1).click()
   await page.locator('[data-qa="submit-btn"]').click()
 
-  await page.locator('[data-qa="submit-btn"]').click()
-}
-
-export const testBackLink = async(page: Page) => {
-  await page.getByRole('link', {name: 'Back'}).click()
   await page.locator('[data-qa="submit-btn"]').click()
 }

@@ -23,3 +23,8 @@ export const getUuid = (page: Page) => {
     const split = url.split('?')[0].split('/')
     return split[split.length - 2]
 }
+
+export const testBackLink = async(page: Page) => {
+  await page.getByRole('link', {name: 'Back'}).click()
+  await page.locator('[data-qa="submit-btn"]').click()
+}

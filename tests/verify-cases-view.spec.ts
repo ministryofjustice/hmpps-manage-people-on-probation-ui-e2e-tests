@@ -7,7 +7,9 @@ import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-pro
 import { loginMPoPAndGoToCases } from '../steps/mpop/personal-details/cases'
 import { automatedTestUser1 } from '../steps/test-data'
 import { mpopFormatDate, plus3Months } from '../steps/mpop/utils'
-import { Attendee, createAppointmentMPop, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
+import { completeArrangeAnotherAppointmentPage, completeConfirmationPage, completeNextAppointmentPage, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
+import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh'
+import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -70,23 +72,65 @@ test.describe('Create an appointment', () => {
     await context.close()
   })
 
-  test('Create an Appointment', async () => {
+  test('Create Appointments', async () => {
     test.setTimeout(120_000)
+
+    //navigate to start of arrange appointment pipeline
+    await loginToManageMySupervision(page)
+    await page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${crn}/appointments/`)
+    await doUntil (
+      () => page.locator('[data-qa="arrange-appointment-btn"]').click(),
+      () => expect(page.locator('[data-qa="pageHeading"]')).toContainText("What is this appointment for?")
+    )
+
+    //arrange appointment
     const dateTime: mpopDateTime = {
       date: "12/11/2030",
       startTime: "15:15",
       endTime: "16:15"
     }
-    const dateTime_another: mpopDateTime = {
+    const attendee: mpopAttendee = {
+      team: "N07T02",
+      user: "AndyAdamczak1"
+    }
+    const appointmentNoVisor: mpopArrangeAppointment = {
+      crn: crn,
+      sentenceId: 0,
+      typeId: 0,
+      attendee: attendee,
+      dateTime: dateTime,
+      locationId: 0,
+      note: "hello world",
+      sensitivity: true
+    }
+    await createAppointmentMPop(page, appointmentNoVisor)
+
+    //arrange another similar
+    const dateTime_similar: mpopDateTime = {
       date: "13/11/2030",
       startTime: "15:15",
       endTime: "16:15"
     }
-    const attendee: Attendee = {
-      team: "N07T02",
-      user: "AndyAdamczak1"
+    await createSimilarAppointmentMPop(page, dateTime_similar, false)
+
+    //arrange another
+    const dateTime_another: mpopDateTime = {
+      date: "14/11/2030",
+      startTime: "15:15",
+      endTime: "16:15"
     }
-    await createAppointmentMPop(page, crn, 0, 0, dateTime, 0, "hello world", true, 0, dateTime_another, "hello world 2", false, attendee)
+    const appointmentNoVisorNoAttendee: mpopArrangeAppointment = {
+      crn: crn,
+      sentenceId: 0,
+      typeId: 0,
+      dateTime: dateTime_another,
+      locationId: 0,
+      note: "hello world",
+      sensitivity: false
+    }
+    await createAnotherAppointmentMPop(page, appointmentNoVisorNoAttendee)
+
+    await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
   })
 })
 
