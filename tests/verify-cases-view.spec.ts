@@ -7,9 +7,10 @@ import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-pro
 import { loginMPoPAndGoToCases } from '../steps/mpop/personal-details/cases'
 import { automatedTestUser1 } from '../steps/test-data'
 import { mpopFormatDate, plus3Months } from '../steps/mpop/utils'
-import { completeArrangeAnotherAppointmentPage, completeConfirmationPage, completeNextAppointmentPage, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
 import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
+import AppointmentsPage from '../steps/mpop/pages/appointments.page'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -77,11 +78,11 @@ test.describe('Create an appointment', () => {
 
     //navigate to start of arrange appointment pipeline
     await loginToManageMySupervision(page)
-    await page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${crn}/appointments/`)
-    await doUntil (
-      () => page.locator('[data-qa="arrange-appointment-btn"]').click(),
-      () => expect(page.locator('[data-qa="pageHeading"]')).toContainText("What is this appointment for?")
-    )
+
+    const appointments = new AppointmentsPage(page)
+    appointments.goTo(crn)
+    appointments.checkOnPage()
+    appointments.startArrangeAppointment()
 
     //arrange appointment
     const dateTime: mpopDateTime = {

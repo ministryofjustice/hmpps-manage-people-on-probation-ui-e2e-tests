@@ -13,7 +13,7 @@ export default abstract class MPopPage {
     }
 
     async checkOnPage() {
-        await expect(this.page.locator('[data-qa="pageHeading"]')).toContainText(this.title)
+        await this.checkQA("pageHeading", this.title)
     }
 
     async clickRadio(qa: string, id: number){
@@ -30,5 +30,9 @@ export default abstract class MPopPage {
 
     async clickBackLink(){
         await this.page.getByRole('link', {name: 'Back'}).click()
+    }
+
+    async checkQA(qa: string, value: string){
+        await expect(this.page.locator(`[data-qa="${qa}"]`)).toContainText(value)
     }
 }
