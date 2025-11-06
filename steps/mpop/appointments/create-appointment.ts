@@ -59,6 +59,7 @@ export const completeSentencePage = async(page: Page, id: number) => {
 
 export const completeTypeAttendancePage = async(page: Page, id: number, attendee:Attendee=null, isVisor:boolean=null) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment type and attendance")
+  await testBackLink(page)
   if (attendee){
     await page.getByRole('link', {name: 'change'}).click()
     await completeAttendingPage(page, attendee)
@@ -86,6 +87,7 @@ export const completeAttendingPage = async(page: Page, attendee: Attendee) => {
 
 export const completeLocationDateTimePage = async(page: Page, dateTime: mpopDateTime, locationId: number) => {
   await expect(page.locator('[data-qa="pageHeading"]').first()).toContainText("Appointment date, time and location")
+  await testBackLink(page)
   await page.getByRole("button").filter({hasText: "Choose date"}).click()
   await page.getByTestId(dateTime.date).click()
   await page.locator('[data-qa="startTime"]').locator('[type="text"]').fill(dateTime.startTime)
@@ -96,6 +98,7 @@ export const completeLocationDateTimePage = async(page: Page, dateTime: mpopDate
 
 export const completeSupportingInformationPage = async(page: Page, note: string, sensitivity: boolean) => {
   await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Add supporting information (optional)")
+  await testBackLink(page)
   await page.locator('[data-qa="notes"]').getByRole('textbox').fill(note)
   await page.locator('[data-qa="visorReport"]').getByRole('radio').nth(sensitivity ? 0 : 1).click()
   await page.locator('[data-qa="submit-btn"]').click()
@@ -144,5 +147,10 @@ export const completeArrangeAnotherAppointmentPage = async(page:Page, dateTime: 
   await page.locator('[data-qa="visorReport"]').getByRole('radio').nth(sensitivity ? 0 : 1).click()
   await page.locator('[data-qa="submit-btn"]').click()
 
+  await page.locator('[data-qa="submit-btn"]').click()
+}
+
+export const testBackLink = async(page: Page) => {
+  await page.getByRole('link', {name: 'Back'}).click()
   await page.locator('[data-qa="submit-btn"]').click()
 }
