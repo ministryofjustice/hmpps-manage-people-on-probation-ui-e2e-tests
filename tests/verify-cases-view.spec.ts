@@ -11,6 +11,9 @@ import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppoi
 import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import AppointmentsPage from '../steps/mpop/pages/appointments.page'
+import caseUpcomingAppointmentsPage from '../steps/mpop/pages/appointments/upcoming-appointments.page'
+import ActivityLogPage from '../steps/mpop/pages/activity-log.page.ts'
+
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -137,16 +140,21 @@ test.describe('Appointments', () => {
   test('Appointments page', async() => {
     test.setTimeout(120_000)
 
-    //navigate to start of arrange appointment pipeline
+    //navigate to appointments page
     await loginToManageMySupervision(page)
-
     const appointments = new AppointmentsPage(page)
-    appointments.goTo(crn)
-    appointments.checkOnPage()
+    await appointments.goTo("X756510")
+    await appointments.checkOnPage()
 
-    appointments.viewUpcomingAppointments()
+    //check link to upcoming appointments
+    await appointments.viewUpcomingAppointments()
+    const upcomingAppointments = new caseUpcomingAppointmentsPage(page)
+    await upcomingAppointments.clickBackLink()
 
-    appointments.viewPastAppointments()
+    //check link to past appointments
+    await appointments.viewPastAppointments()
+    const pastAppointments = new ActivityLogPage(page)
+    await pastAppointments.checkOnPage()
   })
 })
 
