@@ -18,4 +18,20 @@ export default class AppointmentsPage extends MPopPage {
     async startArrangeAppointment(){
         await this.page.locator('[data-qa="arrange-appointment-btn"]').click()
     }
+
+    async viewUpcomingAppointments(){
+        await this.clickLink("View all upcoming appointments")
+    }
+
+    async viewPastAppointments(){
+        await this.clickLink("View all past appointments in the activity log")
+    }
+
+    async selectAppointment(upcoming: boolean, id: number, byName: boolean){
+        const tableqa = upcoming ? "upcomingAppiointments" : "pastAppointments"
+        const table = upcoming ? "upcoming" : "past"
+        const column = byName ? "Type" : "Action"
+        const cellqa = `${table}Appointment${column}${id}`
+        await this.tableLink(tableqa, cellqa)
+    }
 }

@@ -57,7 +57,7 @@ test.describe('Person Details Verification in Cases', () => {
 
 })
 
-test.describe('Create an appointment', () => {
+test.describe('Appointments', () => {
     test.beforeAll(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
@@ -132,6 +132,21 @@ test.describe('Create an appointment', () => {
     await createAnotherAppointmentMPop(page, appointmentNoVisorNoAttendee)
 
     await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
+  })
+
+  test('Appointments page', async() => {
+    test.setTimeout(120_000)
+
+    //navigate to start of arrange appointment pipeline
+    await loginToManageMySupervision(page)
+
+    const appointments = new AppointmentsPage(page)
+    appointments.goTo(crn)
+    appointments.checkOnPage()
+
+    appointments.viewUpcomingAppointments()
+
+    appointments.viewPastAppointments()
   })
 })
 

@@ -35,4 +35,41 @@ export default abstract class MPopPage {
     async checkQA(qa: string, value: string){
         await expect(this.page.locator(`[data-qa="${qa}"]`)).toContainText(value)
     }
+
+    async tableLink(tableqa: string, cellqa: string){
+        await this.page.locator(`[data-qa="${tableqa}"]`).locator(`[data-qa="${cellqa}"]`).getByRole('link').click()
+    }
+
+    async sortByColumn(tableqa: string, cellqa: string, ascending: boolean){
+        const currentSort = await this.page.locator(`[data-qa="${tableqa}"]`).locator(`[data-qa="${cellqa}"]`).getAttribute('aria-sort')
+        const button = await this.page.locator(`[data-qa="${tableqa}"]`).locator(`[data-qa="${cellqa}"]`).getByRole('button')
+        if (currentSort === "none"){
+            await button.click()
+            if (!ascending){
+                await button.click()
+            }
+        } else if (currentSort == "ascending"){
+            if (!ascending){
+                await button.click()
+            }
+        } else {
+            if (ascending){
+                await button.click()
+            }
+        }
+    }
+
+    async pagination(id: number | string){
+        if (id === "previous"){
+            await this.page.getByRole("navigation", {name: "Previous"}).click()
+        } else if (id == "next"){
+            await this.page.getByRole("navigation", {name: "Next"}).click()
+        } else {
+            await this.page.getByRole("navigation", {name: `${id}`}).click()
+        }
+    }
+
+    async clickSummaryAction(qa: string, id: number){
+        await this.page.locator(`[data-qa="${qa}"]`).locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
+    }
 }
