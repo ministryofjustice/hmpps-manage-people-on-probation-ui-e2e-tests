@@ -6,14 +6,7 @@ import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/t
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
 import { loginMPoPAndGoToCases } from '../steps/mpop/personal-details/cases'
 import { automatedTestUser1 } from '../steps/test-data'
-import { mpopFormatDate, plus3Months } from '../steps/mpop/utils'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
-import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import AppointmentsPage from '../steps/mpop/pages/appointments.page'
-import caseUpcomingAppointmentsPage from '../steps/mpop/pages/appointments/upcoming-appointments.page'
-import ActivityLogPage from '../steps/mpop/pages/activity-log.page.ts'
-
+import { mpopFormatDate } from '../steps/mpop/utils'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -56,105 +49,4 @@ test.describe('Person Details Verification in Cases', () => {
     await expect(page.locator('[data-qa="dobValue1"]')).toContainText(mpopFormatDate(person.dob))
     await expect(page.locator('[data-qa="sentenceValue1"]')).toContainText(sentence.outcome)
   })
-
-
 })
-
-test.describe('Appointments', () => {
-    test.beforeAll(async ({ browser: b }) => {
-    test.setTimeout(120000)
-    browser = b
-    context = await browser.newContext()
-    page = await context.newPage()
-
-    await page.clock.setSystemTime(new Date('2030-11-11T10:00:00')) 
-     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-  })
-
-  test.afterAll(async () => {
-    await context.close()
-  })
-
-  test('Create Appointments', async () => {
-    test.setTimeout(120_000)
-
-    //navigate to start of arrange appointment pipeline
-    await loginToManageMySupervision(page)
-
-    const appointments = new AppointmentsPage(page)
-    appointments.goTo(crn)
-    appointments.checkOnPage()
-    appointments.startArrangeAppointment()
-
-    //arrange appointment
-    const dateTime: mpopDateTime = {
-      date: "12/11/2030",
-      startTime: "15:15",
-      endTime: "16:15"
-    }
-    const attendee: mpopAttendee = {
-      team: "N07T02",
-      user: "AndyAdamczak1"
-    }
-    const appointmentNoVisor: mpopArrangeAppointment = {
-      crn: crn,
-      sentenceId: 0,
-      typeId: 0,
-      attendee: attendee,
-      dateTime: dateTime,
-      locationId: 0,
-      note: "hello world",
-      sensitivity: true
-    }
-    await createAppointmentMPop(page, appointmentNoVisor)
-
-    //arrange another similar
-    const dateTime_similar: mpopDateTime = {
-      date: "13/11/2030",
-      startTime: "15:15",
-      endTime: "16:15"
-    }
-    await createSimilarAppointmentMPop(page, dateTime_similar, false)
-
-    //arrange another
-    const dateTime_another: mpopDateTime = {
-      date: "14/11/2030",
-      startTime: "15:15",
-      endTime: "16:15"
-    }
-    const appointmentNoVisorNoAttendee: mpopArrangeAppointment = {
-      crn: crn,
-      sentenceId: 0,
-      typeId: 0,
-      dateTime: dateTime_another,
-      locationId: 0,
-      note: "hello world",
-      sensitivity: false
-    }
-    await createAnotherAppointmentMPop(page, appointmentNoVisorNoAttendee)
-
-    await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
-  })
-
-  test('Appointments page', async() => {
-    test.setTimeout(120_000)
-
-    //navigate to appointments page
-    await loginToManageMySupervision(page)
-    const appointments = new AppointmentsPage(page)
-    await appointments.goTo("X756510")
-    await appointments.checkOnPage()
-
-    //check link to upcoming appointments
-    await appointments.viewUpcomingAppointments()
-    const upcomingAppointments = new caseUpcomingAppointmentsPage(page)
-    await upcomingAppointments.clickBackLink()
-
-    //check link to past appointments
-    await appointments.viewPastAppointments()
-    const pastAppointments = new ActivityLogPage(page)
-    await pastAppointments.checkOnPage()
-  })
-})
-

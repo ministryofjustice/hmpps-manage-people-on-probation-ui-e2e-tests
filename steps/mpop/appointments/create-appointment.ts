@@ -33,6 +33,19 @@ export interface mpopDateTime {
   endTime: string
 }
 
+export const setupAppointmentMPop = async(page: Page, appointment: mpopArrangeAppointment) => {
+  const sentencePage = new SentencePage(page)
+  await sentencePage.completePage(appointment.sentenceId)
+  const typeAttendancePage = new TypeAttendancePage(page)
+  await typeAttendancePage.completePage(appointment.typeId, appointment.attendee, appointment.isVisor)
+  const locationDateTimePage = new LocationDateTimePage(page)
+  await locationDateTimePage.completePage(appointment.dateTime, appointment.locationId)
+  const supportingInformationPage = new SupportingInformationPage(page)
+  await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
+  const cyaPage = new CYAPage(page)
+  cyaPage.checkOnPage
+}
+
 export const createAppointmentMPop = async(page: Page, appointment: mpopArrangeAppointment) => {
   const sentencePage = new SentencePage(page)
   await sentencePage.completePage(appointment.sentenceId)

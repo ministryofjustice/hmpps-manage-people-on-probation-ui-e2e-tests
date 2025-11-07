@@ -69,7 +69,11 @@ export default abstract class MPopPage {
         }
     }
 
-    async clickSummaryAction(qa: string, id: number){
-        await this.page.locator(`[data-qa="${qa}"]`).locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
+    async clickSummaryAction(id: number, qa?: string){
+        if (qa){
+            await this.page.locator(`[data-qa="${qa}"]`).locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
+        } else {
+            await this.page.locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
+        }
     }
 }
