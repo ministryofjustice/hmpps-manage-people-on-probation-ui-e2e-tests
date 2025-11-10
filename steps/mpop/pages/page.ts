@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test"
+import { expect, Locator, Page } from "@playwright/test"
 
 export default abstract class MPopPage {
     readonly page: Page
@@ -75,5 +75,21 @@ export default abstract class MPopPage {
         } else {
             await this.page.locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
         }
+    }
+
+    async checkSummaryRowKey(id: number, value: string){
+        await expect(this.page.locator('[class="govuk-summary-list__key"]').nth(id)).toContainText(value)
+    }
+
+    async checkSummaryRowValue(id: number, value: string){
+        await expect(this.page.locator('[class="govuk-summary-list__value"]').nth(id)).toContainText(value)
+    }
+
+    async checkEmptySummaryRowAction(id: number) {
+        await expect(this.page.locator('[class="govuk-summary-list__row"]').nth(id)).not.toContainClass("govuk-summary-list__actions")
+    }
+
+    async checkForError(value: string) {
+        await expect(this.page.locator('[data-qa="errorList"]')).toContainText(value)
     }
 }

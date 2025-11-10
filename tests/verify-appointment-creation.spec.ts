@@ -94,4 +94,33 @@ test.describe('Create Appointments Full', () => {
 
     await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
   })
+
+  //CURRENTLY BROKEN - can't create appointments with no location
+  test('Appointment - NoLocation', async () => {
+    test.setTimeout(120_000)
+
+    //navigate to start of arrange appointment pipeline
+    await loginToManageMySupervision(page)
+    const appointments = new AppointmentsPage(page)
+    await appointments.goTo(crn)
+    await appointments.checkOnPage()
+    await appointments.startArrangeAppointment()
+
+    //arrange appointment
+    const dateTime: mpopDateTime = {
+      date: "13/11/2030",
+      startTime: "15:15",
+      endTime: "16:15"
+    }
+    const appointmentNoLocation: mpopArrangeAppointment = {
+      crn: crn,
+      sentenceId: 0,
+      typeId: 1,
+      dateTime: dateTime,
+      locationId: 2,
+      note: "hello world",
+      sensitivity: true
+    }
+    await createAppointmentMPop(page, appointmentNoLocation)
+  })
 })

@@ -28,10 +28,6 @@ export default class CYAPage extends MPopPage {
         await this.submit()
     }
 
-    async checkSummaryRowKey(id: number, value: string){
-        await expect(this.page.locator('[class="govuk-summary-list__key"]').nth(id)).toContainText(value)
-    }
-
     async clickChangeLink(id: number, isVisor?: boolean){
         await this.clickSummaryAction(id)
         let page: MPopPage
