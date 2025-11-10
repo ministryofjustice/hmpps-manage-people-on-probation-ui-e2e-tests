@@ -135,37 +135,37 @@ test.describe('Location dateTime page', () => {
         await locationDateTimePage.checkForError("Enter a time in the 24-hour format, for example 16:30")
     })
 
-    // test('DateTime Validation - appointment in past', async () => {
-    //     test.setTimeout(120_000)
+    test('DateTime Validation - appointment in past', async () => {
+        test.setTimeout(120_000)
 
-    //     // const apiRequestContext: APIRequestContext = await request.newContext()
-    //     // await apiRequestContext.post('http://localhost:3007/__test/set-mocked-time', {
-    //     //     data: {
-    //     //         time: new Date('2030-11-11T10:00:00'),
-    //     //     }
-    //     // })
+        const apiRequestContext: APIRequestContext = await request.newContext()
+        await apiRequestContext.post('https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/__test/set-mocked-time', {
+            data: {
+                time: new Date('2030-11-11T10:00:00'),
+            }
+        })
 
-    //     //navigate to start of arrange appointment pipeline
-    //     await loginToManageMySupervision(page)
-    //     const appointments = new AppointmentsPage(page)
-    //     await appointments.goTo(crn)
-    //     await appointments.checkOnPage()
-    //     await appointments.startArrangeAppointment()
+        //navigate to start of arrange appointment pipeline
+        await loginToManageMySupervision(page)
+        const appointments = new AppointmentsPage(page)
+        await appointments.goTo(crn)
+        await appointments.checkOnPage()
+        await appointments.startArrangeAppointment()
 
-    //     const dateTime: mpopDateTime = {
-    //         date: "11/11/2030",
-    //         startTime: "09:15",
-    //         endTime: "10:15"
-    //     }
-    //     const sentencePage = new SentencePage(page)
-    //     await sentencePage.completePage(0)
-    //     const typeAttendancePage = new TypeAttendancePage(page)
-    //     await typeAttendancePage.completePage(0)
-    //     const locationDateTimePage = new LocationDateTimePage(page)
-    //     await locationDateTimePage.completePage(dateTime, 0)
+        const dateTime: mpopDateTime = {
+            date: "11/11/2030",
+            startTime: "05:15",
+            endTime: "06:15"
+        }
+        const sentencePage = new SentencePage(page)
+        await sentencePage.completePage(0)
+        const typeAttendancePage = new TypeAttendancePage(page)
+        await typeAttendancePage.completePage(0)
+        const locationDateTimePage = new LocationDateTimePage(page)
+        await locationDateTimePage.completePage(dateTime, 0)
 
-    //     await locationDateTimePage.checkForError("The start time must be now or in the future")
-    // })
+        await locationDateTimePage.checkForError("The start time must be now or in the future")
+    })
 
     test('DateTime Validation - non working day warning', async () => {
         test.setTimeout(120_000)
