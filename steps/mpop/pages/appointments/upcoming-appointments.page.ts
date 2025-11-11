@@ -18,6 +18,6 @@ export default class caseUpcomingAppointmentsPage extends MPopPage {
         const tableqa = "upcomingAppiointments"
         const column = byName ? "Type" : "Action"
         const cellqa = `upcomingAppointment${column}${id}`
-        await this.tableLink(tableqa, cellqa)
+        await this.clickTableLink(tableqa, cellqa)
     }
 }

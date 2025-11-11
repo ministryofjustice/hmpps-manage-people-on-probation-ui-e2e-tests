@@ -15,7 +15,7 @@ export default class LocationDateTimePage extends MPopPage {
     async completePage(dateTime?: mpopDateTime, locationId?: number) {
         if (dateTime != undefined){
             // await this.selectDate(dateTime.date)
-            await this.page.locator(`[class="moj-datepicker"]`).locator('[type="text"]').fill(dateTime.date)
+            await this.getClass("moj-datepicker").locator('[type="text"]').fill(dateTime.date)
             await this.fillText("startTime", dateTime.startTime)
             await this.fillText("endTime", dateTime.endTime)
         }
@@ -37,7 +37,7 @@ export default class LocationDateTimePage extends MPopPage {
     }
 
     async fillText(qa: string, text: string){
-       await this.page.locator(`[data-qa="${qa}"]`).locator('[type="text"]').fill(text)
+       await this.getQA(qa).locator('[type="text"]').fill(text)
     }
 
     async selectDate(date: string){

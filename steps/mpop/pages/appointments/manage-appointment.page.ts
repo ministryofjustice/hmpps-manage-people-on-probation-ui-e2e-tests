@@ -27,6 +27,6 @@ export default class ManageAppointmentsPage extends MPopPage {
     }
 
     async checkActionLink(id: number, value: string){
-        await expect(this.page.locator(`[data-qa="appointmentActions"]`).getByRole("listitem").nth(id).getByRole("link")).toHaveText(value)
+        await expect(this.getQA("appointmentActions").getByRole("listitem").nth(id).getByRole("link")).toHaveText(value)
     }
 }

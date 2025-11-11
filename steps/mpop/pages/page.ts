@@ -16,37 +16,46 @@ export default abstract class MPopPage {
         await this.checkQA("pageHeading", this.title)
     }
 
+    getQA(qa: string, locator: Locator|Page=this.page){
+        return locator.locator(`[data-qa="${qa}"]`)
+    }
+
     async clickRadio(qa: string, id: number){
-        await this.page.locator(`[data-qa="${qa}"]`).getByRole('radio').nth(id).click()
+        await this.getQA(qa).getByRole('radio').nth(id).click()
     }
 
     async submit(){
-        await this.page.locator('[data-qa="submit-btn"]').click()
+        await this.getQA("submit-btn").click()
+    }
+
+    getLink(name: string, locator: Locator|Page=this.page){
+        return locator.getByRole('link', {name: name})
     }
 
     async clickLink(name: string){
-        await this.page.getByRole('link', {name: name}).click()
-    }
-
-    async checkHref(name: string, value: string){
-        await expect(this.page.getByRole('link', {name: name})).toHaveAttribute('href', value)
+        await this.getLink(name).click()
     }
 
     async clickBackLink(){
-        await this.page.getByRole('link', {name: 'Back'}).click()
+        await this.getLink("back").click()
+    }
+
+    async checkHref(name: string, value: string){
+        await expect(this.getLink(name)).toHaveAttribute('href', value)
     }
 
     async checkQA(qa: string, value: string){
-        await expect(this.page.locator(`[data-qa="${qa}"]`)).toContainText(value)
+        await expect(this.getQA(qa)).toContainText(value)
     }
 
-    async tableLink(tableqa: string, cellqa: string){
-        await this.page.locator(`[data-qa="${tableqa}"]`).locator(`[data-qa="${cellqa}"]`).getByRole('link').click()
+    async clickTableLink(tableqa: string, cellqa: string){
+        await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click()
     }
 
     async sortByColumn(tableqa: string, cellqa: string, ascending: boolean){
-        const currentSort = await this.page.locator(`[data-qa="${tableqa}"]`).locator(`[data-qa="${cellqa}"]`).getAttribute('aria-sort')
-        const button = await this.page.locator(`[data-qa="${tableqa}"]`).locator(`[data-qa="${cellqa}"]`).getByRole('button')
+        const cell = this.getQA(cellqa, this.getQA(tableqa))
+        const currentSort = await cell.getAttribute('aria-sort')
+        const button = await cell.getByRole('button')
         if (currentSort === "none"){
             await button.click()
             if (!ascending){
@@ -63,13 +72,17 @@ export default abstract class MPopPage {
         }
     }
 
+    getNavigation(name: string, locator: Locator|Page=this.page){
+        return locator.getByRole('navigation', {name: name})
+    }
+
     async pagination(id: number | string){
         if (id === "previous"){
-            await this.page.getByRole("navigation", {name: "Previous"}).click()
+            await this.getNavigation("Previous").click()
         } else if (id == "next"){
-            await this.page.getByRole("navigation", {name: "Next"}).click()
+            await this.getNavigation("Next").click()
         } else {
-            await this.page.getByRole("navigation", {name: `${id}`}).click()
+            await this.getNavigation(`${id}`).click()
         }
     }
 
@@ -81,19 +94,23 @@ export default abstract class MPopPage {
         }
     }
 
+    getClass(cssClass: string, locator: Locator|Page=this.page){
+        return locator.locator(`[class="${cssClass}"]`)
+    }
+
     async checkSummaryRowKey(id: number, value: string){
-        await expect(this.page.locator('[class="govuk-summary-list__key"]').nth(id)).toContainText(value)
+        await expect(this.getClass("govuk-summary-list__key").nth(id)).toContainText(value)
     }
 
     async checkSummaryRowValue(id: number, value: string){
-        await expect(this.page.locator('[class="govuk-summary-list__value"]').nth(id)).toContainText(value)
+        await expect(this.getClass("govuk-summary-list__value").nth(id)).toContainText(value)
     }
 
     async checkEmptySummaryRowAction(id: number) {
-        await expect(this.page.locator('[class="govuk-summary-list__row"]').nth(id)).not.toContainClass("govuk-summary-list__actions")
+        await expect(this.getClass("govuk-summary-list__row").nth(id)).not.toContainClass("govuk-summary-list__actions")
     }
 
     async checkForError(value: string) {
-        await expect(this.page.locator('[data-qa="errorList"]')).toContainText(value)
+        await expect(this.getQA("errorList")).toContainText(value)
     }
 }

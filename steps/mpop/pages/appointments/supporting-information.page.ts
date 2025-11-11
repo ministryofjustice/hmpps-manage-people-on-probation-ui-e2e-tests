@@ -29,6 +29,6 @@ export default class SupportingInformationPage extends MPopPage {
     }
 
     async fillText(qa: string, note: string){
-       await this.page.locator(`[data-qa="${qa}"]`).getByRole('textbox').fill(note)
+       await this.getQA(qa).getByRole('textbox').fill(note)
     }
 }

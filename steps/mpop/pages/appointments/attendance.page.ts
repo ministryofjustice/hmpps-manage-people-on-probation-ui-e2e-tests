@@ -22,7 +22,7 @@ export default class AttendancePage extends MPopPage {
     }
 
     async selectOption(qa: string, option: string){
-        this.page.locator(`[data-qa="${qa}"]`).selectOption(option)
+        this.getQA(qa).selectOption(option)
     }
 
     async testBacklink(change: boolean) {
