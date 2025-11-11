@@ -28,6 +28,10 @@ export default abstract class MPopPage {
         await this.page.getByRole('link', {name: name}).click()
     }
 
+    async checkHref(name: string, value: string){
+        await expect(this.page.getByRole('link', {name: name})).toHaveAttribute('href', value)
+    }
+
     async clickBackLink(){
         await this.page.getByRole('link', {name: 'Back'}).click()
     }
