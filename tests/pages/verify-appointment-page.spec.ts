@@ -15,7 +15,7 @@ let appointments: AppointmentsPage
 
 test.describe('Appointments page', () => {
 
-  test.beforeAll(async ({ browser: b }) => {
+  test.beforeEach(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
@@ -24,7 +24,7 @@ test.describe('Appointments page', () => {
     appointments = new AppointmentsPage(page)
     await appointments.goTo(crn)
   })
-  test.afterAll(async () => {
+  test.afterEach(async () => {
     await context.close()
   })
 

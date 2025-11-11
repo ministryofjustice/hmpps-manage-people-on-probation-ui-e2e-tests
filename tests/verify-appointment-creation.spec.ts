@@ -20,18 +20,17 @@ let context: BrowserContext
 let page: Page
 
 test.describe('Create Appointments Full', () => {
-    test.beforeAll(async ({ browser: b }) => {
+    test.beforeEach(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
 
-    await page.clock.setSystemTime(new Date('2030-11-11T10:00:00')) 
      ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
   })
 
-  test.afterAll(async () => {
+  test.afterEach(async () => {
     await context.close()
   })
 

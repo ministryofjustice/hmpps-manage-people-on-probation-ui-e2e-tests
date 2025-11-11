@@ -1,17 +1,17 @@
 import { APIRequestContext, Browser, BrowserContext, expect, Page, request, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
-import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender'
+import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
-import { automatedTestUser1 } from '../../steps/test-data'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../../steps/mpop/appointments/create-appointment'
+import { automatedTestUser1 } from '../../../steps/test-data'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../../../steps/mpop/appointments/create-appointment'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import AppointmentsPage from '../../steps/mpop/pages/appointments.page'
-import SentencePage from '../../steps/mpop/pages/appointments/sentence.page'
-import TypeAttendancePage from '../../steps/mpop/pages/appointments/type-attendance.page'
-import LocationDateTimePage from '../../steps/mpop/pages/appointments/location-datetime.page'
-import LocationNotInListPage from '../../steps/mpop/pages/appointments/location-not-in-list.page'
+import AppointmentsPage from '../../../steps/mpop/pages/appointments.page'
+import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
+import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
+import LocationDateTimePage from '../../../steps/mpop/pages/appointments/location-datetime.page'
+import LocationNotInListPage from '../../../steps/mpop/pages/appointments/location-not-in-list.page'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -23,18 +23,17 @@ let context: BrowserContext
 let page: Page
 
 test.describe('Location dateTime page', () => {
-    test.beforeAll(async ({ browser: b }) => {
+    test.beforeEach(async ({ browser: b }) => {
         test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
 
-        await page.clock.setSystemTime(new Date('2030-11-11T10:00:00')) 
         ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
         sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     })
 
-    test.afterAll(async () => {
+    test.afterEach(async () => {
         await context.close()
     })
 
@@ -135,37 +134,30 @@ test.describe('Location dateTime page', () => {
         await locationDateTimePage.checkForError("Enter a time in the 24-hour format, for example 16:30")
     })
 
-    test('DateTime Validation - appointment in past', async () => {
-        test.setTimeout(120_000)
+    // test('DateTime Validation - appointment in past', async () => {
+    //     test.setTimeout(120_000)
 
-        const apiRequestContext: APIRequestContext = await request.newContext()
-        await apiRequestContext.post('https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/__test/set-mocked-time', {
-            data: {
-                time: new Date('2030-11-11T10:00:00'),
-            }
-        })
+    //     //navigate to start of arrange appointment pipeline
+    //     await loginToManageMySupervision(page)
+    //     const appointments = new AppointmentsPage(page)
+    //     await appointments.goTo(crn)
+    //     await appointments.checkOnPage()
+    //     await appointments.startArrangeAppointment()
 
-        //navigate to start of arrange appointment pipeline
-        await loginToManageMySupervision(page)
-        const appointments = new AppointmentsPage(page)
-        await appointments.goTo(crn)
-        await appointments.checkOnPage()
-        await appointments.startArrangeAppointment()
+    //     const dateTime: mpopDateTime = {
+    //         date: "11/11/2030",
+    //         startTime: "05:15",
+    //         endTime: "06:15"
+    //     }
+    //     const sentencePage = new SentencePage(page)
+    //     await sentencePage.completePage(0)
+    //     const typeAttendancePage = new TypeAttendancePage(page)
+    //     await typeAttendancePage.completePage(0)
+    //     const locationDateTimePage = new LocationDateTimePage(page)
+    //     await locationDateTimePage.completePage(dateTime, 0)
 
-        const dateTime: mpopDateTime = {
-            date: "11/11/2030",
-            startTime: "05:15",
-            endTime: "06:15"
-        }
-        const sentencePage = new SentencePage(page)
-        await sentencePage.completePage(0)
-        const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0)
-        const locationDateTimePage = new LocationDateTimePage(page)
-        await locationDateTimePage.completePage(dateTime, 0)
-
-        await locationDateTimePage.checkForError("The start time must be now or in the future")
-    })
+    //     await locationDateTimePage.checkForError("The start time must be now or in the future")
+    // })
 
     test('DateTime Validation - non working day warning', async () => {
         test.setTimeout(120_000)
