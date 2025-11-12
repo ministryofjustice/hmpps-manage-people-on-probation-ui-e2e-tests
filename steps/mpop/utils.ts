@@ -1,5 +1,5 @@
 import { Page } from '@playwright/test'
-import { DateTime} from 'luxon'
+import { DateTime } from 'luxon'
 import { mpopDateTime } from './appointments/create-appointment'
 
 // To format the date as 'd MMM yyyy'
@@ -36,17 +36,16 @@ export const testBackLink = async(page: Page) => {
 }
 
 export const updateDateTime = (date: mpopDateTime): mpopDateTime => {
-    if (parseInt(date.endTime.substring(0,2)) <= 22){
+    if (parseInt(date.endTime.substring(0,2)) <= 18){
         date.startTime = (parseInt(date.startTime.substring(0,2))+1).toString() + date.startTime.substring(2,5)
         date.endTime = (parseInt(date.endTime.substring(0,2))+1).toString() + date.endTime.substring(2,5)
     } else {
-        date.startTime = (parseInt(date.startTime.substring(0,2))-22).toString() + date.startTime.substring(2,5)
-        date.endTime = (parseInt(date.endTime.substring(0,2))-22).toString() + date.endTime.substring(2,5)
-        let dateTime = new DateTime()
-        dateTime.fromFormat(date.date, {locale: 'en-gb'})
-        dateTime.plus({ days: 1 })
+        date.startTime = "09" + date.startTime.substring(2,5)
+        date.endTime = "10" + date.endTime.substring(2,5)
+        let dateTime = DateTime.fromFormat(date.date, "d/M/yyyy")
+        dateTime = dateTime.plus({ days: 1 })
         while (dateTime.weekend){
-            dateTime.plus({ days: 1 })
+            dateTime = dateTime.plus({ days: 1 })
         }
         date.date = luxonString(dateTime)
     }

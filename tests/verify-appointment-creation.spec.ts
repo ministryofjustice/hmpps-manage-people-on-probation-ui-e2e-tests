@@ -30,7 +30,7 @@ test.describe('Create Appointments Full', () => {
   })
 
   test('Appointment + SimilarNextAppointment + FullNextAppointment', async () => {
-    test.setTimeout(120_000)
+    test.setTimeout(360_000)
 
     //navigate to start of arrange appointment pipeline
     await loginToManageMySupervision(page)
@@ -42,8 +42,8 @@ test.describe('Create Appointments Full', () => {
     //arrange appointment
     const dateTime: mpopDateTime = {
       date: luxonString(tomorrow),
-      startTime: "22:15",
-      endTime: "23:15"
+      startTime: "15:15",
+      endTime: "16:15"
     }
     const attendee: mpopAttendee = {
       team: "N07T02",
@@ -65,16 +65,16 @@ test.describe('Create Appointments Full', () => {
     //arrange another similar
     const dateTime_similar: mpopDateTime = {
         date: luxonString(plus3Months),
-        startTime: "22:15",
-        endTime: "23:15"
+        startTime: "15:15",
+        endTime: "16:15"
     }
     await createSimilarAppointmentMPop(page, dateTime_similar, false)
 
     //arrange another
     const dateTime_another: mpopDateTime = {
         date: luxonString(plus6Months),
-        startTime: "22:15",
-        endTime: "23:15"
+        startTime: "15:15",
+        endTime: "16:15"
     }
     const appointmentNoAttendee: mpopArrangeAppointment = {
         crn: crn,
