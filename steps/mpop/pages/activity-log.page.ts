@@ -1,5 +1,9 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "./page";
+import * as dotenv from 'dotenv'
+
+dotenv.config({ path: '.env' })
+const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
 
 export default class ActivityLogPage extends MPopPage {
     view : string = "default"
@@ -10,7 +14,7 @@ export default class ActivityLogPage extends MPopPage {
     }
 
     async goTo(crn: string){
-       await this.page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${crn}/activity-log/${this.view === "default" ? "" : `?view=${this.view}`}`)
+       await this.page.goto(`${MPOP_URL}/case/${crn}/activity-log/${this.view === "default" ? "" : `?view=${this.view}`}`)
     }
 
     async changeView(){
