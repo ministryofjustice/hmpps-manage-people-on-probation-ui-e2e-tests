@@ -62,31 +62,31 @@ test.describe('Create Appointments Full', () => {
     }
     await createAppointmentMPop(page, appointment)
 
-    // //arrange another similar
-    // const dateTime_similar: mpopDateTime = {
-    //     date: luxonString(plus3Months),
-    //     startTime: "15:15",
-    //     endTime: "16:15"
-    // }
-    // await createSimilarAppointmentMPop(page, dateTime_similar, false)
+    //arrange another similar
+    const dateTime_similar: mpopDateTime = {
+        date: luxonString(plus3Months),
+        startTime: "22:15",
+        endTime: "23:15"
+    }
+    await createSimilarAppointmentMPop(page, dateTime_similar, false)
 
-    // //arrange another
-    // const dateTime_another: mpopDateTime = {
-    //     date: luxonString(plus6Months),
-    //     startTime: "15:15",
-    //     endTime: "16:15"
-    // }
-    // const appointmentNoAttendee: mpopArrangeAppointment = {
-    //     crn: crn,
-    //     sentenceId: 0,
-    //     typeId: 0,
-    //     isVisor: true,
-    //     dateTime: dateTime_another,
-    //     locationId: 0,
-    //     note: "hello world",
-    //     sensitivity: false
-    // }
-    // await createAnotherAppointmentMPop(page, appointmentNoAttendee)
+    //arrange another
+    const dateTime_another: mpopDateTime = {
+        date: luxonString(plus6Months),
+        startTime: "22:15",
+        endTime: "23:15"
+    }
+    const appointmentNoAttendee: mpopArrangeAppointment = {
+        crn: crn,
+        sentenceId: 0,
+        typeId: 0,
+        isVisor: true,
+        dateTime: dateTime_another,
+        locationId: 0,
+        note: "hello world",
+        sensitivity: false
+    }
+    await createAnotherAppointmentMPop(page, appointmentNoAttendee)
 
     await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")  
   })
