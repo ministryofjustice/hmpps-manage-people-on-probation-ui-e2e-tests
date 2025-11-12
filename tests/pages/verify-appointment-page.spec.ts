@@ -4,10 +4,11 @@ import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-pr
 import AppointmentsPage from '../../steps/mpop/pages/appointments.page.ts'
 import caseUpcomingAppointmentsPage from '../../steps/mpop/pages/appointments/upcoming-appointments.page.ts'
 import ActivityLogPage from '../../steps/mpop/pages/activity-log.page.ts'
+import { testCrn } from '../../steps/test-data.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string = "X756510"
+let crn: string = testCrn
 let browser: Browser
 let context: BrowserContext
 let page: Page

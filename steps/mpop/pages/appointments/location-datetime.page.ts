@@ -2,6 +2,8 @@ import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 import { mpopDateTime } from "../../appointments/create-appointment";
 import TypeAttendancePage from "./type-attendance.page";
+import { DateTime } from 'luxon'
+import { updateDateTime } from "../../utils";
 
 export default class LocationDateTimePage extends MPopPage {
     constructor(page: Page) {
@@ -23,6 +25,17 @@ export default class LocationDateTimePage extends MPopPage {
             await this.clickRadio("locationCode", locationId)
         }
         await this.submit()
+        await this.validateDateTime(dateTime, locationId)
+    }
+
+    async validateDateTime(dateTime: mpopDateTime, locationId?: number){
+        try {
+            await this.checkOnPage()
+            dateTime = updateDateTime(dateTime)
+            await this.completePage(dateTime, locationId)
+        } catch {
+            return
+        }
     }
 
     async testBacklink(change: boolean) {

@@ -5,3 +5,5 @@ export const automatedTestUser1 = {
     firstName: 'AutomatedTestUser',
     lastName: 'AutomatedTestUser',
 }
+
+export const testCrn = "X756510"

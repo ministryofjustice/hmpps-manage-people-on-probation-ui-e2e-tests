@@ -2,10 +2,11 @@ import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import ActivityLogPage from '../../steps/mpop/pages/activity-log.page.ts'
+import { testCrn } from '../../steps/test-data.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string = "X756510"
+let crn: string = testCrn
 let browser: Browser
 let context: BrowserContext
 let page: Page
