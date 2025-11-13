@@ -44,7 +44,7 @@ export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
         date.endTime = "10" + date.endTime.substring(2,5)
         let dateTime = DateTime.fromFormat(date.date, "d/M/yyyy")
         dateTime = dateTime.plus({ days: 1 })
-        while (dateTime.weekend){
+        while (dateTime.isWeekend){
             dateTime = dateTime.plus({ days: 1 })
         }
         date.date = luxonString(dateTime)
