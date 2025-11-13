@@ -8,7 +8,7 @@ export default abstract class MPopPage {
         this.page = page
         this.title = title
         if (this.title) {
-            this.checkOnPage()
+            this.checkOnPage() 
         }
     }
 

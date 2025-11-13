@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "../page";
-import { mpopAttendee } from "../../appointments/create-appointment";
+import { MpopAttendee } from "../../appointments/create-appointment";
 import AttendancePage from "./attendance.page";
 import SentencePage from "./sentence.page";
 
@@ -9,7 +9,7 @@ export default class TypeAttendancePage extends MPopPage {
         super(page, "Appointment type and attendance")
     }
 
-    async completePage(id: number, attendee?: mpopAttendee, isVisor?: boolean) {
+    async completePage(id: number, attendee?: MpopAttendee, isVisor?: boolean) {
         if (attendee != undefined){
             await this.clickLink('change')
             const attendancePage = new AttendancePage(this.page)

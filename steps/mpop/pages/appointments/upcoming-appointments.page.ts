@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 
-export default class caseUpcomingAppointmentsPage extends MPopPage {
+export default class CaseUpcomingAppointmentsPage extends MPopPage {
     constructor(page: Page) {
         super(page, "")
     }

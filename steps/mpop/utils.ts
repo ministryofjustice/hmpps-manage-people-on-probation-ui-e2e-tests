@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test'
 import { DateTime } from 'luxon'
-import { mpopDateTime } from './appointments/create-appointment'
+import { MpopDateTime } from './appointments/create-appointment'
 
 // To format the date as 'd MMM yyyy'
 export const mpopFormatDate = (date: Date) => {
@@ -35,7 +35,7 @@ export const testBackLink = async(page: Page) => {
   await page.locator('[data-qa="submit-btn"]').click()
 }
 
-export const updateDateTime = (date: mpopDateTime): mpopDateTime => {
+export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
     if (parseInt(date.endTime.substring(0,2)) <= 18){
         date.startTime = (parseInt(date.startTime.substring(0,2))+1).toString() + date.startTime.substring(2,5)
         date.endTime = (parseInt(date.endTime.substring(0,2))+1).toString() + date.endTime.substring(2,5)

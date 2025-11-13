@@ -4,8 +4,8 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
-import { automatedTestUser1, testCrn } from '../steps/test-data'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../steps/mpop/appointments/create-appointment'
+import { attendee, automatedTestUser1, testCrn } from '../steps/test-data'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../steps/mpop/appointments/create-appointment'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import AppointmentsPage from '../steps/mpop/pages/appointments.page'
 import { luxonString, plus3Months, plus6Months, today, tomorrow } from '../steps/mpop/utils'
@@ -40,16 +40,12 @@ test.describe('Create Appointments Full', () => {
     await appointments.startArrangeAppointment()
 
     //arrange appointment
-    const dateTime: mpopDateTime = {
+    const dateTime: MpopDateTime = {
       date: luxonString(tomorrow),
       startTime: "15:15",
       endTime: "16:15"
     }
-    const attendee: mpopAttendee = {
-      team: "N07T02",
-      user: "AndyAdamczak1"
-    }
-    const appointment: mpopArrangeAppointment = {
+    const appointment: MpopArrangeAppointment = {
       crn: crn,
       sentenceId: 0,
       typeId: 0,
@@ -63,7 +59,7 @@ test.describe('Create Appointments Full', () => {
     await createAppointmentMPop(page, appointment)
 
     //arrange another similar
-    const dateTime_similar: mpopDateTime = {
+    const dateTime_similar: MpopDateTime = {
         date: luxonString(plus3Months),
         startTime: "15:15",
         endTime: "16:15"
@@ -71,12 +67,12 @@ test.describe('Create Appointments Full', () => {
     await createSimilarAppointmentMPop(page, dateTime_similar, false)
 
     //arrange another
-    const dateTime_another: mpopDateTime = {
+    const dateTime_another: MpopDateTime = {
         date: luxonString(plus6Months),
         startTime: "15:15",
         endTime: "16:15"
     }
-    const appointmentNoAttendee: mpopArrangeAppointment = {
+    const appointmentNoAttendee: MpopArrangeAppointment = {
         crn: crn,
         sentenceId: 0,
         typeId: 0,
@@ -103,12 +99,12 @@ test.describe('Create Appointments Full', () => {
   //   await appointments.startArrangeAppointment()
 
   //   //arrange appointment
-  //   const dateTime: mpopDateTime = {
+  //   const dateTime: MpopDateTime = {
   //     date: "13/11/2030",
   //     startTime: "15:15",
   //     endTime: "16:15"
   //   }
-  //   const appointmentNoLocation: mpopArrangeAppointment = {
+  //   const appointmentNoLocation: MpopArrangeAppointment = {
   //     crn: crn,
   //     sentenceId: 0,
   //     typeId: 1,

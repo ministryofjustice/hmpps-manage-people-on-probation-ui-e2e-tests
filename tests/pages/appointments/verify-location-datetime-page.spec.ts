@@ -5,7 +5,7 @@ import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
 import { automatedTestUser1 } from '../../../steps/test-data'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, mpopArrangeAppointment, mpopAttendee, mpopDateTime} from '../../../steps/mpop/appointments/create-appointment'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../../../steps/mpop/appointments/create-appointment'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import AppointmentsPage from '../../../steps/mpop/pages/appointments.page'
 import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
@@ -47,7 +47,7 @@ test.describe('Location dateTime page', () => {
         await appointments.checkOnPage()
         await appointments.startArrangeAppointment()
 
-        const dateTime: mpopDateTime = {
+        const dateTime: MpopDateTime = {
             date: "12/11/2030",
             startTime: "15:15",
             endTime: "16:15"
@@ -72,7 +72,7 @@ test.describe('Location dateTime page', () => {
         await appointments.checkOnPage()
         await appointments.startArrangeAppointment()
 
-        const attendee: mpopAttendee = {
+        const attendee: MpopAttendee = {
             provider: "N56",
             team: "N56AAT"
         }
@@ -94,7 +94,7 @@ test.describe('Location dateTime page', () => {
         await appointments.checkOnPage()
         await appointments.startArrangeAppointment()
 
-        const dateTime: mpopDateTime = {
+        const dateTime: MpopDateTime = {
             date: "12/11/2030",
             startTime: "15:15",
             endTime: "12:15"
@@ -119,7 +119,7 @@ test.describe('Location dateTime page', () => {
         await appointments.checkOnPage()
         await appointments.startArrangeAppointment()
 
-        const dateTime: mpopDateTime = {
+        const dateTime: MpopDateTime = {
             date: "12/11/2030",
             startTime: "5:15",
             endTime: "13:15"
@@ -144,7 +144,7 @@ test.describe('Location dateTime page', () => {
     //     await appointments.checkOnPage()
     //     await appointments.startArrangeAppointment()
 
-    //     const dateTime: mpopDateTime = {
+    //     const dateTime: MpopDateTime = {
     //         date: "11/11/2030",
     //         startTime: "05:15",
     //         endTime: "06:15"
@@ -169,7 +169,7 @@ test.describe('Location dateTime page', () => {
         await appointments.checkOnPage()
         await appointments.startArrangeAppointment()
 
-        const dateTime: mpopDateTime = {
+        const dateTime: MpopDateTime = {
             date: "16/11/2030",
             startTime: "12:15",
             endTime: "13:15"

@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "../page";
-import { mpopAttendee } from "../../appointments/create-appointment";
+import { MpopAttendee } from "../../appointments/create-appointment";
 import TypeAttendancePage from "./type-attendance.page";
 
 export default class AttendancePage extends MPopPage {
@@ -8,7 +8,7 @@ export default class AttendancePage extends MPopPage {
         super(page, "Who will attend the appointment?")
     }
 
-    async completePage(attendee: mpopAttendee) {
+    async completePage(attendee: MpopAttendee) {
         if (attendee.provider){
             await this.selectOption("providerCode", attendee.provider)
         }
@@ -22,7 +22,7 @@ export default class AttendancePage extends MPopPage {
     }
 
     async selectOption(qa: string, option: string){
-        this.getQA(qa).selectOption(option)
+        await this.getQA(qa).selectOption(option)
     }
 
     async testBacklink(change: boolean) {

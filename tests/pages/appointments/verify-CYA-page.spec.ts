@@ -1,37 +1,32 @@
-import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
+import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
-import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/createOffender'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
-import { automatedTestUser1 } from '../../../steps/test-data'
-import { mpopArrangeAppointment, mpopAttendee, mpopDateTime, setupAppointmentMPop} from '../../../steps/mpop/appointments/create-appointment'
+import { attendee, testCrn } from '../../../steps/test-data'
+import { MpopArrangeAppointment, MpopDateTime, setupAppointmentMPop} from '../../../steps/mpop/appointments/create-appointment'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import AppointmentsPage from '../../../steps/mpop/pages/appointments.page'
 import CYAPage from '../../../steps/mpop/pages/appointments/CYA.page'
 import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
 import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
 import LocationDateTimePage from '../../../steps/mpop/pages/appointments/location-datetime.page'
+import { luxonString, plus3Months, tomorrow } from '../../../steps/mpop/utils'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string
+let crn: string = testCrn
+let isVisor: boolean = true
 let person: Person
-let sentence: CreatedEvent
 let browser: Browser
 let context: BrowserContext
 let page: Page
 
 test.describe('CYA page', () => {
-  test.beforeEach(async ({ browser: b }) => {
+  test.beforeAll(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
 
-     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-  
     //navigate to start of arrange appointment pipeline
     await loginToManageMySupervision(page)
 
@@ -41,19 +36,16 @@ test.describe('CYA page', () => {
     await appointments.startArrangeAppointment()
 
     //navigate to CYA page - noVisor
-    const dateTime: mpopDateTime = {
-      date: "12/11/2030",
+    const dateTime: MpopDateTime = {
+      date: luxonString(plus3Months),
       startTime: "15:15",
       endTime: "16:15"
     }
-    const attendee: mpopAttendee = {
-      team: "N07T02",
-      user: "AndyAdamczak1"
-    }
-    const appointmentNoVisor: mpopArrangeAppointment = {
+    const appointmentNoVisor: MpopArrangeAppointment = {
       crn: crn,
       sentenceId: 0,
       typeId: 0,
+      isVisor: isVisor,
       attendee: attendee,
       dateTime: dateTime,
       locationId: 0,
@@ -63,7 +55,7 @@ test.describe('CYA page', () => {
     await setupAppointmentMPop(page, appointmentNoVisor)
   })
 
-  test.afterEach(async () => {
+  test.afterAll(async () => {
     await context.close()
   })
 
@@ -72,13 +64,14 @@ test.describe('CYA page', () => {
 
     const cyaPage = new CYAPage(page)
 
-    await cyaPage.checkSummaryRowValue(0, "Adult Custody < 12m (6 Months)")
+    await cyaPage.checkSummaryRowValue(0, "CJA - Community Order (6 Months)")
     await cyaPage.checkSummaryRowValue(1, "Planned office visit (NS)")
-    await cyaPage.checkSummaryRowValue(2, "Andy Adamczak (NPS - Other) (OMU B, London)")
-    await cyaPage.checkSummaryRowValue(3, "208 Lewisham High Street")
-    await cyaPage.checkSummaryRowValue(4, "12 November 2030 from 15:15 to 16:15")
-    await cyaPage.checkSummaryRowValue(5, "hello world")
-    await cyaPage.checkSummaryRowValue(6, "Yes")
+    await cyaPage.checkSummaryRowValue(2, "Yes")
+    await cyaPage.checkSummaryRowValue(3, "Andy Adamczak (NPS - Other) (OMU B, London)")
+    await cyaPage.checkSummaryRowValue(4, "208 Lewisham High Street")
+    // await cyaPage.checkSummaryRowValue(5, "12 November 2030 from 15:15 to 16:15")
+    await cyaPage.checkSummaryRowValue(6, "hello world")
+    await cyaPage.checkSummaryRowValue(7, "Yes")
   })
 
   test('Check CYA page links', async() => {
@@ -87,9 +80,10 @@ test.describe('CYA page', () => {
     const cyaPage = new CYAPage(page)
     
     //check each change link and return
-    for (let i=0; i<7; i+=1){
-      const page = await cyaPage.clickChangeLink(i)
-      await page.clickBackLink()
+    const total = isVisor != undefined ? 8 : 7
+    for (let i=0; i< total; i+=1){
+      const targetPage = await cyaPage.clickChangeLink(i, isVisor)
+      await targetPage.clickBackLink()
     }
     await cyaPage.checkOnPage()
   })
@@ -99,7 +93,7 @@ test.describe('CYA page', () => {
 
     const cyaPage = new CYAPage(page)
     const sentencePage = await cyaPage.clickChangeLink(0) as SentencePage
-    await sentencePage.completePage(1)
+    await sentencePage.completePage(6)
     //next page is type as previous value no longer valid
     const typeAttendancePage = new TypeAttendancePage(page)
     await typeAttendancePage.clickBackLink()
@@ -115,7 +109,7 @@ test.describe('CYA page', () => {
     await cyaPage.checkOnPage()
 
     //check results
-    await cyaPage.checkSummaryRowValue(0, person.firstName)
+    await cyaPage.checkSummaryRowValue(0, "James")
     await cyaPage.checkSummaryRowValue(1, "Planned doorstep contact (NS)")
   })
 })

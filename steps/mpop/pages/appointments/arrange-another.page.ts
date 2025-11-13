@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "../page";
-import { mpopDateTime } from "../../appointments/create-appointment";
+import { MpopDateTime } from "../../appointments/create-appointment";
 import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
 
@@ -9,7 +9,7 @@ export default class ArrangeAnotherPage extends MPopPage {
         super(page, "Arrange another appointment")
     }
 
-    async completePage(dateTime: mpopDateTime, sensitivity: boolean, note?: string) {
+    async completePage(dateTime: MpopDateTime, sensitivity: boolean, note?: string) {
         await this.clickLink('Choose date and time')
         const dateTimePage = new LocationDateTimePage(this.page)
         await dateTimePage.completePage(dateTime)

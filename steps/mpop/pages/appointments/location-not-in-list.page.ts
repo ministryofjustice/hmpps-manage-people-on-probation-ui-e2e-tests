@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
-import { mpopDateTime } from "../../appointments/create-appointment";
+import { MpopDateTime } from "../../appointments/create-appointment";
 import TypeAttendancePage from "./type-attendance.page";
 
 export default class LocationNotInListPage extends MPopPage {
