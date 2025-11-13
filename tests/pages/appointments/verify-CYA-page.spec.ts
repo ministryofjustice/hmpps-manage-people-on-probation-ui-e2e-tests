@@ -15,13 +15,12 @@ dotenv.config({ path: '.env' }) // Load environment variables
 
 let crn: string = testCrn
 let isVisor: boolean = true
-let person: Person
 let browser: Browser
 let context: BrowserContext
 let page: Page
 
 test.describe('CYA page', () => {
-  test.beforeAll(async ({ browser: b }) => {
+  test.beforeEach(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
@@ -41,7 +40,7 @@ test.describe('CYA page', () => {
       startTime: "15:15",
       endTime: "16:15"
     }
-    const appointmentNoVisor: MpopArrangeAppointment = {
+    const appointment: MpopArrangeAppointment = {
       crn: crn,
       sentenceId: 0,
       typeId: 0,
@@ -52,10 +51,10 @@ test.describe('CYA page', () => {
       note: "hello world",
       sensitivity: true
     }
-    await setupAppointmentMPop(page, appointmentNoVisor)
+    await setupAppointmentMPop(page, appointment)
   })
 
-  test.afterAll(async () => {
+  test.afterEach(async () => {
     await context.close()
   })
 
