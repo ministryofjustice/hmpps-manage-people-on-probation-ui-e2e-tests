@@ -1,7 +1,7 @@
 import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import ManageAppointmentsPage from '../../../steps/mpop/pages/appointments/manage-appointment.page.ts'
+import ManageAppointmentsPage, { ManageAction } from '../../../steps/mpop/pages/appointments/manage-appointment.page.ts'
 import { testCrn } from '../../../steps/test-data.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
@@ -36,9 +36,9 @@ test.describe('Manage page', () => {
     appointment = new ManageAppointmentsPage(page)
     await appointment.goTo(crn, contactIdLatest)
     await appointment.checkHref("Add appointment notes", `/case/${crn}/appointments/appointment/${contactIdLatest}/add-note`)
-    await appointment.checkActionLink(1, "Add appointment notes")
+    await appointment.checkActionLink(ManageAction.Notes, "Add appointment notes")
     await appointment.checkHref("Arrange next appointment", `/case/${crn}/appointments/appointment/${contactIdLatest}/next-appointment?back=/case/${crn}/appointments/appointment/${contactIdLatest}/manage`)
-    await appointment.checkActionLink(2, "Arrange next appointment")
+    await appointment.checkActionLink(ManageAction.Next, "Arrange next appointment")
   })
   test('Check action links exist - notes and log', async() => {
     appointment = new ManageAppointmentsPage(page)
@@ -48,8 +48,8 @@ test.describe('Manage page', () => {
     await appointment.checkQA("sensitiveTag", "Sensitive")
     //action links
     await appointment.checkHref("Log attended and complied appointment", `/case/${crn}/appointments/appointment/${contactIdPast}/attended-complied`)
-    await appointment.checkActionLink(0, "Log attended and complied appointment")
+    await appointment.checkActionLink(ManageAction.AttendedComplied, "Log attended and complied appointment")
     await appointment.checkHref("Add appointment notes", `/case/${crn}/appointments/appointment/${contactIdPast}/add-note`)
-    await appointment.checkActionLink(1, "Add appointment notes")
+    await appointment.checkActionLink(ManageAction.Notes, "Add appointment notes")
   })
 })

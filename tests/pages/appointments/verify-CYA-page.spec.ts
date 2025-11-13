@@ -1,4 +1,4 @@
-import { Browser, BrowserContext, Page, test } from '@playwright/test'
+import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import { attendee, testCrn } from '../../../steps/test-data'
@@ -19,6 +19,24 @@ let browser: Browser
 let context: BrowserContext
 let page: Page
 
+//navigate to CYA page - noVisor
+const dateTime: MpopDateTime = {
+  date: luxonString(plus3Months),
+  startTime: "15:15",
+  endTime: "16:15"
+}
+const appointment: MpopArrangeAppointment = {
+  crn: crn,
+  sentenceId: 0,
+  typeId: 0,
+  isVisor: isVisor,
+  attendee: attendee,
+  dateTime: dateTime,
+  locationId: 0,
+  note: "hello world",
+  sensitivity: true
+}
+
 test.describe('CYA page', () => {
   test.beforeEach(async ({ browser: b }) => {
     test.setTimeout(120000)
@@ -34,23 +52,6 @@ test.describe('CYA page', () => {
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
 
-    //navigate to CYA page - noVisor
-    const dateTime: MpopDateTime = {
-      date: luxonString(plus3Months),
-      startTime: "15:15",
-      endTime: "16:15"
-    }
-    const appointment: MpopArrangeAppointment = {
-      crn: crn,
-      sentenceId: 0,
-      typeId: 0,
-      isVisor: isVisor,
-      attendee: attendee,
-      dateTime: dateTime,
-      locationId: 0,
-      note: "hello world",
-      sensitivity: true
-    }
     await setupAppointmentMPop(page, appointment)
   })
 
@@ -63,14 +64,14 @@ test.describe('CYA page', () => {
 
     const cyaPage = new CYAPage(page)
 
-    await cyaPage.checkSummaryRowValue(0, "CJA - Community Order (6 Months)")
-    await cyaPage.checkSummaryRowValue(1, "Planned office visit (NS)")
-    await cyaPage.checkSummaryRowValue(2, "Yes")
-    await cyaPage.checkSummaryRowValue(3, "Andy Adamczak (NPS - Other) (OMU B, London)")
-    await cyaPage.checkSummaryRowValue(4, "208 Lewisham High Street")
-    // await cyaPage.checkSummaryRowValue(5, "12 November 2030 from 15:15 to 16:15")
-    await cyaPage.checkSummaryRowValue(6, "hello world")
-    await cyaPage.checkSummaryRowValue(7, "Yes")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Appointment for"), "CJA - Community Order (6 Months)")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Appointment type"), "Planned office visit (NS)")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("VISOR report"), "Yes")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Attending"), "Andy Adamczak (NPS - Other) (OMU B, London)")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Location"), "208 Lewisham High Street")
+    //await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Date and time"), /from (.*) to/)
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Supporting information"), "hello world")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Sensitivity"), "Yes")
   })
 
   test('Check CYA page links', async() => {
@@ -98,7 +99,8 @@ test.describe('CYA page', () => {
     await typeAttendancePage.clickBackLink()
 
     //check for the missing change link    
-    await cyaPage.checkEmptySummaryRowAction(4)
+    console.log(await cyaPage.getSummaryRowByKey("Location"))
+    await expect(await cyaPage.getSummaryRowByKey("Location")).toBeUndefined()
 
     //fill in missing values
     await cyaPage.clickChangeLink(1)
@@ -108,7 +110,7 @@ test.describe('CYA page', () => {
     await cyaPage.checkOnPage()
 
     //check results
-    await cyaPage.checkSummaryRowValue(0, "James")
-    await cyaPage.checkSummaryRowValue(1, "Planned doorstep contact (NS)")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Appointment for"), "James")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Appointment type"), "Planned doorstep contact (NS)")
   })
 })

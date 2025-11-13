@@ -5,6 +5,12 @@ import * as dotenv from 'dotenv'
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
 
+export enum ManageAction {
+  AttendedComplied = 0,
+  Notes = 1,
+  Next = 2
+}
+
 export default class ManageAppointmentsPage extends MPopPage {
     constructor(page: Page) {
         super(page, "Manage")
@@ -30,7 +36,7 @@ export default class ManageAppointmentsPage extends MPopPage {
         await this.clickLink("Arrange next appointment")
     }
 
-    async checkActionLink(id: number, value: string){
+    async checkActionLink(id: ManageAction, value: string){
         await expect(this.getQA("appointmentActions").getByRole("listitem").nth(id).getByRole("link")).toHaveText(value)
     }
 }

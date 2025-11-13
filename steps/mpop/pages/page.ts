@@ -98,19 +98,30 @@ export default abstract class MPopPage {
         return locator.locator(`[class="${cssClass}"]`)
     }
 
-    async checkSummaryRowKey(id: number, value: string){
-        await expect(this.getClass("govuk-summary-list__key").nth(id)).toContainText(value)
-    }
-
-    async checkSummaryRowValue(id: number, value: string){
-        await expect(this.getClass("govuk-summary-list__value").nth(id)).toContainText(value)
-    }
-
-    async checkEmptySummaryRowAction(id: number) {
-        await expect(this.getClass("govuk-summary-list__row").nth(id)).not.toContainClass("govuk-summary-list__actions")
-    }
-
     async checkForError(value: string) {
         await expect(this.getQA("errorList")).toContainText(value)
     }
+
+    async getSummaryRowByID(id: number): Promise<Locator> {
+        return this.getClass("govuk-summary-list__row").nth(id)
+    }
+
+    async getSummaryRowByKey(key: string): Promise<Locator> {
+        const rows = await this.getClass("govuk-summary-list__key", this.getClass("govuk-summary-list__row")).allTextContents()
+        const index = rows.indexOf(rows.find(element => (element.includes(key))))
+        if (index != -1){
+            return this.getClass("govuk-summary-list__row").nth(index)
+        }
+        return undefined
+    }
+
+    async checkSummaryRowValue(row: Locator, value: string|RegExp){
+        await expect(this.getClass("govuk-summary-list__value", row)).toContainText(value)
+    }
+
+    async checkSummaryRowKey(row: Locator, value: string){
+        await expect(this.getClass("govuk-summary-list__key", row)).toContainText(value)
+    }
+
+
 }

@@ -1,4 +1,4 @@
-import { Page } from '@playwright/test'
+import { Locator, Page } from '@playwright/test'
 import { DateTime } from 'luxon'
 import { MpopDateTime } from './appointments/create-appointment'
 

@@ -24,7 +24,7 @@ export default class CYAPage extends MPopPage {
         "Sensitivity",
         ]
         for (let i=0; i<rows.length; i+=1) {
-            await this.checkSummaryRowKey(i, rows[i])
+            await this.checkSummaryRowKey(await this.getSummaryRowByID(i), rows[i])
         }
         await this.submit()
     }
