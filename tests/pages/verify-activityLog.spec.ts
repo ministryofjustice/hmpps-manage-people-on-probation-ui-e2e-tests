@@ -3,6 +3,7 @@ import * as dotenv from 'dotenv'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import ActivityLogPage from '../../steps/mpop/pages/activity-log.page.ts'
 import { testCrn } from '../../steps/test-data.ts'
+import { navigateToActivityLog } from '../../steps/mpop/appointments/base-navigation.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -19,9 +20,7 @@ test.describe('Activity log page', () => {
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
-    await loginToManageMySupervision(page)
-    activityLog = new ActivityLogPage(page)
-    await activityLog.goTo(crn)
+    activityLog = await navigateToActivityLog(page, crn)
   })
   test.afterEach(async () => {
     await context.close()

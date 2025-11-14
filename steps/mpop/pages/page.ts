@@ -123,5 +123,18 @@ export default abstract class MPopPage {
         await expect(this.getClass("govuk-summary-list__key", row)).toContainText(value)
     }
 
+    async selectOption(qa: string, option: string){
+        await this.getQA(qa).selectOption(option)
+    }
+
+    async useSubNavigation(qa: string){
+        await this.getQA(qa).getByRole('link').click()
+    }
+
+    async usePrimaryNavigation(tab: string){
+        await this.page.locator('[class="moj-primary-navigation"]').getByRole('link', {name: tab}).click()
+    }
+
+
 
 }

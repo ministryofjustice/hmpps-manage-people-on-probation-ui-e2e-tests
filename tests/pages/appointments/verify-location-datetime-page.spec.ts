@@ -12,7 +12,8 @@ import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
 import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
 import LocationDateTimePage from '../../../steps/mpop/pages/appointments/location-datetime.page'
 import LocationNotInListPage from '../../../steps/mpop/pages/appointments/location-not-in-list.page'
-import { luxonString, nextWeekend, tomorrow } from '../../../steps/mpop/utils'
+import { luxonString, nextWeekend, tomorrow, yesterday } from '../../../steps/mpop/utils'
+import { navigateToAppointments } from '../../../steps/mpop/appointments/base-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -27,6 +28,11 @@ test.describe('Location dateTime page', () => {
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
+
+        //navigate to start of arrange appointment pipeline
+        const appointments : AppointmentsPage = await navigateToAppointments(page, testCrn)
+        await appointments.checkOnPage()
+        await appointments.startArrangeAppointment()
     })
 
     test.afterEach(async () => {
@@ -35,13 +41,6 @@ test.describe('Location dateTime page', () => {
 
     test('CheckLocationNotInList page', async () => {
         test.setTimeout(120_000)
-
-        //navigate to start of arrange appointment pipeline
-        await loginToManageMySupervision(page)
-        const appointments = new AppointmentsPage(page)
-        await appointments.goTo(crn)
-        await appointments.checkOnPage()
-        await appointments.startArrangeAppointment()
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -61,13 +60,6 @@ test.describe('Location dateTime page', () => {
     test('CheckLocationNotInList page - no valid locations', async () => {
         test.setTimeout(120_000)
 
-        //navigate to start of arrange appointment pipeline
-        await loginToManageMySupervision(page)
-        const appointments = new AppointmentsPage(page)
-        await appointments.goTo(crn)
-        await appointments.checkOnPage()
-        await appointments.startArrangeAppointment()
-
         const attendee: MpopAttendee = {
             provider: "N56",
             team: "N56AAT"
@@ -82,13 +74,6 @@ test.describe('Location dateTime page', () => {
 
     test('DateTime Validation - end before start', async () => {
         test.setTimeout(120_000)
-
-        //navigate to start of arrange appointment pipeline
-        await loginToManageMySupervision(page)
-        const appointments = new AppointmentsPage(page)
-        await appointments.goTo(crn)
-        await appointments.checkOnPage()
-        await appointments.startArrangeAppointment()
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -108,13 +93,6 @@ test.describe('Location dateTime page', () => {
     test('DateTime Validation - non 24h format', async () => {
         test.setTimeout(120_000)
 
-        //navigate to start of arrange appointment pipeline
-        await loginToManageMySupervision(page)
-        const appointments = new AppointmentsPage(page)
-        await appointments.goTo(crn)
-        await appointments.checkOnPage()
-        await appointments.startArrangeAppointment()
-
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
             startTime: "5:15",
@@ -130,40 +108,26 @@ test.describe('Location dateTime page', () => {
         await locationDateTimePage.checkForError("Enter a time in the 24-hour format, for example 16:30")
     })
 
-    // test('DateTime Validation - appointment in past', async () => {
-    //     test.setTimeout(120_000)
+    test('DateTime Validation - appointment in past', async () => {
+        test.setTimeout(120_000)
 
-    //     //navigate to start of arrange appointment pipeline
-    //     await loginToManageMySupervision(page)
-    //     const appointments = new AppointmentsPage(page)
-    //     await appointments.goTo(crn)
-    //     await appointments.checkOnPage()
-    //     await appointments.startArrangeAppointment()
+        const dateTime: MpopDateTime = {
+            date: luxonString(yesterday),
+            startTime: "05:15",
+            endTime: "06:15"
+        }
+        const sentencePage = new SentencePage(page)
+        await sentencePage.completePage(0)
+        const typeAttendancePage = new TypeAttendancePage(page)
+        await typeAttendancePage.completePage(0, undefined, true)
+        const locationDateTimePage = new LocationDateTimePage(page)
+        await locationDateTimePage.completePage(dateTime, 0, false)
 
-    //     const dateTime: MpopDateTime = {
-    //         date: "11/11/2030",
-    //         startTime: "05:15",
-    //         endTime: "06:15"
-    //     }
-    //     const sentencePage = new SentencePage(page)
-    //     await sentencePage.completePage(0)
-    //     const typeAttendancePage = new TypeAttendancePage(page)
-    //     await typeAttendancePage.completePage(0)
-    //     const locationDateTimePage = new LocationDateTimePage(page)
-    //     await locationDateTimePage.completePage(dateTime, 0)
-
-    //     await locationDateTimePage.checkForError("The start time must be now or in the future")
-    // })
+        await locationDateTimePage.checkForError("The start time must be now or in the future")
+    })
 
     test('DateTime Validation - non working day warning', async () => {
         test.setTimeout(120_000)
-
-        //navigate to start of arrange appointment pipeline
-        await loginToManageMySupervision(page)
-        const appointments = new AppointmentsPage(page)
-        await appointments.goTo(crn)
-        await appointments.checkOnPage()
-        await appointments.startArrangeAppointment()
 
         const dateTime: MpopDateTime = {
             date: luxonString(nextWeekend(tomorrow)),

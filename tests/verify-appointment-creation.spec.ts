@@ -9,6 +9,7 @@ import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppoi
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import AppointmentsPage from '../steps/mpop/pages/appointments.page'
 import { luxonString, plus3Months, plus6Months, today, tomorrow } from '../steps/mpop/utils'
+import { navigateToAppointments } from '../steps/mpop/appointments/base-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -33,9 +34,7 @@ test.describe('Create Appointments Full', () => {
     test.setTimeout(360_000)
 
     //navigate to start of arrange appointment pipeline
-    await loginToManageMySupervision(page)
-    const appointments = new AppointmentsPage(page)
-    await appointments.goTo(crn)
+    const appointments : AppointmentsPage = await navigateToAppointments(page, testCrn)
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
 

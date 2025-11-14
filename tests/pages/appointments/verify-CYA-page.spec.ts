@@ -10,6 +10,7 @@ import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
 import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
 import LocationDateTimePage from '../../../steps/mpop/pages/appointments/location-datetime.page'
 import { luxonString, plus3Months, tomorrow } from '../../../steps/mpop/utils'
+import { navigateToAppointments } from '../../../steps/mpop/appointments/base-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -45,10 +46,7 @@ test.describe('CYA page', () => {
     page = await context.newPage()
 
     //navigate to start of arrange appointment pipeline
-    await loginToManageMySupervision(page)
-
-    const appointments = new AppointmentsPage(page)
-    await appointments.goTo(crn)
+    const appointments : AppointmentsPage = await navigateToAppointments(page, testCrn)
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
 

@@ -5,6 +5,10 @@ import AppointmentsPage from '../../steps/mpop/pages/appointments.page.ts'
 import CaseUpcomingAppointmentsPage from '../../steps/mpop/pages/appointments/upcoming-appointments.page.ts'
 import ActivityLogPage from '../../steps/mpop/pages/activity-log.page.ts'
 import { testCrn } from '../../steps/test-data.ts'
+import { loginMPoPAndGoToCases } from '../../steps/mpop/personal-details/cases.ts'
+import CasesPage from '../../steps/mpop/pages/cases.page.ts'
+import OverviewPage from '../../steps/mpop/pages/overview.page.ts'
+import { navigateToAppointments } from '../../steps/mpop/appointments/base-navigation.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -21,9 +25,9 @@ test.describe('Appointments page', () => {
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
-    await loginToManageMySupervision(page)
-    appointments = new AppointmentsPage(page)
-    await appointments.goTo(crn)
+
+    appointments = await navigateToAppointments(page, testCrn)
+    await appointments.checkOnPage()
   })
   test.afterEach(async () => {
     await context.close()

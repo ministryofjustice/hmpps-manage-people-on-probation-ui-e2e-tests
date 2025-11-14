@@ -21,10 +21,6 @@ export default class AttendancePage extends MPopPage {
         await this.submit()
     }
 
-    async selectOption(qa: string, option: string){
-        await this.getQA(qa).selectOption(option)
-    }
-
     async testBacklink(change: boolean) {
         await this.clickBackLink()
         if (change){
