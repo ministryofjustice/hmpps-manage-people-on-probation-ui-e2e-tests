@@ -1,5 +1,5 @@
 import { Page, expect, Locator } from '@playwright/test'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login'
+import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 
 export const loginMPoPAndGoToCases = async (page: Page) => {
   await loginToManageMySupervision(page)

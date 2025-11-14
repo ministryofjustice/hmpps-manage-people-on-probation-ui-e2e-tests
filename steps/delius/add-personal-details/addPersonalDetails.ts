@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker/locale/en_GB'
 import { Page, expect } from '@playwright/test'
-import { findOffenderByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender'
+import { findOffenderByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs'
 import { retryOnError } from '../utils/utils'
 
 interface PersonalDetails {
