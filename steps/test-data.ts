@@ -1,5 +1,5 @@
 // /steps/test-data.ts
-import { MpopAttendee } from "./mpop/appointments/create-appointment"
+import { MpopAttendee } from "./mpop/navigation/create-appointment"
 
 export const automatedTestUser1 = {
     name: 'AutomatedTestUser, AutomatedTestUser (PS - PSO)',

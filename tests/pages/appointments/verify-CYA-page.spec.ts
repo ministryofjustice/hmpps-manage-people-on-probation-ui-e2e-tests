@@ -2,15 +2,15 @@ import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import { attendee, testCrn } from '../../../steps/test-data'
-import { MpopArrangeAppointment, MpopDateTime, setupAppointmentMPop} from '../../../steps/mpop/appointments/create-appointment'
+import { MpopArrangeAppointment, MpopDateTime, setupAppointmentMPop} from '../../../steps/mpop/navigation/create-appointment'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import AppointmentsPage from '../../../steps/mpop/pages/appointments.page'
+import AppointmentsPage from '../../../steps/mpop/pages/case/appointments.page'
 import CYAPage from '../../../steps/mpop/pages/appointments/CYA.page'
 import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
 import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
 import LocationDateTimePage from '../../../steps/mpop/pages/appointments/location-datetime.page'
 import { luxonString, plus3Months, tomorrow } from '../../../steps/mpop/utils'
-import { navigateToAppointments } from '../../../steps/mpop/appointments/base-navigation'
+import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 

@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "../page";
-import { MpopAttendee } from "../../appointments/create-appointment";
+import { MpopAttendee } from "../../navigation/create-appointment";
 import TypeAttendancePage from "./type-attendance.page";
 
 export default class AttendancePage extends MPopPage {

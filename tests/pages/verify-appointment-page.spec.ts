@@ -1,14 +1,10 @@
 import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import AppointmentsPage from '../../steps/mpop/pages/appointments.page.ts'
+import AppointmentsPage from '../../steps/mpop/pages/case/appointments.page.ts'
 import CaseUpcomingAppointmentsPage from '../../steps/mpop/pages/appointments/upcoming-appointments.page.ts'
-import ActivityLogPage from '../../steps/mpop/pages/activity-log.page.ts'
+import ActivityLogPage from '../../steps/mpop/pages/case/activity-log.page.ts'
 import { testCrn } from '../../steps/test-data.ts'
-import { loginMPoPAndGoToCases } from '../../steps/mpop/personal-details/cases.ts'
-import CasesPage from '../../steps/mpop/pages/cases.page.ts'
-import OverviewPage from '../../steps/mpop/pages/overview.page.ts'
-import { navigateToAppointments } from '../../steps/mpop/appointments/base-navigation.ts'
+import { navigateToAppointments } from '../../steps/mpop/navigation/case-navigation.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 

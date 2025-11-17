@@ -4,9 +4,9 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
-import { loginMPoPAndGoToCases } from '../steps/mpop/personal-details/cases'
 import { automatedTestUser1 } from '../steps/test-data'
 import { mpopFormatDate } from '../steps/mpop/utils'
+import { navigateToCases } from '../steps/mpop/navigation/base-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -36,7 +36,7 @@ test.describe('Person Details Verification in Cases', () => {
 
   test('Verify Name, DOB, and Sentence of the person in Cases search results', async () => {
     // Login and navigate to Cases
-    await loginMPoPAndGoToCases(page)
+    await navigateToCases(page)
 
     // Search for the person by CRN
     await page.locator('#nameOrCrn').fill(crn)

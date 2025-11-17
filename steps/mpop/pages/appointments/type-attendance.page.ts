@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "../page";
-import { MpopAttendee } from "../../appointments/create-appointment";
+import { MpopAttendee } from "../../navigation/create-appointment";
 import AttendancePage from "./attendance.page";
 import SentencePage from "./sentence.page";
 

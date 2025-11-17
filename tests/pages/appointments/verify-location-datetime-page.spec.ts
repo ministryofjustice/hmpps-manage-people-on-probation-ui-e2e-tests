@@ -5,15 +5,15 @@ import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
 import { automatedTestUser1, testCrn } from '../../../steps/test-data'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../../../steps/mpop/appointments/create-appointment'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../../../steps/mpop/navigation/create-appointment'
 import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import AppointmentsPage from '../../../steps/mpop/pages/appointments.page'
+import AppointmentsPage from '../../../steps/mpop/pages/case/appointments.page'
 import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
 import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
 import LocationDateTimePage from '../../../steps/mpop/pages/appointments/location-datetime.page'
 import LocationNotInListPage from '../../../steps/mpop/pages/appointments/location-not-in-list.page'
 import { luxonString, nextWeekend, tomorrow, yesterday } from '../../../steps/mpop/utils'
-import { navigateToAppointments } from '../../../steps/mpop/appointments/base-navigation'
+import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 

@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import MPopPage from "./page";
+import MPopPage from "../page";
 import * as dotenv from 'dotenv'
 
 dotenv.config({ path: '.env' })

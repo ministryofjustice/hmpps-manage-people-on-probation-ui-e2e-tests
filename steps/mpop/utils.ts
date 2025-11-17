@@ -1,6 +1,6 @@
 import { Locator, Page } from '@playwright/test'
 import { DateTime } from 'luxon'
-import { MpopDateTime } from './appointments/create-appointment'
+import { MpopDateTime } from './navigation/create-appointment'
 
 // To format the date as 'd MMM yyyy'
 export const mpopFormatDate = (date: Date) => {

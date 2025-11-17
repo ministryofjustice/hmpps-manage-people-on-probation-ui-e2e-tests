@@ -1,8 +1,8 @@
 import { expect, Page } from "@playwright/test";
-import MPopPage from "./page";
+import MPopPage from "../page";
 import * as dotenv from 'dotenv'
-import SentencePage from "./appointments/sentence.page";
-import CaseUpcomingAppointmentsPage from "./appointments/upcoming-appointments.page";
+import SentencePage from "../appointments/sentence.page";
+import CaseUpcomingAppointmentsPage from "../appointments/upcoming-appointments.page";
 import ActivityLogPage from "./activity-log.page";
 
 dotenv.config({ path: '.env' })
