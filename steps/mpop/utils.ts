@@ -1,6 +1,11 @@
-import { Locator, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { DateTime } from 'luxon'
 import { MpopDateTime } from './navigation/create-appointment'
+import { Contact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { fillDate, fillTime, selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs.mjs'
+import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh.mjs'
+import { findOffenderByCRNNoContextCheck } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs'
+import { findContactsByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/find-contacts.mjs'
 
 // To format the date as 'd MMM yyyy'
 export const mpopFormatDate = (date: Date) => {
@@ -63,4 +68,65 @@ export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
         date.endTime = "0" + date.endTime
     } 
     return date
+}
+
+interface AlertContact extends Contact {
+  alert: boolean
+}
+
+export const createContact = async (page: Page, crn: string, options: AlertContact) => {
+    await findContactsByCRN(page, crn)
+    await page.locator('input.btn', { hasText: 'Add Contact' }).first().click()
+    await expect(page).toHaveTitle('Add Contact Details', { timeout: 10000 })
+    if (options.date) {
+        await fillDate(page, '#StartDate\\:datePicker', options.date as Date)
+    }
+
+    await selectOption(page, '#RelatedTo\\:selectOneMenu', options.relatesTo)
+    await selectOption(page, '#ContactCategory\\:selectOneMenu', options.category)
+    await selectOption(page, '#ContactType\\:selectOneMenu', options.type)
+    await selectOption(page, '#TransferToTrust\\:selectOneMenu', options.allocation?.team?.provider)
+    await selectOption(page, '#TransferToTeam\\:selectOneMenu', options.allocation?.team?.name)
+
+    await selectOption(page, '#alert\\:selectOneMenu', options.alert ? "Yes" : "No")
+
+    if (options.allocation?.team?.location) {
+        await selectOption(page, '#Location\\:selectOneMenu', options.allocation?.team?.location)
+    }
+    if (options.startTime) {
+        await fillTime(page, '#StartTime\\:timePicker', options.startTime)
+    }
+    if (options.endTime) {
+        await fillTime(page, '#EndTime\\:timePicker', options.endTime)
+    }
+    if (options.outcome) {
+        await selectOption(page, '#contactOutcome\\:selectOneMenu', options.outcome)
+    }
+    if (options.enforcementAction) {
+        await selectOption(page, '#enforcementAction\\:selectOneMenu', options.enforcementAction)
+    }
+    await selectOption(page, '#TransferToOfficer\\:selectOneMenu', options.allocation?.staff?.name)
+
+    try {
+        // Attempt to create contact
+        await doUntil(
+            async () => {
+                await page.locator('input[type="submit"].btn-primary').click()
+            },
+            // Check if the page title matches "Contact List"
+            async () => expect(page).toHaveTitle(/Contact List/),
+            { timeout: 60_000, intervals: [500, 1000, 5000] }
+        )
+    } catch (error) {
+        console.error('Error occurred while waiting for page title:', error)
+        // Handle fallback in case of an error
+        if ((await page.title()) === 'Error Page') {
+            await findOffenderByCRNNoContextCheck(page, crn)
+            return await createContact(page, crn, options)
+        }
+
+        if (!(await page.title()).includes('Contact List')) {
+            await page.locator('#navigation-include\\:linkNavigation1ContactList').click()
+        }
+    }
 }
