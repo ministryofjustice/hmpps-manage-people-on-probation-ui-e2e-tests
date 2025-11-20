@@ -26,12 +26,12 @@ jobs:
       run: npx playwright install
     - name: Run Playwright tests
       id: tests
-      run: NODE_OPTIONS='--import tsx' npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
+      run: npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
       env:
         TZ: Europe/London
         ENV: test
         TEST_DIR: ${{ inputs.directory || 'tests' }}
-        WORKERS: ${{ inputs.workers || '16' }}
+        WORKERS: ${{ inputs.workers || '1' }}
         PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit.xml
         PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
 
