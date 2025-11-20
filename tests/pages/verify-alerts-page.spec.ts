@@ -6,8 +6,9 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender.ts'
 import { automatedTestUser1 } from '../../steps/test-data.ts'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { createContact, tomorrow } from '../../steps/mpop/utils.ts'
+import { tomorrow } from '../../steps/mpop/utils.ts'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import HomePage from '../../steps/mpop/pages/home.page.ts'
 import { login } from '../../steps/mpop/login.ts'
 
