@@ -71,7 +71,8 @@ export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
 }
 
 interface AlertContact extends Contact {
-  alert: boolean
+  alert?: boolean
+  note?: string
 }
 
 export const createContact = async (page: Page, crn: string, options: AlertContact) => {
@@ -106,6 +107,10 @@ export const createContact = async (page: Page, crn: string, options: AlertConta
         await selectOption(page, '#enforcementAction\\:selectOneMenu', options.enforcementAction)
     }
     await selectOption(page, '#TransferToOfficer\\:selectOneMenu', options.allocation?.staff?.name)
+
+    if (options.note){
+        await page.fill(`#Notes\\:notesField`, options.note)
+    }
 
     try {
         // Attempt to create contact

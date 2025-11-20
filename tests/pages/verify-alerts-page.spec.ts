@@ -55,7 +55,8 @@ test.describe('Alerts page', () => {
         allocation: { team: data.teams.allocationsTestTeam },
         category: "All/Always",
         type: "3 Way Meeting (Non NS)",
-        alert: true
+        alert: true,
+        note: "Words ".repeat(500)
     })
     await page.goto(process.env.MANAGE_PEOPLE_ON_PROBATION_URL as string)
     await expect(alertsNav).toContainText((alertCount+1).toString())
