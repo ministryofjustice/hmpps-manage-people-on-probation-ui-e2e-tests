@@ -97,8 +97,7 @@ test.describe('CYA page', () => {
     await typeAttendancePage.clickBackLink()
 
     //check for the missing change link    
-    console.log(await cyaPage.getSummaryRowByKey("Location"))
-    await expect(await cyaPage.getSummaryRowByKey("Location")).toBeUndefined()
+    expect(await cyaPage.getSummaryRowByKey("Location")).toBeUndefined()
 
     //fill in missing values
     await cyaPage.clickChangeLink(1)
