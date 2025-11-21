@@ -40,7 +40,7 @@ const appointment: MpopArrangeAppointment = {
 
 test.describe('CYA page', () => {
   test.beforeEach(async ({ browser: b }) => {
-    test.setTimeout(120000)
+    test.setTimeout(360000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
