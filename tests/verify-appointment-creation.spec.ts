@@ -4,22 +4,33 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
-import { attendee, automatedTestUser1, testCrn } from '../steps/test-data'
+import { attendee, automatedTestUser1 } from '../steps/test-data'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../steps/mpop/navigation/create-appointment'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
 import AppointmentsPage from '../steps/mpop/pages/case/appointments.page'
 import { luxonString, plus3Months, plus6Months, today, tomorrow } from '../steps/mpop/utils'
 import { navigateToAppointments } from '../steps/mpop/navigation/case-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string = testCrn
+let crn: string
 let browser: Browser
 let context: BrowserContext
 let page: Page
+let person: Person
+let sentence: CreatedEvent
 
 test.describe('Create Appointments Full', () => {
-    test.beforeEach(async ({ browser: b }) => {
+  test.beforeAll(async ({browser: b}) => {
+      test.setTimeout(120000)
+      browser = b
+      context = await browser.newContext()
+      page = await context.newPage()
+
+      ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+      sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+
+  })
+  test.beforeEach(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
@@ -34,7 +45,7 @@ test.describe('Create Appointments Full', () => {
     test.setTimeout(360_000)
 
     //navigate to start of arrange appointment pipeline
-    const appointments : AppointmentsPage = await navigateToAppointments(page, testCrn)
+    const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
 
@@ -45,10 +56,8 @@ test.describe('Create Appointments Full', () => {
       endTime: "16:15"
     }
     const appointment: MpopArrangeAppointment = {
-      crn: crn,
       sentenceId: 0,
       typeId: 0,
-      isVisor: true,
       attendee: attendee,
       dateTime: dateTime,
       locationId: 0,
@@ -72,10 +81,8 @@ test.describe('Create Appointments Full', () => {
         endTime: "16:15"
     }
     const appointmentNoAttendee: MpopArrangeAppointment = {
-        crn: crn,
         sentenceId: 0,
         typeId: 0,
-        isVisor: true,
         dateTime: dateTime_another,
         locationId: 0,
         note: "hello world",
