@@ -1,8 +1,18 @@
 # Manage Person on Probation UI tests
 
 
+### Install npm and npm playwright
+```shell
+npm install --save-dev playwright
+npx playwright install
+
+### If using Mac, install the below commands to run the tests
+brew install --cask 1password-cli
+
 ### Running end-to-end tests
-Create a `.env` file in the e2e_tests directory with your Delius credentials. You can use `.env.example` as a template.
+### Create Env file
+Create a .env file in the Project root folder and add the content from the 1Password filename is '.env.playwright'
+You can use `.env.example` as a template.
 ```shell
 cp -n .env.example .env
 ```
@@ -11,8 +21,22 @@ Run the tests
 ```shell
 npm run e2e-test
 
+# Run a single test
+npx playwright test tests/pages/verify-activityLog.spec.ts
+
+#Run in headed mode or in a browser
+npx playwright test tests/pages/verify-activityLog.spec.ts --headed
+
+## The below command will run the complete suite with the 1password details
+op run --account ministryofjustice.1password.eu --env-file=./.env.1password -- npx playwright test
+
 # Or, run in debug mode to enable breakpoints and test recorder
 npm run e2e-test:debug
+```
+
+### See the Run Reports
+```shell
+npx playwright show-report
 ```
 
 ### Dependency Checks
