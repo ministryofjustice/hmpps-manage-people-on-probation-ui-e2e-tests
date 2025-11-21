@@ -31,7 +31,7 @@ jobs:
         TZ: Europe/London
         ENV: test
         TEST_DIR: ${{ inputs.directory || 'tests' }}
-        WORKERS: ${{ inputs.workers || '4' }}
+        WORKERS: ${{ inputs.workers || '2' }}
         PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit.xml
         PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
 
