@@ -19,6 +19,7 @@ let page: Page
 let person: Person
 let sentence: CreatedEvent
 
+test.describe.configure({ mode: 'serial' });
 test.describe('Create Appointments Full', () => {
   test.beforeAll(async ({browser: b}) => {
       test.setTimeout(120000)

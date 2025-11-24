@@ -10,7 +10,7 @@ import { tomorrow } from '../../steps/mpop/utils.ts'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import HomePage from '../../steps/mpop/pages/home.page.ts'
-import { login } from '../../steps/mpop/login.ts'
+import { login, loginIfNotAlready } from '../../steps/mpop/login.ts'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -20,16 +20,29 @@ let page: Page
 let alerts: AlertsPage
 let home: HomePage
 let alertCount: number
+let person: Person
+let crn: string
+let sentence: CreatedEvent
 
+test.describe.configure({ mode: 'serial' })
 test.describe('Alerts page', () => {
 
-  test.beforeEach(async ({ browser: b }) => {
+  test.beforeAll(async ({ browser: b }) => {
     test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
+
+    await login(page)
+    home = new HomePage(page)
+    alertCount = await home.getAlertsCount()
+    await home.logout()
+
+    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    await createContact(page, crn, deliusAlert)
   })
-  test.afterEach(async () => {
+  test.afterAll(async() => {
     await context.close()
   })
 
@@ -38,19 +51,15 @@ test.describe('Alerts page', () => {
     await alerts.checkOnPage()
   })
 
-  test('Add alert', async() => {
+  test('Check alert added', async() => {
+    await loginIfNotAlready(page)
+    const home = new HomePage(page)
+    const updatedCount = await home.getAlertsCount()
+    expect(updatedCount).toBe(alertCount+1)
+  })
 
-    await login(page)
-    home = new HomePage(page)
-    const alertsNav = home.getClass("moj-notification-badge", home.getLink("Alerts"))
-    alertCount = parseInt((await alertsNav.allTextContents())[0])
-    let person: Person
-    let crn: string
-    let sentence: CreatedEvent
-    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-    await createContact(page, crn, deliusAlert)
-    await page.goto(process.env.MANAGE_PEOPLE_ON_PROBATION_URL as string)
-    await expect(alertsNav).toContainText((alertCount+1).toString())
+  test('Check alert links', async() => {
+    alerts = await navigateToAlerts(page)
+    await alerts.checkOnPage()
   })
 })

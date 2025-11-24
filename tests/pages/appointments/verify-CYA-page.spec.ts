@@ -40,6 +40,7 @@ const appointment: MpopArrangeAppointment = {
   sensitivity: true
 }
 
+test.describe.configure({ mode: 'serial' });
 test.describe('CYA page', () => {
   test.beforeAll(async ({browser: b}) => {
     test.setTimeout(120000)
@@ -51,21 +52,16 @@ test.describe('CYA page', () => {
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
   })
-  test.beforeEach(async ({ browser: b }) => {
+  test.beforeEach(async () => {
     test.setTimeout(120_000)
-    browser = b
-    context = await browser.newContext()
-    page = await context.newPage()
 
-    //navigate to start of arrange appointment pipeline
     const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
 
     await setupAppointmentMPop(page, appointment)
   })
-
-  test.afterEach(async () => {
+  test.afterAll(async () => {
     await context.close()
   })
 

@@ -23,6 +23,7 @@ let page: Page
 let person: Person
 let sentence: CreatedEvent
 
+test.describe.configure({ mode: 'serial' });
 test.describe('Location dateTime page', () => {
     test.beforeAll(async ({browser: b}) => {
         test.setTimeout(120000)

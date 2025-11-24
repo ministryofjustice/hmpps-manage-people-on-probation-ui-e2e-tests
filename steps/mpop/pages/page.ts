@@ -140,6 +140,14 @@ export default abstract class MPopPage {
         await this.page.locator('[class="moj-primary-navigation"]').getByRole('link', {name: tab}).click()
     }
 
+    async getAlertsCount() : Promise<number> {
+        return parseInt((await (this.getClass("moj-notification-badge", this.getLink("Alerts"))).allTextContents())[0])
+    }
+
+    async logout() {
+        await this.getQA('probation-common-header-user-name').click()
+        await this.getLink('Sign out').click()
+    }
 
 
 }
