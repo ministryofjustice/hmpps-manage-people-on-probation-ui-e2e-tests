@@ -1,12 +1,11 @@
-import { APIRequestContext, Browser, BrowserContext, expect, Page, request, test } from '@playwright/test'
+import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-// import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
-// import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/createOffender'
-// import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-// import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
-import { automatedTestUser1, testCrn } from '../../../steps/test-data'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../../../steps/mpop/navigation/create-appointment'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
+import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/createOffender'
+import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
+import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { automatedTestUser1 } from '../../../steps/test-data'
+import { MpopAttendee, MpopDateTime} from '../../../steps/mpop/navigation/create-appointment'
 import AppointmentsPage from '../../../steps/mpop/pages/case/appointments.page'
 import SentencePage from '../../../steps/mpop/pages/appointments/sentence.page'
 import TypeAttendancePage from '../../../steps/mpop/pages/appointments/type-attendance.page'
@@ -17,12 +16,25 @@ import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navi
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string = testCrn
+let crn: string 
 let browser: Browser
 let context: BrowserContext
 let page: Page
+let person: Person
+let sentence: CreatedEvent
 
+test.describe.configure({ mode: 'serial' });
 test.describe('Location dateTime page', () => {
+    test.beforeAll(async ({browser: b}) => {
+        test.setTimeout(120000)
+        browser = b
+        context = await browser.newContext()
+        page = await context.newPage()
+
+        ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+        sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+
+    })
     test.beforeEach(async ({ browser: b }) => {
         test.setTimeout(120000)
         browser = b
@@ -30,7 +42,7 @@ test.describe('Location dateTime page', () => {
         page = await context.newPage()
 
         //navigate to start of arrange appointment pipeline
-        const appointments : AppointmentsPage = await navigateToAppointments(page, testCrn)
+        const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
         await appointments.checkOnPage()
         await appointments.startArrangeAppointment()
     })
@@ -50,7 +62,7 @@ test.describe('Location dateTime page', () => {
         const sentencePage = new SentencePage(page)
         await sentencePage.completePage(0)
         const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0, undefined, true)
+        await typeAttendancePage.completePage(0)
         const locationDateTimePage = new LocationDateTimePage(page)
         await locationDateTimePage.completePage(dateTime, 1)
         const locationNotInListPage = new LocationNotInListPage(page)
@@ -67,7 +79,7 @@ test.describe('Location dateTime page', () => {
         const sentencePage = new SentencePage(page)
         await sentencePage.completePage(0)
         const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0, attendee, true)
+        await typeAttendancePage.completePage(0, attendee)
         const locationNotInListPage = new LocationNotInListPage(page)
         await locationNotInListPage.checkOnPage()
     })
@@ -83,7 +95,7 @@ test.describe('Location dateTime page', () => {
         const sentencePage = new SentencePage(page)
         await sentencePage.completePage(0)
         const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0, undefined, true)
+        await typeAttendancePage.completePage(0)
         const locationDateTimePage = new LocationDateTimePage(page)
         await locationDateTimePage.completePage(dateTime, 0, false)
 
@@ -101,7 +113,7 @@ test.describe('Location dateTime page', () => {
         const sentencePage = new SentencePage(page)
         await sentencePage.completePage(0)
         const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0, undefined, true)
+        await typeAttendancePage.completePage(0)
         const locationDateTimePage = new LocationDateTimePage(page)
         await locationDateTimePage.completePage(dateTime, 0, false)
 
@@ -119,7 +131,7 @@ test.describe('Location dateTime page', () => {
         const sentencePage = new SentencePage(page)
         await sentencePage.completePage(0)
         const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0, undefined, true)
+        await typeAttendancePage.completePage(0)
         const locationDateTimePage = new LocationDateTimePage(page)
         await locationDateTimePage.completePage(dateTime, 0, false)
 
@@ -137,7 +149,7 @@ test.describe('Location dateTime page', () => {
         const sentencePage = new SentencePage(page)
         await sentencePage.completePage(0)
         const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0, undefined, true)
+        await typeAttendancePage.completePage(0)
         const locationDateTimePage = new LocationDateTimePage(page)
         await locationDateTimePage.completePage(dateTime, 0, false)
 

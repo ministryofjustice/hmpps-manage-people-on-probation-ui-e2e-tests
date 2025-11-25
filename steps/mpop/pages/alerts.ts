@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Locator, Page } from "@playwright/test";
 import MPopPage from "./page";
 import * as dotenv from 'dotenv'
 
@@ -13,5 +13,8 @@ export default class AlertsPage extends MPopPage {
     async goTo(){
        await this.page.goto(`${MPOP_URL}/alerts`)
     }
-    
+
+    getTableRowByCRN(crn: string): Locator {
+        return this.getClass('govuk-table_row').filter({has: this.page.getByRole('paragraph', {name: crn})})
+    }
 }

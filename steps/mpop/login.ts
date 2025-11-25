@@ -1,4 +1,6 @@
 import { expect, type Page } from '@playwright/test'
+import MPopPage from './pages/page'
+import HomePage from './pages/home.page'
 
 export const login = async (page: Page) => {
     await page.goto(process.env.MANAGE_PEOPLE_ON_PROBATION_URL)
@@ -9,3 +11,11 @@ export const login = async (page: Page) => {
     await expect(page.locator('[data-qa="pageHeading"]')).toContainText('Manage people on probation')
 }
 
+export const loginIfNotAlready = async(page: Page) => {
+    try {
+        await login(page)
+    } catch {
+        const homePage = new HomePage(page)
+        await homePage.checkOnPage()
+    }
+}

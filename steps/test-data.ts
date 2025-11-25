@@ -12,8 +12,8 @@ export const automatedTestUser1 = {
 export const testCrn = "X756510"
 
 export const attendee: MpopAttendee = {
-    team: "N07T02",
-    user: "AndyAdamczak1"
+    team: "N07AAT",
+    user: "jsftest"
 }
 
 export const deliusAlert: Contact = { 

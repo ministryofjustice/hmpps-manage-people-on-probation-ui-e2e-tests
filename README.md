@@ -17,8 +17,11 @@ You can use `.env.example` as a template.
 cp -n .env.example .env
 ```
 
-Run the tests
+Populate the file using .env.playwright from within the MPop one password account. 
+
+Run the tests with the following command
 ```shell
+npx playwright text
 npm run e2e-test
 
 # Run a single test

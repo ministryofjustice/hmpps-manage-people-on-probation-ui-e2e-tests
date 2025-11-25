@@ -48,12 +48,12 @@ export const testBackLink = async(page: Page) => {
 }
 
 export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
-    if (parseInt(date.endTime.substring(0,2)) <= 18 && parseInt(date.startTime.substring(0,2)) <= 18){
+    if (parseInt(date.endTime.substring(0,2)) <= 22 && parseInt(date.startTime.substring(0,2)) <= 22){
         date.startTime = (parseInt(date.startTime.substring(0,2))+1).toString() + date.startTime.substring(2,5)
         date.endTime = (parseInt(date.endTime.substring(0,2))+1).toString() + date.endTime.substring(2,5)
     } else {
-        date.startTime = (parseInt(date.startTime.substring(0,2))-12) + date.startTime.substring(2,5)
-        date.endTime = (parseInt(date.endTime.substring(0,2))-12) + date.endTime.substring(2,5)
+        date.startTime = (parseInt(date.startTime.substring(0,2))-18) + date.startTime.substring(2,5)
+        date.endTime = (parseInt(date.endTime.substring(0,2))-18) + date.endTime.substring(2,5)
         let dateTime = DateTime.fromFormat(date.date, "d/M/yyyy")
         dateTime = dateTime.plus({ days: 1 })
         while (dateTime.isWeekend){
