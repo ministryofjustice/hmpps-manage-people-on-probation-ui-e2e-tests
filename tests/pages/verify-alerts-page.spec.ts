@@ -45,6 +45,9 @@ test.describe('Alerts page', () => {
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
+  test.afterEach(async() => {
+    await alerts.logout()
+  })
   test.afterAll(async() => {
     await context.close()
   })
