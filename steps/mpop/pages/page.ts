@@ -16,6 +16,10 @@ export default abstract class MPopPage {
         await this.checkQA("pageHeading", this.title)
     }
 
+    async checkH2Header(qa: string, expectedText: string) {
+        await this.checkQA(qa, expectedText)
+    }
+
     getQA(qa: string, locator: Locator|Page=this.page){
         return locator.locator(`[data-qa="${qa}"]`)
     }
@@ -46,6 +50,10 @@ export default abstract class MPopPage {
 
     async checkQA(qa: string, value: string){
         await expect(this.getQA(qa)).toContainText(value)
+    }
+
+    async checkQAExists(qa: string) {
+        await expect(this.getQA(qa)).toBeVisible(); // ensures it exists and is visible
     }
 
     async clickTableLink(tableqa: string, cellqa: string){
@@ -139,6 +147,8 @@ export default abstract class MPopPage {
     async usePrimaryNavigation(tab: string){
         await this.page.locator('[class="moj-primary-navigation"]').getByRole('link', {name: tab}).click()
     }
+
+
 
 
 
