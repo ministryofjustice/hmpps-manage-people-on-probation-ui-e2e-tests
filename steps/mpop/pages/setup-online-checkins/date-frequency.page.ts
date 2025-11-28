@@ -1,27 +1,43 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
-import MPopPage from "../../page.ts"
+import MPopPage from "../page.ts"
+
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
-const datepickerQA = '#esupervision-X457081-98160fdb-3dfd-4603-b08b-fe2a49feb7f5-checkins-date';
 
-export default class DateFrequencyPagePage extends MPopPage {
+const DATEPICKER_QA = 'input.moj-js-datepicker-input';
+const CHECK_IN_FREQUENCY_SECTION = 'checkInFrequency';
+
+export default class DateFrequencyPage extends MPopPage {
     datepickerQA: string;
+    checkInFrequencySection: string;
     constructor(page: Page) {
-        super(page)
+        super(page);
+        this.datepickerQA = DATEPICKER_QA;
+        this.checkInFrequencySection = CHECK_IN_FREQUENCY_SECTION;
     }
 
     async goTo(crn: string){
-        await this.page.goto(`${MPOP_URL}/case/${crn}/check-in/date-frequency/`)
+        await this.page.goto(`${MPOP_URL}/case/${crn}/appointments\\/[0-9a-fA-F-]{36}\\/check-in\\/date-frequency/`)
     }
 
     async checkOnPage(){
-        await this.checkQA("online-checkin-btn", "Set up online check ins");
+        await this.checkQAExists(this.checkInFrequencySection)
     }
 
-    async checkElementExists(qa: string){
-        await this.checkQAExists(datepickerQA);
+    async checkElementExists (){
+        await this.checkQAExists(this.datepickerQA);
+    }
+
+    async selectOption4Weeks(){
+        await this.clickRadio("checkInFrequency", 2)
+        await this.submit()
+    }
+
+    async selectOption8Weeks(){
+        await this.clickRadio("checkInFrequency", 3)
+        await this.submit()
     }
 
     async clickSetupOnlineCheckInsBtn() {
@@ -40,14 +56,10 @@ export default class DateFrequencyPagePage extends MPopPage {
         const year = tomorrow.getFullYear();
         const formattedDate = `${day}/${month}/${year}`;
 
-        // Fill the input
-        await this.page.fill(datepickerQA, formattedDate);
+        // Enter the formattedDate in to the date field
+        await this.page.fill(this.datepickerQA, formattedDate);
 
-        // Trigger blur/change events if needed
         await this.page.keyboard.press('Tab');
-
-        // Optional: pause to see the result
-        await this.page.waitForTimeout(3000);
 
     }
 
