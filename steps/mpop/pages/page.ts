@@ -16,12 +16,16 @@ export default abstract class MPopPage {
         await this.checkQA("pageHeading", this.title)
     }
 
-    async checkH2Header(qa: string, expectedText: string) {
+    async checkPageHeader(qa: string, expectedText: string) {
         await this.checkQA(qa, expectedText)
     }
 
     getQA(qa: string, locator: Locator|Page=this.page){
         return locator.locator(`[data-qa="${qa}"]`)
+    }
+
+    async expectElementVisible(selector: string) {
+        await expect(this.page.locator(selector)).toBeVisible();
     }
 
     async clickRadio(qa: string, id: number){
@@ -30,6 +34,10 @@ export default abstract class MPopPage {
 
     async submit(){
         await this.getQA("submit-btn").click()
+    }
+
+    async continueButton(){
+        await this.getQA("submitBtn").click()
     }
 
     getLink(name: string, locator: Locator|Page=this.page){
@@ -53,8 +61,22 @@ export default abstract class MPopPage {
     }
 
     async checkQAExists(qa: string) {
-        await expect(this.getQA(qa)).toBeVisible(); // ensures it exists and is visible
+        const element = this.page.locator(qa)
+        await expect(element).toBeVisible();
     }
+
+    async checkPageHeaderPhoto(qa: string, expectedText: string) {
+        const fullText = await this.getQA(qa).innerText();
+
+        // Normalize whitespace and remove the last word (the dynamic name)
+        const staticPart = fullText
+            .replace(/\s+/g, ' ')       // collapse whitespace
+            .trim()
+            .replace(/\s+\w+$/, '');    // remove the last word (e.g. "Teddy")
+
+        expect(staticPart).toBe(expectedText);
+    }
+
 
     async clickTableLink(tableqa: string, cellqa: string){
         await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click()

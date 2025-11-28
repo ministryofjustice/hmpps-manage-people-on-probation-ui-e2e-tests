@@ -28,6 +28,7 @@ export default defineConfig({
   reporter: 'html',
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+      viewport: null,
     actionTimeout: secondsToMilliseconds(30),
     timezoneId: 'Europe/London',
     launchOptions: { slowMo: 150 },
@@ -40,7 +41,13 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+          //...devices['Desktop Chrome'],
+          launchOptions: {
+              args: ['--start-maximized'],
+          }
+
+      },
     },
 
     // {

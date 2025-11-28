@@ -21,10 +21,14 @@ Populate the file using .env.playwright from within the MPop one password accoun
 
 Run the tests with the following command
 ```shell
-npx playwright text
+npx playwright test
 npm run e2e-test
 
-# Run a single test
+# Simple way to run a specific test
+# use **test.only** keyword in front of the single test and either debug or run, it will run that single test only.
+
+
+# Run a single spec file
 npx playwright test tests/pages/verify-activityLog.spec.ts
 
 #Run in headed mode or in a browser
