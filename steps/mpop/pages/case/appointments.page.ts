@@ -34,7 +34,7 @@ export default class AppointmentsPage extends MPopPage {
     }
 
     async viewPastAppointments(): Promise<ActivityLogPage> {
-        await this.clickLink("View all past appointments in the activity log")
+        await this.clickLink("View all past appointments in the contacts page")
         return new ActivityLogPage(this.page)
     }
 

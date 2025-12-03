@@ -145,7 +145,7 @@ export default abstract class MPopPage {
     }
 
     async logout() {
-        await this.getQA('probation-common-header-user-name').click()
+        await this.getClass('probation-common-header__navigation__item').first().getByRole("button").click()
         await this.getLink('Sign out').click()
     }
 
