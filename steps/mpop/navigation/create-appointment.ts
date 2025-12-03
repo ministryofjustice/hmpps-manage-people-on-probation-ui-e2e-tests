@@ -9,7 +9,6 @@ import NextAppointmentPage, { NextAction } from '../pages/appointments/next-appo
 import ArrangeAnotherPage from '../pages/appointments/arrange-another.page'
 
 export interface MpopArrangeAppointment {
-  crn: string
   sentenceId: number
   typeId: number
   attendee?: MpopAttendee

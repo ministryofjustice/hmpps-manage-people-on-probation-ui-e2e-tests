@@ -1,6 +1,11 @@
-import { Locator, Page } from '@playwright/test'
+import { expect, Locator, Page } from '@playwright/test'
 import { DateTime } from 'luxon'
-import { MpopDateTime } from './appointments/create-appointment'
+import { MpopDateTime } from './navigation/create-appointment'
+import { Contact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { fillDate, fillTime, selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs.mjs'
+import { doUntil } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/refresh.mjs'
+import { findOffenderByCRNNoContextCheck } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs'
+import { findContactsByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/find-contacts.mjs'
 
 // To format the date as 'd MMM yyyy'
 export const mpopFormatDate = (date: Date) => {
@@ -43,12 +48,12 @@ export const testBackLink = async(page: Page) => {
 }
 
 export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
-    if (parseInt(date.endTime.substring(0,2)) <= 18 && parseInt(date.startTime.substring(0,2)) <= 18){
+    if (parseInt(date.endTime.substring(0,2)) <= 22 && parseInt(date.startTime.substring(0,2)) <= 22){
         date.startTime = (parseInt(date.startTime.substring(0,2))+1).toString() + date.startTime.substring(2,5)
         date.endTime = (parseInt(date.endTime.substring(0,2))+1).toString() + date.endTime.substring(2,5)
     } else {
-        date.startTime = (parseInt(date.startTime.substring(0,2))-12) + date.startTime.substring(2,5)
-        date.endTime = (parseInt(date.endTime.substring(0,2))-12) + date.endTime.substring(2,5)
+        date.startTime = (parseInt(date.startTime.substring(0,2))-18) + date.startTime.substring(2,5)
+        date.endTime = (parseInt(date.endTime.substring(0,2))-18) + date.endTime.substring(2,5)
         let dateTime = DateTime.fromFormat(date.date, "d/M/yyyy")
         dateTime = dateTime.plus({ days: 1 })
         while (dateTime.isWeekend){

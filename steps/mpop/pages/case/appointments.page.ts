@@ -1,9 +1,10 @@
 import { expect, Page } from "@playwright/test";
-import MPopPage from "./page";
+import MPopPage from "../page";
 import * as dotenv from 'dotenv'
-import SentencePage from "./appointments/sentence.page";
-import CaseUpcomingAppointmentsPage from "./appointments/upcoming-appointments.page";
+import SentencePage from "../appointments/sentence.page";
+import CaseUpcomingAppointmentsPage from "../appointments/upcoming-appointments.page";
 import ActivityLogPage from "./activity-log.page";
+import ManageAppointmentsPage from "../appointments/manage-appointment.page";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -37,11 +38,21 @@ export default class AppointmentsPage extends MPopPage {
         return new ActivityLogPage(this.page)
     }
 
-    async selectAppointment(upcoming: boolean, id: number, byName: boolean){
+    async selectPastAppointment(id: number): Promise<ManageAppointmentsPage>{
+        return this.selectAppointment(false, id, true)
+    }
+
+    async selectFutureAppointment(id: number): Promise<ManageAppointmentsPage>{
+        return this.selectAppointment(true, id, true)
+    }
+
+    async selectAppointment(upcoming: boolean, id: number, byName: boolean = false): Promise<ManageAppointmentsPage>{
         const tableqa = upcoming ? "upcomingAppointments" : "pastAppointments"
         const table = upcoming ? "upcoming" : "past"
         const column = byName ? "Type" : "Action"
         const cellqa = `${table}Appointment${column}${id}`
         await this.clickTableLink(tableqa, cellqa)
+        const contact = new ManageAppointmentsPage(this.page)
+        return contact
     }
 }

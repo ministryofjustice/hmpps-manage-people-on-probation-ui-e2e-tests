@@ -7,15 +7,9 @@ Create a `.env` file in the e2e_tests directory with your Delius credentials. Yo
 cp -n .env.example .env
 ```
 
-Run the tests
+Populate the file using .env.playwright from within the MPop one password account. 
+
+Run the tests with the following command
 ```shell
-npm run e2e-test
-
-# Or, run in debug mode to enable breakpoints and test recorder
-npm run e2e-test:debug
+npx playwright text
 ```
-
-### Dependency Checks
-
-The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
-If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`

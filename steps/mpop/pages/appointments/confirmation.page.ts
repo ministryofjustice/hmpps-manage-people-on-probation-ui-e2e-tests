@@ -1,9 +1,9 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 import NextAppointmentPage from "./next-appointment.page";
-import AppointmentsPage from "../appointments.page";
+import AppointmentsPage from "../case/appointments.page";
 import CasesPage from "../cases.page";
-import OverviewPage from "../overview.page";
+import OverviewPage from "../case/overview.page";
 
 export default class ConfirmationPage extends MPopPage {
     constructor(page: Page) {

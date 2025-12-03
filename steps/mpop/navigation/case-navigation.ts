@@ -1,10 +1,9 @@
 import { Page } from "@playwright/test"
-import CasesPage from "../pages/cases.page"
-import OverviewPage from "../pages/overview.page"
-import AppointmentsPage from "../pages/appointments.page"
-import { loginMPoPAndGoToCases } from "../personal-details/cases"
-import SearchPage from "../pages/search.page"
-import ActivityLogPage from "../pages/activity-log.page"
+import OverviewPage from "../pages/case/overview.page"
+import AppointmentsPage from "../pages/case/appointments.page"
+import ActivityLogPage from "../pages/case/activity-log.page"
+import { navigateToSearch } from "./base-navigation"
+import PersonalDetailsPage from "../pages/case/personal-details.page"
 
 export const navigateToAppointments = async (page: Page, crn: string) : Promise<AppointmentsPage> => {
     const overviewPage = await navigateToCase(page, crn)
@@ -18,11 +17,14 @@ export const navigateToActivityLog = async (page: Page, crn: string) : Promise<A
     return new ActivityLogPage(page)
 }
 
+export const navigateToPersonalDetails = async (page: Page, crn: string) : Promise<PersonalDetailsPage> => {
+    const overviewPage = await navigateToCase(page, crn)
+    await overviewPage.useSubNavigation("personalDetailsTab")
+    return new PersonalDetailsPage(page)
+}
+
 export const navigateToCase = async(page: Page, crn: string): Promise<OverviewPage> => {
-    await loginMPoPAndGoToCases(page)
-    const casesPage = new CasesPage(page)
-    await casesPage.usePrimaryNavigation("Search")
-    const searchPage = new SearchPage(page)
+    const searchPage = await navigateToSearch(page)
     await searchPage.searchCases(crn)
     await searchPage.selectCaseByID(1)
     return new OverviewPage(page)

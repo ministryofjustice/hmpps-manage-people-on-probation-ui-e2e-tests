@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "../page";
-import { MpopDateTime } from "../../appointments/create-appointment";
+import { MpopDateTime } from "../../navigation/create-appointment";
 import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
 
