@@ -46,21 +46,27 @@ export default class DateFrequencyPage extends MPopPage {
         await btn.click()
     }
 
-    async useTomorrowsDate(){
+    async useTomorrowsDate() {
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
 
-        // Format date as DD/MM/YYYY (adjust if your datepicker expects another format)
-        const day = String(tomorrow.getDate()).padStart(2, '0');
-        const month = String(tomorrow.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+        // Day with optional leading zero removed
+        let day = String(tomorrow.getDate()).padStart(2, '0');
+        if (day.startsWith("0")) {
+            day = day.substring(1);
+        }
+
+        // Month still padded (remove this if you also want to normalise month)
+        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+
         const year = tomorrow.getFullYear();
+
+        // Final format, but DAY has no leading zero
         const formattedDate = `${day}/${month}/${year}`;
 
-        // Enter the formattedDate in to the date field
         await this.page.fill(this.datepickerQA, formattedDate);
-
         await this.page.keyboard.press('Tab');
-
     }
+
 
 }
