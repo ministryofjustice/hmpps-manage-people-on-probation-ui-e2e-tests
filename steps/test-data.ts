@@ -11,7 +11,6 @@ export const testUser = {
 }
 
 export const testCrn = "X756510"
-
 export const attendee: MpopAttendee = {
     team: "N07AAT",
     user: "jsftest"

@@ -19,7 +19,7 @@ export default abstract class MPopPage {
         await this.checkQA("pageHeading", this.title)
     }
 
-    async checkPageHeader(qa: string, expectedText: string) {
+    async checkPageHeader(qa: string, expectedText: string | RegExp) {
         await this.checkQA(qa, expectedText)
     }
 
@@ -59,7 +59,7 @@ export default abstract class MPopPage {
         await expect(this.getLink(name)).toHaveAttribute('href', value)
     }
 
-    async checkQA(qa: string, value: string){
+    async checkQA(qa: string, value: string | RegExp){
         await expect(this.getQA(qa)).toContainText(value)
     }
 
