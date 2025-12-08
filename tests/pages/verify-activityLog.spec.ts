@@ -1,9 +1,8 @@
 import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import ActivityLogPage from '../../steps/mpop/pages/case/activity-log.page.ts'
-import { testCrn } from '../../steps/test-data.ts'
-import { navigateToActivityLog } from '../../steps/mpop/navigation/case-navigation.ts'
+import ActivityLogPage from '../../steps/mpop/pages/case/activity-log.page'
+import { testCrn } from '../../steps/test-data'
+import { navigateToActivityLog } from '../../steps/mpop/navigation/case-navigation'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 

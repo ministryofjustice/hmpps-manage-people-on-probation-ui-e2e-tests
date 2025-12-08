@@ -1,10 +1,11 @@
 import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import AppointmentsPage from '../../steps/mpop/pages/case/appointments.page.ts'
-import CaseUpcomingAppointmentsPage from '../../steps/mpop/pages/appointments/upcoming-appointments.page.ts'
-import ActivityLogPage from '../../steps/mpop/pages/case/activity-log.page.ts'
-import { testCrn } from '../../steps/test-data.ts'
-import { navigateToAppointments } from '../../steps/mpop/navigation/case-navigation.ts'
+
+import CaseUpcomingAppointmentsPage from '../../steps/mpop/pages/appointments/upcoming-appointments.page'
+import ActivityLogPage from '../../steps/mpop/pages/case/activity-log.page'
+import { testCrn } from '../../steps/test-data'
+import { navigateToAppointments } from '../../steps/mpop/navigation/case-navigation'
+import AppointmentsPage from "../../steps/mpop/pages/case/appointments.page";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
