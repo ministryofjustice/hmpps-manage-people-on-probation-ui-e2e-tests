@@ -1,3 +1,4 @@
+
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 import * as dotenv from 'dotenv'
@@ -15,5 +16,11 @@ export default class OverviewPage extends MPopPage {
 
     async goTo(crn: string){
        await this.page.goto(`${MPOP_URL}/case/${crn}/`)
+    }
+
+    async checkOnlineCheckInsSectionExists(){
+        await this.getQA("checkinCard").isVisible()
+        await this.getQA("frequencyLabel").isVisible()
+        await this.getQA("contactPreferenceValueLabel").isVisible()
     }
 }

@@ -10,7 +10,7 @@ export const automatedTestUser1 = {
     lastName: 'AutomatedTestUser',
 }
 
-export const testCrn = "X756510"
+export const testCrn = "X786858"
 export const attendee: MpopAttendee = {
     team: "N07AAT",
     user: "jsftest"

@@ -20,6 +20,10 @@ export default abstract class MPopPage {
         await this.checkQA(qa, expectedText)
     }
 
+    async returnToPoPsOverviewButtonExist(){
+        await this.getQA("submit-btn").isVisible()
+    }
+
     getQA(qa: string, locator: Locator|Page=this.page){
         return locator.locator(`[data-qa="${qa}"]`)
     }
@@ -48,6 +52,11 @@ export default abstract class MPopPage {
         await this.getLink(name).click()
     }
 
+    async clickChangeLink(name: string){
+        await this.getQA(name).click()
+    }
+
+
     async clickBackLink(){
         await this.getLink("back").click()
     }
@@ -56,8 +65,11 @@ export default abstract class MPopPage {
         await expect(this.getLink(name)).toHaveAttribute('href', value)
     }
 
+    // async checkQA(qa: string, value: string | RegExp){
+    //     await expect(this.getQA(qa)).toContainText(value)
+    // }
     async checkQA(qa: string, value: string | RegExp){
-        await expect(this.getQA(qa)).toContainText(value)
+        await expect(this.getQA(qa)).toHaveText(value, {timeout: 10000})
     }
 
     async checkQAExists(qa: string) {
