@@ -23,7 +23,7 @@ export default class ContactPreferencePage extends MPopPage {
 
     async enterContactPreferenceIfDoesNotExists(
         value: string,
-        contactMethod: 'text' | 'email'
+        contactMethod: 'text' | 'email' | 'textUpdate'| 'emailUpdate'
     ) {
         let radioValue: string;
         let valueLocator: string;
@@ -35,10 +35,24 @@ export default class ContactPreferencePage extends MPopPage {
                 radioValue = 'TEXT';
                 valueLocator = '[data-qa="mobileNumberValue"]';
                 changeLinkSelector = '[data-qa="mobileNumberAction"]';
-                inputLocator =  this.page.locator('input[id$="-editCheckInMobile"]');
+                inputLocator = this.page.locator('input[id$="checkins-editCheckInMobile"]');
                 break;
 
             case 'email':
+                radioValue = 'EMAIL';
+                valueLocator = '[data-qa="emailAddressValue"]';
+                changeLinkSelector = '[data-qa="emailAddressAction"]';
+                inputLocator = this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]');
+                break;
+
+            case 'textUpdate':
+                radioValue = 'TEXT';
+                valueLocator = '[data-qa="mobileNumberValue"]';
+                changeLinkSelector = '[data-qa="mobileNumberAction"]';
+                inputLocator = this.page.locator('input[id$="checkins-editCheckInMobile"]');
+                break;
+
+            case 'emailUpdate':
                 radioValue = 'EMAIL';
                 valueLocator = '[data-qa="emailAddressValue"]';
                 changeLinkSelector = '[data-qa="emailAddressAction"]';
@@ -56,28 +70,37 @@ export default class ContactPreferencePage extends MPopPage {
         const currentValueText = await this.page.locator(valueLocator).textContent();
 
         // If it already exists → do nothing and Continue further
-        if (currentValueText && !currentValueText.includes("No")) {
+        if (currentValueText && !currentValueText.includes("No") &&
+            contactMethod !== "textUpdate" &&
+            contactMethod !== "emailUpdate"){
             await this.continueButton()
-            return
+            return radioValue;
         }
 
         // - If Mobile number or Email does not exist then select the Change link based on the preference option selected
         await Promise.all([
-            this.page.waitForURL('**/edit-contact-preference'),
+
+            this.checkPageHeader("pageHeading", /Edit contact details for .*/i),
             this.page.locator(changeLinkSelector).click()
         ]);
 
         //  Fill the correct input field (mobile or email)
+        await expect(inputLocator).toBeVisible();
+        await expect(inputLocator).toBeEditable();
         await inputLocator.fill(value);
+        //await inputLocator.fill(value);
 
         //  Save changes and navigate to the previous page
         await this.submit()
+
 
         // Validate and return to the previous page
         await this.checkPageHeader("pageHeading", "Contact Preferences");
 
         // Verify the inputted value: Mobile number or Email
         await expect(this.page.locator(valueLocator)).toHaveText(value);
+
+        return radioValue;
     }
 
 }
