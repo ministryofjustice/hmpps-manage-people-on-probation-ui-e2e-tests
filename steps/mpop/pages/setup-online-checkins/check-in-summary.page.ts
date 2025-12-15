@@ -4,6 +4,7 @@ import MPopPage from "../page.ts"
 import path from "node:path";
 
 import {photo_1_path} from "../../../test-data.ts";
+import contactPreferencePage from "./contact-preference.page.ts";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -12,6 +13,7 @@ const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
 
 
 export default class CheckInSummaryPage extends MPopPage {
+
     constructor(page: Page) {
         super(page);
     }
@@ -52,7 +54,13 @@ export default class CheckInSummaryPage extends MPopPage {
     }
 
     async clickPreferredCommsActionChangeLink() {
-        await this.getQA(this.preferredCommsActionChangeLink).click();
+        const locator =  this.getQA(this.preferredCommsActionChangeLink);
+        await locator.waitFor({ state: 'visible', timeout: 10000 });
+        // If the click triggers navigation, wrap it in a `Promise.all`
+        await Promise.all([
+            this.page.waitForURL(/\/check-in\/contact-preference\?cya=true$/, { timeout: 15000 }),
+            locator.click(),
+        ]);
     }
 
     async clickMobileActionChangeLink() {
@@ -131,11 +139,11 @@ export default class CheckInSummaryPage extends MPopPage {
         const row = this.page.locator('.govuk-summary-list__row', { hasText: labelPattern });
 
         // Locate the corresponding <dd> value
-        const value = row.locator('.govuk-summary-list__value');
+        const Value = row.locator('.govuk-summary-list__value');
 
         // Assert it matches expected
-        await expect(value).toHaveText(expectedValue);
-       // await expect(value).toHaveText(new RegExp(`\\s*${expectedValue.trim()}\\s*`, 'i'));
+        await expect(Value).toHaveText(expectedValue);
+
     }
 
 

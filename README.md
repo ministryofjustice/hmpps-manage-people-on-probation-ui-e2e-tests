@@ -27,7 +27,7 @@ npm run e2e-test
 # Simple way to run a specific test
 # use **test.only** keyword in front of the single test and either debug or run, it will run that single test only.
 
-
+nox 
 # Run a single spec file
 npx playwright test tests/pages/verify-activityLog.spec.ts
 
