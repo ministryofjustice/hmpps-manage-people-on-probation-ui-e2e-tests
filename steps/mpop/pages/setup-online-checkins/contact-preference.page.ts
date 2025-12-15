@@ -32,19 +32,6 @@ export default class ContactPreferencePage extends MPopPage {
 
         switch (contactMethod) {
             case 'text':
-                radioValue = 'TEXT';
-                valueLocator = '[data-qa="mobileNumberValue"]';
-                changeLinkSelector = '[data-qa="mobileNumberAction"]';
-                inputLocator = this.page.locator('input[id$="checkins-editCheckInMobile"]');
-                break;
-
-            case 'email':
-                radioValue = 'EMAIL';
-                valueLocator = '[data-qa="emailAddressValue"]';
-                changeLinkSelector = '[data-qa="emailAddressAction"]';
-                inputLocator = this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]');
-                break;
-
             case 'textUpdate':
                 radioValue = 'TEXT';
                 valueLocator = '[data-qa="mobileNumberValue"]';
@@ -52,6 +39,7 @@ export default class ContactPreferencePage extends MPopPage {
                 inputLocator = this.page.locator('input[id$="checkins-editCheckInMobile"]');
                 break;
 
+            case 'email':
             case 'emailUpdate':
                 radioValue = 'EMAIL';
                 valueLocator = '[data-qa="emailAddressValue"]';
@@ -69,7 +57,7 @@ export default class ContactPreferencePage extends MPopPage {
         // Get the current TEXT or EMAIL value
         const currentValueText = await this.page.locator(valueLocator).textContent();
 
-        // If it already exists → do nothing and Continue further
+        // If it already exists -- do nothing and Continue further
         if (currentValueText && !currentValueText.includes("No") &&
             contactMethod !== "textUpdate" &&
             contactMethod !== "emailUpdate"){
@@ -79,16 +67,14 @@ export default class ContactPreferencePage extends MPopPage {
 
         // - If Mobile number or Email does not exist then select the Change link based on the preference option selected
         await Promise.all([
-
-            this.checkPageHeader("pageHeading", /Edit contact details for .*/i),
-            this.page.locator(changeLinkSelector).click()
+            this.page.locator(changeLinkSelector).click(),
+            this.checkPageHeader("pageHeading", /Edit contact details for .*/i)
         ]);
 
         //  Fill the correct input field (mobile or email)
         await expect(inputLocator).toBeVisible();
         await expect(inputLocator).toBeEditable();
         await inputLocator.fill(value);
-        //await inputLocator.fill(value);
 
         //  Save changes and navigate to the previous page
         await this.submit()

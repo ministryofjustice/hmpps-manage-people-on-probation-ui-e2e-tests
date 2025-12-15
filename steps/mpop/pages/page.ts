@@ -19,9 +19,34 @@ export default abstract class MPopPage {
         await this.checkQA("pageHeading", this.title)
     }
 
-    async checkPageHeader(qa: string, expectedText: string | RegExp) {
-        await this.checkQA(qa, expectedText)
+    // async checkPageHeader(qa: string, expectedText: string | RegExp) {
+    //     await this.checkQA(qa, expectedText)
+    // }
+
+    async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
+        await this.page.waitForLoadState('domcontentloaded', { timeout });
+        const locator = this.page.locator(`[data-qa="${qa}"]`);
+
+        // Wait for it to be attached and visible
+        await locator.waitFor({ state: 'visible', timeout });
+
+        // Get the text content and trim whitespace
+        const text = (await locator.textContent())?.trim() || '';
+        console.log(`Page header [${qa}]:`, text);
+
+        // Assert manually for regex or string
+        if (expectedText instanceof RegExp) {
+            if (!expectedText.test(text)) {
+                throw new Error(`Header text did not match expected pattern. Found: "${text}"`);
+            }
+        } else {
+            if (text !== expectedText) {
+                throw new Error(`Header text did not match expected string. Found: "${text}", Expected: "${expectedText}"`);
+            }
+        }
     }
+
+
 
     async returnToPoPsOverviewButtonExist(){
         await this.getQA("submit-btn").isVisible()
@@ -37,6 +62,20 @@ export default abstract class MPopPage {
 
     async clickRadio(qa: string, id: number){
         await this.getQA(qa).getByRole('radio').nth(id).click()
+    }
+
+    // Safer clickRadio that works for radio buttons
+    async NEW_clickRadio(qa: string, id: number) {
+        const radio = this.getQA(qa).getByRole('radio').nth(id);
+
+        // Ensure the radio button is visible
+        await expect(radio).toBeVisible({ timeout: 10000 });
+
+        // Use .check() for radio buttons (safer than click)
+        await radio.check();
+
+        // Optionally, you can verify it’s selected
+        await expect(radio).toBeChecked({ timeout: 5000 });
     }
 
     async submit(){
@@ -79,6 +118,7 @@ export default abstract class MPopPage {
         const element = this.page.locator(qa)
         await expect(element).toBeVisible();
     }
+
 
     async checkPageHeaderPhoto(qa: string, expectedText: string) {
         const fullText = await this.getQA(qa).innerText();
