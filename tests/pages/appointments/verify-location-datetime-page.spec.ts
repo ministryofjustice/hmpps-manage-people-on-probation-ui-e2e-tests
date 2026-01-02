@@ -13,6 +13,7 @@ import LocationDateTimePage from '../../../steps/mpop/pages/appointments/locatio
 import LocationNotInListPage from '../../../steps/mpop/pages/appointments/location-not-in-list.page'
 import { luxonString, nextWeekend, tomorrow, yesterday } from '../../../steps/mpop/utils'
 import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
+import {login} from "../../../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -26,7 +27,6 @@ let sentence: CreatedEvent
 test.describe.configure({ mode: 'serial' });
 test.describe('Location dateTime page', () => {
     test.beforeAll(async ({browser: b}) => {
-        test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
@@ -36,10 +36,10 @@ test.describe('Location dateTime page', () => {
 
     })
     test.beforeEach(async ({ browser: b }) => {
-        test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
+        await login(page)
 
         //navigate to start of arrange appointment pipeline
         const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
@@ -52,7 +52,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('CheckLocationNotInList page', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -70,7 +69,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('CheckLocationNotInList page - no valid locations', async () => {
-        test.setTimeout(120_000)
 
         const attendee: MpopAttendee = {
             provider: "N56",
@@ -85,7 +83,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('DateTime Validation - end before start', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -103,7 +100,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('DateTime Validation - non 24h format', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -121,7 +117,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('DateTime Validation - non working day warning', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(nextWeekend(tomorrow)),

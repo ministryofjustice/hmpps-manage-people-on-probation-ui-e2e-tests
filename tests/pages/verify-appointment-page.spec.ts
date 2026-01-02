@@ -5,6 +5,7 @@ import CaseUpcomingAppointmentsPage from '../../steps/mpop/pages/appointments/up
 import ActivityLogPage from '../../steps/mpop/pages/case/activity-log.page'
 import { testCrn } from '../../steps/test-data'
 import { navigateToAppointments } from '../../steps/mpop/navigation/case-navigation'
+import {login} from "../../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -17,11 +18,11 @@ let appointments: AppointmentsPage
 test.describe('Appointments page', () => {
 
   test.beforeEach(async ({ browser: b }) => {
-    test.setTimeout(120000)
+
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
-
+    await login(page)
     appointments = await navigateToAppointments(page, testCrn)
     await appointments.checkOnPage()
   })
