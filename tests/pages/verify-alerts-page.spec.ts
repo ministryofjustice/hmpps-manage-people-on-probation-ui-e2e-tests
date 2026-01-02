@@ -54,13 +54,13 @@ test.describe('Alerts page', () => {
     await alerts.checkOnPage()
   })
 
-  // test('Check alert added', async() => {
-  //   test.setTimeout(120000)
-  //   await loginIfNotAlready(page)
-  //   const home = new HomePage(page)
-  //   const updatedCount = await home.getAlertsCount()
-  //   expect(updatedCount).toBe(alertCount+1)
-  // })
+  test('Check alert added', async() => {
+    test.setTimeout(120000)
+    await loginIfNotAlready(page)
+    const home = new HomePage(page)
+    const updatedCount = await home.getAlertsCount()
+    expect(updatedCount).toBe(alertCount+1)
+  })
   //
   // test('Check person link', async() => {
   //   test.setTimeout(120000)
