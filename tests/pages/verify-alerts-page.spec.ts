@@ -73,7 +73,8 @@ test.describe('Alerts page', () => {
 
   test('Check activity link', async() => {
     test.setTimeout(120000)
-    alerts = await navigateToAlerts(page)
+    alerts = new AlertsPage(page)
+    await alerts.goTo()
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
     const managePage = new ManageAppointmentsPage(page)
