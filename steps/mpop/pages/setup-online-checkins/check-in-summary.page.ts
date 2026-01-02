@@ -40,13 +40,10 @@ export default class CheckInSummaryPage extends MPopPage {
     private readonly takeAPhotoActionChangeLink = "photoUploadOptionAction"
     private readonly photoActionChangeLink = "photoAction"
 
-    // async clickChangeLinkByQA(qa: string) {
-    //     await this.page.locator(`[data-qa="${qa}"]`).click();
-    // }
 
     async clickDateChangeLink() {
-        //await this.clickChangeLinkByQA(this.dateActionChangeLink);
         await this.getQA(this.dateActionChangeLink).click();
+        await this.page.locator('h2', { hasText: 'Set up online check ins' }).waitFor();
     }
 
     async clickDateIntervalChangeLink() {

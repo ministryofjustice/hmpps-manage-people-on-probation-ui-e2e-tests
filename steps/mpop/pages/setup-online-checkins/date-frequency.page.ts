@@ -46,7 +46,7 @@ export default class DateFrequencyPage extends MPopPage {
     async selectOption2Weeks() {
 
         await this.page.waitForURL(/\/check-in\/date-frequency/, { timeout: 20000 });
-
+        await this.page.waitForTimeout(3000);
         // Wait for the container to appear
         const container = this.page.locator('[data-qa="checkInFrequency"]');
         await expect(container).toBeVisible({ timeout: 20000 });
@@ -85,7 +85,8 @@ export default class DateFrequencyPage extends MPopPage {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         const day = tomorrow.getDate(); // already no leading zero
-        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        //const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+        const month = tomorrow.getMonth() + 1;
         const year = tomorrow.getFullYear();
 
         const formattedDate = `${day}/${month}/${year}`;

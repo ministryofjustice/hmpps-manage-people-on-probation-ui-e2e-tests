@@ -59,7 +59,7 @@ test.describe('Set up online checkins page', () => {
         //await appointments.checkOnPage()
 
         setUpOnLineCheckinsPage = new SetupOnlineCheckinsPage(page)
-        await setUpOnLineCheckinsPage.checkOnPage()
+        //await setUpOnLineCheckinsPage.checkOnPage()
         overviewPage = new OverviewPage(page)
         dateFrequencyPage = new DateFrequencyPagePage(page)
         contactPreferencePage = new ContactPreferencePage(page)
@@ -92,7 +92,7 @@ test.describe('Set up online checkins page', () => {
         await dateFrequencyPage.selectOption8Weeks()
 
         // Navigate to Contact preference page, verify page header and select TEXT Message option
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact Preferences")
+        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
         // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
         await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "text" )
 
@@ -117,17 +117,19 @@ test.describe('Set up online checkins page', () => {
 
         // Change date
         await checkInSummaryPage.clickDateChangeLink()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+
         const { summaryFormat } = await dateFrequencyPage.updateToNextWeekDate()
         await dateFrequencyPage.submit()
 
         await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
         await checkInSummaryPage.verifySummaryField('date', summaryFormat)
 
-        // Change Date frequency
-        // await checkInSummaryPage.clickDateIntervalChangeLink()
-        // const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption2Weeks()
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
+        //Change Date frequency
+        await checkInSummaryPage.clickDateIntervalChangeLink()
+        const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption2Weeks()
+        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
 
 
 
