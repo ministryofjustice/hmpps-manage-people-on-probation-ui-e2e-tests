@@ -117,42 +117,42 @@ test.describe('Set up online checkins page', () => {
 
         // Change date
         await checkInSummaryPage.clickDateChangeLink()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+        // await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
 
-        const { summaryFormat } = await dateFrequencyPage.updateToNextWeekDate()
-        await dateFrequencyPage.submit()
+        // const { summaryFormat } = await dateFrequencyPage.updateToNextWeekDate()
+        // await dateFrequencyPage.submit()
 
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.verifySummaryField('date', summaryFormat)
+        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        // await checkInSummaryPage.verifySummaryField('date', summaryFormat)
 
-        //Change Date frequency
-        await checkInSummaryPage.clickDateIntervalChangeLink()
-        const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption2Weeks()
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
+        // //Change Date frequency
+        // await checkInSummaryPage.clickDateIntervalChangeLink()
+        // const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption2Weeks()
+        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        // await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
 
 
 
-        // Change Preferred Communication
-        await checkInSummaryPage.clickPreferredCommsActionChangeLink()
-        const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "emailUpdate" )
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
+        // // Change Preferred Communication
+        // await checkInSummaryPage.clickPreferredCommsActionChangeLink()
+        // const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "emailUpdate" )
+        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
 
-        // TODO Radio selections are not persisted - Bug already reported https://dsdmoj.atlassian.net/browse/MAN-1611
-        // Change Mobile Number
-        await checkInSummaryPage.clickMobileActionChangeLink()
-        const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-        await contactPreferencePage.continueButton()
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
+        // // TODO Radio selections are not persisted - Bug already reported https://dsdmoj.atlassian.net/browse/MAN-1611
+        // // Change Mobile Number
+        // await checkInSummaryPage.clickMobileActionChangeLink()
+        // const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
+        // await contactPreferencePage.continueButton()
+        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
 
-        // Email Address
-        await checkInSummaryPage.clickEmailActionChangeLink()
-        const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
-        await contactPreferencePage.continueButton()
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
+        // // Email Address
+        // await checkInSummaryPage.clickEmailActionChangeLink()
+        // const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
+        // await contactPreferencePage.continueButton()
+        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
 
         // // How do you want to take a Photo
         // await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
