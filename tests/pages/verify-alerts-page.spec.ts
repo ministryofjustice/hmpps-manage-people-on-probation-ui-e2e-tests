@@ -61,15 +61,15 @@ test.describe('Alerts page', () => {
     const updatedCount = await home.getAlertsCount()
     expect(updatedCount).toBe(alertCount+1)
   })
-  //
-  // test('Check person link', async() => {
-  //   test.setTimeout(120000)
-  //   alerts = await navigateToAlerts(page)
-  //   const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-  //   await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person.lastName}, ${person.firstName}`}).click()
-  //   const overviewPage = new OverviewPage(page)
-  //   expect(overviewPage.page.url()).toContain(crn)
-  // })
+
+  test('Check person link', async() => {
+    test.setTimeout(120000)
+    alerts = await navigateToAlerts(page)
+    const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
+    await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person.lastName}, ${person.firstName}`}).click()
+    const overviewPage = new OverviewPage(page)
+    expect(overviewPage.page.url()).toContain(crn)
+  })
   //
   // test('Check activity link', async() => {
   //   test.setTimeout(120000)
