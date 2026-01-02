@@ -7,9 +7,9 @@ export default abstract class MPopPage {
     constructor(page: Page, title?: string) {
         this.page = page
         this.title = title
-        if (this.title) {
-            this.checkOnPage() 
-        }
+        // if (this.title) {
+        //     this.checkOnPage() 
+        // }
     }
 
     async checkOnPage() {
