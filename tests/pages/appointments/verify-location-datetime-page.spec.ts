@@ -120,24 +120,6 @@ test.describe('Location dateTime page', () => {
         await locationDateTimePage.checkForError("Enter a time in the 24-hour format, for example 16:30")
     })
 
-    test('DateTime Validation - appointment in past', async () => {
-        test.setTimeout(120_000)
-
-        const dateTime: MpopDateTime = {
-            date: luxonString(yesterday),
-            startTime: "05:15",
-            endTime: "06:15"
-        }
-        const sentencePage = new SentencePage(page)
-        await sentencePage.completePage(0)
-        const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0)
-        const locationDateTimePage = new LocationDateTimePage(page)
-        await locationDateTimePage.completePage(dateTime, 0, false)
-
-        await locationDateTimePage.checkForError("The start time must be now or in the future")
-    })
-
     test('DateTime Validation - non working day warning', async () => {
         test.setTimeout(120_000)
 

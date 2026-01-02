@@ -72,7 +72,7 @@ test.describe('CYA page', () => {
 
     await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Appointment for"), "Adult Custody < 12m (6 Months)")
     await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Appointment type"), "Planned office visit (NS)")
-    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Attending"), "jsf test (CRC - Additional Grade) (Automated Allocation Team, London)")
+    await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Attending"), "Jsf Test (CRC - Additional Grade) (Automated Allocation Team, London)")
     await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Location"), "117 Stockwell Road")
     await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Supporting information"), "hello world")
     await cyaPage.checkSummaryRowValue(await cyaPage.getSummaryRowByKey("Sensitivity"), "Yes")

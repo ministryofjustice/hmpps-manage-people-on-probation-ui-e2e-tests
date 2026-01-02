@@ -39,14 +39,14 @@ test.describe('Alerts page', () => {
     await login(page)
     home = new HomePage(page)
     alertCount = await home.getAlertsCount()
-    await home.logout()
+  //  await home.logout()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
   test.afterEach(async() => {
-    await alerts.logout()
+ //   await alerts.logout()
   })
   test.afterAll(async() => {
     await context.close()
@@ -134,7 +134,7 @@ test.describe('Alerts page', () => {
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await row.getByRole('checkbox').click()
     await alerts.getQA("clearSelectedAlerts").click()
-    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('1 alert(s) cleared successfully')
+    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
     const finalCount = await alerts.getAlertsCount()
     expect(finalCount).toBe(alertCount)
   })
