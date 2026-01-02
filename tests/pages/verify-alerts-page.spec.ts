@@ -1,19 +1,18 @@
 import { Browser, BrowserContext, expect, Locator, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation.ts'
-import AlertsPage from '../../steps/mpop/pages/alerts.ts'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person'
-import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender.ts'
-import { automatedTestUser1, deliusAlert } from '../../steps/test-data.ts'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { tomorrow } from '../../steps/mpop/utils.ts'
-import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation'
+import AlertsPage from '../../steps/mpop/pages/alerts'
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
+import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender'
+import { automatedTestUser1, deliusAlert } from '../../steps/test-data'
+import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
-import HomePage from '../../steps/mpop/pages/home.page.ts'
-import { login, loginIfNotAlready } from '../../steps/mpop/login.ts'
-import OverviewPage from '../../steps/mpop/pages/case/overview.page.ts'
-import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page.ts'
-import NotePage from '../../steps/mpop/pages/appointments/note.page.ts'
+import HomePage from '../../steps/mpop/pages/home.page'
+import { login, loginIfNotAlready } from '../../steps/mpop/login'
+import OverviewPage from '../../steps/mpop/pages/case/overview.page'
+import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page'
+import NotePage from '../../steps/mpop/pages/appointments/note.page'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -39,15 +38,12 @@ test.describe('Alerts page', () => {
     await login(page)
     home = new HomePage(page)
     alertCount = await home.getAlertsCount()
-  //  await home.logout()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
-  test.afterEach(async() => {
- //   await alerts.logout()
-  })
+
   test.afterAll(async() => {
     await context.close()
   })
@@ -102,9 +98,9 @@ test.describe('Alerts page', () => {
     test.setTimeout(120000)
     alerts = await navigateToAlerts(page)
     await alerts.pagination("Next")
-    expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
+    await expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
     await alerts.pagination(1)
-    expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
+    await expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
   })
 
   test('Check select all alerts', async() => {
@@ -113,11 +109,11 @@ test.describe('Alerts page', () => {
     await alerts.getQA("selectAllAlertsBtn").click()
     const checkboxes : Locator[] = await alerts.page.getByRole('checkbox').all()
     for (const checkbox of checkboxes){
-      expect(checkbox).toBeChecked()
+      await expect(checkbox).toBeChecked()
     }
     await alerts.getQA("selectAllAlertsBtn").click()
     for (const checkbox of checkboxes){
-      expect(checkbox).not.toBeChecked()
+      await expect(checkbox).not.toBeChecked()
     }
   })
 
