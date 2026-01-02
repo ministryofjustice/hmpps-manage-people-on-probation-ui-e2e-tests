@@ -56,7 +56,7 @@ test.describe('Alerts page', () => {
 
   test('Check alert added', async() => {
     test.setTimeout(120000)
-    await loginIfNotAlready(page)
+    await navigateToAlerts(page)
     const home = new HomePage(page)
     const updatedCount = await home.getAlertsCount()
     expect(updatedCount).toBe(alertCount+1)
@@ -73,8 +73,7 @@ test.describe('Alerts page', () => {
 
   test('Check activity link', async() => {
     test.setTimeout(120000)
-    alerts = new AlertsPage(page)
-    await alerts.goTo()
+    alerts = await navigateToAlerts(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
     const managePage = new ManageAppointmentsPage(page)
