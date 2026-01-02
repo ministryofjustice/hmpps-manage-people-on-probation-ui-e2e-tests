@@ -33,7 +33,7 @@ export default class ContactPreferencePage extends MPopPage {
         switch (contactMethod) {
             case 'text':
             case 'textUpdate':
-                radioValue = 'TEXT';
+                radioValue = 'PHONE';
                 valueLocator = '[data-qa="mobileNumberValue"]';
                 changeLinkSelector = '[data-qa="mobileNumberAction"]';
                 inputLocator = this.page.locator('input[id$="checkins-editCheckInMobile"]');
@@ -81,7 +81,7 @@ export default class ContactPreferencePage extends MPopPage {
 
 
         // Validate and return to the previous page
-        await this.checkPageHeader("pageHeading", "Contact Preferences");
+        await this.checkPageHeader("pageHeading", "Contact preferences");
 
         // Verify the inputted value: Mobile number or Email
         await expect(this.page.locator(valueLocator)).toHaveText(value);
