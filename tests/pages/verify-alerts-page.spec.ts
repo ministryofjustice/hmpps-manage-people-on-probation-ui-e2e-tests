@@ -69,28 +69,28 @@ test.describe('Alerts page', () => {
     expect(overviewPage.page.url()).toContain(crn)
   })
 
-  test('Check activity link', async() => {
+    test('Check activity link', async () => {
+        test.setTimeout(120000)
+        alerts = await navigateToAlerts(page)
+        const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
+        await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
+        const managePage = new ManageAppointmentsPage(page)
+        expect(managePage.page.url()).toContain(crn)
+        await managePage.clickBackLink()
+        await alerts.checkOnPage()
+    })
+
+  test('Check activity note', async() => {
     test.setTimeout(120000)
     alerts = await navigateToAlerts(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-    await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
-    const managePage = new ManageAppointmentsPage(page)
-    expect(managePage.page.url()).toContain(crn)
-    await managePage.clickBackLink()
+    await alerts.getQA('alertActivity', row).getByText('More information').click()
+    await alerts.getQA('alertActivity', row).getByRole('link', {name: "View full note"}).click()
+    const notePage = new NotePage(page)
+    await notePage.checkOnPage()
+    await notePage.clickBackLink()
     await alerts.checkOnPage()
   })
-  //
-  // test('Check activity note', async() => {
-  //   test.setTimeout(120000)
-  //   alerts = await navigateToAlerts(page)
-  //   const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-  //   await alerts.getQA('alertActivity', row).getByText('More information').click()
-  //   await alerts.getQA('alertActivity', row).getByRole('link', {name: "View full note"}).click()
-  //   const notePage = new NotePage(page)
-  //   await notePage.checkOnPage()
-  //   await notePage.clickBackLink()
-  //   await alerts.checkOnPage()
-  // })
   //
   // test('Check pagination', async() => {
   //   test.setTimeout(120000)
