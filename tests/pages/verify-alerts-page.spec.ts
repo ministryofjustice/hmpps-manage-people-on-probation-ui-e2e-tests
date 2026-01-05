@@ -91,45 +91,45 @@ test.describe('Alerts page', () => {
     await notePage.clickBackLink()
     await alerts.checkOnPage()
   })
-  //
-  // test('Check pagination', async() => {
-  //   test.setTimeout(120000)
-  //   alerts = await navigateToAlerts(page)
-  //   await alerts.pagination("Next")
-  //   await expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
-  //   await alerts.pagination(1)
-  //   await expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
-  // })
-  //
-  // test('Check select all alerts', async() => {
-  //   test.setTimeout(120000)
-  //   alerts = await navigateToAlerts(page)
-  //   await alerts.getQA("selectAllAlertsBtn").click()
-  //   const checkboxes : Locator[] = await alerts.page.getByRole('checkbox').all()
-  //   for (const checkbox of checkboxes){
-  //     await expect(checkbox).toBeChecked()
-  //   }
-  //   await alerts.getQA("selectAllAlertsBtn").click()
-  //   for (const checkbox of checkboxes){
-  //     await expect(checkbox).not.toBeChecked()
-  //   }
-  // })
-  //
-  // test('Check clear alert - none', async() => {
-  //   test.setTimeout(120000)
-  //   alerts = await navigateToAlerts(page)
-  //   await alerts.getQA("clearSelectedAlerts").click()
-  //   await expect(alerts.getClass('moj-alert moj-alert--error')).toContainText('Select an alert to clear it')
-  // })
-  //
-  // test('Check clear alert', async() => {
-  //   test.setTimeout(120000)
-  //   alerts = await navigateToAlerts(page)
-  //   const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-  //   await row.getByRole('checkbox').click()
-  //   await alerts.getQA("clearSelectedAlerts").click()
-  //   await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
-  //   const finalCount = await alerts.getAlertsCount()
-  //   expect(finalCount).toBe(alertCount)
-  // })
+
+  test('Check pagination', async() => {
+    test.setTimeout(120000)
+    alerts = await navigateToAlerts(page)
+    await alerts.pagination("Next")
+    await expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
+    await alerts.pagination(1)
+    await expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
+  })
+
+  test('Check select all alerts', async() => {
+    test.setTimeout(120000)
+    alerts = await navigateToAlerts(page)
+    await alerts.getQA("selectAllAlertsBtn").click()
+    const checkboxes : Locator[] = await alerts.page.getByRole('checkbox').all()
+    for (const checkbox of checkboxes){
+      await expect(checkbox).toBeChecked()
+    }
+    await alerts.getQA("selectAllAlertsBtn").click()
+    for (const checkbox of checkboxes){
+      await expect(checkbox).not.toBeChecked()
+    }
+  })
+
+  test('Check clear alert - none', async() => {
+    test.setTimeout(120000)
+    alerts = await navigateToAlerts(page)
+    await alerts.getQA("clearSelectedAlerts").click()
+    await expect(alerts.getClass('moj-alert moj-alert--error')).toContainText('Select an alert to clear it')
+  })
+
+  test('Check clear alert', async() => {
+    test.setTimeout(120000)
+    alerts = await navigateToAlerts(page)
+    const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
+    await row.getByRole('checkbox').click()
+    await alerts.getQA("clearSelectedAlerts").click()
+    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
+    const finalCount = await alerts.getAlertsCount()
+    expect(finalCount).toBe(alertCount)
+  })
 })
