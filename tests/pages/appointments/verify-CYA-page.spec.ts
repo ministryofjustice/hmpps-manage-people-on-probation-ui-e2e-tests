@@ -13,6 +13,7 @@ import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navi
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import {login} from "../../../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -42,17 +43,17 @@ const appointment: MpopArrangeAppointment = {
 test.describe.configure({ mode: 'serial' });
 test.describe('CYA page', () => {
   test.beforeAll(async ({browser: b}) => {
-    test.setTimeout(120000)
+
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
-
+    await login(page)
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
   })
   test.beforeEach(async () => {
-    test.setTimeout(120_000)
+
 
     const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
     await appointments.checkOnPage()
@@ -65,7 +66,7 @@ test.describe('CYA page', () => {
   })
 
   test('Validate appointment details', async() => {
-    test.setTimeout(120_000)
+
 
     const cyaPage = new CYAPage(page)
 
@@ -78,7 +79,6 @@ test.describe('CYA page', () => {
   })
 
   test('Check CYA page links', async() => {
-    test.setTimeout(120_000)
 
     const cyaPage = new CYAPage(page)
     
@@ -92,7 +92,6 @@ test.describe('CYA page', () => {
   })
 
   test('Update to person level contact', async() => {
-    test.setTimeout(120_000)
 
     const cyaPage = new CYAPage(page)
     const sentencePage = await cyaPage.clickChangeLink(0) as SentencePage

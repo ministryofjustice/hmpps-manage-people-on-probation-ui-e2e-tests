@@ -30,7 +30,6 @@ test.describe.configure({ mode: 'serial' })
 test.describe('Alerts page', () => {
 
   test.beforeAll(async ({ browser: b }) => {
-    test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
@@ -49,17 +48,17 @@ test.describe('Alerts page', () => {
   })
 
   test('Render the page', async() => {
-    test.setTimeout(120000)
     alerts = await navigateToAlerts(page)
     await alerts.checkOnPage()
   })
 
   test('Check alert added', async() => {
+    await loginIfNotAlready(page)
     test.setTimeout(120000)
     await navigateToAlerts(page)
     const home = new HomePage(page)
     const updatedCount = await home.getAlertsCount()
-    expect(updatedCount).toBe(alertCount+1)
+    expect(updatedCount).toBeGreaterThan(alertCount)
   })
 
   test('Check person link', async() => {

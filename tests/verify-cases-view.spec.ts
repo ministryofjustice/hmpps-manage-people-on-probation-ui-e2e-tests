@@ -7,6 +7,7 @@ import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-pro
 import { automatedTestUser1 } from '../steps/test-data'
 import { mpopFormatDate } from '../steps/mpop/utils'
 import { navigateToCases } from '../steps/mpop/navigation/base-navigation'
+import {login} from "../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -20,11 +21,10 @@ let page: Page
 test.describe('Person Details Verification in Cases', () => {
 
   test.beforeAll(async ({ browser: b }) => {
-    test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
-
+    await login(page)
     // Create an offender and Event in Delius
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
