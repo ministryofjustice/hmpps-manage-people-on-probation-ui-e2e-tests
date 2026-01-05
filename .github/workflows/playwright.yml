@@ -43,7 +43,6 @@ jobs:
         DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
 
     - name: Publish JUnit report
-      if: always()
       uses: mikepenz/action-junit-report@cf701569b05ccdd861a76b8607a66d76f6fd4857 # v5.5.1
       id: junit
       with:
@@ -51,7 +50,6 @@ jobs:
         report_paths: junit.xml
 
     - name: Create sanitised Playwright stats summary
-      if: always()
       id: stats
       run: |
             node <<'EOF'
@@ -95,7 +93,7 @@ jobs:
             fs.appendFileSync(out, `skipped=${summary.stats.skipped}\n`);
             EOF
         
-        
+
     - name: Upload stats summary
       if: always()
       uses: actions/upload-artifact@v4
