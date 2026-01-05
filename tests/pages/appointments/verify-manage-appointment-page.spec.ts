@@ -1,9 +1,9 @@
 import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { login as loginToManageMySupervision } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/manage-a-supervision/login.mjs'
-import ManageAppointmentsPage, { ManageAction } from '../../../steps/mpop/pages/appointments/manage-appointment.page.ts'
-import { testCrn } from '../../../steps/test-data.ts'
-import { navigateToLatestAppointment, navigateToPastAppointment } from '../../../steps/mpop/navigation/contact-navigation.ts'
+import ManageAppointmentsPage, { ManageAction } from '../../../steps/mpop/pages/appointments/manage-appointment.page'
+import { testCrn } from '../../../steps/test-data'
+import { navigateToLatestAppointment, navigateToPastAppointment } from '../../../steps/mpop/navigation/contact-navigation'
+import {login} from "../../../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -16,10 +16,10 @@ let appointment: ManageAppointmentsPage
 test.describe('Manage page', () => {
 
   test.beforeEach(async ({ browser: b }) => {
-    test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
+    await login(page)
   })
   test.afterEach(async () => {
     await context.close()

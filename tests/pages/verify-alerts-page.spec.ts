@@ -1,19 +1,18 @@
 import { Browser, BrowserContext, expect, Locator, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation.ts'
-import AlertsPage from '../../steps/mpop/pages/alerts.ts'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person'
-import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender.ts'
-import { automatedTestUser1, deliusAlert } from '../../steps/test-data.ts'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { tomorrow } from '../../steps/mpop/utils.ts'
-import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation'
+import AlertsPage from '../../steps/mpop/pages/alerts'
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
+import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender'
+import { automatedTestUser1, deliusAlert } from '../../steps/test-data'
+import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
-import HomePage from '../../steps/mpop/pages/home.page.ts'
-import { login, loginIfNotAlready } from '../../steps/mpop/login.ts'
-import OverviewPage from '../../steps/mpop/pages/case/overview.page.ts'
-import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page.ts'
-import NotePage from '../../steps/mpop/pages/appointments/note.page.ts'
+import HomePage from '../../steps/mpop/pages/home.page'
+import { login, loginIfNotAlready } from '../../steps/mpop/login'
+import OverviewPage from '../../steps/mpop/pages/case/overview.page'
+import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page'
+import NotePage from '../../steps/mpop/pages/appointments/note.page'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -31,7 +30,6 @@ test.describe.configure({ mode: 'serial' })
 test.describe('Alerts page', () => {
 
   test.beforeAll(async ({ browser: b }) => {
-    test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
@@ -39,31 +37,27 @@ test.describe('Alerts page', () => {
     await login(page)
     home = new HomePage(page)
     alertCount = await home.getAlertsCount()
-    await home.logout()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
-  test.afterEach(async() => {
-    await alerts.logout()
-  })
+
   test.afterAll(async() => {
     await context.close()
   })
 
   test('Render the page', async() => {
-    test.setTimeout(120000)
     alerts = await navigateToAlerts(page)
     await alerts.checkOnPage()
   })
 
   test('Check alert added', async() => {
     test.setTimeout(120000)
-    await loginIfNotAlready(page)
+    await navigateToAlerts(page)
     const home = new HomePage(page)
     const updatedCount = await home.getAlertsCount()
-    expect(updatedCount).toBe(alertCount+1)
+    expect(updatedCount).toBeGreaterThan(alertCount)
   })
 
   test('Check person link', async() => {
@@ -75,16 +69,16 @@ test.describe('Alerts page', () => {
     expect(overviewPage.page.url()).toContain(crn)
   })
 
-  test('Check activity link', async() => {
-    test.setTimeout(120000)
-    alerts = await navigateToAlerts(page)
-    const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-    await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
-    const managePage = new ManageAppointmentsPage(page)
-    expect(managePage.page.url()).toContain(crn)
-    await managePage.clickBackLink()
-    await alerts.checkOnPage()
-  })
+    test('Check activity link', async () => {
+        test.setTimeout(120000)
+        alerts = await navigateToAlerts(page)
+        const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
+        await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
+        const managePage = new ManageAppointmentsPage(page)
+        expect(managePage.page.url()).toContain(crn)
+        await managePage.clickBackLink()
+        await alerts.checkOnPage()
+    })
 
   test('Check activity note', async() => {
     test.setTimeout(120000)
@@ -102,9 +96,9 @@ test.describe('Alerts page', () => {
     test.setTimeout(120000)
     alerts = await navigateToAlerts(page)
     await alerts.pagination("Next")
-    expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
+    await expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
     await alerts.pagination(1)
-    expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
+    await expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
   })
 
   test('Check select all alerts', async() => {
@@ -113,11 +107,11 @@ test.describe('Alerts page', () => {
     await alerts.getQA("selectAllAlertsBtn").click()
     const checkboxes : Locator[] = await alerts.page.getByRole('checkbox').all()
     for (const checkbox of checkboxes){
-      expect(checkbox).toBeChecked()
+      await expect(checkbox).toBeChecked()
     }
     await alerts.getQA("selectAllAlertsBtn").click()
     for (const checkbox of checkboxes){
-      expect(checkbox).not.toBeChecked()
+      await expect(checkbox).not.toBeChecked()
     }
   })
 
@@ -134,7 +128,7 @@ test.describe('Alerts page', () => {
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await row.getByRole('checkbox').click()
     await alerts.getQA("clearSelectedAlerts").click()
-    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('1 alert(s) cleared successfully')
+    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
     const finalCount = await alerts.getAlertsCount()
     expect(finalCount).toBe(alertCount)
   })

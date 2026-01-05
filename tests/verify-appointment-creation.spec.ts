@@ -2,13 +2,14 @@ import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { attendee, automatedTestUser1 } from '../steps/test-data'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../steps/mpop/navigation/create-appointment'
 import AppointmentsPage from '../steps/mpop/pages/case/appointments.page'
 import { luxonString, plus3Months, plus6Months, today, tomorrow } from '../steps/mpop/utils'
 import { navigateToAppointments } from '../steps/mpop/navigation/case-navigation'
+import {login} from "../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -22,7 +23,6 @@ let sentence: CreatedEvent
 test.describe.configure({ mode: 'serial' });
 test.describe('Create Appointments Full', () => {
   test.beforeAll(async ({browser: b}) => {
-      test.setTimeout(120000)
       browser = b
       context = await browser.newContext()
       page = await context.newPage()
@@ -32,10 +32,10 @@ test.describe('Create Appointments Full', () => {
 
   })
   test.beforeEach(async ({ browser: b }) => {
-    test.setTimeout(120000)
     browser = b
     context = await browser.newContext()
     page = await context.newPage()
+      await login(page)
   })
 
   test.afterEach(async () => {

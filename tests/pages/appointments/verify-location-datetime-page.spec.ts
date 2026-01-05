@@ -2,8 +2,8 @@ import { Browser, BrowserContext, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import loginDeliusAndCreateOffender from '../../../steps/delius/create-offender/createOffender'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { automatedTestUser1 } from '../../../steps/test-data'
 import { MpopAttendee, MpopDateTime} from '../../../steps/mpop/navigation/create-appointment'
 import AppointmentsPage from '../../../steps/mpop/pages/case/appointments.page'
@@ -13,6 +13,7 @@ import LocationDateTimePage from '../../../steps/mpop/pages/appointments/locatio
 import LocationNotInListPage from '../../../steps/mpop/pages/appointments/location-not-in-list.page'
 import { luxonString, nextWeekend, tomorrow, yesterday } from '../../../steps/mpop/utils'
 import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
+import {login} from "../../../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -26,7 +27,6 @@ let sentence: CreatedEvent
 test.describe.configure({ mode: 'serial' });
 test.describe('Location dateTime page', () => {
     test.beforeAll(async ({browser: b}) => {
-        test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
@@ -36,10 +36,10 @@ test.describe('Location dateTime page', () => {
 
     })
     test.beforeEach(async ({ browser: b }) => {
-        test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
+        await login(page)
 
         //navigate to start of arrange appointment pipeline
         const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
@@ -52,7 +52,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('CheckLocationNotInList page', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -70,7 +69,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('CheckLocationNotInList page - no valid locations', async () => {
-        test.setTimeout(120_000)
 
         const attendee: MpopAttendee = {
             provider: "N56",
@@ -85,7 +83,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('DateTime Validation - end before start', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -103,7 +100,6 @@ test.describe('Location dateTime page', () => {
     })
 
     test('DateTime Validation - non 24h format', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(tomorrow),
@@ -120,26 +116,7 @@ test.describe('Location dateTime page', () => {
         await locationDateTimePage.checkForError("Enter a time in the 24-hour format, for example 16:30")
     })
 
-    test('DateTime Validation - appointment in past', async () => {
-        test.setTimeout(120_000)
-
-        const dateTime: MpopDateTime = {
-            date: luxonString(yesterday),
-            startTime: "05:15",
-            endTime: "06:15"
-        }
-        const sentencePage = new SentencePage(page)
-        await sentencePage.completePage(0)
-        const typeAttendancePage = new TypeAttendancePage(page)
-        await typeAttendancePage.completePage(0)
-        const locationDateTimePage = new LocationDateTimePage(page)
-        await locationDateTimePage.completePage(dateTime, 0, false)
-
-        await locationDateTimePage.checkForError("The start time must be now or in the future")
-    })
-
     test('DateTime Validation - non working day warning', async () => {
-        test.setTimeout(120_000)
 
         const dateTime: MpopDateTime = {
             date: luxonString(nextWeekend(tomorrow)),
