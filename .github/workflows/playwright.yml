@@ -49,3 +49,57 @@ jobs:
       with:
         check_name: End-to-end test results
         report_paths: junit.xml
+
+    - name: Create sanitised Playwright stats summary
+      if: always()
+      id: stats
+      run: |
+            node <<'EOF'
+            const fs = require('fs');
+            
+            const input = JSON.parse(fs.readFileSync('results.json', 'utf8'));
+            const s = input.stats || {};
+            
+            function formatDuration(ms) {
+              const totalSeconds = Math.floor((ms || 0) / 1000);
+              const hours = Math.floor(totalSeconds / 3600);
+              const minutes = Math.floor((totalSeconds % 3600) / 60);
+              const seconds = totalSeconds % 60;
+            
+              if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+              if (minutes > 0) return `${minutes}m ${seconds}s`;
+              return `${seconds}s`;
+            }
+            
+            const summary = {
+              stats: {
+                startTime: s.startTime,
+                duration: formatDuration(s.duration),
+                expected: s.expected || 0,
+                skipped: s.skipped || 0,
+                unexpected: s.unexpected || 0,
+                flaky: s.flaky || 0
+              }
+            };
+            
+            fs.writeFileSync(
+              'stats-summary.json',
+              JSON.stringify(summary, null, 2)
+            );
+            
+            const out = process.env.GITHUB_OUTPUT;
+            fs.appendFileSync(out, `duration=${summary.stats.duration}\n`);
+            fs.appendFileSync(out, `expected=${summary.stats.expected}\n`);
+            fs.appendFileSync(out, `unexpected=${summary.stats.unexpected}\n`);
+            fs.appendFileSync(out, `flaky=${summary.stats.flaky}\n`);
+            fs.appendFileSync(out, `skipped=${summary.stats.skipped}\n`);
+            EOF
+        
+        
+    - name: Upload stats summary
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+         name: playwright-stats
+         path: stats-summary.json
+         retention-days: 7
