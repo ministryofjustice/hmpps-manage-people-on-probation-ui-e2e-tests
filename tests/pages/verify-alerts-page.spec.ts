@@ -53,7 +53,6 @@ test.describe('Alerts page', () => {
   })
 
   test('Check alert added', async() => {
-    await loginIfNotAlready(page)
     test.setTimeout(120000)
     await navigateToAlerts(page)
     const home = new HomePage(page)
