@@ -43,6 +43,7 @@ jobs:
         DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
 
     - name: Publish JUnit report
+      if: always()
       uses: mikepenz/action-junit-report@cf701569b05ccdd861a76b8607a66d76f6fd4857 # v5.5.1
       id: junit
       with:
@@ -101,3 +102,20 @@ jobs:
          name: playwright-stats
          path: stats-summary.json
          retention-days: 7
+
+    - name: Notify Slack
+      if: always()
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+         method: chat.postMessage
+         token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+         payload: |
+               channel: ${{ secrets.SLACK_CHANNEL_ID }}
+               text: >
+                 *Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`
+                 • Duration: ${{ steps.stats.outputs.duration }}
+                 • Passed: ${{ steps.stats.outputs.expected }}
+                 • Failed: ${{ steps.stats.outputs.unexpected }}
+                 • Flaky: ${{ steps.stats.outputs.flaky }}
+                 • Skipped: ${{ steps.stats.outputs.skipped }}
+                 • Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}         
