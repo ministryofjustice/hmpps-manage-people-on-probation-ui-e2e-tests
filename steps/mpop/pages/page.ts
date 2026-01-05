@@ -4,11 +4,14 @@ export default abstract class MPopPage {
     readonly page: Page
     readonly title?: string
 
-    constructor(page: Page, title?: string) {
+    protected constructor(page: Page, title?: string) {
         this.page = page
         this.title = title
+    }
+
+    async init() {
         if (this.title) {
-            this.checkOnPage() 
+            await this.checkOnPage()
         }
     }
 
