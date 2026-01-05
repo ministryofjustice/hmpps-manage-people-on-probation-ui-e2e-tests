@@ -9,7 +9,7 @@ import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/t
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import HomePage from '../../steps/mpop/pages/home.page'
-import { login, loginIfNotAlready } from '../../steps/mpop/login'
+import { login } from '../../steps/mpop/login'
 import OverviewPage from '../../steps/mpop/pages/case/overview.page'
 import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page'
 import NotePage from '../../steps/mpop/pages/appointments/note.page'
@@ -24,7 +24,6 @@ let home: HomePage
 let alertCount: number
 let person: Person
 let crn: string
-let sentence: CreatedEvent
 
 test.describe.configure({ mode: 'serial' })
 test.describe('Alerts page', () => {
@@ -39,7 +38,7 @@ test.describe('Alerts page', () => {
     alertCount = await home.getAlertsCount()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
 
@@ -69,16 +68,16 @@ test.describe('Alerts page', () => {
     expect(overviewPage.page.url()).toContain(crn)
   })
 
-    test('Check activity link', async () => {
-        test.setTimeout(120000)
-        alerts = await navigateToAlerts(page)
-        const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-        await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
-        const managePage = new ManageAppointmentsPage(page)
-        expect(managePage.page.url()).toContain(crn)
-        await managePage.clickBackLink()
-        await alerts.checkOnPage()
-    })
+  test('Check activity link', async () => {
+    test.setTimeout(120000)
+    alerts = await navigateToAlerts(page)
+    const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
+    await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
+    const managePage = new ManageAppointmentsPage(page)
+    expect(managePage.page.url()).toContain(crn)
+    await managePage.clickBackLink()
+    await alerts.checkOnPage()
+  })
 
   test('Check activity note', async() => {
     test.setTimeout(120000)
