@@ -8,7 +8,7 @@ on:
     branches: [ main, master ]
     # Every weekday at 08:00 UTC
   schedule:
-    - cron: "0 8 * * MON-FRI"
+    - cron: "0 9 * * MON-FRI"
 jobs:
   test:
     timeout-minutes: 60
@@ -49,3 +49,73 @@ jobs:
       with:
         check_name: End-to-end test results
         report_paths: junit.xml
+
+    - name: Create sanitised Playwright stats summary
+      id: stats
+      run: |
+            node <<'EOF'
+            const fs = require('fs');
+            
+            const input = JSON.parse(fs.readFileSync('results.json', 'utf8'));
+            const s = input.stats || {};
+            
+            function formatDuration(ms) {
+              const totalSeconds = Math.floor((ms || 0) / 1000);
+              const hours = Math.floor(totalSeconds / 3600);
+              const minutes = Math.floor((totalSeconds % 3600) / 60);
+              const seconds = totalSeconds % 60;
+            
+              if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+              if (minutes > 0) return `${minutes}m ${seconds}s`;
+              return `${seconds}s`;
+            }
+            
+            const summary = {
+              stats: {
+                startTime: s.startTime,
+                duration: formatDuration(s.duration),
+                expected: s.expected || 0,
+                skipped: s.skipped || 0,
+                unexpected: s.unexpected || 0,
+                flaky: s.flaky || 0
+              }
+            };
+            
+            fs.writeFileSync(
+              'stats-summary.json',
+              JSON.stringify(summary, null, 2)
+            );
+            
+            const out = process.env.GITHUB_OUTPUT;
+            fs.appendFileSync(out, `duration=${summary.stats.duration}\n`);
+            fs.appendFileSync(out, `expected=${summary.stats.expected}\n`);
+            fs.appendFileSync(out, `unexpected=${summary.stats.unexpected}\n`);
+            fs.appendFileSync(out, `flaky=${summary.stats.flaky}\n`);
+            fs.appendFileSync(out, `skipped=${summary.stats.skipped}\n`);
+            EOF
+        
+
+    - name: Upload stats summary
+      if: always() && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+         name: playwright-stats
+         path: stats-summary.json
+         retention-days: 7
+
+    - name: Notify Slack
+      if: always() && github.ref == 'refs/heads/main'
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+         method: chat.postMessage
+         token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+         payload: |
+               channel: ${{ secrets.SLACK_CHANNEL_ID }}
+               text: >
+                 *Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`
+                 • Duration: ${{ steps.stats.outputs.duration }}
+                 • Passed: ${{ steps.stats.outputs.expected }}
+                 • Failed: ${{ steps.stats.outputs.unexpected }}
+                 • Flaky: ${{ steps.stats.outputs.flaky }}
+                 • Skipped: ${{ steps.stats.outputs.skipped }}
+                 • Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}         
