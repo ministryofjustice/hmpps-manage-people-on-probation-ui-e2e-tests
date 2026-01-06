@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import {  Page } from "@playwright/test";
 import MPopPage from "./page";
 import * as dotenv from 'dotenv'
 
