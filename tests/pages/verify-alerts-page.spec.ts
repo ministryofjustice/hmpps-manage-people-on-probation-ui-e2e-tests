@@ -26,7 +26,7 @@ let person: Person
 let crn: string
 
 test.describe.configure({ mode: 'serial' })
-test.describe('Alerts page', () => {
+test.describe('Alerts page', { tag: ['@smoke', '@alerts'] }, () => {
 
   test.beforeAll(async ({ browser: b }) => {
     browser = b
