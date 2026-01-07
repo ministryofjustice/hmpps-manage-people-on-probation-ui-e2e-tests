@@ -27,15 +27,10 @@ test.describe('Create Appointments Full', () => {
       context = await browser.newContext()
       page = await context.newPage()
 
+      await login(page)
       ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
       sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
-  })
-  test.beforeEach(async ({ browser: b }) => {
-    browser = b
-    context = await browser.newContext()
-    page = await context.newPage()
-      await login(page)
   })
 
   test.afterEach(async () => {
@@ -43,7 +38,6 @@ test.describe('Create Appointments Full', () => {
   })
 
   test('Appointment + SimilarNextAppointment + FullNextAppointment', async () => {
-    test.setTimeout(360_000)
 
     //navigate to start of arrange appointment pipeline
     const appointments : AppointmentsPage = await navigateToAppointments(page, crn)
