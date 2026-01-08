@@ -10,11 +10,6 @@ export default class TypeAttendancePage extends MPopPage {
     }
 
     async completePage(id: number, attendee?: MpopAttendee, isVisor?: boolean) {
-        if (attendee != undefined){
-            await this.clickLink('change')
-            const attendancePage = new AttendancePage(this.page)
-            await attendancePage.completePage(attendee)
-        }
         await this.clickRadio("type", id)
         if (isVisor != undefined){
             await this.clickRadio("visorReport", isVisor ? 0 : 1)

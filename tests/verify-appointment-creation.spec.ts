@@ -24,7 +24,7 @@ test.describe.configure({ mode: 'serial' });
 test.describe('Create Appointments Full', { tag: ['@smoke', '@appointments'] }, () => {
   test.beforeAll(async ({browser: b}) => {
       browser = b
-      context = await browser.newContext()
+      context = context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
       page = await context.newPage()
 
       await login(page)
