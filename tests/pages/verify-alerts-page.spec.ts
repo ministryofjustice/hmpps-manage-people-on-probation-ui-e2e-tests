@@ -30,7 +30,7 @@ test.describe('Alerts page', { tag: ['@smoke', '@alerts'] }, () => {
 
   test.beforeAll(async ({ browser: b }) => {
     browser = b
-    context = await browser.newContext()
+      context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
     page = await context.newPage()
 
     await login(page)
