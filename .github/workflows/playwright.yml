@@ -26,13 +26,11 @@ jobs:
       run: npx playwright install
     - name: Run Playwright tests
       id: tests
-      run: npx playwright test -g "Alerts page" --reporter=html,junit,json,line --workers=1 --retries=0
+      run: npx playwright test -g "@smoke"  --workers=1 --retries=0
       env:
         TZ: Europe/London
         ENV: test
-        TEST_DIR: ${{ inputs.directory || 'tests' }}
-        PLAYWRIGHT_JUNIT_OUTPUT_NAME: junit.xml
-        PLAYWRIGHT_JSON_OUTPUT_NAME: results.json
+        TEST_DIR: tests
 
         # URLs
         DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
@@ -50,49 +48,110 @@ jobs:
         check_name: End-to-end test results
         report_paths: junit.xml
 
-    - name: Create sanitised Playwright stats summary
+    - name: Create sanitised Playwright stats summary (overall + per file)
+      if: always() && github.ref == 'refs/heads/main'
       id: stats
       run: |
-            node <<'EOF'
-            const fs = require('fs');
-            
-            const input = JSON.parse(fs.readFileSync('results.json', 'utf8'));
-            const s = input.stats || {};
-            
-            function formatDuration(ms) {
-              const totalSeconds = Math.floor((ms || 0) / 1000);
-              const hours = Math.floor(totalSeconds / 3600);
-              const minutes = Math.floor((totalSeconds % 3600) / 60);
-              const seconds = totalSeconds % 60;
-            
-              if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
-              if (minutes > 0) return `${minutes}m ${seconds}s`;
-              return `${seconds}s`;
-            }
-            
-            const summary = {
-              stats: {
-                startTime: s.startTime,
-                duration: formatDuration(s.duration),
-                expected: s.expected || 0,
-                skipped: s.skipped || 0,
-                unexpected: s.unexpected || 0,
-                flaky: s.flaky || 0
+        node <<'EOF'
+        const fs = require('fs');
+        
+        const reportPath = 'results.json';
+        if (!fs.existsSync(reportPath)) {
+          console.error(`Missing ${reportPath}. Ensure playwright.config.ts has ['json', { outputFile: 'results.json' }].`);
+          process.exit(0);
+        }
+        
+        const input = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+        const s = input.stats || {};
+        
+        function formatDuration(ms) {
+          const totalSeconds = Math.floor((ms || 0) / 1000);
+          const hours = Math.floor(totalSeconds / 3600);
+          const minutes = Math.floor((totalSeconds % 3600) / 60);
+          const seconds = totalSeconds % 60;
+        
+          if (hours > 0) return `${hours}h ${minutes}m ${seconds}s`;
+          if (minutes > 0) return `${minutes}m ${seconds}s`;
+          return `${seconds}s`;
+        }
+        
+        // ---- Per-file aggregation ----
+        const perFile = new Map(); // file -> { passed, failed, skipped, flaky, durationMs }
+        
+        function ensure(file) {
+          const key = file || 'unknown';
+          if (!perFile.has(key)) perFile.set(key, { passed: 0, failed: 0, skipped: 0, flaky: 0, durationMs: 0 });
+          return perFile.get(key);
+        }
+        
+        function walkSuite(suite, inheritedFile) {
+          const file = suite.file || inheritedFile;
+        
+          for (const spec of (suite.specs || [])) {
+            const specFile = spec.file || file || 'unknown';
+        
+            for (const t of (spec.tests || [])) {
+              for (const r of (t.results || [])) {
+                const f = ensure(specFile);
+                f.durationMs += (r.duration || 0);
+        
+                if (r.status === 'passed') f.passed++;
+                else if (r.status === 'skipped') f.skipped++;
+                else if (r.status === 'flaky') f.flaky++;
+                else f.failed++; // failed / timedOut / interrupted etc.
               }
-            };
-            
-            fs.writeFileSync(
-              'stats-summary.json',
-              JSON.stringify(summary, null, 2)
-            );
-            
-            const out = process.env.GITHUB_OUTPUT;
-            fs.appendFileSync(out, `duration=${summary.stats.duration}\n`);
-            fs.appendFileSync(out, `expected=${summary.stats.expected}\n`);
-            fs.appendFileSync(out, `unexpected=${summary.stats.unexpected}\n`);
-            fs.appendFileSync(out, `flaky=${summary.stats.flaky}\n`);
-            fs.appendFileSync(out, `skipped=${summary.stats.skipped}\n`);
-            EOF
+            }
+          }
+        
+          for (const child of (suite.suites || [])) walkSuite(child, file);
+        }
+        
+        for (const top of (input.suites || [])) walkSuite(top, top.file);
+        
+        const perFileArray = [...perFile.entries()]
+          .map(([file, v]) => ({ file, ...v, duration: formatDuration(v.durationMs) }))
+          .sort((a, b) => (b.failed - a.failed) || (b.passed - a.passed) || a.file.localeCompare(b.file));
+        
+        // ALL files (no truncation)
+        const perFileLines = perFileArray.map(x =>
+          `• ${x.file}: ✅ ${x.passed} ❌ ${x.failed} ⏭️ ${x.skipped} ⏱️ ${x.duration}`
+        ).join('\n') || '• (No test files found)';
+        
+        const summary = {
+          stats: {
+            startTime: s.startTime,
+            duration: formatDuration(s.duration),
+            expected: s.expected || 0,
+            skipped: s.skipped || 0,
+            unexpected: s.unexpected || 0,
+            flaky: s.flaky || 0
+          },
+          perFile: perFileArray
+        };
+        
+        fs.writeFileSync('stats-summary.json', JSON.stringify(summary, null, 2));
+        
+        // ---- Outputs ----
+        const out = process.env.GITHUB_OUTPUT;
+        fs.appendFileSync(out, `duration=${summary.stats.duration}\n`);
+        fs.appendFileSync(out, `expected=${summary.stats.expected}\n`);
+        fs.appendFileSync(out, `unexpected=${summary.stats.unexpected}\n`);
+        fs.appendFileSync(out, `flaky=${summary.stats.flaky}\n`);
+        fs.appendFileSync(out, `skipped=${summary.stats.skipped}\n`);
+        fs.appendFileSync(out, `per_file<<PERFILE\n${perFileLines}\nPERFILE\n`);
+        
+        // Slack-friendly multiline (avoid JSON/YAML escaping issues in the Slack step)
+        const slackText =
+          `• Duration: ${summary.stats.duration}\n` +
+          `• Passed: ${summary.stats.expected}\n` +
+          `• Failed: ${summary.stats.unexpected}\n` +
+          `• Flaky: ${summary.stats.flaky}\n` +
+          `• Skipped: ${summary.stats.skipped}\n\n` +
+          `*Per file:*\n${perFileLines}`;
+        
+        fs.appendFileSync(out, `slack_text<<SLACK\n${slackText}\nSLACK\n`);
+        EOF
+
         
 
     - name: Upload stats summary
@@ -107,15 +166,11 @@ jobs:
       if: always() && github.ref == 'refs/heads/main'
       uses: slackapi/slack-github-action@v2.1.1
       with:
-         method: chat.postMessage
-         token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
-         payload: |
-               channel: ${{ secrets.SLACK_CHANNEL_ID }}
-               text: >
-                 *Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`
-                 • Duration: ${{ steps.stats.outputs.duration }}
-                 • Passed: ${{ steps.stats.outputs.expected }}
-                 • Failed: ${{ steps.stats.outputs.unexpected }}
-                 • Flaky: ${{ steps.stats.outputs.flaky }}
-                 • Skipped: ${{ steps.stats.outputs.skipped }}
-                 • Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}         
+        method: chat.postMessage
+        token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+        payload: |
+          {
+            "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
+            "text": "*Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`\n${{ steps.stats.outputs.slack_text }}\n\n• Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }
+   

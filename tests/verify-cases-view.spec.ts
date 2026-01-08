@@ -4,7 +4,7 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
-import { automatedTestUser1 } from '../steps/test-data'
+import { testUser } from '../steps/test-data'
 import { mpopFormatDate } from '../steps/mpop/utils'
 import { navigateToCases } from '../steps/mpop/navigation/base-navigation'
 import {login} from "../steps/mpop/login";
@@ -26,7 +26,7 @@ test.describe('Person Details Verification in Cases', () => {
     page = await context.newPage()
     await login(page)
     // Create an offender and Event in Delius
-    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
   })
 

@@ -4,7 +4,7 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import loginDeliusAndCreateOffender from '../steps/delius/create-offender/createOffender'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
-import { attendee, automatedTestUser1 } from '../steps/test-data'
+import { attendee, testUser } from '../steps/test-data'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment, MpopAttendee, MpopDateTime} from '../steps/mpop/navigation/create-appointment'
 import AppointmentsPage from '../steps/mpop/pages/case/appointments.page'
 import { luxonString, plus3Months, plus6Months, today, tomorrow } from '../steps/mpop/utils'
@@ -21,21 +21,16 @@ let person: Person
 let sentence: CreatedEvent
 
 test.describe.configure({ mode: 'serial' });
-test.describe('Create Appointments Full', () => {
+test.describe('Create Appointments Full', { tag: ['@smoke', '@appointments'] }, () => {
   test.beforeAll(async ({browser: b}) => {
       browser = b
-      context = await browser.newContext()
+      context = context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
       page = await context.newPage()
 
-      ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+      await login(page)
+      ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
       sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
-  })
-  test.beforeEach(async ({ browser: b }) => {
-    browser = b
-    context = await browser.newContext()
-    page = await context.newPage()
-      await login(page)
   })
 
   test.afterEach(async () => {
@@ -43,7 +38,6 @@ test.describe('Create Appointments Full', () => {
   })
 
   test('Appointment + SimilarNextAppointment + FullNextAppointment', async () => {
-    test.setTimeout(360_000)
 
     //navigate to start of arrange appointment pipeline
     const appointments : AppointmentsPage = await navigateToAppointments(page, crn)

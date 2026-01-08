@@ -3,10 +3,10 @@ import { Contact, data } from "@ministryofjustice/hmpps-probation-integration-e2
 import { MpopAttendee } from "./mpop/navigation/create-appointment"
 import { tomorrow } from "./mpop/utils"
 
-export const automatedTestUser1 = {
-    name: 'AutomatedTestUser, AutomatedTestUser (PS - PSO)',
-    firstName: 'AutomatedTestUser',
-    lastName: 'AutomatedTestUser',
+export const testUser = {
+    name: 'TestUser, MPOP (PS - PSO)',
+    firstName: 'MPOP',
+    lastName: 'TestUser',
 }
 
 export const testCrn = "X756510"

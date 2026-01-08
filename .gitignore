@@ -6,6 +6,11 @@ node_modules/
 /dist/
 *.tgz
 
+### playwright report ###
+junit.xml
+results.json
+/videos
+
 ### IntelliJ IDEA ###
 .idea/**/*
 !.idea/runConfigurations
