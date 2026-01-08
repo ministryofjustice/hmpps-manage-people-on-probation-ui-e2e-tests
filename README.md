@@ -11,5 +11,5 @@ Populate the file using .env.playwright from within the MPop one password accoun
 
 Run the tests with the following command
 ```shell
-npx playwright text
+npx playwright test
 ```
