@@ -4,7 +4,7 @@ import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation'
 import AlertsPage from '../../steps/mpop/pages/alerts'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender'
-import { automatedTestUser1, deliusAlert } from '../../steps/test-data'
+import { testUser, deliusAlert } from '../../steps/test-data'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
@@ -37,7 +37,7 @@ test.describe('Alerts page', { tag: ['@smoke', '@alerts'] }, () => {
     home = new HomePage(page)
     alertCount = await home.getAlertsCount()
 
-    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
     await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
