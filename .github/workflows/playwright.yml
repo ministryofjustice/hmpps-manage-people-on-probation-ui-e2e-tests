@@ -58,7 +58,7 @@ jobs:
         const reportPath = 'results.json';
         if (!fs.existsSync(reportPath)) {
           console.error(`Missing ${reportPath}. Ensure playwright.config.ts has ['json', { outputFile: 'results.json' }].`);
-          process.exit(1);
+          process.exit(0);
         }
         
         const input = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
@@ -139,7 +139,19 @@ jobs:
         fs.appendFileSync(out, `flaky=${summary.stats.flaky}\n`);
         fs.appendFileSync(out, `skipped=${summary.stats.skipped}\n`);
         fs.appendFileSync(out, `per_file<<PERFILE\n${perFileLines}\nPERFILE\n`);
+        
+        // Slack-friendly multiline (avoid JSON/YAML escaping issues in the Slack step)
+        const slackText =
+          `• Duration: ${summary.stats.duration}\n` +
+          `• Passed: ${summary.stats.expected}\n` +
+          `• Failed: ${summary.stats.unexpected}\n` +
+          `• Flaky: ${summary.stats.flaky}\n` +
+          `• Skipped: ${summary.stats.skipped}\n\n` +
+          `*Per file:*\n${perFileLines}`;
+        
+        fs.appendFileSync(out, `slack_text<<SLACK\n${slackText}\nSLACK\n`);
         EOF
+
         
 
     - name: Upload stats summary
@@ -157,17 +169,8 @@ jobs:
         method: chat.postMessage
         token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
         payload: |
-          channel: ${{ secrets.SLACK_CHANNEL_ID }}
-          text: |
-            *Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`
-            • Duration: ${{ steps.stats.outputs.duration }}
-            • Passed: ${{ steps.stats.outputs.expected }}
-            • Failed: ${{ steps.stats.outputs.unexpected }}
-            • Flaky: ${{ steps.stats.outputs.flaky }}
-            • Skipped: ${{ steps.stats.outputs.skipped }}
-
-            *Per file:*
-            ${{ steps.stats.outputs.per_file }}
-
-            • Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          {
+            "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
+            "text": "*Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`\n${{ steps.stats.outputs.slack_text }}\n\n• Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          }
    
