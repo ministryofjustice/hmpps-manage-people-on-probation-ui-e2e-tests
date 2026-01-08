@@ -1,7 +1,7 @@
 import { Browser, BrowserContext, expect, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
-import { attendee, automatedTestUser1, testCrn } from '../../../steps/test-data'
+import { attendee, testUser, testCrn } from '../../../steps/test-data'
 import { MpopArrangeAppointment, MpopDateTime, setupAppointmentMPop} from '../../../steps/mpop/navigation/create-appointment'
 import AppointmentsPage from '../../../steps/mpop/pages/case/appointments.page'
 import CYAPage from '../../../steps/mpop/pages/appointments/CYA.page'
@@ -48,7 +48,7 @@ test.describe('CYA page', () => {
     context = await browser.newContext()
     page = await context.newPage()
     await login(page)
-    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
   })
