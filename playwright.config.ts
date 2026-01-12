@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import {
     secondsToMilliseconds
-} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time'
+} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs'
 
 /**
  * Read environment variables from file.

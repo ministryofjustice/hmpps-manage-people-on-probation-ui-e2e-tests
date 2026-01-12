@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
-import MPopPage from "../page.ts"
+import MPopPage from "../page"
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL

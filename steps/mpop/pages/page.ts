@@ -8,17 +8,13 @@ export default abstract class MPopPage {
         this.page = page
         this.title = title
         // if (this.title) {
-        //     this.checkOnPage() 
+        //     this.checkOnPage()
         // }
     }
 
     async checkOnPage() {
         await this.checkQA("pageHeading", this.title)
     }
-
-    // async checkPageHeader(qa: string, expectedText: string | RegExp) {
-    //     await this.checkQA(qa, expectedText)
-    // }
 
     async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
         await this.page.waitForLoadState('domcontentloaded', { timeout });
@@ -43,10 +39,12 @@ export default abstract class MPopPage {
         }
     }
 
-
-
     async returnToPoPsOverviewButtonExist(){
-        await this.getQA("submit-btn").isVisible()
+        await this.getQA("submit-btn").isVisible();
+    }
+
+    async selectPoPsOverviewButton() {
+        await this.getQA("submit-btn").click();
     }
 
     getQA(qa: string, locator: Locator|Page=this.page){
@@ -59,20 +57,6 @@ export default abstract class MPopPage {
 
     async clickRadio(qa: string, id: number){
         await this.getQA(qa).getByRole('radio').nth(id).click()
-    }
-
-    // Safer clickRadio that works for radio buttons
-    async NEW_clickRadio(qa: string, id: number) {
-        const radio = this.getQA(qa).getByRole('radio').nth(id);
-
-        // Ensure the radio button is visible
-        await expect(radio).toBeVisible({ timeout: 10000 });
-
-        // Use .check() for radio buttons (safer than click)
-        await radio.check();
-
-        // Optionally, you can verify it’s selected
-        await expect(radio).toBeChecked({ timeout: 5000 });
     }
 
     async submit(){
@@ -128,8 +112,6 @@ export default abstract class MPopPage {
 
         expect(staticPart).toBe(expectedText);
     }
-
-
     async clickTableLink(tableqa: string, cellqa: string){
         await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click()
     }

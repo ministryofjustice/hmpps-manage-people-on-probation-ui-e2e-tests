@@ -1,10 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
-import MPopPage from "../page.ts"
-import path from "node:path";
-
-import {photo_1_path} from "../../../test-data.ts";
-import contactPreferencePage from "./contact-preference.page.ts";
+import MPopPage from "../page"
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -42,37 +38,38 @@ export default class CheckInSummaryPage extends MPopPage {
 
 
     async clickDateChangeLink() {
+        await this.getQA(this.dateActionChangeLink).isEnabled();
         await this.getQA(this.dateActionChangeLink).click();
         await this.page.locator('h2', { hasText: 'Set up online check ins' }).waitFor();
     }
 
     async clickDateIntervalChangeLink() {
+        await this.getQA(this.dateIntervalActionChangeLink).isEnabled();
         await this.getQA(this.dateIntervalActionChangeLink).click();
     }
 
     async clickPreferredCommsActionChangeLink() {
-        const locator =  this.getQA(this.preferredCommsActionChangeLink);
-        await locator.waitFor({ state: 'visible', timeout: 10000 });
-        // If the click triggers navigation, wrap it in a `Promise.all`
-        await Promise.all([
-            this.page.waitForURL(/\/check-in\/contact-preference\?cya=true$/, { timeout: 15000 }),
-            locator.click(),
-        ]);
+        await this.getQA(this.preferredCommsActionChangeLink).isEnabled();
+        await this.getQA(this.preferredCommsActionChangeLink).click();
     }
 
     async clickMobileActionChangeLink() {
+        await this.getQA(this.mobileActionChangeLink).isEnabled();
         await this.getQA(this.mobileActionChangeLink).click();
     }
 
     async clickEmailActionChangeLink() {
-        await this.getQA(this.emailActionChangeLink).click()
+        await this.getQA(this.emailActionChangeLink).isEnabled();
+        await this.getQA(this.emailActionChangeLink).click();
     }
 
     async clickTakeAPhotoActionChangeLink() {
+        await this.getQA(this.takeAPhotoActionChangeLink).isEnabled();
         await this.getQA(this.takeAPhotoActionChangeLink).click();
     }
 
     async clickPhotoActionChangeLink() {
+        await this.getQA(this.photoActionChangeLink).isEnabled();
         await this.getQA(this.photoActionChangeLink).click();
     }
 
