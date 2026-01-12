@@ -1,7 +1,7 @@
-import { expect, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test"
 import * as dotenv from 'dotenv'
-import MPopPage from "../page.ts"
-import CheckInSummaryPage from "./check-in-summary.page.ts";
+import MPopPage from "../page"
+import CheckInSummaryPage from "../../pages/setup-online-checkins/check-in-summary.page"
 
 
 dotenv.config({ path: '.env' })
@@ -36,47 +36,43 @@ export default class DateFrequencyPage extends MPopPage {
         await this.checkQAExists(this.datepickerQA);
     }
 
-
     async selectOption8Weeks(){
         await this.clickRadio("checkInFrequency", 3)
         await this.submit()
     }
 
-
     async selectOption2Weeks() {
+            await this.page.waitForURL(/\/check-in\/date-frequency/, { timeout: 20000 });
+            // Wait for the container to appear
+            const container = this.page.locator('[data-qa="checkInFrequency"]');
+            await expect(container).toBeVisible();
 
+            const radioButton = this.page.locator('input[type="radio"][value="TWO_WEEKS"]');
+            await radioButton.check();
+
+            const id = await radioButton.getAttribute('id');
+            const labelText = await this.page.locator(`label[for="${id}"]`).innerText();
+
+            await this.submit();
+
+            return labelText.trim();
+    }
+
+    async selectOption4Weeks() {
         await this.page.waitForURL(/\/check-in\/date-frequency/, { timeout: 20000 });
-        await this.page.waitForTimeout(3000);
         // Wait for the container to appear
         const container = this.page.locator('[data-qa="checkInFrequency"]');
-        await expect(container).toBeVisible({ timeout: 20000 });
+        await expect(container).toBeVisible();
 
-        const radios = container.locator('input[type="radio"]');
-        await expect(radios).toBeVisible({ timeout: 10000 });
-
-        const radioButton = radios.nth(1);
-
-        // Ensure the radio is visible and enabled
-        await expect(radioButton).toBeVisible({ timeout: 10000 });
-        await expect(radioButton).toBeEnabled({ timeout: 10000 });
-        await radioButton.click()
+        const radioButton = this.page.locator('input[type="radio"][value="FOUR_WEEKS"]');
+        await radioButton.check();
 
         const id = await radioButton.getAttribute('id');
         const labelText = await this.page.locator(`label[for="${id}"]`).innerText();
 
-        await Promise.all([
-            this.page.waitForNavigation({ waitUntil: 'domcontentloaded', timeout: 15000 }),
-            this.submit()
-        ]);
+        await this.submit();
 
         return labelText.trim();
-    }
-
-
-    async clickSetupOnlineCheckInsBtn() {
-        const btn = this.getQA("online-checkin-btn")
-        await expect(btn).toBeVisible({ timeout: 10000 })  // ensure visible
-        await btn.click()
     }
 
 
@@ -102,7 +98,8 @@ export default class DateFrequencyPage extends MPopPage {
         nextWeek.setDate(nextWeek.getDate() + 7);
 
         const day = nextWeek.getDate();
-        const month = String(nextWeek.getMonth() + 1).padStart(2, '0');
+
+        const month = nextWeek.getMonth();
         const year = nextWeek.getFullYear();
 
         const formattedDate = `${day}/${month}/${year}`;
@@ -124,5 +121,11 @@ export default class DateFrequencyPage extends MPopPage {
         return { inputFormat: formattedDate, summaryFormat: summaryFormattedDate };
     }
 
-
+    async formatToDMY(dateStr) {
+        const date = new Date(dateStr); // parse string
+        const day = date.getDate(); // 9
+        const month = date.getMonth() + 1; // 1 (months are 0-indexed)
+        const year = date.getFullYear(); // 2026
+        return `${day}/${month}/${year}`;
+    }
 }

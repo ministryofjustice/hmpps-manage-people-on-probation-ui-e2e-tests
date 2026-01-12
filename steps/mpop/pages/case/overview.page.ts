@@ -21,6 +21,6 @@ export default class OverviewPage extends MPopPage {
     async checkOnlineCheckInsSectionExists(){
         await this.getQA("checkinCard").isVisible()
         await this.getQA("frequencyLabel").isVisible()
-        await this.getQA("contactPreferenceValueLabel").isVisible()
+        await this.getQA("contactPrefLabel").isVisible()
     }
 }

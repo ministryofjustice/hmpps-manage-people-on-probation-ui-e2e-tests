@@ -1,6 +1,6 @@
 import {expect, Locator, Page} from "@playwright/test";
 import * as dotenv from 'dotenv'
-import MPopPage from "../page.ts"
+import MPopPage from "../page"
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -10,15 +10,6 @@ export default class ContactPreferencePage extends MPopPage {
 
     constructor(page: Page) {
         super(page)
-    }
-
-    async goTo(crn: string) {
-        await this.page.goto(`${MPOP_URL}/case/${crn}/appointments\\/[0-9a-fA-F-]{36}\\/check-in/contact-preference/`)
-    }
-    async assertMobileNumberExists(expectedNumber: string) {
-        const numberLocator = this.getQA("mobileNumberValue");
-        await expect(numberLocator).toBeVisible();
-        await expect(numberLocator).toHaveText(expectedNumber);
     }
 
     async enterContactPreferenceIfDoesNotExists(
@@ -52,6 +43,7 @@ export default class ContactPreferencePage extends MPopPage {
         }
 
         //  Select the radio button
+        await this.page.locator(`input[type="radio"][value="${radioValue}"]`).isEnabled();
         await this.page.locator(`input[type="radio"][value="${radioValue}"]`).check();
 
         // Get the current TEXT or EMAIL value
@@ -66,19 +58,15 @@ export default class ContactPreferencePage extends MPopPage {
         }
 
         // - If Mobile number or Email does not exist then select the Change link based on the preference option selected
-        await Promise.all([
-            this.page.locator(changeLinkSelector).click(),
-            this.checkPageHeader("pageHeading", /Edit contact details for .*/i)
-        ]);
+        await this.page.locator(changeLinkSelector).isEnabled();
+        await this.page.locator(changeLinkSelector).click();
 
         //  Fill the correct input field (mobile or email)
-        await expect(inputLocator).toBeVisible();
         await expect(inputLocator).toBeEditable();
         await inputLocator.fill(value);
 
         //  Save changes and navigate to the previous page
         await this.submit()
-
 
         // Validate and return to the previous page
         await this.checkPageHeader("pageHeading", "Contact preferences");
@@ -88,5 +76,4 @@ export default class ContactPreferencePage extends MPopPage {
 
         return radioValue;
     }
-
 }
