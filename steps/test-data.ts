@@ -4,13 +4,13 @@ import { MpopAttendee } from "./mpop/navigation/create-appointment"
 import { tomorrow } from "./mpop/utils"
 import path from 'path'
 
-export const automatedTestUser1 = {
-    name: 'AutomatedTestUser, AutomatedTestUser (PS - PSO)',
-    firstName: 'AutomatedTestUser',
-    lastName: 'AutomatedTestUser',
+export const testUser = {
+    name: 'TestUser, MPOP (PS - PSO)',
+    firstName: 'MPOP',
+    lastName: 'TestUser',
 }
 
-export const testCrn = "X968704"
+export const testCrn = "X977632"
 export const attendee: MpopAttendee = {
     team: "N07AAT",
     user: "jsftest"

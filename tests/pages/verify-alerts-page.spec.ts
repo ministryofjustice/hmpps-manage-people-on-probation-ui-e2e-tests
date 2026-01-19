@@ -1,19 +1,19 @@
 import { Browser, BrowserContext, expect, Locator, Page, test } from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation.ts'
-import AlertsPage from '../../steps/mpop/pages/alerts.ts'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person'
-import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender.ts'
-import { automatedTestUser1, deliusAlert } from '../../steps/test-data.ts'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
-import { tomorrow } from '../../steps/mpop/utils.ts'
-import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event'
+import { navigateToAlerts } from '../../steps/mpop/navigation/base-navigation'
+import AlertsPage from '../../steps/mpop/pages/alerts'
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
+import loginDeliusAndCreateOffender from '../../steps/delius/create-offender/createOffender'
+import { testUser, deliusAlert } from '../../steps/test-data'
+import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import { tomorrow } from '../../steps/mpop/utils'
+import { createCustodialEvent, CreatedEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
-import HomePage from '../../steps/mpop/pages/home.page.ts'
-import { login, loginIfNotAlready } from '../../steps/mpop/login.ts'
-import OverviewPage from '../../steps/mpop/pages/case/overview.page.ts'
-import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page.ts'
-import NotePage from '../../steps/mpop/pages/appointments/note.page.ts'
+import HomePage from '../../steps/mpop/pages/home.page'
+import { login, loginIfNotAlready } from '../../steps/mpop/login'
+import OverviewPage from '../../steps/mpop/pages/case/overview.page'
+import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page'
+import NotePage from '../../steps/mpop/pages/appointments/note.page'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -41,7 +41,7 @@ test.describe('Alerts page', () => {
     alertCount = await home.getAlertsCount()
     await home.logout()
 
-    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
+    ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
