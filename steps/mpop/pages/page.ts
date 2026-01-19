@@ -108,7 +108,11 @@ export default abstract class MPopPage {
 
 
     async checkPageHeaderPhoto(qa: string, expectedText: string) {
-        const fullText = await this.getQA(qa).innerText();
+        const header = this.getQA(qa);
+        // Ensure we are no longer on the previous page
+        await expect(header).not.toHaveText(/Contact preferences/);
+        await expect(header).toContainText(expectedText);
+        const fullText = await header.innerText();
 
         // Normalize whitespace and remove the last word (the dynamic name)
         const staticPart = fullText
