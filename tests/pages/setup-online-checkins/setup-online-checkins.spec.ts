@@ -1,6 +1,6 @@
 import {Browser, BrowserContext, expect, Page, test} from '@playwright/test'
 import * as dotenv from 'dotenv'
-import { testCrn } from '../../../steps/test-data'
+import {testCrn, testUser} from '../../../steps/test-data'
 import {login} from "../../../steps/mpop/login";
 import AppointmentsPage from "../../../steps/mpop/pages/case/appointments.page";
 import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
@@ -13,10 +13,18 @@ import PhotoMeetRulesPage    from "../../../steps/mpop/pages/setup-online-checki
 import CheckInSummaryPage    from "../../../steps/mpop/pages/setup-online-checkins/check-in-summary.page";
 import ConfirmationPage from "../../../steps/mpop/pages/setup-online-checkins/confirmation.page";
 import OverviewPage from "../../../steps/mpop/pages/case/overview.page";
+import loginDeliusAndCreateOffender from "../../../steps/delius/create-offender/createOffender";
+import {data} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
+import {
+    createCustodialEvent, CreatedEvent
+} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs";
+import {Person} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string = testCrn
+let crn: string //= testCrn
+let person: Person
+let sentence: CreatedEvent
 let browser: Browser
 let context: BrowserContext
 let page: Page
@@ -36,6 +44,10 @@ test.describe('Set up online checkins page', () => {
         test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
+        page = await context.newPage()
+
+        ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+        sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     })
 
     test.beforeEach(async ({ browser: b }) => {
@@ -43,7 +55,7 @@ test.describe('Set up online checkins page', () => {
         browser = b
         context = await browser.newContext()
         page = await context.newPage()
-        appointments = await navigateToAppointments(page, testCrn)
+        appointments = await navigateToAppointments(page, crn)
         setUpOnLineCheckinsPage = new SetupOnlineCheckinsPage(page)
         overviewPage = new OverviewPage(page)
         dateFrequencyPage = new DateFrequencyPagePage(page)
@@ -169,7 +181,7 @@ test.describe('Set up online checkins page', () => {
         await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
         // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
         await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
-
+        await contactPreferencePage.continueButton()
         // Photo options page
         await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
         await photoOptionsPage.selectUploadAPhoto()
