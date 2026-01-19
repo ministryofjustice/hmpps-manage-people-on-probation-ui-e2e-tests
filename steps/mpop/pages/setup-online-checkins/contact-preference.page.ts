@@ -14,7 +14,7 @@ export default class ContactPreferencePage extends MPopPage {
 
     async enterContactPreferenceIfDoesNotExists(
         value: string,
-        contactMethod: 'text' | 'email' | 'textUpdate'| 'emailUpdate'
+        contactMethod: 'Text message' | 'email' | 'textUpdate'| 'emailUpdate'
     ) {
         let radioValue: string;
         let valueLocator: string;
@@ -22,18 +22,24 @@ export default class ContactPreferencePage extends MPopPage {
         let inputLocator: Locator;
 
         switch (contactMethod) {
-            case 'text':
+            case 'Text message':
             case 'textUpdate':
                 radioValue = 'PHONE';
-                valueLocator = '[data-qa="mobileNumberValue"]';
+                valueLocator ='[data-qa="mobileNumberValue"]';
+                //valueLocator =//label[normalize-space()="Text message"]
                 changeLinkSelector = '[data-qa="mobileNumberAction"]';
-                inputLocator = this.page.locator('input[id$="checkins-editCheckInMobile"]');
+                inputLocator = this.page.locator('input[id$="editCheckInMobile"]');
                 break;
 
             case 'email':
-            case 'emailUpdate':
                 radioValue = 'EMAIL';
                 valueLocator = '[data-qa="emailAddressValue"]';
+                changeLinkSelector = '[data-qa="emailAddressAction"]';
+                inputLocator = this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]');
+                break;
+            case 'emailUpdate':
+                radioValue = 'EMAIL';
+                valueLocator = '//span[@data-qa="emailAddressValue"]/parent::*';
                 changeLinkSelector = '[data-qa="emailAddressAction"]';
                 inputLocator = this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]');
                 break;

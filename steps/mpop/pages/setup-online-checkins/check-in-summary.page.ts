@@ -99,7 +99,20 @@ export default class CheckInSummaryPage extends MPopPage {
         await expect(dateValue).toHaveText(expectedDate);
     }
 
-    async verifySummaryField(field: 'date' | 'firstCheckIn' |'frequency' | 'preferredCommunication' | 'mobile' | 'email' | 'uploadPhoto', expectedValue: string) {
+    async verifyCheckInDateInOverviewPage(summaryFormat: string) {
+        const date = new Date(summaryFormat);
+
+        const formattedDateOverviewPage = date.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+        });
+
+        console.log(formattedDateOverviewPage);
+        return formattedDateOverviewPage;
+    }
+
+    async verifySummaryField(field: 'date' | 'firstCheckIn' |'frequency' | 'confirmedFrequency' | 'preferredCommunication' | 'mobile' | 'email' | 'uploadPhoto', expectedValue: string) {
         let labelPattern: RegExp;
 
         switch (field) {
@@ -108,11 +121,12 @@ export default class CheckInSummaryPage extends MPopPage {
                 labelPattern = /When would you like|First check in/i;
                 break;
             case 'frequency':
-                labelPattern = /How often would you like/i;
+            case 'confirmedFrequency':
+                labelPattern = /How often would you like|Frequency/i;
                 break;
             case 'preferredCommunication':
-                labelPattern = /How does/i;
-                if (expectedValue.toUpperCase() === 'TEXT') expectedValue = 'Text message';
+                labelPattern = /How does|Contact preferences/i;
+                if (expectedValue.toUpperCase() === 'PHONE') expectedValue = 'Text message';
                 if (expectedValue.toUpperCase() === 'EMAIL') expectedValue = 'Email';
                 break;
             case 'mobile':
@@ -137,8 +151,5 @@ export default class CheckInSummaryPage extends MPopPage {
 
         // Assert it matches expected
         await expect(Value).toHaveText(expectedValue);
-
     }
-
-
 }

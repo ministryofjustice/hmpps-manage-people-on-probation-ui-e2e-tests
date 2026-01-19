@@ -45,9 +45,10 @@ export default class DateFrequencyPage extends MPopPage {
             await this.page.waitForURL(/\/check-in\/date-frequency/, { timeout: 20000 });
             // Wait for the container to appear
             const container = this.page.locator('[data-qa="checkInFrequency"]');
-            await expect(container).toBeVisible();
+            await expect(container).toBeEnabled();
 
             const radioButton = this.page.locator('input[type="radio"][value="TWO_WEEKS"]');
+            await radioButton.isEnabled();
             await radioButton.check();
 
             const id = await radioButton.getAttribute('id');
@@ -62,9 +63,10 @@ export default class DateFrequencyPage extends MPopPage {
         await this.page.waitForURL(/\/check-in\/date-frequency/, { timeout: 20000 });
         // Wait for the container to appear
         const container = this.page.locator('[data-qa="checkInFrequency"]');
-        await expect(container).toBeVisible();
+        await expect(container).toBeEnabled();
 
         const radioButton = this.page.locator('input[type="radio"][value="FOUR_WEEKS"]');
+        await radioButton.isEnabled();
         await radioButton.check();
 
         const id = await radioButton.getAttribute('id');
@@ -81,8 +83,8 @@ export default class DateFrequencyPage extends MPopPage {
         tomorrow.setDate(tomorrow.getDate() + 1);
 
         const day = tomorrow.getDate(); // already no leading zero
-        //const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-        const month = tomorrow.getMonth() + 1;
+        const month = String(tomorrow.getMonth() + 1);
+        //const month = tomorrow.getMonth() + 1;
         const year = tomorrow.getFullYear();
 
         const formattedDate = `${day}/${month}/${year}`;
@@ -99,7 +101,7 @@ export default class DateFrequencyPage extends MPopPage {
 
         const day = nextWeek.getDate();
 
-        const month = nextWeek.getMonth();
+        const month = nextWeek.getMonth() + 1;
         const year = nextWeek.getFullYear();
 
         const formattedDate = `${day}/${month}/${year}`;

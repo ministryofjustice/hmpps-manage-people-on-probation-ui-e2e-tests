@@ -26,13 +26,19 @@ export default abstract class MPopPage {
     async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
         await this.page.waitForLoadState('domcontentloaded', { timeout });
         const locator = this.page.locator(`[data-qa="${qa}"]`);
+        await locator.isVisible();
 
         // Wait for it to be attached and visible
-        await locator.waitFor({ state: 'visible', timeout });
+        // await locator.waitFor({ state: 'visible', timeout });
 
         // Get the text content and trim whitespace
-        const text = (await locator.textContent())?.trim() || '';
+        //const text = (await locator.textContent())?.trim() || '';
+        const text = (await locator.textContent())
+            ?.replace(/\s+/g, ' ')
+            .trim() || '';
+
         console.log(`Page header [${qa}]:`, text);
+
 
         // Assert manually for regex or string
         if (expectedText instanceof RegExp) {

@@ -1,7 +1,8 @@
 import {Browser, BrowserContext, expect, Page, test} from '@playwright/test'
 import * as dotenv from 'dotenv'
+import { testCrn } from '../../../steps/test-data'
+import {login} from "../../../steps/mpop/login";
 import AppointmentsPage from "../../../steps/mpop/pages/case/appointments.page";
-import {automatedTestUser1, testCrn} from '../../../steps/test-data'
 import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
 import SetupOnlineCheckinsPage from "../../../steps/mpop/pages/setup-online-checkins/setup-online-checkins-page";
 import DateFrequencyPagePage from "../../../steps/mpop/pages/setup-online-checkins/date-frequency.page";
@@ -12,16 +13,10 @@ import PhotoMeetRulesPage    from "../../../steps/mpop/pages/setup-online-checki
 import CheckInSummaryPage    from "../../../steps/mpop/pages/setup-online-checkins/check-in-summary.page";
 import ConfirmationPage from "../../../steps/mpop/pages/setup-online-checkins/confirmation.page";
 import OverviewPage from "../../../steps/mpop/pages/case/overview.page";
-import loginDeliusAndCreateOffender from "../../../steps/delius/create-offender/createOffender";
-import {data} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
-import {
-    createCustodialEvent
-} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
 let crn: string = testCrn
-let person;
 let browser: Browser
 let context: BrowserContext
 let page: Page
@@ -41,9 +36,6 @@ test.describe('Set up online checkins page', () => {
         test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
-        //[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', automatedTestUser1, data.teams.allocationsTestTeam)
-        //sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-
     })
 
     test.beforeEach(async ({ browser: b }) => {
@@ -72,6 +64,95 @@ test.describe('Set up online checkins page', () => {
         await setUpOnLineCheckinsPage.checkOnPage()
     })
 
+    // BACK link Instructions page - How you can use online check ins
+    test('Check Back link exists on Instructions Page - How can you use online check ins and navigates to the previous page Appointments', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.clickBackLink()
+        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Overview")
+    })
+
+    // CANCEL link Instructions page - How you can use online check ins
+    test('Check Cancel button on Instructions Page and navigates to the previous page Appointments', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.clickLink('Cancel')
+        await photoOptionsPage.checkPageHeaderPhoto("appointments-header-label", "Appointments")
+    })
+
+    //SET UP Online Check Ins page
+    // BACK link on Instructions page - How you can use online check ins
+    test('Check Back link exists on Set Up Online Check Ins Page  and navigates to the previous page How you can use online check ins', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.submit()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+        await setUpOnLineCheckinsPage.clickBackLink()
+        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
+    })
+
+    // CONTACT Preferences page
+    // BACK link on Contact Preferences page
+    test('Check Back link exists on Contact Preference Page - and navigates to the previous page Set up online check ins', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.submit()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
+        await dateFrequencyPage.useTomorrowsDate()
+        await dateFrequencyPage.selectOption4Weeks()
+        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
+        await contactPreferencePage.clickBackLink()
+        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "Set up online check ins")
+    })
+
+    // Take a Photo page
+    // BACK link on Take a photo page
+    test('Check Back link exists on Take a Photo Page - and navigates to the previous page Contact Preferences', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.submit()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
+        await dateFrequencyPage.useTomorrowsDate()
+        await dateFrequencyPage.selectOption4Weeks()
+        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
+        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
+        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
+        await photoOptionsPage.clickBackLink()
+        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
+    })
+
+    // Upload a Photo page
+    // BACK link on Upload a photo page
+    test('Check Back link exists on Upload a Photo Page - and navigates to the previous page Take a Photo', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.submit()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
+        await dateFrequencyPage.useTomorrowsDate()
+        await dateFrequencyPage.selectOption4Weeks()
+        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
+        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
+        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
+        await photoOptionsPage.selectUploadAPhoto()
+        await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
+        await uploadPhotoPage.clickBackLink()
+        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
+    })
+
+    // Check Validation exists on Set up online check ins - Date Frequency page
+    test('Check validation exists in Set up online check ins', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.submit()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
+        await setUpOnLineCheckinsPage.submit()
+    })
+
+    // E2E positive scenario with Text message(Phone option) all the way to Check in submitted and verify the confirmed values are displayed in Overview Page
     test('Select the Contact Preference as TEXT MESSAGE and proceed through the journey', async () => {
         await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
         await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
@@ -87,7 +168,7 @@ test.describe('Set up online checkins page', () => {
         // Navigate to Contact preference page, verify page header and select TEXT Message option
         await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
         // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "text" )
+        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
 
         // Photo options page
         await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
@@ -124,32 +205,28 @@ test.describe('Set up online checkins page', () => {
         await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
         await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
 
-
-        // TODO -- Bug to raise - select email option, then change link, update email and save changes-> in contact preferences the email option is not selected
         // Change Preferred Communication
-        // await checkInSummaryPage.clickPreferredCommsActionChangeLink()
-        // const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "emailUpdate" )
-        // await contactPreferencePage.continueButton();
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
+        await checkInSummaryPage.clickPreferredCommsActionChangeLink()
+        const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "emailUpdate" )
+        await contactPreferencePage.continueButton();
+        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
 
-        // // TODO Radio selections are not persisted - Bug already reported https://dsdmoj.atlassian.net/browse/MAN-1611
         // // Change Mobile Number
-        // await checkInSummaryPage.clickMobileActionChangeLink()
-        // const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-        // await contactPreferencePage.continueButton()
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
+        await checkInSummaryPage.clickMobileActionChangeLink()
+        const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
+        await contactPreferencePage.continueButton()
+        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
 
-        // TODO - same as above
         // Email Address
-        // await checkInSummaryPage.clickEmailActionChangeLink()
-        // const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
-        // await contactPreferencePage.continueButton()
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
+        await checkInSummaryPage.clickEmailActionChangeLink()
+        const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
+        await contactPreferencePage.continueButton()
+        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
 
-        // // How do you want to take a Photo
+        // How do you want to take a Photo
         await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
         await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
         await photoOptionsPage.selectUploadAPhoto()
@@ -168,6 +245,7 @@ test.describe('Set up online checkins page', () => {
         // ****  Confirmation Page   ***
         await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
         await checkInSummaryPage.submit()
+        await new Promise(resolve => setTimeout(resolve, 4000));
 
         await confirmationPage.checkPageHeader("pageHeading", "Online check ins added");
         await confirmationPage.checkWhatHappensNextTextExists()
@@ -178,210 +256,121 @@ test.describe('Set up online checkins page', () => {
         //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
         await confirmationPage.checkPageHeader("pageHeading", "Overview");
         await overviewPage.checkOnlineCheckInsSectionExists()
-        // Bug to raise on Date format and Year not displayed
-        //await checkInSummaryPage.verifySummaryField('firstCheckIn', summaryFormat)
-        await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
-        // uncomment the below line after the contact preference bug is fixed.
-        //await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
-
+        const checkinDateOverviewPage = await checkInSummaryPage.verifyCheckInDateInOverviewPage(summaryFormat)
+        await checkInSummaryPage.verifySummaryField('firstCheckIn', checkinDateOverviewPage)
+        await checkInSummaryPage.verifySummaryField('confirmedFrequency', updatedFrequencyForSummaryPage)
+        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
     })
 
-    test('Select Contact Preference as EMAIL and proceed through the journey', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-
-        // Asserting the Date Picker element exists in Dom and is visible
-        await dateFrequencyPage.expectElementVisible(dateFrequencyPage.datepickerQA)
-
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption8Weeks()
-
-        // Navigate to Contact preference page, verify page header and select Email Message option
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-        // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "email" )
-        // Photo options page
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-        await photoOptionsPage.selectUploadAPhoto()
-
-        // Upload a Photo page
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
-        await uploadPhotoPage.uploadPhoto()
-        await uploadPhotoPage.submit();
-        // Photo Meet the rules page
-        await photoOptionsPage.checkPageHeader("pageHeading", "Does this photo meet the rules?");
-        await photoMeetRulesPage.checkPhotoRulesDisplayed();
-        await Promise.all([page.waitForURL(/\/check-in\/checkin-summary$/), photoMeetRulesPage.submit(),]);
-
-        // ******   Summary Page   ******
-        // Submit and wait for Summary page navigation
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-
-        // Change date
-        await checkInSummaryPage.clickDateChangeLink()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-
-        const { summaryFormat } = await dateFrequencyPage.updateToNextWeekDate()
-        await dateFrequencyPage.submit()
-
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        const formattedDate = await dateFrequencyPage.formatToDMY(summaryFormat);
-        await checkInSummaryPage.verifySummaryField('date', formattedDate)
-
-        //Change Date frequency
-        await checkInSummaryPage.clickDateIntervalChangeLink()
-        const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption4Weeks()
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
-
-
-        // TODO -- Bug to raise - select email option, then change link, update email and save changes-> in contact preferences the email option is not selected
-        // Change Preferred Communication
-        // await checkInSummaryPage.clickPreferredCommsActionChangeLink()
-        // const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-        // await contactPreferencePage.continueButton();
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
-
-        // // TODO Radio selections are not persisted - Bug already reported https://dsdmoj.atlassian.net/browse/MAN-1611
-        // // Change Mobile Number
-        // await checkInSummaryPage.clickMobileActionChangeLink()
-        // const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-        // await contactPreferencePage.continueButton()
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
-
-        // TODO - same as above
-        // Email Address
-        // await checkInSummaryPage.clickEmailActionChangeLink()
-        // const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
-        // await contactPreferencePage.continueButton()
-        // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
-
-        // // How do you want to take a Photo
-        await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-        await photoOptionsPage.selectUploadAPhoto()
-        await uploadPhotoPage.uploadPhoto()
-        await uploadPhotoPage.submit()
-        await photoMeetRulesPage.checkPhotoRulesDisplayed();
-        await photoMeetRulesPage.submit()
-
-        // Photo - uploaded
-        await checkInSummaryPage.clickPhotoActionChangeLink()
-        await uploadPhotoPage.uploadPhoto()
-        await uploadPhotoPage.submit()
-        await photoMeetRulesPage.checkPhotoRulesDisplayed();
-        await photoMeetRulesPage.submit()
-
-        // ****  Confirmation Page   ***
-        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-        await checkInSummaryPage.submit()
-
-        await confirmationPage.checkPageHeader("pageHeading", "Online check ins added");
-        await confirmationPage.checkWhatHappensNextTextExists()
-        await confirmationPage.checkGoToAllCasesLinkExists()
-        await confirmationPage.returnToPoPsOverviewButtonExist()
-        await confirmationPage.selectPoPsOverviewButton()
-
-        //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
-        await confirmationPage.checkPageHeader("pageHeading", "Overview");
-        await overviewPage.checkOnlineCheckInsSectionExists()
-        // Bug to raise on Date format and Year not displayed
-        //await checkInSummaryPage.verifySummaryField('firstCheckIn', summaryFormat)
-        //await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
-        // uncomment the below line after the contact preference bug is fixed.
-        //await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
-    })
-
-    // BACK link Instructions page - How you can use online check ins
-    test('Check Back link exists on Instructions Page - How can you use online check ins and navigates to the previous page Appointments', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.clickBackLink()
-        await appointments.checkQA("appointments-header-label", "Appointments")
-    })
-    // CANCEL link Instructions page - How you can use online check ins
-    test('Check Cancel button on Instructions Page and navigates to the previous page Appointments', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.clickLink('Cancel')
-        await appointments.checkQA("appointments-header-label", "Appointments")
-    })
-
-    //SET UP Online Check Ins page
-    // BACK link on Instructions page - How you can use online check ins
-    test('Check Back link exists on Set Up Online Check Ins Page  and navigates to the previous page How you can use online check ins', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await setUpOnLineCheckinsPage.clickBackLink()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-    })
-
-    //CONTACT Preferences page
-    // BACK link on Contact Preferences page
-    test('Check Back link exists on Contact Preference Page - and navigates to the previous page Set up online check ins', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption4Weeks()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact Preferences")
-        await dateFrequencyPage.clickBackLink()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "Set up online check ins")
-    })
-
-    // Take a Photo page
-    // BACK link on Take a photo page
-    test('Check Back link exists on Take a Photo Page - and navigates to the previous page Contact Preferences', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption4Weeks()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact Preferences")
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "text" )
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-        await photoOptionsPage.clickBackLink()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact Preferences")
-    })
-
-    // Upload a Photo page
-    // BACK link on Upload a photo page
-    test('Check Back link exists on Upload a Photo Page - and navigates to the previous page Take a Photo', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption4Weeks()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact Preferences")
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "text" )
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-        await photoOptionsPage.selectUploadAPhoto()
-        await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
-        await uploadPhotoPage.clickBackLink()
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-    })
-
-    // Validation on Set up online check ins - Date Frequency page
-    test('Check validation exists in Set up online check ins', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await setUpOnLineCheckinsPage.submit()
-    })
+    // test('Select Contact Preference as EMAIL and proceed through the journey', async () => {
+    //     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+    //     await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
+    //     await setUpOnLineCheckinsPage.submit()
+    //     await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+    //
+    //     // Asserting the Date Picker element exists in Dom and is visible
+    //     await dateFrequencyPage.expectElementVisible(dateFrequencyPage.datepickerQA)
+    //
+    //     await dateFrequencyPage.useTomorrowsDate()
+    //     await dateFrequencyPage.selectOption8Weeks()
+    //
+    //     // Navigate to Contact preference page, verify page header and select Email Message option
+    //     await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
+    //     // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
+    //     await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "email" )
+    //     // Photo options page
+    //     await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
+    //     await photoOptionsPage.selectUploadAPhoto()
+    //
+    //     // Upload a Photo page
+    //     await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
+    //     await uploadPhotoPage.uploadPhoto()
+    //     await uploadPhotoPage.submit();
+    //     // Photo Meet the rules page
+    //     await photoOptionsPage.checkPageHeader("pageHeading", "Does this photo meet the rules?");
+    //     await photoMeetRulesPage.checkPhotoRulesDisplayed();
+    //     await Promise.all([page.waitForURL(/\/check-in\/checkin-summary$/), photoMeetRulesPage.submit(),]);
+    //
+    //     // ******   Summary Page   ******
+    //     // Submit and wait for Summary page navigation
+    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //
+    //     // Change date
+    //     await checkInSummaryPage.clickDateChangeLink()
+    //     await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
+    //
+    //     const { summaryFormat } = await dateFrequencyPage.updateToNextWeekDate()
+    //     await dateFrequencyPage.submit()
+    //
+    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //     const formattedDate = await dateFrequencyPage.formatToDMY(summaryFormat);
+    //     await checkInSummaryPage.verifySummaryField('date', formattedDate)
+    //
+    //     //Change Date frequency
+    //     await checkInSummaryPage.clickDateIntervalChangeLink()
+    //     const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption4Weeks()
+    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //     await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
+    //
+    //
+    //     // TODO -- Bug to raise - select email option, then change link, update email and save changes-> in contact preferences the email option is not selected
+    //     // Change Preferred Communication
+    //     // await checkInSummaryPage.clickPreferredCommsActionChangeLink()
+    //     // const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
+    //     // await contactPreferencePage.continueButton();
+    //     // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
+    //
+    //     // // TODO Radio selections are not persisted - Bug already reported https://dsdmoj.atlassian.net/browse/MAN-1611
+    //     // // Change Mobile Number
+    //     // await checkInSummaryPage.clickMobileActionChangeLink()
+    //     // const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
+    //     // await contactPreferencePage.continueButton()
+    //     // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
+    //
+    //     // TODO - same as above
+    //     // Email Address
+    //     // await checkInSummaryPage.clickEmailActionChangeLink()
+    //     // const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
+    //     // await contactPreferencePage.continueButton()
+    //     // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
+    //
+    //     // // How do you want to take a Photo
+    //     await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
+    //     await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
+    //     await photoOptionsPage.selectUploadAPhoto()
+    //     await uploadPhotoPage.uploadPhoto()
+    //     await uploadPhotoPage.submit()
+    //     await photoMeetRulesPage.checkPhotoRulesDisplayed();
+    //     await photoMeetRulesPage.submit()
+    //
+    //     // Photo - uploaded
+    //     await checkInSummaryPage.clickPhotoActionChangeLink()
+    //     await uploadPhotoPage.uploadPhoto()
+    //     await uploadPhotoPage.submit()
+    //     await photoMeetRulesPage.checkPhotoRulesDisplayed();
+    //     await photoMeetRulesPage.submit()
+    //
+    //     // ****  Confirmation Page   ***
+    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+    //     await checkInSummaryPage.submit()
+    //
+    //     await confirmationPage.checkPageHeader("pageHeading", "Online check ins added");
+    //     await confirmationPage.checkWhatHappensNextTextExists()
+    //     await confirmationPage.checkGoToAllCasesLinkExists()
+    //     await confirmationPage.returnToPoPsOverviewButtonExist()
+    //     await confirmationPage.selectPoPsOverviewButton()
+    //
+    //     //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
+    //     await confirmationPage.checkPageHeader("pageHeading", "Overview");
+    //     await overviewPage.checkOnlineCheckInsSectionExists()
+    //     // Bug to raise on Date format and Year not displayed
+    //     //await checkInSummaryPage.verifySummaryField('firstCheckIn', summaryFormat)
+    //     //await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
+    //     // uncomment the below line after the contact preference bug is fixed.
+    //     //await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
+    // })
 
 })
