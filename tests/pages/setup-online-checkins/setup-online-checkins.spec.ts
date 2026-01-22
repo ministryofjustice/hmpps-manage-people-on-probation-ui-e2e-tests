@@ -1,7 +1,7 @@
 import {Browser, BrowserContext, expect, Page, test} from '@playwright/test'
 import * as dotenv from 'dotenv'
 import {testCrn, testUser} from '../../../steps/test-data'
-import {login} from "../../../steps/mpop/login";
+import {login, loginIfNotAlready} from "../../../steps/mpop/login";
 import AppointmentsPage from "../../../steps/mpop/pages/case/appointments.page";
 import { navigateToAppointments } from '../../../steps/mpop/navigation/case-navigation'
 import SetupOnlineCheckinsPage from "../../../steps/mpop/pages/setup-online-checkins/setup-online-checkins-page";
@@ -50,6 +50,7 @@ test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] 
         ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
         sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
+        await loginIfNotAlready(page)
         appointments = await navigateToAppointments(page, crn)
         setUpOnLineCheckinsPage = new SetupOnlineCheckinsPage(page)
         overviewPage = new OverviewPage(page)
@@ -63,7 +64,8 @@ test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] 
 
     })
     test.afterEach(async () => {
-        // await loginDeliusAndDeleteOffender(page, crn)
+        test.setTimeout(120000)
+        await loginDeliusAndDeleteOffender(page, crn)
         await context.close()
     })
 
