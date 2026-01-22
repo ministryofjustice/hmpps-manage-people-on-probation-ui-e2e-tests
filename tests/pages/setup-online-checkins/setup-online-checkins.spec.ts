@@ -22,7 +22,7 @@ import {Person} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/s
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string //= 'X978245'
+let crn: string //= 'X978434'
 let person: Person
 let sentence: CreatedEvent
 let browser: Browser
