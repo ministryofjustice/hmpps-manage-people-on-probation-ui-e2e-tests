@@ -40,7 +40,7 @@ let photoMeetRulesPage: PhotoMeetRulesPage
 let checkInSummaryPage: CheckInSummaryPage
 let confirmationPage: ConfirmationPage
 
-test.describe('Set up online checkins page', () => {
+test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] },  () => {
     test.beforeEach(async ({ browser: b }) => {
         test.setTimeout(120000)
         browser = b
