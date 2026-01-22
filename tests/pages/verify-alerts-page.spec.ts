@@ -39,7 +39,7 @@ test.describe('Alerts page', { tag: ['@smoke', '@alerts'] }, () => {
     alertCount = await home.getAlertsCount()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
-    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
   })
 

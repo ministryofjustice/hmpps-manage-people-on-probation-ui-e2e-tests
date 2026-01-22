@@ -37,7 +37,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     trace: process.env.CI ? 'off' : 'on',
     ...devices['Desktop Chrome'],
-      headless: false,
+      headless: true,
   },
   /* Configure projects for major browsers */
   projects: [
