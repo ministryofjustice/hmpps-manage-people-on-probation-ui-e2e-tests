@@ -22,7 +22,7 @@ import {Person} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/s
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
-let crn: string //= testCrn
+let crn: string //= 'X978245'
 let person: Person
 let sentence: CreatedEvent
 let browser: Browser
@@ -130,6 +130,7 @@ test.describe('Set up online checkins page', () => {
         await dateFrequencyPage.selectOption4Weeks()
         await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
         await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
+        await contactPreferencePage.continueButton()
         await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
         await photoOptionsPage.clickBackLink()
         await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
@@ -146,7 +147,11 @@ test.describe('Set up online checkins page', () => {
         await dateFrequencyPage.useTomorrowsDate()
         await dateFrequencyPage.selectOption4Weeks()
         await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
+        const {alreadyContinued: mobileAlreadyContinued } = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
+        // Only click continue if it wasn't clicked automatically
+        if (!mobileAlreadyContinued) {
+            await contactPreferencePage.continueButton();
+        }
         await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
         await photoOptionsPage.selectUploadAPhoto()
         await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
@@ -180,8 +185,11 @@ test.describe('Set up online checkins page', () => {
         // Navigate to Contact preference page, verify page header and select TEXT Message option
         await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
         // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
-        await contactPreferencePage.continueButton()
+        const {alreadyContinued: mobileAlreadyContinued } = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
+        // Only click continue if it wasn't clicked automatically
+        if (!mobileAlreadyContinued) {
+            await contactPreferencePage.continueButton();
+        }
         // Photo options page
         await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
         await photoOptionsPage.selectUploadAPhoto()
@@ -219,22 +227,22 @@ test.describe('Set up online checkins page', () => {
 
         // Change Preferred Communication
         await checkInSummaryPage.clickPreferredCommsActionChangeLink()
-        const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "emailUpdate" )
-        await contactPreferencePage.continueButton();
+        const {radioValue: preferredCommsEmail, alreadyContinued: emailAlreadyContinued} = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "emailUpdate" )
+        if (!emailAlreadyContinued) await contactPreferencePage.continueButton();
         await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
         await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
 
         // // Change Mobile Number
         await checkInSummaryPage.clickMobileActionChangeLink()
-        const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-        await contactPreferencePage.continueButton()
+        const {radioValue: preferredCommsMobileUpdate, alreadyContinued: mobileUpdateContinued } = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
+        if (!mobileUpdateContinued) await contactPreferencePage.continueButton()
         await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
         await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
 
         // Email Address
         await checkInSummaryPage.clickEmailActionChangeLink()
-        const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
-        await contactPreferencePage.continueButton()
+        const {radioValue: preferredCommsEmailUpdate, alreadyContinued: emailUpdateContinued} = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
+        if (!emailUpdateContinued) await contactPreferencePage.continueButton()
         await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
         await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
 
@@ -268,121 +276,64 @@ test.describe('Set up online checkins page', () => {
         //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
         await confirmationPage.checkPageHeader("pageHeading", "Overview");
         await overviewPage.checkOnlineCheckInsSectionExists()
-        const checkinDateOverviewPage = await checkInSummaryPage.verifyCheckInDateInOverviewPage(summaryFormat)
+        const formattedDateMobile = await dateFrequencyPage.formatToDMY(summaryFormat);
+        const checkinDateOverviewPage = await checkInSummaryPage.verifyCheckInDateInOverviewPage(formattedDateMobile)
         await checkInSummaryPage.verifySummaryField('firstCheckIn', checkinDateOverviewPage)
         await checkInSummaryPage.verifySummaryField('confirmedFrequency', updatedFrequencyForSummaryPage)
         await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
     })
 
-    // test('Select Contact Preference as EMAIL and proceed through the journey', async () => {
-    //     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-    //     await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
-    //     await setUpOnLineCheckinsPage.submit()
-    //     await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-    //
-    //     // Asserting the Date Picker element exists in Dom and is visible
-    //     await dateFrequencyPage.expectElementVisible(dateFrequencyPage.datepickerQA)
-    //
-    //     await dateFrequencyPage.useTomorrowsDate()
-    //     await dateFrequencyPage.selectOption8Weeks()
-    //
-    //     // Navigate to Contact preference page, verify page header and select Email Message option
-    //     await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-    //     // If mobile number does not exist, click the change link and add the new mobile number. If it exists do nothing
-    //     await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "email" )
-    //     // Photo options page
-    //     await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-    //     await photoOptionsPage.selectUploadAPhoto()
-    //
-    //     // Upload a Photo page
-    //     await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
-    //     await uploadPhotoPage.uploadPhoto()
-    //     await uploadPhotoPage.submit();
-    //     // Photo Meet the rules page
-    //     await photoOptionsPage.checkPageHeader("pageHeading", "Does this photo meet the rules?");
-    //     await photoMeetRulesPage.checkPhotoRulesDisplayed();
-    //     await Promise.all([page.waitForURL(/\/check-in\/checkin-summary$/), photoMeetRulesPage.submit(),]);
-    //
-    //     // ******   Summary Page   ******
-    //     // Submit and wait for Summary page navigation
-    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //
-    //     // Change date
-    //     await checkInSummaryPage.clickDateChangeLink()
-    //     await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-    //
-    //     const { summaryFormat } = await dateFrequencyPage.updateToNextWeekDate()
-    //     await dateFrequencyPage.submit()
-    //
-    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //     const formattedDate = await dateFrequencyPage.formatToDMY(summaryFormat);
-    //     await checkInSummaryPage.verifySummaryField('date', formattedDate)
-    //
-    //     //Change Date frequency
-    //     await checkInSummaryPage.clickDateIntervalChangeLink()
-    //     const updatedFrequencyForSummaryPage = await dateFrequencyPage.selectOption4Weeks()
-    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //     await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
-    //
-    //
-    //     // TODO -- Bug to raise - select email option, then change link, update email and save changes-> in contact preferences the email option is not selected
-    //     // Change Preferred Communication
-    //     // await checkInSummaryPage.clickPreferredCommsActionChangeLink()
-    //     // const preferredCommsEmail = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-    //     // await contactPreferencePage.continueButton();
-    //     // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
-    //
-    //     // // TODO Radio selections are not persisted - Bug already reported https://dsdmoj.atlassian.net/browse/MAN-1611
-    //     // // Change Mobile Number
-    //     // await checkInSummaryPage.clickMobileActionChangeLink()
-    //     // const preferredCommsMobileUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 999 999", "textUpdate" )
-    //     // await contactPreferencePage.continueButton()
-    //     // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsMobileUpdate)
-    //
-    //     // TODO - same as above
-    //     // Email Address
-    //     // await checkInSummaryPage.clickEmailActionChangeLink()
-    //     // const preferredCommsEmailUpdate = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@gmail.com", "emailUpdate" )
-    //     // await contactPreferencePage.continueButton()
-    //     // await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmailUpdate)
-    //
-    //     // // How do you want to take a Photo
-    //     await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
-    //     await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-    //     await photoOptionsPage.selectUploadAPhoto()
-    //     await uploadPhotoPage.uploadPhoto()
-    //     await uploadPhotoPage.submit()
-    //     await photoMeetRulesPage.checkPhotoRulesDisplayed();
-    //     await photoMeetRulesPage.submit()
-    //
-    //     // Photo - uploaded
-    //     await checkInSummaryPage.clickPhotoActionChangeLink()
-    //     await uploadPhotoPage.uploadPhoto()
-    //     await uploadPhotoPage.submit()
-    //     await photoMeetRulesPage.checkPhotoRulesDisplayed();
-    //     await photoMeetRulesPage.submit()
-    //
-    //     // ****  Confirmation Page   ***
-    //     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-    //     await checkInSummaryPage.submit()
-    //
-    //     await confirmationPage.checkPageHeader("pageHeading", "Online check ins added");
-    //     await confirmationPage.checkWhatHappensNextTextExists()
-    //     await confirmationPage.checkGoToAllCasesLinkExists()
-    //     await confirmationPage.returnToPoPsOverviewButtonExist()
-    //     await confirmationPage.selectPoPsOverviewButton()
-    //
-    //     //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
-    //     await confirmationPage.checkPageHeader("pageHeading", "Overview");
-    //     await overviewPage.checkOnlineCheckInsSectionExists()
-    //     // Bug to raise on Date format and Year not displayed
-    //     //await checkInSummaryPage.verifySummaryField('firstCheckIn', summaryFormat)
-    //     //await checkInSummaryPage.verifySummaryField('frequency', updatedFrequencyForSummaryPage)
-    //     // uncomment the below line after the contact preference bug is fixed.
-    //     //await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
-    // })
+    test('Select Contact Preference as EMAIL and proceed through the journey', async () => {
+        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
+        await setUpOnLineCheckinsPage.submit()
+        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
 
+        // Asserting the Date Picker element exists in Dom and is visible
+        await dateFrequencyPage.expectElementVisible(dateFrequencyPage.datepickerQA)
+
+        const tomorrowsDate = await dateFrequencyPage.useTomorrowsDate()
+        const checkInfrequency = await dateFrequencyPage.selectOption4Weeks()
+
+        // Navigate to Contact preference page, verify page header and select EMAIL option
+        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
+        // If Email does not exist, click the change link and add the Email. If it exists do nothing
+        const {radioValue: preferredCommsEmail, alreadyContinued: emailUpdateContinued}= await contactPreferencePage.enterContactPreferenceIfDoesNotExists("Test@test.com", "email" )
+        if (!emailUpdateContinued) await contactPreferencePage.continueButton()
+
+        // Photo options page
+        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
+        await photoOptionsPage.selectUploadAPhoto()
+
+        // Upload a Photo page
+        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
+        await uploadPhotoPage.uploadPhoto()
+        await uploadPhotoPage.submit()
+
+        // Photo Meet the rules page
+        await photoOptionsPage.checkPageHeader("pageHeading", "Does this photo meet the rules?");
+        await photoMeetRulesPage.checkPhotoRulesDisplayed();
+        await Promise.all([page.waitForURL(/\/check-in\/checkin-summary$/), photoMeetRulesPage.submit(),]);
+
+        // ******   Summary Page   ******
+        // Submit and wait for Summary page navigation
+        await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
+        await checkInSummaryPage.submit()
+        await new Promise(resolve => setTimeout(resolve, 4000));
+
+        // Confirmation Page
+        await confirmationPage.checkPageHeader("pageHeading", "Online check ins added");
+        await confirmationPage.checkWhatHappensNextTextExists()
+        await confirmationPage.checkGoToAllCasesLinkExists()
+        await confirmationPage.returnToPoPsOverviewButtonExist()
+        await confirmationPage.selectPoPsOverviewButton()
+
+        //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
+        await confirmationPage.checkPageHeader("pageHeading", "Overview");
+        await overviewPage.checkOnlineCheckInsSectionExists()
+        const checkinDateOverviewPage = await checkInSummaryPage.verifyCheckInDateInOverviewPage(tomorrowsDate)
+        await checkInSummaryPage.verifySummaryField('firstCheckIn', checkinDateOverviewPage)
+        await checkInSummaryPage.verifySummaryField('frequency', checkInfrequency)
+        await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
+    })
 })

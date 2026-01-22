@@ -19,19 +19,14 @@ export default abstract class MPopPage {
     async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
         await this.page.waitForLoadState('domcontentloaded', { timeout });
         const locator = this.page.locator(`[data-qa="${qa}"]`);
-        await locator.isVisible();
 
-        // Wait for it to be attached and visible
-        // await locator.waitFor({ state: 'visible', timeout });
+        await expect(locator).toBeVisible({ timeout: 120000 });
 
-        // Get the text content and trim whitespace
-        //const text = (await locator.textContent())?.trim() || '';
         const text = (await locator.textContent())
             ?.replace(/\s+/g, ' ')
             .trim() || '';
 
         console.log(`Page header [${qa}]:`, text);
-
 
         // Assert manually for regex or string
         if (expectedText instanceof RegExp) {
@@ -109,9 +104,11 @@ export default abstract class MPopPage {
 
     async checkPageHeaderPhoto(qa: string, expectedText: string) {
         const header = this.getQA(qa);
+        await expect(header).toBeVisible();
         // Ensure we are no longer on the previous page
-        await expect(header).not.toHaveText(/Contact preferences/);
-        await expect(header).toContainText(expectedText);
+         await expect(header).not.toHaveText(/Contact preferences/);
+        await expect(header).toContainText(expectedText, {timeout: 10000});
+        //await expect(header).toHaveText(expectedText);
         const fullText = await header.innerText();
 
         // Normalize whitespace and remove the last word (the dynamic name)
@@ -122,6 +119,9 @@ export default abstract class MPopPage {
 
         expect(staticPart).toBe(expectedText);
     }
+
+
+
     async clickTableLink(tableqa: string, cellqa: string){
         await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click()
     }
