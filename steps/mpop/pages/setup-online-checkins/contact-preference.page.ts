@@ -115,10 +115,22 @@ export default class ContactPreferencePage extends MPopPage {
         }
 
         // Select the radio button
-        await this.page.locator(`input[type="radio"][value="${radioValue}"]`).check();
+       // await this.page.locator(`input[type="radio"][value="${radioValue}"]`).check();
+
+        const radio = this.page.locator(`input[type="radio"][value="${radioValue}"]`);
+        await radio.waitFor({ state: 'visible' });
+        if (!(await radio.isChecked())) {
+            await radio.check();
+        }
 
         // Get the current TEXT or EMAIL value
-        const currentValueText = await this.page.locator(valueLocator).textContent();
+        // await this.page.locator(valueLocator).isVisible();
+        // const currentValueText = await this.page.locator(valueLocator).textContent();
+
+        const valueEl = this.page.locator(valueLocator);
+        await expect(valueEl).toBeVisible();
+
+        const currentValueText = (await valueEl.textContent())?.trim();
 
         // If value exists and doesn't need updating
         if (currentValueText && !currentValueText.includes("No") &&
@@ -142,7 +154,9 @@ export default class ContactPreferencePage extends MPopPage {
         await this.checkPageHeader("pageHeading", "Contact preferences");
 
         // Verify inputted value
-        await expect(this.page.locator(valueLocator)).toHaveText(value);
+        //await expect(this.page.locator(valueEl)).toHaveText(value);
+        await expect(valueEl).toHaveText(value);
+
 
         return { radioValue, alreadyContinued: false };
     }
