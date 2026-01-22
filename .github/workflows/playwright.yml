@@ -26,7 +26,7 @@ jobs:
       run: npx playwright install
     - name: Run Playwright tests
       id: tests
-      run: npx playwright test -g "Alerts page" --reporter=html,junit,json,line --workers="$WORKERS"
+      run: npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
       env:
         TZ: Europe/London
         ENV: test
