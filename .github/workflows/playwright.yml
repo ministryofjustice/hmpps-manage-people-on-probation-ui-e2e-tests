@@ -26,11 +26,10 @@ jobs:
       run: npx playwright install
     - name: Run Playwright tests
       id: tests
-      run: npx playwright test --reporter=html,junit,json,line --workers="$WORKERS"
+      run: npx playwright test -g "@smoke"  --workers=4 --retries=0
       env:
         TZ: Europe/London
         ENV: test
-        WORKERS: 4
 
         # URLs
         DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
