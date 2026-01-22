@@ -14,6 +14,7 @@ import CheckInSummaryPage    from "../../../steps/mpop/pages/setup-online-checki
 import ConfirmationPage from "../../../steps/mpop/pages/setup-online-checkins/confirmation.page";
 import OverviewPage from "../../../steps/mpop/pages/case/overview.page";
 import loginDeliusAndCreateOffender from "../../../steps/delius/create-offender/createOffender";
+import loginDeliusAndDeleteOffender from "../../../steps/delius/delete-offender/deleteOffender";
 import {data} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
 import {
     createCustodialEvent, CreatedEvent
@@ -40,7 +41,7 @@ let checkInSummaryPage: CheckInSummaryPage
 let confirmationPage: ConfirmationPage
 
 test.describe('Set up online checkins page', () => {
-    test.beforeAll(async ({browser: b}) => {
+    test.beforeEach(async ({ browser: b }) => {
         test.setTimeout(120000)
         browser = b
         context = await browser.newContext()
@@ -48,13 +49,7 @@ test.describe('Set up online checkins page', () => {
 
         ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
         sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-    })
 
-    test.beforeEach(async ({ browser: b }) => {
-        test.setTimeout(120000)
-        browser = b
-        context = await browser.newContext()
-        page = await context.newPage()
         appointments = await navigateToAppointments(page, crn)
         setUpOnLineCheckinsPage = new SetupOnlineCheckinsPage(page)
         overviewPage = new OverviewPage(page)
@@ -68,6 +63,7 @@ test.describe('Set up online checkins page', () => {
 
     })
     test.afterEach(async () => {
+        await loginDeliusAndDeleteOffender(page, crn)
         await context.close()
     })
 
