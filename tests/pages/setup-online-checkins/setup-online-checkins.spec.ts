@@ -63,7 +63,7 @@ test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] 
 
     })
     test.afterEach(async () => {
-        await loginDeliusAndDeleteOffender(page, crn)
+        // await loginDeliusAndDeleteOffender(page, crn)
         await context.close()
     })
 
