@@ -9,7 +9,7 @@ export default class ActivityLogPage extends MPopPage {
     view : string = "default"
 
     constructor(page: Page, view: string = "default") {
-        super(page, "Activity log")
+        super(page, "Contacts")
         this.view = view
     }
 

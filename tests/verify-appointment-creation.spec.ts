@@ -9,6 +9,7 @@ import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppoi
 import AppointmentsPage from '../steps/mpop/pages/case/appointments.page'
 import { luxonString, plus3Months, plus6Months, today, tomorrow } from '../steps/mpop/utils'
 import { navigateToAppointments } from '../steps/mpop/navigation/case-navigation'
+import {login} from "../steps/mpop/login";
 
 dotenv.config({ path: '.env' }) // Load environment variables
 
@@ -20,22 +21,15 @@ let person: Person
 let sentence: CreatedEvent
 
 test.describe.configure({ mode: 'serial' });
-test.describe('Create Appointments Full', () => {
+test.describe('Create Appointments Full', { tag: ['@smoke', '@appointments'] }, () => {
   test.beforeAll(async ({browser: b}) => {
-      test.setTimeout(120000)
       browser = b
-      context = await browser.newContext()
+      context = context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
       page = await context.newPage()
-
+      await login(page)
       ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
       sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
-  })
-  test.beforeEach(async ({ browser: b }) => {
-    test.setTimeout(120000)
-    browser = b
-    context = await browser.newContext()
-    page = await context.newPage()
   })
 
   test.afterEach(async () => {
@@ -43,7 +37,6 @@ test.describe('Create Appointments Full', () => {
   })
 
   test('Appointment + SimilarNextAppointment + FullNextAppointment', async () => {
-    test.setTimeout(360_000)
 
     //navigate to start of arrange appointment pipeline
     const appointments : AppointmentsPage = await navigateToAppointments(page, crn)

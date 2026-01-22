@@ -23,7 +23,7 @@ export const luxonString = (date: DateTime) : string => {
     return date.toFormat("d/M/yyyy")
 }
 
-export const today = DateTime.fromISO(DateTime.now())
+export const today = DateTime.now().setZone('Europe/London')
 export const yesterday = today.minus({ days: 1 })
 export const tomorrow = today.plus({ days: 1 })
 export const plus3Months = today.plus({ months: 3 })  // => 12 Sep 2025
