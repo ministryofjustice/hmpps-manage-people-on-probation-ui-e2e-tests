@@ -16,7 +16,6 @@ export default defineConfig({
         ['json', { outputFile: 'results.json' }],
     ],
   testDir: './tests',
-  testMatch: '**/*(setup-online-checkins|verify-alerts-page).spec.ts',
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
