@@ -7,8 +7,8 @@ on:
   pull_request:
     branches: [ main, master ]
     # Every weekday at 08:00 UTC
-  # schedule:
-  #   - cron: "0 8 * * MON-FRI"
+  schedule:
+    - cron: "0 9 * * MON-FRI"
 jobs:
   test:
     timeout-minutes: 60
@@ -26,7 +26,7 @@ jobs:
       run: npx playwright install
     - name: Run Playwright tests
       id: tests
-      run: npx playwright test -g "@smoke"  --workers=4 --retries=0
+      run: npx playwright test -g "@smoke"  --workers=1 --retries=0
       env:
         TZ: Europe/London
         ENV: test
