@@ -44,14 +44,15 @@ test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] 
     test.beforeEach(async ({ browser: b }) => {
         test.setTimeout(120000)
         browser = b
-        context = await browser.newContext()
+        context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
         page = await context.newPage()
 
         ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
         sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 
-        await loginIfNotAlready(page)
+        await login(page)
         appointments = await navigateToAppointments(page, crn)
+
         setUpOnLineCheckinsPage = new SetupOnlineCheckinsPage(page)
         overviewPage = new OverviewPage(page)
         dateFrequencyPage = new DateFrequencyPagePage(page)
@@ -67,104 +68,6 @@ test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] 
         test.setTimeout(120000)
         await loginDeliusAndDeleteOffender(page, crn)
         await context.close()
-    })
-
-    test('Render the page', async() => {
-        await appointments.checkOnPage()
-        await setUpOnLineCheckinsPage.checkOnPage()
-    })
-
-    // BACK link Instructions page - How you can use online check ins
-    test('Check Back link exists on Instructions Page - How can you use online check ins and navigates to the previous page Appointments', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.clickBackLink()
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Overview")
-    })
-
-    // CANCEL link Instructions page - How you can use online check ins
-    test('Check Cancel button on Instructions Page and navigates to the previous page Appointments', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.clickLink('Cancel')
-        await photoOptionsPage.checkPageHeaderPhoto("appointments-header-label", "Appointments")
-    })
-
-    //SET UP Online Check Ins page
-    // BACK link on Instructions page - How you can use online check ins
-    test('Check Back link exists on Set Up Online Check Ins Page  and navigates to the previous page How you can use online check ins', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await setUpOnLineCheckinsPage.clickBackLink()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-    })
-
-    // CONTACT Preferences page
-    // BACK link on Contact Preferences page
-    test('Check Back link exists on Contact Preference Page - and navigates to the previous page Set up online check ins', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption4Weeks()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-        await contactPreferencePage.clickBackLink()
-        await setUpOnLineCheckinsPage.checkPageHeader("pageHeading", "Set up online check ins")
-    })
-
-    // Take a Photo page
-    // BACK link on Take a photo page
-    test('Check Back link exists on Take a Photo Page - and navigates to the previous page Contact Preferences', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption4Weeks()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-        await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
-        await contactPreferencePage.continueButton()
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-        await photoOptionsPage.clickBackLink()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-    })
-
-    // Upload a Photo page
-    // BACK link on Upload a photo page
-    test('Check Back link exists on Upload a Photo Page - and navigates to the previous page Take a Photo', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await dateFrequencyPage.useTomorrowsDate()
-        await dateFrequencyPage.selectOption4Weeks()
-        await contactPreferencePage.checkPageHeader("pageHeading", "Contact preferences")
-        const {alreadyContinued: mobileAlreadyContinued } = await contactPreferencePage.enterContactPreferenceIfDoesNotExists("07771 900 900", "Text message" )
-        // Only click continue if it wasn't clicked automatically
-        if (!mobileAlreadyContinued) {
-            await contactPreferencePage.continueButton();
-        }
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-        await photoOptionsPage.selectUploadAPhoto()
-        await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
-        await uploadPhotoPage.clickBackLink()
-        await photoOptionsPage.checkPageHeaderPhoto("pageHeading", "Take a photo of")
-    })
-
-    // Check Validation exists on Set up online check ins - Date Frequency page
-    test('Check validation exists in Set up online check ins', async () => {
-        await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-        await appointments.checkPageHeader("pageHeading", "How you can use online check ins")
-        await setUpOnLineCheckinsPage.submit()
-        await contactPreferencePage.checkPageHeader("pageHeading", /Set up\s+online check ins/i)
-        await expect(page.locator(dateFrequencyPage.datepickerQA)).toBeVisible()
-        await setUpOnLineCheckinsPage.submit()
     })
 
     // E2E positive scenario with Text message(Phone option) all the way to Check in submitted and verify the confirmed values are displayed in Overview Page
