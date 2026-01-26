@@ -2,7 +2,13 @@ import { defineConfig, devices } from '@playwright/test';
 import {
   secondsToMilliseconds
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs'
+import { defineBddConfig } from 'playwright-bdd';
 
+const testDir = defineBddConfig({
+  paths: ['features/smoke/*.feature'],
+  require: ['features/smoke/*.steps.ts'],
+  importTestFrom: 'features/fixtures.ts',
+});
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -15,7 +21,7 @@ export default defineConfig({
         ['junit', { outputFile: 'junit.xml' }],
         ['json', { outputFile: 'results.json' }],
     ],
-  testDir: './tests',
+  testDir,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
