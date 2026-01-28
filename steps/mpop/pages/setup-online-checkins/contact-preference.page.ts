@@ -12,77 +12,6 @@ export default class ContactPreferencePage extends MPopPage {
         super(page)
     }
 
-    // async enterContactPreferenceIfDoesNotExists(
-    //     value: string,
-    //     contactMethod: 'Text message' | 'email' | 'textUpdate'| 'emailUpdate'
-    // ) {
-    //     let radioValue: string;
-    //     let valueLocator: string;
-    //     let changeLinkSelector: string;
-    //     let inputLocator: Locator;
-    //
-    //     switch (contactMethod) {
-    //         case 'Text message':
-    //         case 'textUpdate':
-    //             radioValue = 'PHONE';
-    //             valueLocator ='[data-qa="mobileNumberValue"]';
-    //             changeLinkSelector = '[data-qa="mobileNumberAction"]';
-    //             inputLocator = this.page.locator('input[id$="editCheckInMobile"]');
-    //             break;
-    //
-    //         case 'email':
-    //             radioValue = 'EMAIL';
-    //             //valueLocator = '[data-qa="emailAddressValue"]';
-    //             valueLocator = 'xpath=//span[@data-qa="emailAddressValue"]/parent::*';
-    //             changeLinkSelector = '[data-qa="emailAddressAction"]';
-    //             inputLocator = this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]');
-    //             break;
-    //         case 'emailUpdate':
-    //             radioValue = 'EMAIL';
-    //             valueLocator = '//span[@data-qa="emailAddressValue"]/parent::*';
-    //             changeLinkSelector = '[data-qa="emailAddressAction"]';
-    //             inputLocator = this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]');
-    //             break;
-    //
-    //         default:
-    //             throw new Error(`Invalid contact method used: ${contactMethod}`);
-    //     }
-    //
-    //     //  Select the radio button
-    //     await this.page.locator(`input[type="radio"][value="${radioValue}"]`).isEnabled();
-    //     await this.page.locator(`input[type="radio"][value="${radioValue}"]`).check();
-    //
-    //     // Get the current TEXT or EMAIL value
-    //     const currentValueText = await this.page.locator(valueLocator).textContent();
-    //
-    //     // If it already exists -- do nothing and Continue further
-    //     if (currentValueText && !currentValueText.includes("No") &&
-    //         contactMethod !== "textUpdate" &&
-    //         contactMethod !== "emailUpdate"){
-    //         await this.continueButton()
-    //         return radioValue;
-    //     }
-    //
-    //     // - If Mobile number or Email does not exist then select the Change link based on the preference option selected
-    //     await this.page.locator(changeLinkSelector).isEnabled();
-    //     await this.page.locator(changeLinkSelector).click();
-    //
-    //     //  Fill the correct input field (mobile or email)
-    //     await inputLocator.waitFor({ state: 'visible' });
-    //     await inputLocator.click();
-    //     await inputLocator.fill(value);
-    //
-    //     //  Save changes and navigate to the previous page
-    //     await this.submit()
-    //
-    //     // Validate and return to the previous page
-    //     await this.checkPageHeader("pageHeading", "Contact preferences");
-    //
-    //     // Verify the inputted value: Mobile number or Email
-    //     await expect(this.page.locator(valueLocator)).toHaveText(value);
-    //
-    //     return radioValue;
-    // }
     async enterContactPreferenceIfDoesNotExists(
         value: string,
         contactMethod: 'Text message' | 'email' | 'textUpdate'| 'emailUpdate'
@@ -115,16 +44,11 @@ export default class ContactPreferencePage extends MPopPage {
         }
 
         // Select the radio button
-       // await this.page.locator(`input[type="radio"][value="${radioValue}"]`).check();
-
         const radio = this.page.locator(`input[type="radio"][value="${radioValue}"]`);
         await radio.waitFor({ state: 'visible' }); 
         await radio.check();
 
         // Get the current TEXT or EMAIL value
-        // await this.page.locator(valueLocator).isVisible();
-        // const currentValueText = await this.page.locator(valueLocator).textContent();
-
         const valueEl = this.page.locator(valueLocator);
         await expect(valueEl).toBeVisible();
 
@@ -156,7 +80,6 @@ export default class ContactPreferencePage extends MPopPage {
         }
 
         // Verify inputted value
-        //await expect(this.page.locator(valueEl)).toHaveText(value);
         await expect(valueEl).toHaveText(value);
 
 

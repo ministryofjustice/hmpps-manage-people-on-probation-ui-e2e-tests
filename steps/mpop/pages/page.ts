@@ -9,11 +9,11 @@ export default abstract class MPopPage {
         this.title = title
     }
 
-//     async init() {
-//         if (this.title) {
-//             await this.checkOnPage()
-//         }
-//     }
+    // async init() {
+    //     if (this.title) {
+    //         await this.checkOnPage()
+    //     }
+    // }
 
     async checkOnPage() {
         await this.checkQA("pageHeading", this.title)
@@ -92,9 +92,6 @@ export default abstract class MPopPage {
         await expect(this.getLink(name)).toHaveAttribute('href', value)
     }
 
-    // async checkQA(qa: string, value: string | RegExp){
-    //     await expect(this.getQA(qa)).toContainText(value)
-    // }
     async checkQA(qa: string, value: string | RegExp){
         await expect(this.getQA(qa)).toHaveText(value, {timeout: 10000})
     }

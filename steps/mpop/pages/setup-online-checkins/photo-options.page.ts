@@ -1,9 +1,9 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
-import MPopPage from "../page.ts"
+import MPopPage from "../page"
 import path from "node:path";
 
-import {photo_1_path} from "../../../test-data.ts";
+import {photo_1_path} from "../../../test-data";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -28,14 +28,4 @@ export default class PhotoOptionsPage extends MPopPage {
         await this.clickRadio("uploadOptions", 1)
         await this.submit()
     }
-    //
-    // fileUploadInput() {
-    //     return this.page.locator('#photoUpload-input');
-    // }
-    //
-    // async uploadPhoto() {
-    //     console.log(photo_1_path);
-    //     await this.fileUploadInput().setInputFiles(photo_1_path);
-    // }
-
 }

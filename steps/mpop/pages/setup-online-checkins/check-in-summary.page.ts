@@ -99,34 +99,6 @@ export default class CheckInSummaryPage extends MPopPage {
         await expect(dateValue).toHaveText(expectedDate);
     }
 
-    // async verifyCheckInDateInOverviewPage(summaryFormat: string) {
-    //     const date = new Date(summaryFormat);
-    //
-    //     const formattedDateOverviewPage = date.toLocaleDateString('en-GB', {
-    //         weekday: 'long',
-    //         day: 'numeric',
-    //         month: 'long',
-    //     });
-    //
-    //     console.log(formattedDateOverviewPage);
-    //     return formattedDateOverviewPage;
-    // }
-
-    // async verifyCheckInDateInOverviewPage(summaryFormat: string) {
-    //     const [day, month, year] = summaryFormat.split('/').map(Number);
-    //
-    //     const date = new Date(year, month - 1, day); // month is 0-based
-    //
-    //     const formattedDateOverviewPage = date.toLocaleDateString('en-GB', {
-    //         weekday: 'long',
-    //         day: 'numeric',
-    //         month: 'long',
-    //     });
-    //
-    //     console.log(formattedDateOverviewPage);
-    //     return formattedDateOverviewPage;
-    // }
-
     async verifyCheckInDateInOverviewPage(summaryFormat: string) {
         // summaryFormat = "27/1/2026"
         const [day, month, year] = summaryFormat.split('/').map(Number);
@@ -142,8 +114,6 @@ export default class CheckInSummaryPage extends MPopPage {
         // e.g. "Monday 27 January"
         return formattedDateOverviewPage;
     }
-
-
 
     async verifySummaryField(field: 'date' | 'firstCheckIn' |'frequency' | 'confirmedFrequency' | 'preferredCommunication' | 'mobile' | 'email' | 'uploadPhoto', expectedValue: string) {
         let labelPattern: RegExp;
