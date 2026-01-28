@@ -26,7 +26,6 @@ test.describe('Create Appointments Full', { tag: ['@smoke', '@appointments'] }, 
       browser = b
       context = context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
       page = await context.newPage()
-
       await login(page)
       ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
       sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })

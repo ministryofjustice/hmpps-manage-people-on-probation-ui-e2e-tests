@@ -6,7 +6,7 @@ on:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
-    # Every weekday at 08:00 UTC
+    # Every weekday at 09:00 UTC
   schedule:
     - cron: "0 9 * * MON-FRI"
 jobs:
@@ -173,4 +173,3 @@ jobs:
             "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
             "text": "*Playwright E2E:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`\n${{ steps.stats.outputs.slack_text }}\n\n• Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           }
-   

@@ -2,6 +2,7 @@
 import { Contact, data } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs"
 import { MpopAttendee } from "./mpop/navigation/create-appointment"
 import { tomorrow } from "./mpop/utils"
+import path from 'path'
 
 export const testUser = {
     name: 'TestUser, MPOP (PS - PSO)',
@@ -9,8 +10,7 @@ export const testUser = {
     lastName: 'TestUser',
 }
 
-export const testCrn = "X756510"
-
+export const testCrn = "X977632"
 export const attendee: MpopAttendee = {
     team: "N07AAT",
     user: "jsftest"
@@ -26,3 +26,6 @@ export const deliusAlert: Contact = {
     alert: true,
     note: "Words ".repeat(500)
 }
+
+ export const photo_1_path = path.join(process.cwd(), 'steps/mpop/fixtures/Photo1.png');
+

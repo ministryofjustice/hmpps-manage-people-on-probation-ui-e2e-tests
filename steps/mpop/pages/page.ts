@@ -9,18 +9,54 @@ export default abstract class MPopPage {
         this.title = title
     }
 
-    async init() {
-        if (this.title) {
-            await this.checkOnPage()
-        }
-    }
+    // async init() {
+    //     if (this.title) {
+    //         await this.checkOnPage()
+    //     }
+    // }
 
     async checkOnPage() {
         await this.checkQA("pageHeading", this.title)
     }
 
+    async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
+        await this.page.waitForLoadState('domcontentloaded', { timeout });
+        const locator = this.page.locator(`[data-qa="${qa}"]`);
+
+        await expect(locator).toBeVisible({ timeout: 120000 });
+
+        const text = (await locator.textContent())
+            ?.replace(/\s+/g, ' ')
+            .trim() || '';
+
+        console.log(`Page header [${qa}]:`, text);
+
+        // Assert manually for regex or string
+        if (expectedText instanceof RegExp) {
+            if (!expectedText.test(text)) {
+                throw new Error(`Header text did not match expected pattern. Found: "${text}"`);
+            }
+        } else {
+            if (text !== expectedText) {
+                throw new Error(`Header text did not match expected string. Found: "${text}", Expected: "${expectedText}"`);
+            }
+        }
+    }
+
+    async returnToPoPsOverviewButtonExist(){
+        await this.getQA("submit-btn").isVisible();
+    }
+
+    async selectPoPsOverviewButton() {
+        await this.getQA("submit-btn").click();
+    }
+
     getQA(qa: string, locator: Locator|Page=this.page){
         return locator.locator(`[data-qa="${qa}"]`)
+    }
+
+    async expectElementVisible(selector: string) {
+        await expect(this.page.locator(selector)).toBeVisible();
     }
 
     async clickRadio(qa: string, id: number){
@@ -31,6 +67,10 @@ export default abstract class MPopPage {
         await this.getQA("submit-btn").click()
     }
 
+    async continueButton(){
+        await this.getQA("submitBtn").click()
+    }
+
     getLink(name: string, locator: Locator|Page=this.page){
         return locator.getByRole('link', {name: name})
     }
@@ -38,6 +78,11 @@ export default abstract class MPopPage {
     async clickLink(name: string){
         await this.getLink(name).click()
     }
+
+    async clickChangeLink(name: string){
+        await this.getQA(name).click()
+    }
+
 
     async clickBackLink(){
         await this.getLink("back").click()
@@ -47,9 +92,35 @@ export default abstract class MPopPage {
         await expect(this.getLink(name)).toHaveAttribute('href', value)
     }
 
-    async checkQA(qa: string, value: string){
-        await expect(this.getQA(qa)).toContainText(value)
+    async checkQA(qa: string, value: string | RegExp){
+        await expect(this.getQA(qa)).toHaveText(value, {timeout: 10000})
     }
+
+    async checkQAExists(qa: string) {
+        const element = this.page.locator(qa)
+        await expect(element).toBeVisible();
+    }
+
+
+    async checkPageHeaderPhoto(qa: string, expectedText: string) {
+        const header = this.getQA(qa);
+        await expect(header).toBeVisible();
+        // Ensure we are no longer on the previous page
+         await expect(header).not.toHaveText(/Contact preferences/);
+        await expect(header).toContainText(expectedText, {timeout: 10000});
+        //await expect(header).toHaveText(expectedText);
+        const fullText = await header.innerText();
+
+        // Normalize whitespace and remove the last word (the dynamic name)
+        const staticPart = fullText
+            .replace(/\s+/g, ' ')       // collapse whitespace
+            .trim()
+            .replace(/\s+\w+$/, '');    // remove the last word (e.g. "Teddy")
+
+        expect(staticPart).toBe(expectedText);
+    }
+
+
 
     async clickTableLink(tableqa: string, cellqa: string){
         await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click()
@@ -151,6 +222,8 @@ export default abstract class MPopPage {
         await this.getQA('probation-common-header-user-name').click()
         await this.getLink('Sign out').click()
     }
+
+
 
 
 }

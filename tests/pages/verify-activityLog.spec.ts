@@ -5,6 +5,7 @@ import { testCrn } from '../../steps/test-data'
 import { navigateToActivityLog } from '../../steps/mpop/navigation/case-navigation'
 import {login} from "../../steps/mpop/login";
 
+
 dotenv.config({ path: '.env' }) // Load environment variables
 
 let crn: string = testCrn
@@ -31,12 +32,9 @@ test.describe('Activity log page', () => {
   })
   test('View default view', async() => {
     const card = activityLog.getTimelineCard(1)
-    // await expect(card).toContainText("Planned office visit (NS) at 3:15pm")
-    // await expect(activityLog.getClass("govuk-details__summary", card)).toContainText("Notes (sensitive)")
   })
   test('View compact view', async() => {
     await activityLog.changeView()
-    // await expect(activityLog.getTimelineCard(1)).toContainText("Planned office visit (NS) at 3:15pm")
   })
   test('Apply filters', async() => {
     await activityLog.fillText('keywords', "Email")
@@ -56,6 +54,5 @@ test.describe('Activity log page', () => {
     await activityLog.getQA('submit-button').click()
 
     const card = activityLog.getTimelineCard(1)
-    // await expect(activityLog.getTimelineCard(1)).toContainText("Planned office visit (NS) at 3:15pm")
   })
 })

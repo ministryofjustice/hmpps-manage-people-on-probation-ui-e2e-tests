@@ -19,6 +19,7 @@ export default defineConfig({
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
+    // Uncomment the below line before pushing
   forbidOnly: !!process.env.CI,
   /* Retry on CI only */
   retries: process.env.CI ? 2 : 0,
@@ -28,18 +29,26 @@ export default defineConfig({
   timeout: 120000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
+      viewport: null,
     actionTimeout: secondsToMilliseconds(30),
     timezoneId: 'Europe/London',
     launchOptions: { slowMo: 150 },
     screenshot: 'only-on-failure',
     trace: process.env.CI ? 'off' : 'on',
     ...devices['Desktop Chrome'],
+      headless: true,
   },
   /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+          //...devices['Desktop Chrome'],
+          launchOptions: {
+              args: ['--start-maximized'],
+          }
+
+      },
     },
   ],
 });
