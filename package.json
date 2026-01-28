@@ -2,7 +2,9 @@
   "name": "hmpps-manage-people-on-probation-ui-e2e-tests",
   "version": "1.0.0",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "cucumber-js test"
+  },
   "keywords": [],
   "author": "",
   "type": "module",
@@ -16,7 +18,9 @@
     "dotenv": "^16.5.0",
     "eslint": "^9.27.0",
     "luxon": "^3.6.1",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "ts-node": "^10.9.2",
+    "playwright-bdd": "^8.4.2"
   },
   "dependencies": {
     "op": "^0.0.6"

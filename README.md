@@ -17,18 +17,11 @@ You can use `.env.example` as a template.
 cp -n .env.example .env
 ```
 
-Populate the file using .env.playwright from within the MPop one password account. 
-
-Run the tests with the following command
+Run the tests
 ```shell
-npx playwright test
 npm run e2e-test
 
-# Simple way to run a specific test
-# use **test.only** keyword in front of the single test and either debug or run, it will run that single test only.
-
-nox 
-# Run a single spec file
+# Run a single test
 npx playwright test tests/pages/verify-activityLog.spec.ts
 
 #Run in headed mode or in a browser

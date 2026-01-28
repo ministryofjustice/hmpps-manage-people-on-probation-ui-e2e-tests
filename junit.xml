@@ -1,0 +1,11 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="8.601259">
+<testsuite name="pages/verify-activityLog.spec.ts" timestamp="2026-01-15T16:12:50.650Z" hostname="chromium" tests="1" failures="0" skipped="0" time="7.579" errors="0">
+<testcase name="Activity log page › Render the page" classname="pages/verify-activityLog.spec.ts" time="7.579">
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/pages-verify-activityLog-Activity-log-page-Render-the-page-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

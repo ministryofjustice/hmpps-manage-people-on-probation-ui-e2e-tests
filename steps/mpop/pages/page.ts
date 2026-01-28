@@ -63,6 +63,20 @@ export default abstract class MPopPage {
         await this.getQA(qa).getByRole('radio').nth(id).click()
     }
 
+    // Safer clickRadio that works for radio buttons
+    async NEW_clickRadio(qa: string, id: number) {
+        const radio = this.getQA(qa).getByRole('radio').nth(id);
+
+        // Ensure the radio button is visible
+        await expect(radio).toBeVisible({ timeout: 10000 });
+
+        // Use .check() for radio buttons (safer than click)
+        await radio.check();
+
+        // Optionally, you can verify it’s selected
+        await expect(radio).toBeChecked({ timeout: 5000 });
+    }
+
     async submit(){
         await this.getQA("submit-btn").click()
     }
@@ -119,7 +133,6 @@ export default abstract class MPopPage {
 
         expect(staticPart).toBe(expectedText);
     }
-
 
 
     async clickTableLink(tableqa: string, cellqa: string){
