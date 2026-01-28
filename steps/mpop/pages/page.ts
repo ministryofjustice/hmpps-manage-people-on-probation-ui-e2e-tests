@@ -9,36 +9,27 @@ export default abstract class MPopPage {
         this.title = title
     }
 
-    async init() {
-        if (this.title) {
-            await this.checkOnPage()
-        }
-    }
+    // async init() {
+    //     if (this.title) {
+    //         await this.checkOnPage()
+    //     }
+    // }
 
     async checkOnPage() {
         await this.checkQA("pageHeading", this.title)
     }
 
-    // async checkPageHeader(qa: string, expectedText: string | RegExp) {
-    //     await this.checkQA(qa, expectedText)
-    // }
-
     async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
         await this.page.waitForLoadState('domcontentloaded', { timeout });
         const locator = this.page.locator(`[data-qa="${qa}"]`);
-        await locator.isVisible();
 
-        // Wait for it to be attached and visible
-        // await locator.waitFor({ state: 'visible', timeout });
+        await expect(locator).toBeVisible({ timeout: 120000 });
 
-        // Get the text content and trim whitespace
-        //const text = (await locator.textContent())?.trim() || '';
         const text = (await locator.textContent())
             ?.replace(/\s+/g, ' ')
             .trim() || '';
 
         console.log(`Page header [${qa}]:`, text);
-
 
         // Assert manually for regex or string
         if (expectedText instanceof RegExp) {
@@ -52,10 +43,12 @@ export default abstract class MPopPage {
         }
     }
 
-
-
     async returnToPoPsOverviewButtonExist(){
-        await this.getQA("submit-btn").isVisible()
+        await this.getQA("submit-btn").isVisible();
+    }
+
+    async selectPoPsOverviewButton() {
+        await this.getQA("submit-btn").click();
     }
 
     getQA(qa: string, locator: Locator|Page=this.page){
@@ -113,9 +106,6 @@ export default abstract class MPopPage {
         await expect(this.getLink(name)).toHaveAttribute('href', value)
     }
 
-    // async checkQA(qa: string, value: string | RegExp){
-    //     await expect(this.getQA(qa)).toContainText(value)
-    // }
     async checkQA(qa: string, value: string | RegExp){
         await expect(this.getQA(qa)).toHaveText(value, {timeout: 10000})
     }
@@ -128,9 +118,11 @@ export default abstract class MPopPage {
 
     async checkPageHeaderPhoto(qa: string, expectedText: string) {
         const header = this.getQA(qa);
+        await expect(header).toBeVisible();
         // Ensure we are no longer on the previous page
-        await expect(header).not.toHaveText(/Contact preferences/);
-        await expect(header).toContainText(expectedText);
+         await expect(header).not.toHaveText(/Contact preferences/);
+        await expect(header).toContainText(expectedText, {timeout: 10000});
+        //await expect(header).toHaveText(expectedText);
         const fullText = await header.innerText();
 
         // Normalize whitespace and remove the last word (the dynamic name)
