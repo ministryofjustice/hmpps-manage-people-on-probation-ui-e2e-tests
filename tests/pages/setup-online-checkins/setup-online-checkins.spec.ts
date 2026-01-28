@@ -14,7 +14,6 @@ import CheckInSummaryPage    from "../../../steps/mpop/pages/setup-online-checki
 import ConfirmationPage from "../../../steps/mpop/pages/setup-online-checkins/confirmation.page";
 import OverviewPage from "../../../steps/mpop/pages/case/overview.page";
 import loginDeliusAndCreateOffender from "../../../steps/delius/create-offender/createOffender";
-import loginDeliusAndDeleteOffender from "../../../steps/delius/delete-offender/deleteOffender";
 import {data} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
 import {
     createCustodialEvent, CreatedEvent
@@ -66,7 +65,6 @@ test.describe('Set up online checkins page', { tag: ['@smoke', '@esupervision'] 
     })
     test.afterEach(async () => {
         test.setTimeout(120000)
-        await loginDeliusAndDeleteOffender(page, crn)
         await context.close()
     })
 
