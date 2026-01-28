@@ -19,7 +19,6 @@
     "eslint": "^9.27.0",
     "luxon": "^3.6.1",
     "tsx": "^4.19.3",
-    "@cucumber/cucumber": "^12.5.0",
     "ts-node": "^10.9.2",
     "playwright-bdd": "^8.4.2"
   },
