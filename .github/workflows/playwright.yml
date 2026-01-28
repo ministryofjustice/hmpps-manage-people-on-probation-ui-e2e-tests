@@ -30,7 +30,7 @@ jobs:
       env:
         TZ: Europe/London
         ENV: test
-        TEST_DIR: testss
+        TEST_DIR: tests
 
         # URLs
         DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
