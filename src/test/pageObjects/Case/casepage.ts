@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import MPopPage from "../Page";
+import MPopPage from "../page";
 
 export default abstract class CasePage extends MPopPage {
     readonly crn?: string
