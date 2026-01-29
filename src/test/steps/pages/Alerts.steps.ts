@@ -24,11 +24,17 @@ let alertCount: number
 let person: Person
 let crn: string
 
-Given('A new offender has been created with an alert', async ({ browser: b }) => {
+Given('I am logged in and have noted the alerts count', async ({ browser: b }) => {
     browser = b
     context = await browser.newContext(ContextConfig)
     page = await context.newPage()
 
+    await login(page)
+    home = new HomePage(page)
+    alertCount = await home.getAlertsCount()
+});
+
+Given('A new offender has been created with an alert', async () => {
     const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
     person = login[0]
     crn = login[1]
@@ -36,13 +42,10 @@ Given('A new offender has been created with an alert', async ({ browser: b }) =>
     await createContact(page, crn, deliusAlert)
 });
 
-Given('I am logged in and on the alerts page', async () => {
-    await login(page)
-    home = new HomePage(page)
-    alertCount = await home.getAlertsCount()
+Given('I have navigated to alerts', async () => {
     alerts = new AlertsPage(page)
     alerts.navigateTo(page)
-});
+})
 
 Then('the page should be rendered', async () => {
     await alerts.checkOnPage()

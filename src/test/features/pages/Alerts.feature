@@ -5,8 +5,9 @@ Feature: Alerts page
 
     @smoke @alerts
     Scenario: Verify alerts page functionality
-        Given A new offender has been created with an alert
-        And I am logged in and on the alerts page
+        Given I am logged in and have noted the alerts count
+        And A new offender has been created with an alert
+        And I have navigated to alerts
         Then the page should be rendered
         And the new alert should be present
         When I click the person link
