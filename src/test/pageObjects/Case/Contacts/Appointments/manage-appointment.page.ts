@@ -1,9 +1,6 @@
 import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
-import * as dotenv from 'dotenv'
-
-dotenv.config({ path: '.env' })
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
+import ContactPage from "../contactpage";
+import { MPOP_URL } from "../../../../utilities/Data";
 
 export enum ManageAction {
   AttendedComplied = 0,
@@ -11,13 +8,13 @@ export enum ManageAction {
   Next = 2
 }
 
-export default class ManageAppointmentsPage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "Manage")
+export default class ManageAppointmentsPage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, "Manage", crn, uuid)
     }
 
-    async goTo(crn: string, contactId: string){
-       await this.page.goto(`${MPOP_URL}/case/${crn}/appointments/appointment/${contactId}/manage`)
+    async goTo(crn?: string, contactId?: string){
+       await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/appointments/appointment/${(contactId ?? this.uuid)!}/manage`)
     }
 
     async clickNdeliusLink(){

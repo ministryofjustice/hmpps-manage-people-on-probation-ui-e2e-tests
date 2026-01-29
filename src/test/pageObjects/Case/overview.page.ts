@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import CasePage from "./casepage";
-import { navigateToCase } from "../../Utilities/Navigation";
+import { navigateToCase } from "../../utilities/Navigation";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL

@@ -1,12 +1,11 @@
 import { Page } from "@playwright/test";
-import MPopPage from "../page";
-import { MpopAttendee } from "../../navigation/create-appointment";
-import AttendancePage from "./attendance.page";
 import SentencePage from "./sentence.page";
+import ContactPage from "../contactpage";
+import { MpopAttendee } from "../../../../utilities/ArrangeAppointment";
 
-export default class TypeAttendancePage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "Appointment type and attendance")
+export default class TypeAttendancePage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, "Appointment type and attendance", crn, uuid)
     }
 
     async completePage(id: number, attendee?: MpopAttendee, isVisor?: boolean) {

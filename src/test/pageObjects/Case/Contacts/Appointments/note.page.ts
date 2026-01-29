@@ -1,9 +1,12 @@
 import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
+import ContactPage from "../contactpage";
 
-export default class NotePage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "")
+export default class NotePage extends ContactPage {
+    readonly noteId?: string
+
+    constructor(page: Page, crn?: string, uuid?: string, noteId?: string) {
+        super(page, "", crn, uuid)
+        this.noteId = noteId
     }
 
     async checkOnPage(){

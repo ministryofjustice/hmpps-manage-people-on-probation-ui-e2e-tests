@@ -1,13 +1,13 @@
-import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
+import { Page } from "@playwright/test";
+import CasePage from "./casepage";
 
-export default class CaseUpcomingAppointmentsPage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "")
+export default class CaseUpcomingAppointmentsPage extends CasePage {
+    constructor(page: Page, crn?: string) {
+        super(page, "", crn)
     }
 
-    async goTo(crn: string){
-       await this.page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${crn}/upcoming-appointments/`)
+    async goTo(crn?: string){
+       await this.page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${(crn ?? this.crn)!}/upcoming-appointments/`)
     }
 
     async checkOnPage(){

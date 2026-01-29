@@ -1,9 +1,9 @@
-import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
+import { Page } from "@playwright/test";
+import ContactPage from "../contactpage";
 
-export default class SentencePage extends MPopPage {
-    constructor(page: Page) {
-        super(page, 'What is this appointment for?')
+export default class SentencePage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, 'What is this appointment for?', crn, uuid)
     }
 
     async completePage(id: number) {

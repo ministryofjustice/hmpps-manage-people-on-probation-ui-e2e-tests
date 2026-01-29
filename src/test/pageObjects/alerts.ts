@@ -1,7 +1,7 @@
 import { Locator, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import HomePage from "./home.page";
-import { baseNavigation } from "../Utilities/Navigation";
+import { baseNavigation } from "../utilities/Navigation";
 import MPopPage from "./Page";
 
 dotenv.config({ path: '.env' })

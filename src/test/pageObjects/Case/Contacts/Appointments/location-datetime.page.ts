@@ -1,17 +1,16 @@
 import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
-import { MpopDateTime } from "../../navigation/create-appointment";
 import TypeAttendancePage from "./type-attendance.page";
 import { DateTime } from 'luxon'
-import { updateDateTime } from "../../utils";
+import ContactPage from "../contactpage";
+import { MpopDateTime, updateDateTime } from "../../../../utilities/DateTime";
 
-export default class LocationDateTimePage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "Appointment date, time and location")
+export default class LocationDateTimePage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, "Appointment date, time and location", crn, uuid)
     }
 
     async checkOnPage() {
-        await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title)
+        await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
     }
 
     async completePage(dateTime?: MpopDateTime, locationId?: number, validation: boolean= true) {
@@ -25,7 +24,7 @@ export default class LocationDateTimePage extends MPopPage {
         }
         await this.submit()
         if (validation){
-            await this.validateDateTime(dateTime, locationId)
+            await this.validateDateTime(dateTime!, locationId)
         }
     }
 

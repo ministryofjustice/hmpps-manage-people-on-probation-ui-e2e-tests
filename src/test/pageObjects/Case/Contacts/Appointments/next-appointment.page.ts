@@ -1,5 +1,5 @@
-import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
+import { Page } from "@playwright/test";
+import ContactPage from "../contactpage";
 
 export enum NextAction {
   Similar = 0,
@@ -7,9 +7,9 @@ export enum NextAction {
   No = 2
 }
 
-export default class NextAppointmentPage extends MPopPage {
-    constructor(page: Page) {
-        super(page, 'Do you want to arrange the next appointment with')
+export default class NextAppointmentPage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, 'Do you want to arrange the next appointment with', crn, uuid)
     }
 
     async completePage(id: NextAction) {

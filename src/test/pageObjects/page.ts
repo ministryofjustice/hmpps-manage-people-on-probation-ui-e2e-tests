@@ -37,14 +37,6 @@ export default abstract class MPopPage {
         }
     }
 
-    async returnToPoPsOverviewButtonExist(){
-        await this.getQA("submit-btn").isVisible();
-    }
-
-    async selectPoPsOverviewButton() {
-        await this.getQA("submit-btn").click();
-    }
-
     getQA(qa: string, locator: Locator|Page=this.page){
         return locator.locator(`[data-qa="${qa}"]`)
     }
@@ -56,7 +48,6 @@ export default abstract class MPopPage {
     async clickRadio(qa: string, id: number){
         await this.getQA(qa).getByRole('radio').nth(id).click()
     }
-
     // Safer clickRadio that works for radio buttons
     async NEW_clickRadio(qa: string, id: number) {
         const radio = this.getQA(qa).getByRole('radio').nth(id);
@@ -74,7 +65,6 @@ export default abstract class MPopPage {
     async submit(){
         await this.getQA("submit-btn").click()
     }
-
     async continueButton(){
         await this.getQA("submitBtn").click()
     }
@@ -82,16 +72,9 @@ export default abstract class MPopPage {
     getLink(name: string, locator: Locator|Page=this.page){
         return locator.getByRole('link', {name: name})
     }
-
     async clickLink(name: string){
         await this.getLink(name).click()
     }
-
-    async clickChangeLink(name: string){
-        await this.getQA(name).click()
-    }
-
-
     async clickBackLink(){
         await this.getLink("back").click()
     }

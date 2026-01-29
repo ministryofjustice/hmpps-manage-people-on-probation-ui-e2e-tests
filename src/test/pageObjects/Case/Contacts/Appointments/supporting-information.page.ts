@@ -1,12 +1,10 @@
-import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
-import { MpopDateTime } from "../../navigation/create-appointment";
-import TypeAttendancePage from "./type-attendance.page";
+import { Page } from "@playwright/test";
 import LocationDateTimePage from "./location-datetime.page";
+import ContactPage from "../contactpage";
 
-export default class SupportingInformationPage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "Add supporting information (optional)")
+export default class SupportingInformationPage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, "Add supporting information (optional)", crn, uuid)
     }
 
     async completePage(sensitivity: boolean, note?: string) {

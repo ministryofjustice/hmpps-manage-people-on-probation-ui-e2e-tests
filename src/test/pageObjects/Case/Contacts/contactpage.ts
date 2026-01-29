@@ -8,4 +8,12 @@ export default abstract class ContactPage extends CasePage {
         super(page, title)
         this.uuid = uuid
     }
+
+    async returnToPoPsOverviewButtonExist(){
+        await this.getQA("submit-btn").isVisible();
+    }
+    
+    async selectPoPsOverviewButton() {
+        await this.submit();
+    }
 }

@@ -1,6 +1,6 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
-import { caseNavigation } from "../../Utilities/Navigation";
+import { caseNavigation } from "../../utilities/Navigation";
 import CasePage from "./casepage";
 
 dotenv.config({ path: '.env' })
@@ -50,5 +50,15 @@ export default class AppointmentsPage extends CasePage{
 
     async navigateTo(crn?: string){
         await caseNavigation(this.page, (crn ?? this.crn)!, "appointmentsTab")
+    }
+
+    async checkSetupCheckIns(){
+        await this.checkQA("online-checkin-btn", "Set up online check ins");
+    }
+
+    async clickSetupOnlineCheckInsBtn() {
+        const btn = this.getQA("online-checkin-btn")
+        await expect(btn).toBeVisible({ timeout: 10000 })  // ensure visible
+        await btn.click()
     }
 }

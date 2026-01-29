@@ -1,10 +1,8 @@
-import { expect, Page } from "@playwright/test";
-import MPopPage from "../page";
-import { MpopDateTime } from "../../navigation/create-appointment";
-import TypeAttendancePage from "./type-attendance.page";
+import { Page } from "@playwright/test";
+import ContactPage from "../contactpage";
 
-export default class LocationNotInListPage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "Arrange an appointment in another location")
+export default class LocationNotInListPage extends ContactPage {
+    constructor(page: Page, crn?: string, uuid?: string) {
+        super(page, "Arrange an appointment in another location", crn, uuid)
     }
 }
