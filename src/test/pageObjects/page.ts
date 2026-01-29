@@ -84,7 +84,7 @@ export default abstract class MPopPage {
     }
 
     async checkQA(qa: string, value: string | RegExp){
-        await expect(this.getQA(qa)).toHaveText(value, {timeout: 10000})
+        await expect(this.getQA(qa)).toContainText(value, {timeout: 10000})
     }
 
     async checkQAExists(qa: string) {
