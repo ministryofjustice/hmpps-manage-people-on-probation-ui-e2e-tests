@@ -1,6 +1,5 @@
 import { expect, Page } from "@playwright/test";
 import TypeAttendancePage from "./type-attendance.page";
-import { DateTime } from 'luxon'
 import ContactPage from "../contactpage";
 import { MpopDateTime, updateDateTime } from "../../../../utilities/DateTime";
 
