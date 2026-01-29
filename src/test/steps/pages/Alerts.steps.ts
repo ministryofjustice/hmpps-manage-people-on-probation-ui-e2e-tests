@@ -7,11 +7,11 @@ import { createBdd } from 'playwright-bdd';
 import HomePage from '../../pageObjects/home.page'
 import { login } from '../../Utilities/Login'
 import AlertsPage from '../../pageObjects/alerts'
-import loginDeliusAndCreateOffender from '../../../../steps/delius/create-offender/createOffender'
 import { ContextConfig, deliusAlert, testUser } from '../../utilities/Data'
 import OverviewPage from '../../pageObjects/Case/overview.page'
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page'
 import NotePage from '../../pageObjects/Case/Contacts/Appointments/note.page'
+import loginDeliusAndCreateOffender from '../../utilities/Delius'
 
 const { Given, When, Then } = createBdd();
 
@@ -29,7 +29,9 @@ Given('A new offender has been created with an alert', async ({ browser: b }) =>
     context = await browser.newContext(ContextConfig)
     page = await context.newPage()
 
-    [person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+    const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+    person = login[0]
+    crn = login[1]
     await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     await createContact(page, crn, deliusAlert)
 });

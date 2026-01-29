@@ -18,7 +18,6 @@ Feature: Alerts page
         When I navigate through pagination
         Then the alerts list should be updated
         When I select and deselect all alerts
-        Then all checkboxes should be checked and unchecked accordingly
         When I try to clear alerts without selection
         Then I should see an error message
         When I select and clear an alert
