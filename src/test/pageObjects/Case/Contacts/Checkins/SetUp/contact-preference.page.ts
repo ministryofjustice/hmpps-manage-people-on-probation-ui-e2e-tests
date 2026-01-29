@@ -2,10 +2,12 @@ import {expect, Locator, Page} from "@playwright/test";
 import ContactPage from "../../contactpage";
 
 
+export type contactMethod = 'Text message' | 'email' | 'textUpdate'| 'emailUpdate'
+
 export default class ContactPreferencePage extends ContactPage {
 
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, undefined, crn, uuid)
+        super(page, "Contact preferences", crn, uuid)
     }
 
     async enterContactPreferenceIfDoesNotExists(

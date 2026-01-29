@@ -2,10 +2,19 @@ import { expect, Page } from "@playwright/test"
 import ContactPage from "../../contactpage";
 import CheckInSummaryPage from "./check-in-summary.page";
 import { MPOP_URL } from "../../../../../utilities/Data";
+import { MpopDateTime } from "../../../../../utilities/DateTime";
 
 const DATEPICKER_QA = 'input.moj-js-datepicker-input';
 const DATEPICKER_ICON = 'moj-datepicker-icon';
 const CHECK_IN_FREQUENCY_SECTION = 'checkInFrequency';
+
+export enum FrequencyOptions {
+  EVERY_WEEK = 0,
+  EVERY_2_WEEKS = 1,
+  EVERY_4_WEEKS = 2,
+  EVERY_8_WEEKS = 3,
+}
+
 
 export default class DateFrequencyPage extends ContactPage {
     checkInSummaryPage: CheckInSummaryPage;
@@ -13,7 +22,7 @@ export default class DateFrequencyPage extends ContactPage {
     datePickerIcon: string;
     checkInFrequencySection: string;
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, undefined, crn, uuid);
+        super(page, 'Set up online check ins', crn, uuid);
         this.checkInSummaryPage = new CheckInSummaryPage(page);
         this.datepickerQA = DATEPICKER_QA;
         this.datePickerIcon = DATEPICKER_ICON;
@@ -28,10 +37,15 @@ export default class DateFrequencyPage extends ContactPage {
         await this.checkQAExists(this.checkInFrequencySection)
     }
 
+    async completePage(date: string, frequencyId: number) {
+        await this.getQA(DATEPICKER_QA).locator('[type="text"]').fill(date)
+        await this.clickRadio("checkInFrequency", frequencyId)
+        await this.submit()
+    }
+
     async checkElementExists (){
         await this.checkQAExists(this.datepickerQA);
     }
-
     async selectOption8Weeks(){
         await this.clickRadio("checkInFrequency", 3)
         await this.submit()

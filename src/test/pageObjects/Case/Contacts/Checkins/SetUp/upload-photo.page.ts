@@ -4,7 +4,12 @@ import { photo_1_path } from "../../../../../utilities/Data";
 
 export default class UploadPhotoPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, undefined, crn, uuid);
+        super(page, "Upload a photo of", crn, uuid);
+    }
+
+    async completePage() {
+        await this.uploadPhoto()
+        await this.submit()
     }
 
     fileUploadInput() {
@@ -12,7 +17,6 @@ export default class UploadPhotoPage extends ContactPage {
     }
 
     async uploadPhoto() {
-        console.log(photo_1_path);
         await this.fileUploadInput().setInputFiles(photo_1_path);
     }
 

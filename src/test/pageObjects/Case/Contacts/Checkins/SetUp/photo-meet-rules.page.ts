@@ -3,7 +3,11 @@ import ContactPage from "../../contactpage";
 
 export default class PhotoMeetRulesPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, undefined, crn, uuid);
+        super(page, "Does this photo meet the rules?", crn, uuid);
+    }
+
+    async completePage(){
+        await this.submit()
     }
 
     async checkPhotoRulesDisplayed() {
