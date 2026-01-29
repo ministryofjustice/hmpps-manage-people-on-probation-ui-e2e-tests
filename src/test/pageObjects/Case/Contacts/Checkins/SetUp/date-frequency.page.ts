@@ -33,12 +33,8 @@ export default class DateFrequencyPage extends ContactPage {
         await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/appointments/${(uuid ?? this.uuid)!}/check-in/date-frequency/`)
     }
 
-    async checkOnPage(){
-        await this.checkQAExists(this.checkInFrequencySection)
-    }
-
     async completePage(date: string, frequencyId: number) {
-        await this.getQA(DATEPICKER_QA).locator('[type="text"]').fill(date)
+        await this.getClass("moj-datepicker").locator('[type="text"]').fill(date)
         await this.clickRadio("checkInFrequency", frequencyId)
         await this.submit()
     }

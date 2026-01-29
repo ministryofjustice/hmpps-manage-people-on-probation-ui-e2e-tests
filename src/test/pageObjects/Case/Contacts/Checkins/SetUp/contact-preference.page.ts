@@ -13,7 +13,7 @@ export default class ContactPreferencePage extends ContactPage {
     async enterContactPreferenceIfDoesNotExists(
         value: string,
         contactMethod: 'Text message' | 'email' | 'textUpdate'| 'emailUpdate'
-    ): Promise<{ radioValue: string, alreadyContinued: boolean }> {
+    ): Promise<{ radioValue: string }> {
 
         let radioValue: string;
         let valueLocator: string;
@@ -57,7 +57,7 @@ export default class ContactPreferencePage extends ContactPage {
             contactMethod !== "textUpdate" &&
             contactMethod !== "emailUpdate") {
             await this.continueButton();
-            return { radioValue, alreadyContinued: true }; // <--- flag
+            return { radioValue }; // <--- flag
         }
 
         // Value doesn't exist → click change
@@ -80,8 +80,10 @@ export default class ContactPreferencePage extends ContactPage {
         // Verify inputted value
         await expect(valueEl).toHaveText(value);
 
+        await this.continueButton();
 
-        return { radioValue, alreadyContinued: false };
+
+        return { radioValue };
     }
 
 }
