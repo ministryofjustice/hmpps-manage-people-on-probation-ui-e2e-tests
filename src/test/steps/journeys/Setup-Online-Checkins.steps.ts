@@ -42,7 +42,7 @@ let photoMeetRulesPage: PhotoMeetRulesPage
 let checkInSummaryPage: CheckInSummaryPage
 let confirmationPage: ConfirmationPage
 
-Given('A new offender has been created', async ({ browser: b }) => {
+Given('A new offender has been created for setups', async ({ browser: b }) => {
     browser = b
     context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
     page = await context.newPage()
