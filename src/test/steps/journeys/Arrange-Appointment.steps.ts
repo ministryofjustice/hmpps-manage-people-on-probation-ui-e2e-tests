@@ -4,7 +4,7 @@ import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integra
 import { createBdd } from 'playwright-bdd';
 import { attendee, ContextConfig, testUser } from '../../utilities/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
-import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/DateTime'
+import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/dateTime'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../utilities/ArrangeAppointment'
 import { login } from '../../Utilities/Login';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
