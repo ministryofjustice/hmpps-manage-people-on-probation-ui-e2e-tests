@@ -42,13 +42,7 @@ let photoMeetRulesPage: PhotoMeetRulesPage
 let checkInSummaryPage: CheckInSummaryPage
 let confirmationPage: ConfirmationPage
 
-
-let checkInConfig: {
-
-}
-
 Given('A new offender has been created', async ({ browser: b }) => {
-    test.setTimeout(120000)
     browser = b
     context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
     page = await context.newPage()
