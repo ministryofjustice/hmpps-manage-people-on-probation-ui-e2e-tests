@@ -1,10 +1,7 @@
 import { expect, Page } from "@playwright/test";
-import * as dotenv from 'dotenv'
-import { baseNavigation } from "../Utilities/Navigation";
-import MPopPage from "./Page";
-
-dotenv.config({ path: '.env' })
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
+import MPopPage from "./page";
+import { MPOP_URL } from "../utilities/Data";
+import { baseNavigation } from "../utilities/Navigation";
 
 export default class CasesPage extends MPopPage {
     constructor(page: Page) {

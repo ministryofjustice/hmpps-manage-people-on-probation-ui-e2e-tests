@@ -1,11 +1,7 @@
 import { Locator, Page } from "@playwright/test";
-import * as dotenv from 'dotenv'
-import HomePage from "./home.page";
 import { baseNavigation } from "../utilities/Navigation";
 import MPopPage from "./page";
-
-dotenv.config({ path: '.env' })
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
+import { MPOP_URL } from "../utilities/Data";
 
 export default class AlertsPage extends MPopPage {
     constructor(page: Page) {
