@@ -1,7 +1,7 @@
 {
   "config": {
-    "configFile": "/Users/shilpa.basu/Projects/MPOP_Automation/playwright.config.ts",
-    "rootDir": "/Users/shilpa.basu/Projects/MPOP_Automation/tests",
+    "configFile": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/playwright.config.ts",
+    "rootDir": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
     "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
@@ -10,9 +10,7 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {
-      "actualWorkers": 1
-    },
+    "metadata": {},
     "preserveOutput": "always",
     "reporter": [
       [
@@ -49,15 +47,13 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results",
+        "outputDir": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {
-          "actualWorkers": 1
-        },
+        "metadata": {},
         "id": "chromium",
         "name": "chromium",
-        "testDir": "/Users/shilpa.basu/Projects/MPOP_Automation/tests",
+        "testDir": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
@@ -69,73 +65,20 @@
     "updateSnapshots": "missing",
     "updateSourceMethod": "patch",
     "version": "1.56.1",
-    "workers": 7,
+    "workers": 5,
     "webServer": null
   },
-  "suites": [
+  "suites": [],
+  "errors": [
     {
-      "title": "pages/verify-activityLog.spec.ts",
-      "file": "pages/verify-activityLog.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [],
-      "suites": [
-        {
-          "title": "Activity log page",
-          "file": "pages/verify-activityLog.spec.ts",
-          "line": 16,
-          "column": 6,
-          "specs": [
-            {
-              "title": "Render the page",
-              "ok": true,
-              "tags": [],
-              "tests": [
-                {
-                  "timeout": 120000,
-                  "annotations": [],
-                  "expectedStatus": "passed",
-                  "projectId": "chromium",
-                  "projectName": "chromium",
-                  "results": [
-                    {
-                      "workerIndex": 0,
-                      "parallelIndex": 0,
-                      "status": "passed",
-                      "duration": 7579,
-                      "errors": [],
-                      "stdout": [],
-                      "stderr": [],
-                      "retry": 0,
-                      "startTime": "2026-01-15T16:12:51.003Z",
-                      "annotations": [],
-                      "attachments": [
-                        {
-                          "name": "trace",
-                          "contentType": "application/zip",
-                          "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/pages-verify-activityLog-Activity-log-page-Render-the-page-chromium/trace.zip"
-                        }
-                      ]
-                    }
-                  ],
-                  "status": "expected"
-                }
-              ],
-              "id": "acd78352fd862733b713-c31cfcc39261ee83d8f5",
-              "file": "pages/verify-activityLog.spec.ts",
-              "line": 29,
-              "column": 8
-            }
-          ]
-        }
-      ]
+      "message": "Error: No tests found",
+      "stack": "Error: No tests found"
     }
   ],
-  "errors": [],
   "stats": {
-    "startTime": "2026-01-15T16:12:50.342Z",
-    "duration": 8601.259,
-    "expected": 1,
+    "startTime": "2026-01-28T15:34:24.525Z",
+    "duration": 6.451000000000022,
+    "expected": 0,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0
