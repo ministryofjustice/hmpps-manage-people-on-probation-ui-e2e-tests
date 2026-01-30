@@ -6,6 +6,8 @@ import InstructionsPage from "../pageObjects/Case/Contacts/Checkins/SetUp/instru
 import UploadPhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/upload-photo.page"
 import PhotoMeetRulesPage from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-meet-rules.page"
 import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page"
+import { luxonString, nextWeek, tomorrow } from "./DateTime"
+import { DataTable } from "playwright-bdd"
 
 export interface MpopSetupCheckin {
     date: string
@@ -101,4 +103,48 @@ export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChan
         await photoOptionsPage.checkOnPage()
         await photoOptionsPage.changePage(changes.photo)
     }
+}
+
+export const setupDataTable = (data: DataTable) : MpopSetupChanges => {
+    let date : string
+    let frequency : FrequencyOptions
+    let mobile : string
+    let email : string
+    let preference : Preference
+    let photo : PhotoOptions
+    for (const row of data.hashes()){
+        if (row.label === 'date'){
+            if (row.value === 'tomorrow'){
+                date = luxonString(tomorrow)
+            } 
+            if (row.value === 'nextweek'){
+                date = luxonString(nextWeek)
+            }
+        }
+        if (row.label === 'frequency'){
+            frequency = FrequencyOptions[row.value as keyof typeof FrequencyOptions]
+        }
+        if (row.label === 'mobile'){
+            mobile = row.value
+        }
+        if (row.label === 'email'){
+            email = row.value
+        }
+        if (row.label === 'preference'){
+            preference = Preference[row.value as keyof typeof Preference]
+        }
+        if (row.label === 'photo'){
+            photo = PhotoOptions[row.value as keyof typeof PhotoOptions]
+        }
+    }
+
+    const config : MpopSetupChanges = {
+        date: date!,
+        frequency: frequency!,
+        contact: {mobile: mobile!, email: email!},
+        preference: preference!,
+        photo: photo!
+    }
+
+    return config
 }

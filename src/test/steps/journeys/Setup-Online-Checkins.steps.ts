@@ -1,4 +1,4 @@
-import {Browser, BrowserContext, expect, Page, test} from '@playwright/test'
+import {Browser, BrowserContext, expect, Page} from '@playwright/test'
 import * as dotenv from 'dotenv'
 import {data} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
 import {
@@ -14,16 +14,17 @@ import UploadPhotoPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/uplo
 import PhotoOptionsPage, { PhotoOptions } from '../../pageObjects/Case/Contacts/Checkins/SetUp/photo-options.page';
 import ContactPreferencePage, { Preference } from '../../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page';
 import DateFrequencyPage, { FrequencyOptions } from '../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page';
-import { createBdd } from 'playwright-bdd';
+import { test as base, createBdd, DataTable } from 'playwright-bdd';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
 import { login } from '../../Utilities/Login';
 import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page';
 import { luxonString, nextWeek, tomorrow } from '../../utilities/DateTime';
 import { DateTime } from 'luxon';
-import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, setupCheckinsMPop } from '../../utilities/SetupOnlineCheckins';
+import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
 import { testUser } from '../../utilities/Data';
+import { checkInTest, test } from '../../features/Fixtures';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(checkInTest);
 
 let crn: string //= 'X978434'
 let person: Person
@@ -66,84 +67,41 @@ Given('I am logged in and have navigated to new offender', async () => {
     instructionPage = new InstructionsPage(page)
 });
 
-When('I set up checkIns with TEXT MESSAGE as contact preference', async() => {
-    
-    const setup : MpopSetupCheckin = {
-        date: luxonString(tomorrow),
-        frequency: FrequencyOptions.EVERY_8_WEEKS,
-        contact: {mobile: "07771 900 900"},
-        preference: Preference.TEXT,
-        photo: PhotoOptions.UPLOAD
-    }
-    
+When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
+    const setup : MpopSetupCheckin = setupDataTable(data) as MpopSetupCheckin
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)
     await checkInSummaryPage.checkOnPage()
+    ctx.setup = setup
+})
 
-    const changes: MpopSetupChanges = {
-        date: luxonString(nextWeek),
-        frequency: FrequencyOptions.EVERY_2_WEEKS,
-        contact: {email: "Test@test.com"},
-        preference: Preference.EMAIL,
-    }
-
+When('I make the following changes', async({ ctx }, data:DataTable) => {
+    const changes: MpopSetupChanges = setupDataTable(data)
     await makeChangesSetupCheckins(page, changes)
     await checkInSummaryPage.checkOnPage()
     await checkInSummaryPage.submit()
     await new Promise(resolve => setTimeout(resolve, 4000));
+    ctx.changes = changes
+})
 
+When('I submit the checkin', async({}, data:DataTable) => {
     await confirmationPage.checkOnPage()
     await confirmationPage.checkWhatHappensNextTextExists()
     await confirmationPage.checkGoToAllCasesLinkExists()
     await confirmationPage.returnToPoPsOverviewButtonExist()
     await confirmationPage.selectPoPsOverviewButton()
+})
 
+Then('Checkins should be setup', async({ ctx }) => {
+    const setup = ctx.setup
+    const changes = ctx.changes
     const details: MPoPCheckinDetails = {
         date: changes.date ?? setup.date,
         frequency: changes.frequency ?? setup.frequency,
         preference: changes.preference ?? setup.preference
     }
-
-     //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
+    //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
     await overviewPage.checkOnPage()
     await overviewPage.verifyCheckinDetails(details)
-})
-
-Then('checkIns should be setup up succesfully', async()=> {
     await context.close()
 })
-
-// When('I set up checkIns with EMAIL as contact preference', async() => {
-
-//     const setup : MpopSetupCheckin = {
-//         date: luxonString(tomorrow),
-//         frequency: FrequencyOptions.EVERY_4_WEEKS,
-//         contact: "Test@test.com",
-//         preference: "email",
-//         photo: PhotoOptions.UPLOAD
-//     }
-    
-//     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
-//     await setupCheckinsMPop(page, setup)
-
-//     // ******   Summary Page   ******
-//     // Submit and wait for Summary page navigation
-//     await checkInSummaryPage.checkPageHeader("pageHeading", /Check your answers before adding .* to online check ins/i);
-//     await checkInSummaryPage.submit()
-//     await new Promise(resolve => setTimeout(resolve, 4000));
-
-//     // Confirmation Page
-//     await confirmationPage.checkPageHeader("pageHeading", "Online check ins added");
-//     await confirmationPage.checkWhatHappensNextTextExists()
-//     await confirmationPage.checkGoToAllCasesLinkExists()
-//     await confirmationPage.returnToPoPsOverviewButtonExist()
-//     await confirmationPage.selectPoPsOverviewButton()
-
-//     //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
-//     // await confirmationPage.checkPageHeader("pageHeading", "Overview");
-//     // await overviewPage.checkOnlineCheckInsSectionExists()
-//     // const checkinDateOverviewPage = await checkInSummaryPage.verifyCheckInDateInOverviewPage(tomorrowsDate)
-//     // await checkInSummaryPage.verifySummaryField('firstCheckIn', checkinDateOverviewPage)
-//     // await checkInSummaryPage.verifySummaryField('frequency', checkInfrequency)
-//     // await checkInSummaryPage.verifySummaryField('preferredCommunication', preferredCommsEmail)
-// })

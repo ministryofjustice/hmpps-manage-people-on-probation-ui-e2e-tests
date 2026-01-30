@@ -3,7 +3,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke
+    @smoke @appointments
     Scenario: Create Appointments Full
         Given A new offender has been created
         And I am logged in
