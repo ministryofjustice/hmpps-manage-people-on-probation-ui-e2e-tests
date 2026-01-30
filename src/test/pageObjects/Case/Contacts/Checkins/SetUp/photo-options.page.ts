@@ -17,7 +17,13 @@ export default class PhotoOptionsPage extends ContactPage {
     }
 
     async completePage(optionId: PhotoOptions){
-        await this.clickRadio("uploadOptions", optionId)
+        await this.changePage(optionId)
+    }
+
+    async changePage(optionId?: PhotoOptions){
+        if (optionId){
+            await this.clickRadio("uploadOptions", optionId)
+        }
         await this.submit()
     }
 

@@ -1,13 +1,46 @@
 import {expect, Locator, Page} from "@playwright/test";
 import ContactPage from "../../contactpage";
+import { ContactDetails } from "../../../../../utilities/SetupOnlineCheckins";
+import ContactDetailsPage from "./update-contact-details.page";
 
-
+export enum Preference {
+    TEXT = 0,
+    EMAIL = 1
+}
 export type contactMethod = 'Text message' | 'email' | 'textUpdate'| 'emailUpdate'
 
 export default class ContactPreferencePage extends ContactPage {
 
     constructor(page: Page, crn?: string, uuid?: string) {
         super(page, "Contact preferences", crn, uuid)
+    }
+
+    async completePage(
+        values: ContactDetails,
+        preference: Preference
+    ){
+        await this.changePage(values, preference)   
+    }
+
+    async changePage(
+        values?: ContactDetails,
+        preference?: Preference
+    ){
+        if (values?.email || values?.mobile){
+            if (values.mobile){
+                await this.getQA('mobileNumberAction').click();
+            } else {
+                await this.getQA('emailAddressAction').click();
+            }
+            const contactDetailsPage = new ContactDetailsPage(this.page)
+            await contactDetailsPage.checkOnPage()
+            await contactDetailsPage.completePage(values)
+        }
+
+        if (preference !== undefined){
+            await this.clickRadio("checkInPreferredComs", preference)
+        }
+        await this.continueButton()        
     }
 
     async enterContactPreferenceIfDoesNotExists(

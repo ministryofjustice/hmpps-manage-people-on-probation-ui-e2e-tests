@@ -5,7 +5,7 @@ import { MPOP_URL } from "../../../../../utilities/Data";
 export default class CheckInSummaryPage extends ContactPage {
 
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, undefined, crn, uuid);
+        super(page, "Check your answers before adding", crn, uuid);
     }
 
     async goTo(crn?: string, uuid?: string){
@@ -29,7 +29,6 @@ export default class CheckInSummaryPage extends ContactPage {
     private readonly emailActionChangeLink = "checkInEmailAction"
     private readonly takeAPhotoActionChangeLink = "photoUploadOptionAction"
     private readonly photoActionChangeLink = "photoAction"
-
 
     async clickDateChangeLink() {
         await this.getQA(this.dateActionChangeLink).isEnabled();

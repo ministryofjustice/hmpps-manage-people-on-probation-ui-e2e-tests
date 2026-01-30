@@ -34,8 +34,16 @@ export default class DateFrequencyPage extends ContactPage {
     }
 
     async completePage(date: string, frequencyId: number) {
-        await this.getClass("moj-datepicker").locator('[type="text"]').fill(date)
-        await this.clickRadio("checkInFrequency", frequencyId)
+        await this.changePage(date, frequencyId)
+    }
+
+    async changePage(date?: string, frequencyId?: number) {
+        if (date) {
+            await this.getClass("moj-datepicker").locator('[type="text"]').fill(date)
+        }
+        if (frequencyId) {
+            await this.clickRadio("checkInFrequency", frequencyId)
+        }
         await this.submit()
     }
 
@@ -127,13 +135,5 @@ export default class DateFrequencyPage extends ContactPage {
         }
 
         return { inputFormat: formattedDate, summaryFormat: summaryFormattedDate };
-    }
-
-    async formatToDMY(dateStr: string) {
-        const date = new Date(dateStr); // parse string
-        const day = date.getDate(); // 9
-        const month = date.getMonth() + 1; // 1 (months are 0-indexed)
-        const year = date.getFullYear(); // 2026
-        return `${day}/${month}/${year}`;
     }
 }

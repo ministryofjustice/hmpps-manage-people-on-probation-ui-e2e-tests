@@ -3,7 +3,7 @@ import ContactPage from "../../contactpage";
 
 export default class ConfirmationPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, undefined, crn, uuid);
+        super(page, "Online check ins added", crn, uuid);
     }
 
     async checkWhatHappensNextTextExists() {

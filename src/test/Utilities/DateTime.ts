@@ -14,6 +14,7 @@ export const mpopLongMonthFormat = (date: Date) =>
 export const mpopShortMonthFormat = (date: Date) => {
     return DateTime.fromJSDate(date).toFormat('d MMM yyyy')
 }
+
 export const luxonString = (date: DateTime) : string => {
     return date.toFormat("d/M/yyyy")
 }
@@ -23,6 +24,7 @@ export const yesterday = today.minus({ days: 1 })
 export const tomorrow = today.plus({ days: 1 })
 export const plus3Months = today.plus({ months: 3 })  // => 12 Sep 2025
 export const plus6Months = today.plus({ months: 6 })  // => 12 Dec 2025
+export const nextWeek = today.plus({ days: 7 })
 
 export const nextWeekend = (today: DateTime) => {
     while (!today.isWeekend){
@@ -52,4 +54,24 @@ export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
         date.endTime = "0" + date.endTime
     } 
     return date
+}
+
+export const formatToLongDay = (dateStr: string) => {
+    const date = new Date(dateStr); // parse string
+    const weekday = date.getDay()
+    const day = date.getDate(); // 9
+    const month = date.getMonth() + 1; // 1 (months are 0-indexed)
+    return `${weekday} ${day} ${month}`;
+}
+
+export const formatToDMY = (dateStr: string) => {
+    const date = new Date(dateStr); // parse string
+    const day = date.getDate(); // 9
+    const month = date.getMonth() + 1; // 1 (months are 0-indexed)
+    const year = date.getFullYear(); // 2026
+    return `${day}/${month}/${year}`;
+}
+
+export const dateWithDayAndWithoutYear = (datetimeString: string) => {
+  return DateTime.fromFormat(datetimeString, "d/M/yyyy").toFormat('cccc d MMMM')
 }

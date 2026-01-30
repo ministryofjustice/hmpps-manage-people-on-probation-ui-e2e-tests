@@ -1,7 +1,9 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import CasePage from "./casepage";
 import { navigateToCase } from "../../utilities/Navigation";
+import { MPoPCheckinDetails } from "../../utilities/SetupOnlineCheckins";
+import { dateWithDayAndWithoutYear, formatToLongDay } from "../../utilities/DateTime";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -23,5 +25,10 @@ export default class OverviewPage extends CasePage {
 
     async navigateTo(crn?: string){
         navigateToCase(this.page, (crn ?? this.crn)!)
+    }
+
+    async verifyCheckinDetails(details: MPoPCheckinDetails){
+        await this.getQA("checkinCard").isVisible()
+        await this.checkSummaryRowValue(await this.getSummaryRowByKey('First check in'), dateWithDayAndWithoutYear(details.date))
     }
 }

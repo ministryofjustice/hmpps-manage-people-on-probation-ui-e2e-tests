@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test"
 import DateFrequencyPage, { FrequencyOptions } from "../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page"
-import ContactPreferencePage, { contactMethod } from "../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page"
+import ContactPreferencePage, { contactMethod, Preference } from "../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page"
 import PhotoOptionsPage, { PhotoOptions } from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-options.page"
 import InstructionsPage from "../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page"
 import UploadPhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/upload-photo.page"
@@ -10,9 +10,28 @@ import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/chec
 export interface MpopSetupCheckin {
     date: string
     frequency: FrequencyOptions
-    contact: string
-    preference: contactMethod
+    contact: ContactDetails
+    preference: Preference
     photo: PhotoOptions
+}
+
+export interface MpopSetupChanges {
+    date?: string
+    frequency?: FrequencyOptions
+    contact?: ContactDetails
+    preference?: Preference
+    photo?: PhotoOptions
+}
+
+export interface MPoPCheckinDetails {
+    date: string
+    frequency: FrequencyOptions
+    preference: Preference
+}
+
+export interface ContactDetails {
+    mobile?: string
+    email?: string
 }
 
 export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
@@ -28,7 +47,7 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
     // Navigate to Contact preference page, verify page header and select TEXT Message option
     const contactPreferencePage = new ContactPreferencePage(page) 
     await contactPreferencePage.checkOnPage()
-    await contactPreferencePage.enterContactPreferenceIfDoesNotExists(setup.contact, setup.preference )
+    await contactPreferencePage.completePage(setup.contact, setup.preference )
     
     // Photo options page
     const photoOptionsPage = new PhotoOptionsPage(page) 
@@ -48,4 +67,38 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
 
     const checkInSummaryPage = new CheckInSummaryPage(page)
     await checkInSummaryPage.checkOnPage()
+}
+
+export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChanges) => {
+    const checkInSummaryPage = new CheckInSummaryPage(page)
+    if (changes.date || changes.frequency){
+        if (changes.date){
+            await checkInSummaryPage.clickDateChangeLink()
+        } else {
+            await checkInSummaryPage.clickDateIntervalChangeLink()
+        }
+        const dateFrequencyPage = new DateFrequencyPage(page)
+        await dateFrequencyPage.checkOnPage()
+        await dateFrequencyPage.changePage(changes.date, changes.frequency)
+    }
+
+    if (changes.contact?.email || changes.contact?.mobile || changes.preference){
+        if (changes.preference){
+            await checkInSummaryPage.clickPreferredCommsActionChangeLink()
+        } else if (changes.contact?.mobile){
+            await checkInSummaryPage.clickMobileActionChangeLink()
+        } else {
+            await checkInSummaryPage.clickEmailActionChangeLink()
+        }
+        const contactPreferencePage = new ContactPreferencePage(page) 
+        await contactPreferencePage.checkOnPage()
+        await contactPreferencePage.changePage(changes.contact, changes.preference)
+    }
+
+    if (changes.photo){
+        await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
+        const photoOptionsPage = new PhotoOptionsPage(page) 
+        await photoOptionsPage.checkOnPage()
+        await photoOptionsPage.changePage(changes.photo)
+    }
 }
