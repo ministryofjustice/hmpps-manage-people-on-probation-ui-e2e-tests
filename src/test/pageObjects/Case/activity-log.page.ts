@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import CasePage from "./casepage";
 import { caseNavigation } from "../../utilities/Navigation";
@@ -25,6 +25,15 @@ export default class ActivityLogPage extends CasePage {
         } else {
             this.clickLink("Default view")
             this.view = "default"
+        }
+    }
+
+    async checkAvailable(): Promise<boolean> {
+        try {
+            await expect(this.getQA("descriptionValue", this.getTimelineCard(0))).toHaveText('Online check in missed')
+            return false
+        } catch {
+            return true
         }
     }
 

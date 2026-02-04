@@ -27,7 +27,7 @@ export default class OverviewPage extends CasePage {
         }
     }
 
-    async AfewDaysOld(): Promise<boolean> {
+    async NotMadeToday(): Promise<boolean> {
         const dateStr = await (await this.getSummaryRowValue(await this.getSummaryRowByKey('First check in'))).allTextContents()
         const string = dateStr[0].trim() + ' 2026'
         const date = DateTime.fromFormat(string,'cccc d MMMM y')

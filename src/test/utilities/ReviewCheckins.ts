@@ -5,6 +5,8 @@ import ReviewExpiredPage from "../pageObjects/Case/Contacts/Checkins/Review/revi
 import CasePage from "../pageObjects/Case/casepage"
 import OverviewPage from "../pageObjects/Case/overview.page"
 import SearchPage from "../pageObjects/search.page"
+import ContactPage from "../pageObjects/Case/Contacts/contactpage"
+import ActivityLogPage from "../pageObjects/Case/activity-log.page"
 
 export enum ReviewType {
     SUBMITTED = 0,
@@ -57,24 +59,31 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
     crnNumber = crnNumber-1
     let setup = false
     let old = false
-    while (setup === false || old === false){
+    let available = false
+    while (setup === false || old === false || available === false){
         setup = false
         old = false
         crnNumber = crnNumber-1
         crn = 'X' + crnNumber.toString()
         console.log(crn)
-        let searchPage = new SearchPage(page)
+        const searchPage = new SearchPage(page)
         await searchPage.navigateTo(page)
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
         if (pages > 0){
             console.log('case exists')
-            let casePage = new OverviewPage(page, crn)
+            const casePage = new OverviewPage(page, crn)
             await casePage.navigateTo()
             setup = await casePage.checkOnlineCheckInsSetup()
             if (setup === true){
                 console.log("is setup")
-                old = await casePage.AfewDaysOld()
+                old = await casePage.NotMadeToday()
+                if (old === true){
+                    console.log("is old enough")
+                    casePage.useSubNavigation("activityLogTab")
+                    const contactPage = new ActivityLogPage(page) 
+                    available = await contactPage.checkAvailable()
+                }
             }
         }
     }
