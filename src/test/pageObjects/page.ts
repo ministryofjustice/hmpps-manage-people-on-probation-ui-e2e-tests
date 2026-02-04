@@ -182,6 +182,10 @@ export default abstract class MPopPage {
         return undefined!
     }
 
+    async getSummaryRowValue(row: Locator){
+        return this.getClass("govuk-summary-list__value", row)
+    }
+
     async checkSummaryRowValue(row: Locator, value: string|RegExp){
         await expect(this.getClass("govuk-summary-list__value", row)).toContainText(value)
     }

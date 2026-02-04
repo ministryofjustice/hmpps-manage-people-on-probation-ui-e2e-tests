@@ -2,6 +2,9 @@ import { Page } from "@playwright/test"
 import ReviewIdentityPage from "../pageObjects/Case/Contacts/Checkins/Review/review-identity.page"
 import ReviewNotesPage from "../pageObjects/Case/Contacts/Checkins/Review/review-notes.page"
 import ReviewExpiredPage from "../pageObjects/Case/Contacts/Checkins/Review/review-expired.page"
+import CasePage from "../pageObjects/Case/casepage"
+import OverviewPage from "../pageObjects/Case/overview.page"
+import SearchPage from "../pageObjects/search.page"
 
 export enum ReviewType {
     SUBMITTED = 0,
@@ -47,4 +50,33 @@ export const reviewSubmittedCheckinMpop = async(page: Page, review: SubmittedRev
     const reviewNotesPage = new ReviewNotesPage(page)
     await reviewNotesPage.checkOnPage()
     await reviewNotesPage.completePage(review.note, review.risk)
+}
+
+export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Promise<string> => {
+    let crnNumber = (crn.substring(1) as unknown as number)
+    crnNumber = crnNumber-85
+    let setup = false
+    let old = false
+    while (setup === false || old === false){
+        setup = false
+        old = false
+        crnNumber = crnNumber-1
+        crn = 'X' + crnNumber.toString()
+        console.log(crn)
+        let searchPage = new SearchPage(page)
+        await searchPage.navigateTo(page)
+        await searchPage.searchCases(crn)
+        const pages = await searchPage.countCases()
+        if (pages > 0){
+            console.log('case exists')
+            let casePage = new OverviewPage(page, crn)
+            await casePage.navigateTo()
+            setup = await casePage.checkOnlineCheckInsSetup()
+            if (setup === true){
+                console.log("is setup")
+                old = await casePage.AfewDaysOld()
+            }
+        }
+    }
+    return crn
 }

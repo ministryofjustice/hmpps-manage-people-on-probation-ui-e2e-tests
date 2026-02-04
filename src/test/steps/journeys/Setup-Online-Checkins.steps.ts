@@ -21,18 +21,19 @@ import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/ins
 import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../utilities/DateTime';
 import { DateTime } from 'luxon';
 import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
-import { testUser } from '../../utilities/Data';
+import { testCrn, testUser } from '../../utilities/Data';
 import { checkInTest, test } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
 import { getUuid } from '../../Utilities/Common';
 import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
-import { Review, reviewCheckinMpop, reviewSubmittedCheckinMpop, ReviewType, YesNoCheck } from '../../utilities/ReviewCheckins';
+import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewSubmittedCheckinMpop, ReviewType, YesNoCheck } from '../../utilities/ReviewCheckins';
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
 import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
 
 const { Given, When, Then } = createBdd(checkInTest);
 
 let crn: string //= 'X978434'
+let expiredCrn: string
 let person: Person
 let sentence: CreatedEvent
 let browser: Browser
@@ -55,7 +56,7 @@ Given('A new offender has been created for setups', async ({ browser: b }) => {
     page = await context.newPage()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
-    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } , event: data.events.community })
 })
 
 Given('I am logged in and have navigated to new offender', async () => {
@@ -148,15 +149,20 @@ Then('I can view the reviewed checkIn', async({ }) => {
    await reviewedSubmittedPage.checkOnPage()
 })
 
+When('I find a suitable CRN', async({}) => {
+    expiredCrn = await getValidCrnForExpiredCheckin(page, crn) //crn must be >1 day old, have online checkins setup, and not have an existing expired checkin today
+    console.log(expiredCrn)
+})
+
 When('I mock the completion of an expired checkin', async({ }) => {
     const token = await getClientToken()
-    const practitioner = await getProbationPractitioner(crn, token)
-    await createEsupervisionCheckin(practitioner, crn, dueDateString(lastWeek), token)
+    const practitioner = await getProbationPractitioner(expiredCrn, token)
+    await createEsupervisionCheckin(practitioner, expiredCrn, dueDateString(yesterday), token)
 })
 
 Then('I can access the expired checkIn in the contact log', async({ }) => {
    await page.waitForTimeout(5000)
-   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
    await contactLog.navigateTo()
    await contactLog.checkOnPage()
    await contactLog.getLink('Update').first().click()
@@ -173,10 +179,10 @@ When('I review the missed checkIn', async({ }) => {
 })
 
 Then('I can view the expired and reviewed checkIn', async({ }) => {
-   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
    await contactLog.checkOnPage()
    await contactLog.getLink('Update').first().click()
-   const reviewedExpiredPage = new ReviewedExpiredPage(page, crn)
+   const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
    await reviewedExpiredPage.checkOnPage()
 })
 

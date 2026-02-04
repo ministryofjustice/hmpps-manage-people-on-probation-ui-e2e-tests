@@ -26,8 +26,9 @@ Feature: Setup Checkins
         Then I can access the new checkIn in the contact log
         When I review the completed checkIn
         Then I can view the reviewed checkIn
-        When I mock the completion of an expired checkin
+        When I find a suitable CRN
+        And I mock the completion of an expired checkin
         Then I can access the expired checkIn in the contact log
-        And I review the missed checkIn
+        When I review the missed checkIn
         Then I can view the expired and reviewed checkIn
         And Context is closed
