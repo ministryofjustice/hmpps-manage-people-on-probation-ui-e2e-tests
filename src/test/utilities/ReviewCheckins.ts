@@ -54,7 +54,7 @@ export const reviewSubmittedCheckinMpop = async(page: Page, review: SubmittedRev
 
 export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Promise<string> => {
     let crnNumber = (crn.substring(1) as unknown as number)
-    crnNumber = crnNumber-85
+    crnNumber = crnNumber-1
     let setup = false
     let old = false
     while (setup === false || old === false){
