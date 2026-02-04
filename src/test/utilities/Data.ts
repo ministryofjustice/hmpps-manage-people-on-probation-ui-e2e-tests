@@ -31,6 +31,7 @@ export const deliusAlert: Contact = {
 }
 
 export const photo_1_path = path.join(process.cwd(), 'src/test/fixtures/Photo1.png');
+export const video_1_path = path.join(process.cwd(), 'src/test/fixtures/Video1.mp4');
 
 export const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
 

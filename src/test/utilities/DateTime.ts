@@ -18,6 +18,9 @@ export const mpopShortMonthFormat = (date: Date) => {
 export const luxonString = (date: DateTime) : string => {
     return date.toFormat("d/M/yyyy")
 }
+export const dueDateString = (date: DateTime) : string => {
+    return date.toFormat("yyyy-M-d")
+}
 
 export const today = DateTime.now().setZone('Europe/London')
 export const yesterday = today.minus({ days: 1 })
@@ -25,6 +28,8 @@ export const tomorrow = today.plus({ days: 1 })
 export const plus3Months = today.plus({ months: 3 })  // => 12 Sep 2025
 export const plus6Months = today.plus({ months: 6 })  // => 12 Dec 2025
 export const nextWeek = today.plus({ days: 7 })
+export const lastWeek = today.minus({ days: 7 })
+export const twoDaysAgo = today.minus({ days: 2 })
 
 export const nextWeekend = (today: DateTime) => {
     while (!today.isWeekend){

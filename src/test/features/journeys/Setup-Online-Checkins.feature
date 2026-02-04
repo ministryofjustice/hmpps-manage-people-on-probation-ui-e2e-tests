@@ -4,7 +4,7 @@ Feature: Setup Checkins
     So they can be used by an offender
 
     @smoke @esupervision
-    Scenario: Setup Online Checkins - TEXT
+    Scenario: Setup Online Checkins
         Given A new offender has been created for setups
         And I am logged in and have navigated to new offender
         When I set up checkIns with values
@@ -22,3 +22,12 @@ Feature: Setup Checkins
             | preference | EMAIL           |
         And I submit the checkin
         Then Checkins should be setup
+        When I mock the completion of a completed checkin
+        Then I can access the new checkIn in the contact log
+        When I review the completed checkIn
+        Then I can view the reviewed checkIn
+        When I mock the completion of an expired checkin
+        Then I can access the expired checkIn in the contact log
+        And I review the missed checkIn
+        Then I can view the expired and reviewed checkIn
+        And Context is closed

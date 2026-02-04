@@ -18,11 +18,17 @@ import { test as base, createBdd, DataTable } from 'playwright-bdd';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
 import { login } from '../../Utilities/Login';
 import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page';
-import { luxonString, nextWeek, tomorrow } from '../../utilities/DateTime';
+import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../utilities/DateTime';
 import { DateTime } from 'luxon';
 import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
 import { testUser } from '../../utilities/Data';
 import { checkInTest, test } from '../../features/Fixtures';
+import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
+import { getUuid } from '../../Utilities/Common';
+import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
+import { Review, reviewCheckinMpop, reviewSubmittedCheckinMpop, ReviewType, YesNoCheck } from '../../utilities/ReviewCheckins';
+import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
+import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
 
 const { Given, When, Then } = createBdd(checkInTest);
 
@@ -72,6 +78,8 @@ When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)
     await checkInSummaryPage.checkOnPage()
+    const uuid = getUuid(page)
+    ctx.uuid = uuid
     ctx.setup = setup
 })
 
@@ -103,5 +111,75 @@ Then('Checkins should be setup', async({ ctx }) => {
     //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
     await overviewPage.checkOnPage()
     await overviewPage.verifyCheckinDetails(details)
+})
+
+When('I mock the completion of a completed checkin', async({ }) => {
+    const token = await getClientToken()
+    const practitioner = await getProbationPractitioner(crn, token)
+    const uuid = await createEsupervisionCheckin(practitioner, crn, dueDateString(today), token)
+    await postEsupervisionVideo(page, uuid, token)
+    await verifyEsupervisionVideo(uuid, token)
+    await submitEsupervisionCheckin(uuid, token)
+})
+
+Then('I can access the new checkIn in the contact log', async({ }) => {
+   await page.waitForTimeout(5000)
+   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   await contactLog.navigateTo()
+   await contactLog.checkOnPage()
+   await contactLog.getLink('Update').first().click()
+})
+
+When('I review the completed checkIn', async({ }) => {
+    const review : Review = {
+        type: ReviewType.SUBMITTED,
+        review: {
+            identity: YesNoCheck.YES
+        }
+    }
+    await reviewCheckinMpop(page, review)
+})
+
+Then('I can view the reviewed checkIn', async({ }) => {
+   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   await contactLog.checkOnPage()
+   await contactLog.getLink('Update').first().click()
+   const reviewedSubmittedPage = new ReviewedSubmittedPage(page, crn)
+   await reviewedSubmittedPage.checkOnPage()
+})
+
+When('I mock the completion of an expired checkin', async({ }) => {
+    const token = await getClientToken()
+    const practitioner = await getProbationPractitioner(crn, token)
+    await createEsupervisionCheckin(practitioner, crn, dueDateString(lastWeek), token)
+})
+
+Then('I can access the expired checkIn in the contact log', async({ }) => {
+   await page.waitForTimeout(5000)
+   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   await contactLog.navigateTo()
+   await contactLog.checkOnPage()
+   await contactLog.getLink('Update').first().click()
+})
+
+When('I review the missed checkIn', async({ }) => {
+    const review : Review = {
+        type: ReviewType.EXPIRED,
+        review: {
+            comment: 'note'
+        }
+    }
+    await reviewCheckinMpop(page, review)
+})
+
+Then('I can view the expired and reviewed checkIn', async({ }) => {
+   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   await contactLog.checkOnPage()
+   await contactLog.getLink('Update').first().click()
+   const reviewedExpiredPage = new ReviewedExpiredPage(page, crn)
+   await reviewedExpiredPage.checkOnPage()
+})
+
+Then('Context is closed', async() => {
     await context.close()
 })

@@ -25,8 +25,4 @@ export default class SupportingInformationPage extends ContactPage {
         }
         await this.checkOnPage()
     }
-
-    async fillText(qa: string, note: string){
-       await this.getQA(qa).getByRole('textbox').fill(note)
-    }
 }

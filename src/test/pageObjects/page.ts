@@ -23,8 +23,6 @@ export default abstract class MPopPage {
             ?.replace(/\s+/g, ' ')
             .trim() || '';
 
-        console.log(`Page header [${qa}]:`, text);
-
         // Assert manually for regex or string
         if (expectedText instanceof RegExp) {
             if (!expectedText.test(text)) {
@@ -211,5 +209,9 @@ export default abstract class MPopPage {
     async logout() {
         await this.getQA('probation-common-header-user-name').click()
         await this.getLink('Sign out').click()
+    }
+
+    async fillText(qa: string, note: string){
+       await this.getQA(qa).getByRole('textbox').fill(note)
     }
 }
