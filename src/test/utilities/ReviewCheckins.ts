@@ -55,25 +55,27 @@ export const reviewSubmittedCheckinMpop = async(page: Page, review: SubmittedRev
 }
 
 export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Promise<string> => {
-    let crnNumber = (crn.substring(1) as unknown as number)
-    crnNumber = crnNumber-1
+    // let crnNumber = (crn.substring(1) as unknown as number)
+    // crnNumber = crnNumber-100
     let setup = false
     let old = false
     let available = false
+    const searchPage = new SearchPage(page)
+    await searchPage.navigateTo(page)
+    let startCRN = 'X980730'
+    //passedCRNs X90729, X980718, X980722, X980721
+    let crnNumber = startCRN.substring(1) as unknown as number
     while (setup === false || old === false || available === false){
         setup = false
         old = false
         crnNumber = crnNumber-1
         crn = 'X' + crnNumber.toString()
-        console.log(crn)
-        const searchPage = new SearchPage(page)
-        await searchPage.navigateTo(page)
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
         if (pages > 0){
             console.log('case exists')
+            await searchPage.selectCaseByID(1)
             const casePage = new OverviewPage(page, crn)
-            await casePage.navigateTo()
             setup = await casePage.checkOnlineCheckInsSetup()
             if (setup === true){
                 console.log("is setup")
@@ -85,7 +87,8 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
                     available = await contactPage.checkAvailable()
                 }
             }
-        }
+            await casePage.usePrimaryNavigation('Search')
+        }  
     }
     return crn
 }
