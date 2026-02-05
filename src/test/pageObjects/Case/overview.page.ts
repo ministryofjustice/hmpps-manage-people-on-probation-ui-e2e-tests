@@ -20,7 +20,7 @@ export default class OverviewPage extends CasePage {
 
     async checkOnlineCheckInsSetup(): Promise<boolean> {
         try {
-            await expect(this.getQA("checkinCard").getByRole('link')).toHaveText("View all online check in details", {timeout: 5000})
+            await expect(this.getQA("checkinCard").getByRole('link')).toHaveText("View all online check in details", {timeout: 1000})
             return true
         } catch {
             return false
@@ -30,8 +30,8 @@ export default class OverviewPage extends CasePage {
     async NotMadeToday(): Promise<boolean> {
         const dateStr = await (await this.getSummaryRowValue(await this.getSummaryRowByKey('First check in'))).allTextContents()
         const string = dateStr[0].trim() + ' 2026'
+        console.log(string)
         const date = DateTime.fromFormat(string,'cccc d MMMM y')
-        console.log(date)
         if (date < nextWeek.minus({days: 4})){
             return true
         }

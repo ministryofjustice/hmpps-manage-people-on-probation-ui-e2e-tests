@@ -62,30 +62,32 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
     let available = false
     const searchPage = new SearchPage(page)
     await searchPage.navigateTo(page)
-    let startCRN = 'X980730'
-    //passedCRNs X90729, X980718, X980722, X980721
-    let badCRNS = ['X980716', 'X980728'] //have no practitioner
+    let startCRN = 'X977280'
+    let index = 0
+    let passedCRNs = ['X90729', 'X980718', 'X980722', 'X980721', 'X977961', 'X977718', 'X977632']
     let crnNumber = startCRN.substring(1) as unknown as number
     while (setup === false || old === false || available === false){
         setup = false
         old = false
-        crnNumber = crnNumber-1
-        crn = 'X' + crnNumber.toString()
-        if (crn in badCRNS){
-            continue
+        if (passedCRNs.length > index){
+            crn = passedCRNs[index]
+            index += 1
+        } else {
+            crnNumber = crnNumber-1
+            crn = 'X' + crnNumber.toString()
         }
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
         if (pages > 0){
-            console.log('case exists')
+            console.log(crn)
             await searchPage.selectCaseByID(1)
             const casePage = new OverviewPage(page, crn)
             setup = await casePage.checkOnlineCheckInsSetup()
             if (setup === true){
-                console.log("is setup")
+                console.log("setup")
                 old = await casePage.NotMadeToday()
                 if (old === true){
-                    console.log("is old enough")
+                    console.log("old")
                     casePage.useSubNavigation("activityLogTab")
                     const contactPage = new ActivityLogPage(page) 
                     available = await contactPage.checkAvailable()
