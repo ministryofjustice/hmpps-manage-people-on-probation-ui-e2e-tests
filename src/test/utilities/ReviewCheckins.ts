@@ -64,12 +64,16 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
     await searchPage.navigateTo(page)
     let startCRN = 'X980730'
     //passedCRNs X90729, X980718, X980722, X980721
+    let badCRNS = ['X980716', 'X980728'] //have no practitioner
     let crnNumber = startCRN.substring(1) as unknown as number
     while (setup === false || old === false || available === false){
         setup = false
         old = false
         crnNumber = crnNumber-1
         crn = 'X' + crnNumber.toString()
+        if (crn in badCRNS){
+            continue
+        }
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
         if (pages > 0){
