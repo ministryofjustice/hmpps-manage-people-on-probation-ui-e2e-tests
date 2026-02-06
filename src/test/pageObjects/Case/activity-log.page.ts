@@ -30,8 +30,8 @@ export default class ActivityLogPage extends CasePage {
 
     async checkAvailable(): Promise<boolean> {
         try {
-            await expect(this.getClass('govuk-!-font-weight-bold govuk-!-font-size-19  govuk-!-margin-bottom-2')).toHaveText('Today')
-            await expect(this.getQA("descriptionValue", this.getTimelineCard(1))).toHaveText('Check in has not been submitted on time')
+            await expect(this.getClass('govuk-!-font-weight-bold govuk-!-font-size-19  govuk-!-margin-bottom-2')).toHaveText('Today', {timeout: 1000})
+            await expect(this.getQA("descriptionValue", this.getTimelineCard(1))).toHaveText('Check in has not been submitted on time', {timeout: 1000})
             return false
         } catch {
             return true

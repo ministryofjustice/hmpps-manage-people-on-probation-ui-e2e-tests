@@ -32,7 +32,7 @@ export default class OverviewPage extends CasePage {
         const string = dateStr[0].trim() + ' 2026'
         console.log(string)
         const date = DateTime.fromFormat(string,'cccc d MMMM y')
-        if (date < nextWeek.minus({days: 4})){
+        if (date < nextWeek.minus({days: 7})){
             return true
         }
         return false

@@ -7,6 +7,7 @@ import OverviewPage from "../pageObjects/Case/overview.page"
 import SearchPage from "../pageObjects/search.page"
 import ContactPage from "../pageObjects/Case/Contacts/contactpage"
 import ActivityLogPage from "../pageObjects/Case/activity-log.page"
+import PersonalDetailsPage from "../pageObjects/Case/personal-details.page"
 
 export enum ReviewType {
     SUBMITTED = 0,
@@ -54,19 +55,19 @@ export const reviewSubmittedCheckinMpop = async(page: Page, review: SubmittedRev
     await reviewNotesPage.completePage(review.note, review.risk)
 }
 
-export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Promise<string> => {
-    // let crnNumber = (crn.substring(1) as unknown as number)
-    // crnNumber = crnNumber-100
+export const getValidCrnForExpiredCheckin = async(page: Page, crn?: string) : Promise<string> => {
     let setup = false
     let old = false
     let available = false
+    let practitioner = false
     const searchPage = new SearchPage(page)
     await searchPage.navigateTo(page)
-    let startCRN = 'X977280'
+    crn = crn ?? 'X977280' 
+    crn = 'X982076'
     let index = 0
-    let passedCRNs = ['X980729', 'X980718', 'X980722', 'X980721', 'X977961', 'X977632']
-    let crnNumber = startCRN.substring(1) as unknown as number
-    while (setup === false || old === false || available === false){
+    let passedCRNs : string[] = ['X981726','X982081','X981982', 'X980729', 'X980718', 'X980722', 'X980721', 'X977961', 'X977632'] 
+    let crnNumber = crn.substring(1) as unknown as number
+    while (setup === false || old === false || available === false || practitioner === false){
         setup = false
         old = false
         if (passedCRNs.length > index){
@@ -76,10 +77,12 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
             crnNumber = crnNumber-1
             crn = 'X' + crnNumber.toString()
         }
+        console.log(crn)
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
+        console.log(pages)
         if (pages > 0){
-            console.log(crn)
+            console.log('exists')
             await searchPage.selectCaseByID(1)
             const casePage = new OverviewPage(page, crn)
             setup = await casePage.checkOnlineCheckInsSetup()
@@ -88,13 +91,20 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
                 old = await casePage.NotMadeToday()
                 if (old === true){
                     console.log("old")
-                    casePage.useSubNavigation("activityLogTab")
+                    await casePage.useSubNavigation("activityLogTab")
                     const contactPage = new ActivityLogPage(page) 
                     available = await contactPage.checkAvailable()
+                    if (available === true){
+                        console.log("unused today")
+                        await page.getByRole('link', {name: "Personal details"}).click()
+                        const personalDetailsPage = new PersonalDetailsPage(page)
+                        personalDetailsPage.checkOnPage()
+                        practitioner = await personalDetailsPage.checkForPractitioner()
+                    }
                 }
             }
             await casePage.usePrimaryNavigation('Search')
         }  
     }
-    return crn
+    return crn!
 }

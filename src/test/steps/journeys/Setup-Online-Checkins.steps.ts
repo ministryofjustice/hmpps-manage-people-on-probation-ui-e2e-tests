@@ -158,7 +158,7 @@ Then('I can view the reviewed checkIn', async({ }) => {
 })
 
 When('I find a suitable CRN', async({}) => {
-    crn = 'X1'
+    crn = crn ?? 'X1'
     expiredCrn = await getValidCrnForExpiredCheckin(page, crn) //crn must be >1 day old, have online checkins setup, and not have an existing expired checkin today
     console.log(expiredCrn)
 })

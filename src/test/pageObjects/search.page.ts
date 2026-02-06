@@ -18,7 +18,9 @@ export default class SearchPage extends MPopPage {
     }
 
     async countCases(){
-        return await this.page.getByRole("table").getByRole("row").count()
+        await this.page.waitForTimeout(1000)
+        const count = await this.page.getByRole("table").getByRole("row").count()
+        return count
     }
 
     async selectCaseByID(id: number){
