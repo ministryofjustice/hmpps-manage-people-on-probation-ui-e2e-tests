@@ -64,7 +64,7 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn: string) : Pro
     await searchPage.navigateTo(page)
     let startCRN = 'X977280'
     let index = 0
-    let passedCRNs = ['X90729', 'X980718', 'X980722', 'X980721', 'X977961', 'X977718', 'X977632']
+    let passedCRNs = ['X980729', 'X980718', 'X980722', 'X980721', 'X977961', 'X977632']
     let crnNumber = startCRN.substring(1) as unknown as number
     while (setup === false || old === false || available === false){
         setup = false
