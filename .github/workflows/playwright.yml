@@ -34,10 +34,16 @@ jobs:
         # URLs
         DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
         MANAGE_PEOPLE_ON_PROBATION_URL: https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk
+        MAS_API_URL: https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk
+        E_SUPERVISION_API_URL: https://esupervision-api-dev.hmpps.service.justice.gov.uk
+        SIGN_IN_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
 
         # Credentials
         DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
         DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+        API_USERNAME: ${{ secrets.API_USERNAME }}
+        API_PASSWORD: ${{ secrets.API_PASSWORD }}
+
 
     - name: Publish JUnit report
       if: always()
