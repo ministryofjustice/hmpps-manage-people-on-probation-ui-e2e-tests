@@ -8,6 +8,7 @@ import SearchPage from "../pageObjects/search.page"
 import ContactPage from "../pageObjects/Case/Contacts/contactpage"
 import ActivityLogPage from "../pageObjects/Case/activity-log.page"
 import PersonalDetailsPage from "../pageObjects/Case/personal-details.page"
+import { DataTable } from "playwright-bdd"
 
 export enum ReviewType {
     SUBMITTED = 0,
@@ -29,6 +30,42 @@ export interface SubmittedReview {
     identity: YesNoCheck
     note?: string
     risk?: YesNoCheck
+}
+
+export interface SurveyResponse  {
+  mentalHealth: MentalHealth
+  mentalHealthComment?: string
+  assistance: SupportAspect[]
+  mentalHealthSupport?: string
+  alcoholSupport?: string
+  drugsSupport?: string
+  moneySupport?: string
+  housingSupport?: string
+  supportSystemSupport?: string
+  otherSupport?: string
+  callback: CallbackRequested
+  callbackDetails?: string
+}
+export enum MentalHealth {
+  VeryWell = 'VERY_WELL',
+  Well = 'WELL',
+  Ok = 'OK',
+  NotGreat = 'NOT_GREAT',
+  Struggling = 'STRUGGLING',
+}
+export enum SupportAspect {
+  MentalHealth = 'MENTAL_HEALTH',
+  Alcohol = 'ALCOHOL',
+  Drugs = 'DRUGS',
+  Money = 'MONEY',
+  Housing = 'HOUSING',
+  SupportSystem = 'SUPPORT_SYSTEM',
+  Other = 'OTHER',
+  NoHelp = 'NO_HELP',
+}
+export enum CallbackRequested {
+  Yes = 'YES',
+  No = 'NO',
 }
 
 export const reviewCheckinMpop = async(page: Page, review: Review) => {
@@ -107,4 +144,78 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn?: string) : Pr
         }  
     }
     return crn!
+}
+
+export const reviewDataTable = (data: DataTable) : SurveyResponse => {
+    let mentalHealth: MentalHealth
+    let mentalHealthComment: string|undefined
+    let assistance: SupportAspect[] = []
+    let mentalHealthSupport: string|undefined
+    let alcoholSupport: string|undefined
+    let drugsSupport: string|undefined
+    let moneySupport: string|undefined
+    let housingSupport: string|undefined
+    let supportSystemSupport: string|undefined
+    let otherSupport: string|undefined
+    let callback: CallbackRequested
+    let callbackDetails: string|undefined
+    for (const row of data.hashes()){
+        if (row.label === 'mentalHealth'){
+            mentalHealth = MentalHealth[row.value as keyof typeof MentalHealth]
+        }
+        if (row.label === 'mentalHealthComment'){
+            mentalHealthComment = row.value
+        }
+        if (row.label === 'mentalHealthSupport'){
+            mentalHealthSupport = row.value
+            assistance.push(SupportAspect.MentalHealth)
+        }
+        if (row.label === 'alcoholSupport'){
+            alcoholSupport = row.value
+            assistance.push(SupportAspect.Alcohol)
+        }
+        if (row.label === 'drugsSupport'){
+            drugsSupport = row.value
+            assistance.push(SupportAspect.Drugs)
+        }
+        if (row.label === 'moneySupport'){
+            moneySupport = row.value
+            assistance.push(SupportAspect.Money)
+        }
+        if (row.label === 'housingSupport'){
+            housingSupport = row.value
+            assistance.push(SupportAspect.Housing)
+        }
+        if (row.label === 'supportSystemSupport'){
+            supportSystemSupport = row.value
+            assistance.push(SupportAspect.SupportSystem)
+        }
+        if (row.label === 'otherSupport'){
+            otherSupport = row.value
+            assistance.push(SupportAspect.Other)
+        }
+        if (row.label === 'callback'){
+            callback = CallbackRequested[row.value as keyof typeof CallbackRequested]
+        }
+        if (row.label === 'callbackDetails'){
+            callbackDetails = row.value
+        }
+    }
+
+    const surveyResponse : SurveyResponse = {
+        mentalHealth: mentalHealth!,
+        mentalHealthComment: mentalHealthComment,
+        assistance: assistance!,
+        mentalHealthSupport: mentalHealthSupport,
+        alcoholSupport: alcoholSupport,
+        drugsSupport: drugsSupport,
+        moneySupport: moneySupport,
+        housingSupport: housingSupport,
+        supportSystemSupport: supportSystemSupport,
+        otherSupport: otherSupport,
+        callback: callback!,
+        callbackDetails: callbackDetails
+    }
+
+    return surveyResponse
 }

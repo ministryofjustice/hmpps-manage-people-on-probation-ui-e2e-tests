@@ -26,7 +26,7 @@ import { checkInTest, test } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
 import { getUuid } from '../../Utilities/Common';
 import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
-import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewSubmittedCheckinMpop, ReviewType, YesNoCheck } from '../../utilities/ReviewCheckins';
+import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../utilities/ReviewCheckins';
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
 import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
 
@@ -114,13 +114,14 @@ Then('Checkins should be setup', async({ ctx }) => {
     await overviewPage.verifyCheckinDetails(details)
 })
 
-When('I mock the completion of a completed checkin', async({ }) => {
+When('I mock the completion of a completed checkin', async({}, data:DataTable) => {
     const token = await getClientToken()
     const practitioner = await getProbationPractitioner(crn, token)
     const uuid = await createEsupervisionCheckin(practitioner, crn, dueDateString(today), token)
     await postEsupervisionVideo(page, uuid, token)
     await verifyEsupervisionVideo(uuid, token)
-    await submitEsupervisionCheckin(uuid, token)
+    const surveyResponse = reviewDataTable(data) as SurveyResponse
+    await submitEsupervisionCheckin(uuid, token, surveyResponse)
 })
 
 Then('I can access the new checkIn in the contact log', async({ }) => {
@@ -153,7 +154,6 @@ Given('I am logged in with context', async ({browser: b}) => {
     browser = b
     context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
     page = await context.newPage()
-
     await login(page)
 });
 

@@ -2,6 +2,7 @@ import { Page, request } from '@playwright/test';
 import * as dotenv from 'dotenv'
 import { luxonString } from './DateTime';
 import { photo_1_path, video_1_path } from './Data';
+import { SurveyResponse } from './ReviewCheckins';
 dotenv.config({ path: '.env' })
 
 const MAS_API_URL = process.env.MAS_API_URL
@@ -104,38 +105,7 @@ export const verifyEsupervisionVideo = async(uuid: string, token: string) => {
     })
 }
 
-enum MentalHealth {
-  VeryWell = 'VERY_WELL',
-  Well = 'WELL',
-  Ok = 'OK',
-  NotGreat = 'NOT_GREAT',
-  Struggling = 'STRUGGLING',
-}
-
-enum SupportAspect {
-  MentalHealth = 'MENTAL_HEALTH',
-
-  Alcohol = 'ALCOHOL',
-
-  Drugs = 'DRUGS',
-
-  Money = 'MONEY',
-
-  Housing = 'HOUSING',
-
-  SupportSystem = 'SUPPORT_SYSTEM',
-
-  Other = 'OTHER',
-
-  NoHelp = 'NO_HELP',
-}
-
-enum CallbackRequested {
-  Yes = 'YES',
-  No = 'NO',
-}
-
-export const submitEsupervisionCheckin = async(uuid: string, token: string) => {
+export const submitEsupervisionCheckin = async(uuid: string, token: string, surveyResponse: SurveyResponse) => {
     const context = await request.newContext({
         baseURL: E_SUPERVISION_API_URL,
     });
@@ -144,11 +114,7 @@ export const submitEsupervisionCheckin = async(uuid: string, token: string) => {
             'Authorization': 'Bearer ' + token
         },
         data: {
-            "survey": {
-                "mentalHealth": MentalHealth.VeryWell,
-                "assistance": [SupportAspect.NoHelp],
-                "callback": CallbackRequested.No
-            }
+            "survey": surveyResponse
         }
     })
 }

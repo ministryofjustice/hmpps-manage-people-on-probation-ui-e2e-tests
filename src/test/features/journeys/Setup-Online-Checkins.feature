@@ -23,6 +23,12 @@ Feature: Setup Checkins
         And I submit the checkin
         Then Checkins should be setup
         When I mock the completion of a completed checkin
+            | label               | value           |
+            | mentalHealth        | NotGreat        |
+            | mentalHealthComment | tired           |
+            | drugsSupport        | need help       |
+            | otherSupport        | friends are bad |
+            | callback            | Yes             |
         Then I can access the new checkIn in the contact log
         When I review the completed checkIn
         Then I can view the reviewed checkIn
