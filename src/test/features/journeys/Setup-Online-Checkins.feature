@@ -9,14 +9,14 @@ Feature: Setup Checkins
         And I am logged in and have navigated to new offender
         When I set up checkIns with values
             | label      | value           |
-            | date       | tomorrow        |
+            | date       | nextweek        |
             | frequency  | EVERY_8_WEEKS   |
             | mobile     | 07771 900 900   |
             | preference | TEXT            |
             | photo      | UPLOAD          |
         And I make the following changes
             | label      | value           |
-            | date       | nextweek        |
+            | date       | tomorrow        |
             | frequency  | EVERY_2_WEEKS   |
             | email      | Test@test.com   |
             | preference | EMAIL           |
@@ -26,6 +26,10 @@ Feature: Setup Checkins
         Then I can access the new checkIn in the contact log
         When I review the completed checkIn
         Then I can view the reviewed checkIn
+
+    @esupervision
+    Scenario: Create Expired Checkin
+        Given I am logged in with context
         When I find a suitable CRN
         And I mock the completion of an expired checkin
         Then I can access the expired checkIn in the contact log

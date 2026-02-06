@@ -59,14 +59,6 @@ Given('A new offender has been created for setups', async ({ browser: b }) => {
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } , event: data.events.community })
 })
 
-Given('I am logged in with context', async ({browser: b}) => {
-    browser = b
-    context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
-    page = await context.newPage()
-
-    await login(page)
-});
-
 Given('I am logged in and have navigated to new offender', async () => {
     await login(page)
     setUpOnLineCheckinsPage = new AppointmentsPage(page, crn)
@@ -157,8 +149,16 @@ Then('I can view the reviewed checkIn', async({ }) => {
    await reviewedSubmittedPage.checkOnPage()
 })
 
+Given('I am logged in with context', async ({browser: b}) => {
+    browser = b
+    context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
+    page = await context.newPage()
+
+    await login(page)
+});
+
 When('I find a suitable CRN', async({}) => {
-    crn = crn ?? 'X1'
+    crn = crn ?? undefined
     expiredCrn = await getValidCrnForExpiredCheckin(page, crn) //crn must be >1 day old, have online checkins setup, and not have an existing expired checkin today
     console.log(expiredCrn)
 })
