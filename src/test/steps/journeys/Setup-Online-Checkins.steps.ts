@@ -166,7 +166,7 @@ When('I find a suitable CRN', async({}) => {
 When('I mock the completion of an expired checkin', async({ }) => {
     const token = await getClientToken()
     const practitioner = await getProbationPractitioner(expiredCrn, token)
-    await createEsupervisionCheckin(practitioner, expiredCrn, dueDateString(today.minus({days: 3})), token)
+    await createEsupervisionCheckin(practitioner, expiredCrn, dueDateString(today.minus({days: 7})), token)
 })
 
 Then('I can access the expired checkIn in the contact log', async({ }) => {
