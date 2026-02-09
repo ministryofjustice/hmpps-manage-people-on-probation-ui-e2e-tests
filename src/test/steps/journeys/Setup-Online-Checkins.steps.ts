@@ -16,7 +16,7 @@ import ContactPreferencePage, { Preference } from '../../pageObjects/Case/Contac
 import DateFrequencyPage, { FrequencyOptions } from '../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page';
 import { test as base, createBdd, DataTable } from 'playwright-bdd';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
-import { login } from '../../Utilities/Login';
+import { login } from '../../utilities/Login';
 import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page';
 import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../utilities/DateTime';
 import { DateTime } from 'luxon';
@@ -24,7 +24,7 @@ import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSet
 import { testCrn, testUser } from '../../utilities/Data';
 import { checkInTest, test } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
-import { getUuid } from '../../Utilities/Common';
+import { getBrowserContext, getUuid } from '../../utilities/Common';
 import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
 import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../utilities/ReviewCheckins';
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
@@ -52,7 +52,7 @@ let confirmationPage: ConfirmationPage
 
 Given('A new offender has been created for setups', async ({ browser: b }) => {
     browser = b
-    context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
+    context = await browser.newContext(getBrowserContext('esupervision'))
     page = await context.newPage()
 
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
@@ -152,7 +152,7 @@ Then('I can view the reviewed checkIn', async({ }) => {
 
 Given('I am logged in with context', async ({browser: b}) => {
     browser = b
-    context = process.env.LOCAL ? await browser.newContext({ recordVideo: { dir: 'videos/' } }) : await browser.newContext()
+    context = await browser.newContext(getBrowserContext('esupervision'))
     page = await context.newPage()
     await login(page)
 });
