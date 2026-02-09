@@ -33,7 +33,7 @@ Feature: Setup Checkins
         When I review the completed checkIn
         Then I can view the reviewed checkIn
 
-    @esupervision
+    @esupervision @smoke
     Scenario: Create Expired Checkin
         Given I am logged in with context
         When I find a suitable CRN
