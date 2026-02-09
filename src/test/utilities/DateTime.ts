@@ -80,3 +80,6 @@ export const formatToDMY = (dateStr: string) => {
 export const dateWithDayAndWithoutYear = (datetimeString: string) => {
   return DateTime.fromFormat(datetimeString, "d/M/yyyy").toFormat('cccc d MMMM')
 }
+
+export const futureTimes = [today, tomorrow, nextWeek]
+

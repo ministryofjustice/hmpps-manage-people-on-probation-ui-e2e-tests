@@ -42,3 +42,12 @@ Feature: Setup Checkins
         When I review the missed checkIn
         Then I can view the expired and reviewed checkIn
         And Context is closed
+
+    @esupervision @random
+    Scenario: Randomised Setup
+        Given A new offender has been created for setups
+        And I am logged in and have navigated to new offender
+        When I set up checkIns with random values
+        And I make random changes
+        And I submit the checkin
+        Then Checkins should be setup

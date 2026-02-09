@@ -6,8 +6,9 @@ import InstructionsPage from "../pageObjects/Case/Contacts/Checkins/SetUp/instru
 import UploadPhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/upload-photo.page"
 import PhotoMeetRulesPage from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-meet-rules.page"
 import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page"
-import { luxonString, nextWeek, tomorrow } from "./DateTime"
+import { futureTimes, luxonString, nextWeek, tomorrow } from "./DateTime"
 import { DataTable } from "playwright-bdd"
+import { chance, randomEnum, randomPicker } from "./Common"
 
 export interface MpopSetupCheckin {
     date: string
@@ -146,5 +147,49 @@ export const setupDataTable = (data: DataTable) : MpopSetupChanges => {
         photo: photo!
     }
 
+    return config
+}
+
+export const randomCheckIn = (full: boolean = true) : MpopSetupChanges => {
+    let config: MpopSetupChanges
+    if (full){
+        const preference = randomEnum(Preference)
+        let mobile : string | undefined
+        let email : string | undefined
+        if (preference === Preference.EMAIL){
+            mobile = chance() ? '07771 900 900' : undefined
+            email = 'Test@test.com'
+        }
+        if (preference === Preference.TEXT){
+            mobile = '07771 900 900'
+            email = chance() ? 'Test@test.com' : undefined
+        }
+        config = {
+            date: luxonString(randomPicker(futureTimes)),
+            frequency: randomEnum(FrequencyOptions),
+            contact: {mobile: mobile, email: email},
+            preference: preference as Preference,
+            photo: randomEnum(PhotoOptions)
+        } as MpopSetupCheckin
+    } else {
+        const preference = chance() ? randomEnum(Preference) : undefined
+        let mobile : string | undefined
+        let email : string | undefined
+        if (preference === Preference.EMAIL){
+            mobile = chance() ? '07771 900 900' : undefined
+            email = 'Test@test.com'
+        }
+        if (preference === Preference.TEXT){
+            mobile = '07771 900 900'
+            email = chance() ? 'Test@test.com' : undefined
+        }
+        config = {
+            date: chance() ? luxonString(randomPicker(futureTimes)) : undefined,
+            frequency: chance() ? randomEnum(FrequencyOptions) : undefined,
+            contact: {mobile: mobile, email: email},
+            preference: preference,
+            photo: chance() ? randomEnum(PhotoOptions) : undefined
+        } 
+    }
     return config
 }
