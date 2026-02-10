@@ -86,6 +86,7 @@ When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
 
 When('I set up checkIns with random values', async({ ctx }) => {
     const setup : MpopSetupCheckin = randomCheckIn() as MpopSetupCheckin
+    await page.context().grantPermissions(['camera']);
     console.log(setup)
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)

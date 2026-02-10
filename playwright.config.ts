@@ -51,9 +51,15 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
+          permissions: ["camera"],
           //...devices['Desktop Chrome'],
           launchOptions: {
-              args: ['--start-maximized'],
+              args: [
+                '--start-maximized', 
+                '--use-fake-ui-for-media-stream',
+                '--use-fake-device-for-media-stream',
+                //'--use-file-for-fake-video-capture'
+              ],
           }
 
       },

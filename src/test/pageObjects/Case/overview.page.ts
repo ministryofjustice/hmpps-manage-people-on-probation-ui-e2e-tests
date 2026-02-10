@@ -2,9 +2,11 @@ import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import CasePage from "./casepage";
 import { navigateToCase } from "../../utilities/Navigation";
-import { MPoPCheckinDetails } from "../../utilities/SetupOnlineCheckins";
+import getUserFriendlyString, { MPoPCheckinDetails } from "../../utilities/SetupOnlineCheckins";
 import { dateWithDayAndWithoutYear, formatToLongDay, lastWeek, luxonString, nextWeek, today, yesterday } from "../../utilities/DateTime";
 import { DateTime } from "luxon";
+import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
+import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -51,5 +53,7 @@ export default class OverviewPage extends CasePage {
     async verifyCheckinDetails(details: MPoPCheckinDetails){
         await this.getQA("checkinCard").isVisible()
         await this.checkSummaryRowValue(await this.getSummaryRowByKey('First check in'), dateWithDayAndWithoutYear(details.date))
+        await this.checkSummaryRowValue(await this.getSummaryRowByKey('Frequency'), getUserFriendlyString(FrequencyOptions[details.frequency]))
+        await this.checkSummaryRowValue(await this.getSummaryRowByKey('Contact preferences'), getUserFriendlyString(Preference[details.preference]))
     }
 }

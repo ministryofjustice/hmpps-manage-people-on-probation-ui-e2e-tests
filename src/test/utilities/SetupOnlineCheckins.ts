@@ -9,6 +9,7 @@ import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/chec
 import { futureTimes, luxonString, nextWeek, tomorrow } from "./DateTime"
 import { DataTable } from "playwright-bdd"
 import { chance, randomEnum, randomPicker } from "./Common"
+import TakePhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/take-photo.page"
 
 export interface MpopSetupCheckin {
     date: string
@@ -57,11 +58,18 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
     await photoOptionsPage.checkOnPage()
     await photoOptionsPage.completePage(setup.photo)
 
-    // Upload a Photo page
-    const uploadPhotoPage = new UploadPhotoPage(page)
-    await uploadPhotoPage.checkOnPage()
-    // await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
-    await uploadPhotoPage.completePage()
+    if (setup.photo === PhotoOptions.UPLOAD){
+        // Upload a Photo page
+        const uploadPhotoPage = new UploadPhotoPage(page)
+        await uploadPhotoPage.checkOnPage()
+        // await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
+        await uploadPhotoPage.completePage()
+    } else if (setup.photo === PhotoOptions.TAKE){
+        // Take a Photo page
+        const takePhotoPage = new TakePhotoPage(page)
+        await takePhotoPage.checkOnPage()
+        await takePhotoPage.completePage()  
+    }
 
     // Photo Meet the rules page
     const photoMeetRulesPage = new PhotoMeetRulesPage(page)
@@ -169,7 +177,7 @@ export const randomCheckIn = (full: boolean = true) : MpopSetupChanges => {
             frequency: randomEnum(FrequencyOptions),
             contact: {mobile: mobile, email: email},
             preference: preference as Preference,
-            photo: randomEnum(PhotoOptions)
+            photo: PhotoOptions.TAKE
         } as MpopSetupCheckin
     } else {
         const preference = chance() ? randomEnum(Preference) : undefined
@@ -192,4 +200,38 @@ export const randomCheckIn = (full: boolean = true) : MpopSetupChanges => {
         } 
     }
     return config
+}
+
+const definitions: Record<string, string> = {
+  YES: 'Yes',
+  NO: 'No',
+  EMAIL: 'Email',
+  TEXT: 'Text message',
+  PHONE: 'Text message',
+  EVERY_WEEK: 'Every week',
+  EVERY_2_WEEKS: 'Every 2 weeks',
+  EVERY_4_WEEKS: 'Every 4 weeks',
+  EVERY_8_WEEKS: 'Every 8 weeks',
+  VERY_WELL: 'Very well',
+  WELL: 'Well',
+  NOT_GREAT: 'Not great',
+  STRUGGLING: 'Struggling',
+  MENTAL_HEALTH: 'Mental health',
+  ALCOHOL: 'Alcohol',
+  DRUGS: 'Drugs',
+  HOUSING: 'Housing',
+  MONEY: 'Money',
+  SUPPORT_SYSTEM: 'Support system',
+  OTHER: 'Other',
+  NO_HELP: 'No, I do not need help',
+}
+
+export default function getUserFriendlyString(key: string): string {
+  if (!key) {
+    return ''
+  }
+  if (typeof key !== 'string') {
+    return key
+  }
+  return definitions[key.trim().toUpperCase()] ?? key
 }
