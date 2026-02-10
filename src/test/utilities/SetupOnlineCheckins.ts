@@ -8,8 +8,8 @@ import PhotoMeetRulesPage from "../pageObjects/Case/Contacts/Checkins/SetUp/phot
 import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page"
 import { futureTimes, luxonString, nextWeek, tomorrow } from "./DateTime"
 import { DataTable } from "playwright-bdd"
-import { chance, randomEnum, randomPicker } from "./Common"
 import TakePhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/take-photo.page"
+import { chance, randomEnum, randomPicker } from "./Common"
 
 export interface MpopSetupCheckin {
     date: string
@@ -177,7 +177,7 @@ export const randomCheckIn = (full: boolean = true) : MpopSetupChanges => {
             frequency: randomEnum(FrequencyOptions),
             contact: {mobile: mobile, email: email},
             preference: preference as Preference,
-            photo: PhotoOptions.TAKE
+            photo: randomEnum(PhotoOptions)
         } as MpopSetupCheckin
     } else {
         const preference = chance() ? randomEnum(Preference) : undefined

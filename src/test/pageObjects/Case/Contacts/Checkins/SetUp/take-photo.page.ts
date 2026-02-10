@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
 import { photo_1_path } from "../../../../../utilities/Data";
 
@@ -8,12 +8,17 @@ export default class TakePhotoPage extends ContactPage {
     }
 
     async completePage() {
-        // await this.takePhoto()
+        await this.takePhoto()
+        await this.page.waitForTimeout(1000)
         await this.submit()
     }
 
     async takePhoto() {
-        await this.page.context().grantPermissions(['camera']);
+        await this.page.evaluate(async() => {
+            const takePhotoButton = document.getElementById('take-photo')
+            takePhotoButton?.removeAttribute('disabled')
+            takePhotoButton?.removeAttribute('aria-disabled')
+            takePhotoButton?.click()
+        })
     }
-
 }
