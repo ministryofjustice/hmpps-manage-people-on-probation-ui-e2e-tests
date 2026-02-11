@@ -22,7 +22,7 @@ const loginDeliusAndCreateOffender = async (
   await loginToDelius(page);
   const person = deliusPerson();
   let crn;
-
+  console.log("Creating new Offender");
   if (createNewOffender) {
     crn = await createOffender(page, { person, providerName });
   } else {
