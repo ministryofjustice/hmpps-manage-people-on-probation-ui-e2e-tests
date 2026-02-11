@@ -18,7 +18,6 @@ export default class TakePhotoPage extends ContactPage {
             const takePhotoButton = document.getElementById('take-photo')
             takePhotoButton?.removeAttribute('disabled')
             takePhotoButton?.removeAttribute('aria-disabled')
-            takePhotoButton?.click()
         })
     }
 }

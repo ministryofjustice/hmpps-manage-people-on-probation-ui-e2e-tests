@@ -82,7 +82,7 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
 
 export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChanges) => {
     const checkInSummaryPage = new CheckInSummaryPage(page)
-    if (changes.date || changes.frequency){
+    if (changes.date || changes.frequency !== undefined){
         if (changes.date){
             await checkInSummaryPage.clickDateChangeLink()
         } else {
@@ -90,11 +90,12 @@ export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChan
         }
         const dateFrequencyPage = new DateFrequencyPage(page)
         await dateFrequencyPage.checkOnPage()
+        await dateFrequencyPage.page.reload()
         await dateFrequencyPage.changePage(changes.date, changes.frequency)
     }
 
     if (changes.contact?.email || changes.contact?.mobile || changes.preference){
-        if (changes.preference){
+        if (changes.preference !== undefined){
             await checkInSummaryPage.clickPreferredCommsActionChangeLink()
         } else if (changes.contact?.mobile){
             await checkInSummaryPage.clickMobileActionChangeLink()
@@ -106,11 +107,26 @@ export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChan
         await contactPreferencePage.changePage(changes.contact, changes.preference)
     }
 
-    if (changes.photo){
+    if (changes.photo !== undefined){
         await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
         const photoOptionsPage = new PhotoOptionsPage(page) 
         await photoOptionsPage.checkOnPage()
         await photoOptionsPage.changePage(changes.photo)
+
+        if (changes.photo === PhotoOptions.UPLOAD){
+            const uploadPhotoPage = new UploadPhotoPage(page)
+            await uploadPhotoPage.checkOnPage()
+            await uploadPhotoPage.completePage()
+        }
+        else if (changes.photo === PhotoOptions.TAKE){
+            const takePhotoPage = new TakePhotoPage(page)
+            await takePhotoPage.checkOnPage()
+            await takePhotoPage.completePage()
+        }
+
+        const photoMeetRulesPage = new PhotoMeetRulesPage(page)
+        await photoMeetRulesPage.checkOnPage()
+        await photoMeetRulesPage.completePage()
     }
 }
 
@@ -192,7 +208,7 @@ export const randomCheckIn = (full: boolean = true) : MpopSetupChanges => {
             email = chance() ? 'Test@test.com' : undefined
         }
         config = {
-            date: chance() ? luxonString(randomPicker(futureTimes)) : undefined,
+            date: chance() ? luxonString(randomPicker(futureTimes)): undefined,
             frequency: chance() ? randomEnum(FrequencyOptions) : undefined,
             contact: {mobile: mobile, email: email},
             preference: preference,
