@@ -3,6 +3,10 @@ import {
   secondsToMilliseconds
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs'
 import { defineBddConfig } from 'playwright-bdd';
+import path from "path";
+
+const ROOT_DIR = process.cwd();
+
 
 const testDir = defineBddConfig({
   "paths": [
@@ -59,4 +63,5 @@ export default defineConfig({
       },
     },
   ],
+  globalTeardown: path.join(ROOT_DIR, "global-teardown.ts"),
 });

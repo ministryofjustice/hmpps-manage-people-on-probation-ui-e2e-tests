@@ -35,7 +35,7 @@ Given('I am logged in and have noted the alerts count', async ({ browser: b }) =
 });
 
 Given('A new offender has been created with an alert', async () => {
-    const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+    const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam, true)
     person = login[0]
     crn = login[1]
     await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
