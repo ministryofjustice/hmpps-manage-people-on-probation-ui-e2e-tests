@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../contactpage";
-import { MpopDateTime } from "../../../../Utilities/DateTime";
+import { MpopDateTime } from "../../../../utilities/DateTime";
 
 export default class ArrangeAnotherPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {

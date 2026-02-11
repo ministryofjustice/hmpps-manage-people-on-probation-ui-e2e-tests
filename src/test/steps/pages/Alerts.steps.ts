@@ -5,7 +5,7 @@ import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integra
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import { createBdd } from 'playwright-bdd';
 import HomePage from '../../pageObjects/home.page'
-import { login } from '../../Utilities/Login'
+import { login } from '../../utilities/Login'
 import AlertsPage from '../../pageObjects/alerts'
 import { ContextConfig, deliusAlert, testUser } from '../../utilities/Data'
 import OverviewPage from '../../pageObjects/Case/overview.page'

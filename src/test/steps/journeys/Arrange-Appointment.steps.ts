@@ -6,7 +6,7 @@ import { attendee, ContextConfig, testUser } from '../../utilities/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
 import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/DateTime'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../utilities/ArrangeAppointment'
-import { login } from '../../Utilities/Login';
+import { login } from '../../utilities/Login';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
 
 const { Given, When, Then } = createBdd();

@@ -16,7 +16,7 @@ import ContactPreferencePage, { Preference } from '../../pageObjects/Case/Contac
 import DateFrequencyPage, { FrequencyOptions } from '../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page';
 import { test as base, createBdd, DataTable } from 'playwright-bdd';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
-import { login } from '../../Utilities/Login';
+import { login } from '../../utilities/Login';
 import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page';
 import { luxonString, nextWeek, tomorrow } from '../../utilities/DateTime';
 import { DateTime } from 'luxon';
