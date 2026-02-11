@@ -97,6 +97,7 @@ When('I set up checkIns with random values', async({ ctx }) => {
 
 When('I make the following changes', async({ ctx }, data:DataTable) => {
     const changes: MpopSetupChanges = setupDataTable(data)
+    console.log(changes)
     await makeChangesSetupCheckins(page, changes)
     await checkInSummaryPage.checkOnPage()
     await checkInSummaryPage.submit()

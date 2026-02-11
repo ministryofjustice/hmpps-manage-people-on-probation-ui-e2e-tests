@@ -43,11 +43,8 @@ export default abstract class MPopPage {
         await expect(this.page.locator(selector)).toBeVisible();
     }
 
-    async clickRadio(qa: string, id: number){
-        await this.getQA(qa).getByRole('radio').nth(id).click()
-    }
     // Safer clickRadio that works for radio buttons
-    async NEW_clickRadio(qa: string, id: number) {
+    async clickRadio(qa: string, id: number) {
         const radio = this.getQA(qa).getByRole('radio').nth(id);
 
         // Ensure the radio button is visible
