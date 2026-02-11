@@ -9,17 +9,25 @@ import {
   internalTransfer
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/transfer/internal-transfer.mjs'
 import { data, Staff, Team } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
+import {createOffender as commonCreateOffender} from "./createOffender";
 
 const loginDeliusAndCreateOffender = async (
     page: Page,
     providerName?: string,
     staff?: Staff,
-    team?: Team
+    team?: Team,
+    createAnyUser?: boolean,
 ): Promise<[Person, string]> => {
     await loginToDelius(page)
     const person = deliusPerson()
-    const crn = await createOffender(page, { person, providerName })
+    let crn
+   if(createAnyUser){
+         crn = await createOffender(page, { person, providerName })
+    } else {
+        crn = await commonCreateOffender(page,  person, providerName )
+    }
 
+    //crn = await createOffender(page, { person, providerName })
     // Only call internalTransfer if providerName, staff, and team are provided
     if (providerName && staff && team) {
         await internalTransfer(page, {
