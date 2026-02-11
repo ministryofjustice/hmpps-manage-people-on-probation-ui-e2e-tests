@@ -11,7 +11,7 @@ const __dirname = path.dirname(__filename);
 const USER_FILE = path.join(__dirname, "../temp-user.json");
 const TMP_FILE = USER_FILE + ".tmp";
 
-export const createOffender = async (
+export const commonCreateOffender = async (
   page: Page,
   person: Person,
   providerName?: string,
@@ -29,7 +29,6 @@ export const createOffender = async (
     console.log("USER CREATED, CRN: ", crn);
     return crn;
   } catch (err: any) {
-    console.error("EXCEPTION");
     if (err.code !== "EEXIST") throw err;
     while (!fs.existsSync(USER_FILE)) {
       await new Promise((r) => setTimeout(r, 50));

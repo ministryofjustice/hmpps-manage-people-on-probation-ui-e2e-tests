@@ -10,7 +10,7 @@ import {
     Staff,
     Team,
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
-import { createOffender as commonCreateOffender } from "./createOffender";
+import { commonCreateOffender } from "./commonCreateOffender";
 
 const loginDeliusAndCreateOffender = async (
     page: Page,
@@ -28,7 +28,7 @@ const loginDeliusAndCreateOffender = async (
     } else {
         crn = await commonCreateOffender(page, person, providerName);
     }
-    //crn = await createOffender(page, { person, providerName });
+    //crn = await commonCreateOffender(page, { person, providerName });
 
     // Only call internalTransfer if providerName, staff, and team are provided
     if (providerName && staff && team) {
