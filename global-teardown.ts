@@ -1,7 +1,7 @@
 // global-teardown.ts
 import fs from "fs";
 import path from "path";
-import { ROOT_DIR } from "./src/test/Utilities/paths";
+import { ROOT_DIR } from "./src/test/utilities/paths";
 
 const USER_FILE = path.join(ROOT_DIR, "temp-offender.json");
 
