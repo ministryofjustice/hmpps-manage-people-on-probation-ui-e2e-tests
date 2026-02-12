@@ -83,14 +83,23 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
 export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChanges) => {
     const checkInSummaryPage = new CheckInSummaryPage(page)
     if (changes.date || changes.frequency !== undefined){
-        if (changes.date){
-            await checkInSummaryPage.clickDateChangeLink()
-        } else {
-            await checkInSummaryPage.clickDateIntervalChangeLink()
+        while (true){
+            await checkInSummaryPage.checkOnPage()
+            if (changes.date){
+                await checkInSummaryPage.clickDateChangeLink()
+            } else {
+                await checkInSummaryPage.clickDateIntervalChangeLink()
+            }
+            const dateFrequencyPage = new DateFrequencyPage(page)
+            await dateFrequencyPage.checkOnPage()
+            await dateFrequencyPage.changePage(changes.date, changes.frequency)
+            try {
+                await dateFrequencyPage.checkOnPage()
+                await dateFrequencyPage.clickBackLink()
+            } catch {
+                break 
+            }
         }
-        const dateFrequencyPage = new DateFrequencyPage(page)
-        await dateFrequencyPage.checkOnPage()
-        await dateFrequencyPage.changePage(changes.date, changes.frequency)
     }
 
     if (changes.contact?.email || changes.contact?.mobile || changes.preference){
@@ -207,7 +216,7 @@ export const randomCheckIn = (full: boolean = true) : MpopSetupChanges => {
             email = chance() ? 'Test@test.com' : undefined
         }
         config = {
-            date: chance() ? luxonString(randomPicker(futureTimes)): undefined,
+            date: chance() ? luxonString(randomPicker(futureTimes)) : undefined,
             frequency: chance() ? randomEnum(FrequencyOptions) : undefined,
             contact: {mobile: mobile, email: email},
             preference: preference,
