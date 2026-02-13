@@ -1,9 +1,9 @@
 import { expect, Page } from '@playwright/test'
 import { createBdd } from 'playwright-bdd';
-import { attendee } from '../../utilities/Data'
+import { attendee } from '../../util/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
-import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/DateTime'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../utilities/ArrangeAppointment'
+import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../util/DateTime'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../util/ArrangeAppointment'
 import { testContext } from '../../features/Fixtures';
 
 const { Given, When, Then } = createBdd(testContext);
