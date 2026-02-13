@@ -23,9 +23,9 @@ export const manageCreateOffender = async (
   let crn;
   try {
     const fd = fs.openSync(TMP_FILE, "wx");
-
+    console.time("deliusCreateOffender")
     crn = await deliusCreateOffender(page, { person, providerName });
-
+    console.timeEnd("deliusCreateOffender");
     fs.writeSync(fd, JSON.stringify({ crn }));
     fs.closeSync(fd);
     fs.renameSync(TMP_FILE, USER_FILE);
