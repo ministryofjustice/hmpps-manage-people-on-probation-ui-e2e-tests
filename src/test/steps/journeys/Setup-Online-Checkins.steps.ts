@@ -20,7 +20,7 @@ import { login } from '../../utilities/Login';
 import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page';
 import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../utilities/DateTime';
 import { DateTime } from 'luxon';
-import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
+import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
 import { testCrn, testUser } from '../../utilities/Data';
 import { checkInTest, test } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
@@ -84,8 +84,29 @@ When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
     ctx.setup = setup
 })
 
+When('I set up checkIns with random values', async({ ctx }) => {
+    const setup : MpopSetupCheckin = randomCheckIn() as MpopSetupCheckin
+    console.log(setup)
+    await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+    await setupCheckinsMPop(page, setup)
+    await checkInSummaryPage.checkOnPage()
+    const uuid = getUuid(page)
+    ctx.uuid = uuid
+    ctx.setup = setup
+})
+
 When('I make the following changes', async({ ctx }, data:DataTable) => {
     const changes: MpopSetupChanges = setupDataTable(data)
+    console.log(changes)
+    await makeChangesSetupCheckins(page, changes)
+    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.submit()
+    await new Promise(resolve => setTimeout(resolve, 4000));
+    ctx.changes = changes
+})
+
+When('I make random changes', async({ ctx }) => {
+    const changes : MpopSetupChanges = randomCheckIn(false) as MpopSetupChanges
     await makeChangesSetupCheckins(page, changes)
     await checkInSummaryPage.checkOnPage()
     await checkInSummaryPage.submit()

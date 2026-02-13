@@ -38,10 +38,10 @@ export default class DateFrequencyPage extends ContactPage {
     }
 
     async changePage(date?: string, frequencyId?: number) {
-        if (date) {
+        if (date !== undefined) {
             await this.getClass("moj-datepicker").locator('[type="text"]').fill(date)
         }
-        if (frequencyId) {
+        if (frequencyId !== undefined) {
             await this.clickRadio("checkInFrequency", frequencyId)
         }
         await this.submit()
