@@ -44,7 +44,7 @@ Feature: Setup Checkins
         Then I can view the expired and reviewed checkIn
         And Context is closed
 
-    @smoke @esupervision @random
+    @esupervision @random
     Scenario: Randomised Setup
         Given A new offender has been created for setups
         And I am logged in and have navigated to new offender
