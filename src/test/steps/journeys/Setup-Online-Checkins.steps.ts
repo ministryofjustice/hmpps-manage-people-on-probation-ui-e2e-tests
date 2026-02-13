@@ -22,7 +22,7 @@ import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDay
 import { DateTime } from 'luxon';
 import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
 import { testCrn, testUser } from '../../utilities/Data';
-import { checkInTest, test } from '../../features/Fixtures';
+import { test, testContext } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
 import { getBrowserContext, getUuid } from '../../utilities/Common';
 import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
@@ -30,7 +30,7 @@ import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTabl
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
 import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
 
-const { Given, When, Then } = createBdd(checkInTest);
+const { Given, When, Then } = createBdd(testContext);
 
 let crn: string //= 'X978434'
 let expiredCrn: string
@@ -207,8 +207,4 @@ Then('I can view the expired and reviewed checkIn', async({ }) => {
    await contactLog.getLink('Update').first().click()
    const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
    await reviewedExpiredPage.checkOnPage()
-})
-
-Then('Context is closed', async() => {
-    await context.close()
 })

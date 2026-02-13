@@ -10,7 +10,6 @@ Feature: Alerts page
         And I have noted the alerts count
         And A new offender has been created in Ndelius
         And The offender has been given an alert
-        And I am logged in
         And I have navigated to alerts
         Then the page should be rendered
         And the new alert should be present
@@ -27,4 +26,4 @@ Feature: Alerts page
         Then I should see an error message
         When I select and clear an alert
         Then the alert should be cleared
-        And Context is closed
+        And I close the context

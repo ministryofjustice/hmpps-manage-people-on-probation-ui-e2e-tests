@@ -6,29 +6,32 @@ import { testUser } from '../utilities/Data'
 import { login } from '../utilities/Login';
 import loginDeliusAndCreateOffender from '../utilities/Delius';
 import { getBrowserContext } from '../utilities/Common';
+import { testContext } from '../features/Fixtures';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(testContext);
 
-let crn: string
-let browser: Browser
-let context: BrowserContext
-let page: Page
-
-Given(`Context has been created for {string} test`, async ({browser: b}, name) => {
-    browser = b
-    context = await browser.newContext(getBrowserContext(name))
-    page = await context.newPage()
+Given(`Context has been created for {string} test`, async ({browser: b, ctx}, name) => {
+    const browser = b
+    const context = await browser.newContext(getBrowserContext(name))
+    const page = await context.newPage()
+    ctx.base = {
+        browser: browser,
+        context: context,
+        page: page   
+    }
 })
 
-Given('A new offender has been created in Ndelius', async () => {
-    crn = (await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam))[1]
-    await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+Given('A new offender has been created in Ndelius', async ({ ctx }) => {
+    const [person, crn] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam))
+    await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    ctx.case.crn = crn
+    ctx.case.person = person
 });
 
-Given('I am logged in', async () => {
-    await login(page)
+Given('I am logged in', async ({ ctx }) => {
+    await login(ctx.base.page)
 });
 
-Given('I close the context', async () => {
-    await context.close()
+Given('I close the context', async ({ ctx }) => {
+    await ctx.base.context.close()
 });

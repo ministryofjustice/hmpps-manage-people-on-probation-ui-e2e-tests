@@ -4,14 +4,14 @@ import { attendee } from '../../utilities/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
 import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/DateTime'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../utilities/ArrangeAppointment'
+import { testContext } from '../../features/Fixtures';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(testContext);
 
-let crn: string
-let page: Page
-
-When('I create an appointment', async () => {
-    const appointments: AppointmentsPage = new AppointmentsPage(page!, crn!)
+When('I create an appointment', async ({ ctx }) => {
+    const page = ctx.base.page
+    const crn = ctx.case.crn
+    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
     await appointments.navigateTo()
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
@@ -28,22 +28,23 @@ When('I create an appointment', async () => {
       attendee: attendee,
       dateTime: dateTime,
       locationId: 0,
+      text: false,
       note: "hello world",
       sensitivity: true
     }
-    await createAppointmentMPop(page!, appointment)
+    await createAppointmentMPop(page, appointment)
 });
 
-When('a similar appointment', async () => {
+When('a similar appointment', async ({ ctx }) => {
     const dateTime_similar: MpopDateTime = {
         date: luxonString(plus3Months),
         startTime: "15:15",
         endTime: "16:15"
     }
-    await createSimilarAppointmentMPop(page!, dateTime_similar, false)
+    await createSimilarAppointmentMPop(ctx.base.page, dateTime_similar, false, false)
 });
 
-When('another appointment', async () => {
+When('another appointment', async ({ ctx }) => {
     const dateTime_another: MpopDateTime = {
         date: luxonString(plus6Months),
         startTime: "15:15",
@@ -54,12 +55,13 @@ When('another appointment', async () => {
         typeId: 0,
         dateTime: dateTime_another,
         locationId: 0,
+        text: false,
         note: "hello world",
         sensitivity: false
     }
-    await createAnotherAppointmentMPop(page!, appointmentNoAttendee)
+    await createAnotherAppointmentMPop(ctx.base.page, appointmentNoAttendee)
 });
 
-Then('the appointment should be created successfully', async () => {
-    await expect(page!.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")
+Then('the appointment should be created successfully', async ({ ctx }) => {
+    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")
 });

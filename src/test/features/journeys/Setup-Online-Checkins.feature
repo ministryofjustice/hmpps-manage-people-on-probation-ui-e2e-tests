@@ -32,7 +32,7 @@ Feature: Setup Checkins
         Then I can access the new checkIn in the contact log
         When I review the completed checkIn
         Then I can view the reviewed checkIn
-        And Context is closed
+        And I close the context
 
     @esupervision @expired
     Scenario: Create Expired Checkin
@@ -43,7 +43,7 @@ Feature: Setup Checkins
         Then I can access the expired checkIn in the contact log
         When I review the missed checkIn
         Then I can view the expired and reviewed checkIn
-        And Context is closed
+        And I close the context
 
     @esupervision @random
     Scenario: Randomised Setup
@@ -53,4 +53,4 @@ Feature: Setup Checkins
         And I make random changes
         And I submit the checkin
         Then Checkins should be setup
-        And Context is closed
+        And I close the context

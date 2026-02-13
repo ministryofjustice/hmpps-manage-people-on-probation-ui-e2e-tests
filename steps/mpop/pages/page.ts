@@ -93,9 +93,9 @@ export default abstract class MPopPage {
         await this.getLink(name).click()
     }
 
-    async clickChangeLink(name: string){
-        await this.getQA(name).click()
-    }
+    // async clickChangeLink(name: string){
+    //     await this.getQA(name).click()
+    // }
 
 
     async clickBackLink(){
