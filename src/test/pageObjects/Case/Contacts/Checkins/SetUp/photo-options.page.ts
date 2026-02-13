@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { MPOP_URL } from "../../../../../utilities/Data";
+import { MPOP_URL } from "../../../../../util/Data";
 
 export enum PhotoOptions {
   TAKE = 0,

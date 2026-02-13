@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
-import { caseNavigation } from "../../utilities/Navigation";
+import { caseNavigation } from "../../util/Navigation";
 import CasePage from "./casepage";
 
 dotenv.config({ path: '.env' })

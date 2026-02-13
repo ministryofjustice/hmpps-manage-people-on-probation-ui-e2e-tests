@@ -14,7 +14,7 @@ import { login, loginIfNotAlready } from '../../steps/mpop/login'
 import OverviewPage from '../../steps/mpop/pages/case/overview.page'
 import ManageAppointmentsPage from '../../steps/mpop/pages/appointments/manage-appointment.page'
 import NotePage from '../../steps/mpop/pages/appointments/note.page'
-import { ContextConfig } from '../../src/test/utilities/Data'
+import { ContextConfig } from '../../src/test/util/Data'
 
 dotenv.config({ path: '.env' }) // Load environment variables
 

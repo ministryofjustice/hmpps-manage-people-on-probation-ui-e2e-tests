@@ -1,6 +1,6 @@
 import {expect, Locator, Page} from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { ContactDetails } from "../../../../../utilities/SetupOnlineCheckins";
+import { ContactDetails } from "../../../../../util/SetupOnlineCheckins";
 import ContactDetailsPage from "./update-contact-details.page";
 
 export enum Preference {

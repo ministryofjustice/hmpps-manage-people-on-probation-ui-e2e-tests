@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { photo_1_path } from "../../../../../utilities/Data";
+import { photo_1_path } from "../../../../../util/Data";
 
 export default class UploadPhotoPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {

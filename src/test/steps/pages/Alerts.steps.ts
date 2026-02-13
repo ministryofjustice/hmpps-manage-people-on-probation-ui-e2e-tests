@@ -5,14 +5,14 @@ import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integra
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import { createBdd } from 'playwright-bdd';
 import HomePage from '../../pageObjects/home.page'
-import { login } from '../../utilities/Login'
+import { login } from '../../util/Login'
 import AlertsPage from '../../pageObjects/alerts'
-import { deliusAlert, testUser } from '../../utilities/Data'
+import { deliusAlert, testUser } from '../../util/Data'
 import OverviewPage from '../../pageObjects/Case/overview.page'
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page'
 import NotePage from '../../pageObjects/Case/Contacts/Appointments/note.page'
-import loginDeliusAndCreateOffender from '../../utilities/Delius'
-import { getBrowserContext } from '../../utilities/Common'
+import loginDeliusAndCreateOffender from '../../util/Delius'
+import { getBrowserContext } from '../../util/Common'
 
 const { Given, When, Then } = createBdd();
 
@@ -36,7 +36,9 @@ Given('I am logged in and have noted the alerts count', async ({ browser: b }) =
 });
 
 Given('A new offender has been created with an alert', async () => {
-    const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+    console.time("loginDeliusAndCreateOffender-Alerts")
+    const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam, true)
+    console.timeEnd("loginDeliusAndCreateOffender-Alerts")
     person = login[0]
     crn = login[1]
     await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
