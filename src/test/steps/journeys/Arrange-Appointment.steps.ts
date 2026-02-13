@@ -21,8 +21,9 @@ Given('A new offender has been created', async ({ browser: b }) => {
     browser = b
     context = await browser.newContext(getBrowserContext('appointments'))
     page = await context.newPage()
-
+    console.time("loginDeliusAndCreateOffender-appointments")
     crn = (await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam))[1]
+    console.timeEnd("loginDeliusAndCreateOffender-appointments")
     await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 });
 

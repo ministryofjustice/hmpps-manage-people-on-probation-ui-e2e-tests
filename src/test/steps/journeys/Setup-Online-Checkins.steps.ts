@@ -54,8 +54,9 @@ Given('A new offender has been created for setups', async ({ browser: b }) => {
     browser = b
     context = await browser.newContext(getBrowserContext('esupervision'))
     page = await context.newPage()
-
+    console.time("loginDeliusAndCreateOffender-checkins")
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+    console.timeEnd("loginDeliusAndCreateOffender-checkins")
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } , event: data.events.community })
 })
 
