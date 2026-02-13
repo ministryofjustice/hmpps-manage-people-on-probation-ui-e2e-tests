@@ -36,7 +36,8 @@ Feature: Setup Checkins
 
     @esupervision @expired
     Scenario: Create Expired Checkin
-        Given I am logged in with context
+        Given Context has been created for "Esupervision" test
+        And I am logged in
         When I find a suitable CRN
         And I mock the completion of an expired checkin
         Then I can access the expired checkIn in the contact log

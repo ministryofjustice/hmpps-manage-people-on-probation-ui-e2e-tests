@@ -171,13 +171,6 @@ Then('I can view the reviewed checkIn', async({ }) => {
    await reviewedSubmittedPage.checkOnPage()
 })
 
-Given('I am logged in with context', async ({browser: b}) => {
-    browser = b
-    context = await browser.newContext(getBrowserContext('esupervision'))
-    page = await context.newPage()
-    await login(page)
-});
-
 When('I find a suitable CRN', async({}) => {
     crn = crn ?? undefined
     expiredCrn = await getValidCrnForExpiredCheckin(page, crn) //crn must be >1 day old, have online checkins setup, and not have an existing expired checkin today
