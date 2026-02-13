@@ -10,7 +10,7 @@ export default class ArrangeAnotherPage extends ContactPage {
         super(page, "Arrange another appointment", crn, uuid)
     }
 
-    async completePage(dateTime: MpopDateTime, text: boolean, sensitivity: boolean, mobile?: string, note?: string) {
+    async completePage(dateTime: MpopDateTime, text: boolean, sensitivity: boolean, note?: string, mobile?: string) {
         await this.clickLink('Choose date and time')
         const dateTimePage = new LocationDateTimePage(this.page)
         await dateTimePage.completePage(dateTime)
