@@ -15,6 +15,7 @@ type Ctx = {
 type CheckIns = {
   setup: MpopSetupCheckin
   changes: MpopSetupChanges
+  expiredCrn: string
 }
 type Contact = {
   uuid: string

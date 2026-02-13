@@ -4,9 +4,11 @@ Feature: Setup Checkins
     So they can be used by an offender
 
     @smoke @esupervision
-    Scenario: Setup Online Checkins
-        Given A new offender has been created for setups
-        And I am logged in and have navigated to new offender
+    Scenario: Setup Online Checkins        
+        Given Context has been created for "Esupervision" test
+        And A new offender has been created in Ndelius
+        And I am logged in
+        And I have navigated to new offender
         When I set up checkIns with values
             | label      | value           |
             | date       | nextweek        |
@@ -47,8 +49,10 @@ Feature: Setup Checkins
 
     @esupervision @random
     Scenario: Randomised Setup
-        Given A new offender has been created for setups
-        And I am logged in and have navigated to new offender
+        Given Context has been created for "Esupervision" test
+        And A new offender has been created in Ndelius
+        And I am logged in
+        And I have navigated to new offender
         When I set up checkIns with random values
         And I make random changes
         And I submit the checkin
