@@ -23,8 +23,6 @@ export default abstract class MPopPage {
             ?.replace(/\s+/g, ' ')
             .trim() || '';
 
-        console.log(`Page header [${qa}]:`, text);
-
         // Assert manually for regex or string
         if (expectedText instanceof RegExp) {
             if (!expectedText.test(text)) {
@@ -45,11 +43,8 @@ export default abstract class MPopPage {
         await expect(this.page.locator(selector)).toBeVisible();
     }
 
-    async clickRadio(qa: string, id: number){
-        await this.getQA(qa).getByRole('radio').nth(id).click()
-    }
     // Safer clickRadio that works for radio buttons
-    async NEW_clickRadio(qa: string, id: number) {
+    async clickRadio(qa: string, id: number) {
         const radio = this.getQA(qa).getByRole('radio').nth(id);
 
         // Ensure the radio button is visible
@@ -184,6 +179,10 @@ export default abstract class MPopPage {
         return undefined!
     }
 
+    async getSummaryRowValue(row: Locator){
+        return this.getClass("govuk-summary-list__value", row)
+    }
+
     async checkSummaryRowValue(row: Locator, value: string|RegExp){
         await expect(this.getClass("govuk-summary-list__value", row)).toContainText(value)
     }
@@ -211,5 +210,9 @@ export default abstract class MPopPage {
     async logout() {
         await this.getQA('probation-common-header-user-name').click()
         await this.getLink('Sign out').click()
+    }
+
+    async fillText(qa: string, note: string){
+       await this.getQA(qa).getByRole('textbox').fill(note)
     }
 }

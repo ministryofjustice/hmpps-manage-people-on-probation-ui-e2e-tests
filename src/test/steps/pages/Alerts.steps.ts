@@ -5,13 +5,14 @@ import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integra
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import { createBdd } from 'playwright-bdd';
 import HomePage from '../../pageObjects/home.page'
-import { login } from '../../Utilities/Login'
+import { login } from '../../utilities/Login'
 import AlertsPage from '../../pageObjects/alerts'
-import { ContextConfig, deliusAlert, testUser } from '../../utilities/Data'
+import { deliusAlert, testUser } from '../../utilities/Data'
 import OverviewPage from '../../pageObjects/Case/overview.page'
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page'
 import NotePage from '../../pageObjects/Case/Contacts/Appointments/note.page'
 import loginDeliusAndCreateOffender from '../../utilities/Delius'
+import { getBrowserContext } from '../../utilities/Common'
 
 const { Given, When, Then } = createBdd();
 
@@ -26,7 +27,7 @@ let crn: string
 
 Given('I am logged in and have noted the alerts count', async ({ browser: b }) => {
     browser = b
-    context = await browser.newContext(ContextConfig)
+    context = await browser.newContext(getBrowserContext('alerts'))
     page = await context.newPage()
 
     await login(page)

@@ -103,7 +103,6 @@ export default class CheckInSummaryPage extends ContactPage {
             month: 'long',
         });
 
-        console.log(formattedDateOverviewPage);
         // e.g. "Monday 27 January"
         return formattedDateOverviewPage;
     }

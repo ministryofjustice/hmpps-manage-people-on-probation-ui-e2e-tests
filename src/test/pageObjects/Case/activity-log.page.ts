@@ -1,7 +1,7 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import CasePage from "./casepage";
-import { caseNavigation } from "../../Utilities/Navigation";
+import { caseNavigation } from "../../utilities/Navigation";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -25,6 +25,24 @@ export default class ActivityLogPage extends CasePage {
         } else {
             this.clickLink("Default view")
             this.view = "default"
+        }
+    }
+
+    async checkAvailable(): Promise<boolean> {
+        try {
+            await expect(this.getClass('govuk-table__cell govuk-!-width-one-quarter').first()).toHaveText('Today', {timeout: 1000})
+            for (const entry of await this.getClass('govuk-details', this.getTimelineCard(1)).filter({hasText: 'Online probation check in'}).all()){
+                try {
+                    await entry.click()
+                    await expect(this.getClass('govuk-details__text', entry)).toContainText('Check in status: Missed', {timeout: 1000})
+                    return false
+                } catch {
+                    continue
+                }
+            }
+            return true
+        } catch {
+            return true
         }
     }
 

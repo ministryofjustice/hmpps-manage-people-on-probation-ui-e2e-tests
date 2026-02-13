@@ -2,12 +2,13 @@ import { Browser, BrowserContext, expect, Page } from '@playwright/test'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createBdd } from 'playwright-bdd';
-import { attendee, ContextConfig, testUser } from '../../utilities/Data'
+import { attendee, testUser } from '../../utilities/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
 import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/DateTime'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../utilities/ArrangeAppointment'
-import { login } from '../../Utilities/Login';
+import { login } from '../../utilities/Login';
 import loginDeliusAndCreateOffender from '../../utilities/Delius';
+import { getBrowserContext } from '../../utilities/Common';
 
 const { Given, When, Then } = createBdd();
 
@@ -18,7 +19,7 @@ let page: Page
 
 Given('A new offender has been created', async ({ browser: b }) => {
     browser = b
-    context = await browser.newContext(ContextConfig)
+    context = await browser.newContext(getBrowserContext('appointments'))
     page = await context.newPage()
 
     crn = (await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam))[1]

@@ -5,6 +5,7 @@ import { MpopSetupChanges, MpopSetupCheckin } from '../utilities/SetupOnlineChec
 type Ctx = {
   setup: MpopSetupCheckin
   changes: MpopSetupChanges
+  uuid: string
 };
 
 export const test = base
