@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test";
-import { baseNavigation } from "../utilities/Navigation";
+import { baseNavigation } from "../util/Navigation";
 import MPopPage from "./page";
-import { MPOP_URL } from "../utilities/Data";
+import { MPOP_URL } from "../util/Data";
 
 export default class SearchPage extends MPopPage {
     constructor(page: Page) {

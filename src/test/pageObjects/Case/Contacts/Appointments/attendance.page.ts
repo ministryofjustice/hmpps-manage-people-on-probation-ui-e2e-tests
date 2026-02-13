@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 import TypeAttendancePage from "./type-attendance.page";
 import ContactPage from "../contactpage";
-import { MpopAttendee } from "../../../../utilities/ArrangeAppointment";
+import { MpopAttendee } from "../../../../util/ArrangeAppointment";
 
 export default class AttendancePage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {

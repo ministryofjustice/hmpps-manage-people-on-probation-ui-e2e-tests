@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { ContactDetails } from "../../../../../utilities/SetupOnlineCheckins";
+import { ContactDetails } from "../../../../../util/SetupOnlineCheckins";
 
 export default class ContactDetailsPage extends ContactPage {
 

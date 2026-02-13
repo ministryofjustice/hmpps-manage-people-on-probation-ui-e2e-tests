@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import MPopPage from "./page";
-import { MPOP_URL } from "../utilities/Data";
+import { MPOP_URL } from "../util/Data";
 
 export default class HomePage extends MPopPage {
     constructor(page: Page) {

@@ -2,13 +2,13 @@ import { Browser, BrowserContext, expect, Page } from '@playwright/test'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createBdd } from 'playwright-bdd';
-import { attendee, testUser } from '../../utilities/Data'
+import { attendee, testUser } from '../../util/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
-import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../utilities/DateTime'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../utilities/ArrangeAppointment'
-import { login } from '../../utilities/Login';
-import loginDeliusAndCreateOffender from '../../utilities/Delius';
-import { getBrowserContext } from '../../utilities/Common';
+import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../util/DateTime'
+import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../util/ArrangeAppointment'
+import { login } from '../../util/Login';
+import loginDeliusAndCreateOffender from '../../util/Delius';
+import { getBrowserContext } from '../../util/Common';
 
 const { Given, When, Then } = createBdd();
 
@@ -21,8 +21,9 @@ Given('A new offender has been created', async ({ browser: b }) => {
     browser = b
     context = await browser.newContext(getBrowserContext('appointments'))
     page = await context.newPage()
-
+    console.time("loginDeliusAndCreateOffender-appointments")
     crn = (await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam))[1]
+    console.timeEnd("loginDeliusAndCreateOffender-appointments")
     await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
 });
 

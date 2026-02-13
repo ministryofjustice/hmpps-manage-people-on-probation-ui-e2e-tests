@@ -1,6 +1,6 @@
 import { Page } from '@playwright/test';
 import { test as base } from 'playwright-bdd';
-import { MpopSetupChanges, MpopSetupCheckin } from '../utilities/SetupOnlineCheckins';
+import { MpopSetupChanges, MpopSetupCheckin } from '../util/SetupOnlineCheckins';
 
 type Ctx = {
   setup: MpopSetupCheckin

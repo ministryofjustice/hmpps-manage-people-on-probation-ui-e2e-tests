@@ -1,9 +1,9 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import CasePage from "./casepage";
-import { navigateToCase } from "../../utilities/Navigation";
-import getUserFriendlyString, { MPoPCheckinDetails } from "../../utilities/SetupOnlineCheckins";
-import { dateWithDayAndWithoutYear, formatToLongDay, lastWeek, luxonString, nextWeek, today, yesterday } from "../../utilities/DateTime";
+import { navigateToCase } from "../../util/Navigation";
+import getUserFriendlyString, { MPoPCheckinDetails } from "../../util/SetupOnlineCheckins";
+import { dateWithDayAndWithoutYear, formatToLongDay, lastWeek, luxonString, nextWeek, today, yesterday } from "../../util/DateTime";
 import { DateTime } from "luxon";
 import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
 import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";

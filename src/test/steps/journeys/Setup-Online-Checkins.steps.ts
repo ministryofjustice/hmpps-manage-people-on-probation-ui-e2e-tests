@@ -15,18 +15,18 @@ import PhotoOptionsPage, { PhotoOptions } from '../../pageObjects/Case/Contacts/
 import ContactPreferencePage, { Preference } from '../../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page';
 import DateFrequencyPage, { FrequencyOptions } from '../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page';
 import { test as base, createBdd, DataTable } from 'playwright-bdd';
-import loginDeliusAndCreateOffender from '../../utilities/Delius';
-import { login } from '../../utilities/Login';
+import loginDeliusAndCreateOffender from '../../util/Delius';
+import { login } from '../../util/Login';
 import InstructionsPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page';
-import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../utilities/DateTime';
+import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../util/DateTime';
 import { DateTime } from 'luxon';
-import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../utilities/SetupOnlineCheckins';
-import { testCrn, testUser } from '../../utilities/Data';
+import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../util/SetupOnlineCheckins';
+import { testCrn, testUser } from '../../util/Data';
 import { checkInTest, test } from '../../features/Fixtures';
-import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../utilities/API';
-import { getBrowserContext, getUuid } from '../../utilities/Common';
+import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../util/API';
+import { getBrowserContext, getUuid } from '../../util/Common';
 import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
-import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../utilities/ReviewCheckins';
+import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../util/ReviewCheckins';
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
 import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
 
@@ -54,8 +54,9 @@ Given('A new offender has been created for setups', async ({ browser: b }) => {
     browser = b
     context = await browser.newContext(getBrowserContext('esupervision'))
     page = await context.newPage()
-
+    console.time("loginDeliusAndCreateOffender-checkins")
     ;[person, crn] = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam)
+    console.timeEnd("loginDeliusAndCreateOffender-checkins")
     sentence = await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } , event: data.events.community })
 })
 

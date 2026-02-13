@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { YesNoCheck } from "../../../../../utilities/ReviewCheckins";
+import { YesNoCheck } from "../../../../../util/ReviewCheckins";
 
 export default class ReviewIdentityPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
