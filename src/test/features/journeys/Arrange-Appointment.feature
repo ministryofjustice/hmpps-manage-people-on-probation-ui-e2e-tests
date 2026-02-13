@@ -5,9 +5,11 @@ Feature: Create Appointments
 
     @smoke @appointments
     Scenario: Create Appointments Full
-        Given A new offender has been created
+        Given Context has been created for "Appointments" test
+        And A new offender has been created in Ndelius
         And I am logged in
         When I create an appointment
         And a similar appointment
         And another appointment
         Then the appointment should be created successfully
+        And I close the context
