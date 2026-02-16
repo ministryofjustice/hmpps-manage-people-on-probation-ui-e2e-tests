@@ -36,4 +36,12 @@ export default class ManageAppointmentsPage extends ContactPage {
     async checkActionLink(id: ManageAction, value: string){
         await expect(this.getQA("appointmentActions").getByRole("listitem").nth(id).getByRole("link")).toHaveText(value)
     }
+
+    async getAppointmentNotes(){
+        return this.getClass("app-note text-break", await this.getSummaryRowValue(await this.getSummaryRowByKey("Appointment notes")))
+    }
+
+    async getNoteCount(){
+        return await (await this.getAppointmentNotes()).count()
+    }
 }

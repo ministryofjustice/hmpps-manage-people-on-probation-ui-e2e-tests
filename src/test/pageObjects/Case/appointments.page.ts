@@ -41,7 +41,7 @@ export default class AppointmentsPage extends CasePage{
     }
 
     async selectAppointment(upcoming: boolean, id: number, byName: boolean = false){
-        const tableqa = upcoming ? "upcomingAppointments" : "pastAppointments"
+        const tableqa = upcoming ? "upcomingAppointmentsSection" : "pastAppointmentsSection"
         const table = upcoming ? "upcoming" : "past"
         const column = byName ? "Type" : "Action"
         const cellqa = `${table}Appointment${column}${id}`
