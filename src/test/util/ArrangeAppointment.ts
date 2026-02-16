@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { MpopDateTime } from "../Utilities/DateTime"
+import { MpopDateTime } from "../util/DateTime"
 import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page"
 import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page"
 import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page"
