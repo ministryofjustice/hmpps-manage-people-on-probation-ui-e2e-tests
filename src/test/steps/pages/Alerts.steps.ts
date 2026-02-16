@@ -1,18 +1,12 @@
 import { Browser, BrowserContext, expect, Locator, Page } from '@playwright/test'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
-import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import { createBdd } from 'playwright-bdd';
 import HomePage from '../../pageObjects/home.page'
-import { login } from '../../util/Login'
 import AlertsPage from '../../pageObjects/alerts'
 import { deliusAlert, testUser } from '../../util/Data'
 import OverviewPage from '../../pageObjects/Case/overview.page'
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page'
 import NotePage from '../../pageObjects/Case/Contacts/Appointments/note.page'
-import loginDeliusAndCreateOffender from '../../util/Delius'
-import { getBrowserContext } from '../../util/Common'
 import { testContext } from '../../features/Fixtures'
 
 const { Given, When, Then } = createBdd(testContext);
@@ -29,7 +23,7 @@ Given('The offender has been given an alert', async ({ ctx }) => {
 
 Given('I have navigated to alerts', async ({ ctx }) => {
     const alerts = new AlertsPage(ctx.base.page)
-    alerts.navigateTo(ctx.base.page)
+    await alerts.navigateTo(ctx.base.page)
     ctx.alerts.alertsPage = alerts
 })
 
@@ -49,7 +43,7 @@ When('I click the person link', async ({ ctx }) => {
     const page = ctx.base.page
     const person = ctx.case.person
     const crn = ctx.case.crn
-    alerts.navigateTo(page)
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person!.lastName}, ${person.firstName}`}).click()
 });
@@ -64,7 +58,7 @@ When('I click the activity link', async ({ ctx }) => {
     const page = ctx.base.page
     const person = ctx.case.person
     const crn = ctx.case.crn
-    alerts.navigateTo(page)
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
 });
@@ -81,7 +75,7 @@ When('I view the activity note', async ({ ctx }) => {
     const page = ctx.base.page
     const person = ctx.case.person
     const crn = ctx.case.crn
-    alerts.navigateTo(page)
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertActivity', row).getByText('More information').click()
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "View full note"}).click()
@@ -96,7 +90,7 @@ Then('I should be on the note page', async ({ ctx }) => {
 
 When('I navigate through pagination', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
-    alerts.navigateTo(ctx.base.page)
+    await alerts.navigateTo(ctx.base.page)
     await alerts.pagination("Next")
 });
 
@@ -109,7 +103,7 @@ Then('the alerts list should be updated', async ({ ctx }) => {
 
 When('I select and deselect all alerts', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
-    alerts.navigateTo(ctx.base.page)
+    await alerts.navigateTo(ctx.base.page)
     await alerts.getQA("selectAllAlertsBtn").click()
     const checkboxes : Locator[] = await alerts.page.getByRole('checkbox').all()
     for (const checkbox of checkboxes){
@@ -123,7 +117,7 @@ When('I select and deselect all alerts', async ({ ctx }) => {
 
 When('I try to clear alerts without selection', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
-    alerts.navigateTo(ctx.base.page)
+    await alerts.navigateTo(ctx.base.page)
     await alerts.getQA("clearSelectedAlerts").click()
 });
 
@@ -136,7 +130,7 @@ When('I select and clear an alert', async ({ ctx }) => {
     const page = ctx.base.page
     const person = ctx.case.person
     const crn = ctx.case.crn
-    alerts.navigateTo(page)
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await row.getByRole('checkbox').click()
     await alerts.getQA("clearSelectedAlerts").click()

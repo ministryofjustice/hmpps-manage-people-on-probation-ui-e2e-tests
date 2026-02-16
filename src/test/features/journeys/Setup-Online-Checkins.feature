@@ -6,7 +6,7 @@ Feature: Setup Checkins
     @smoke @esupervision
     Scenario: Setup Online Checkins        
         Given Context has been created for "Esupervision" test
-        And A new offender has been created in Ndelius
+        And A new offender has been created or existing made available
         And I am logged in
         And I have navigated to new offender
         When I set up checkIns with values
@@ -50,7 +50,7 @@ Feature: Setup Checkins
     @esupervision @random
     Scenario: Randomised Setup
         Given Context has been created for "Esupervision" test
-        And A new offender has been created in Ndelius
+        And A new offender has been created or existing made available
         And I am logged in
         And I have navigated to new offender
         When I set up checkIns with random values

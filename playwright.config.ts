@@ -39,7 +39,7 @@ export default defineConfig({
   timeout: 300000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-      viewport: null,
+    viewport: null,
     actionTimeout: secondsToMilliseconds(30),
     timezoneId: 'Europe/London',
     launchOptions: { slowMo: 150 },

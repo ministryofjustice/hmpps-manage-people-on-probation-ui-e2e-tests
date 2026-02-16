@@ -4,7 +4,7 @@ import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integra
 import { createBdd } from 'playwright-bdd';
 import { testUser } from '../util/Data'
 import { login } from '../util/Login';
-import loginDeliusAndCreateOffender from '../util/Delius';
+import { loginDeliusAndCreateOffender } from '../util/Delius';
 import { getBrowserContext } from '../util/Common';
 import { testContext } from '../features/Fixtures';
 
@@ -22,6 +22,13 @@ Given(`Context has been created for {string} test`, async ({browser: b, ctx}, na
 })
 
 Given('A new offender has been created in Ndelius', async ({ ctx }) => {
+    const [person, crn] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam, true))
+    await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    ctx.case.crn = crn
+    ctx.case.person = person
+});
+
+Given('A new offender has been created or existing made available', async ({ ctx }) => {
     const [person, crn] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam))
     await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     ctx.case.crn = crn
