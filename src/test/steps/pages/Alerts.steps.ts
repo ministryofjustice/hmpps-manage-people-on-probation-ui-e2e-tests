@@ -1,117 +1,109 @@
 import { Browser, BrowserContext, expect, Locator, Page } from '@playwright/test'
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
-import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createContact } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs'
 import { createBdd } from 'playwright-bdd';
 import HomePage from '../../pageObjects/home.page'
-import { login } from '../../util/Login'
 import AlertsPage from '../../pageObjects/alerts'
 import { deliusAlert, testUser } from '../../util/Data'
 import OverviewPage from '../../pageObjects/Case/overview.page'
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page'
 import NotePage from '../../pageObjects/Case/Contacts/Appointments/note.page'
-import loginDeliusAndCreateOffender from '../../util/Delius'
-import { getBrowserContext } from '../../util/Common'
+import { testContext } from '../../features/Fixtures'
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(testContext);
 
-let browser: Browser
-let context: BrowserContext
-let page: Page
-let alerts: AlertsPage
-let home: HomePage
-let alertCount: number
-let person: Person
-let crn: string
-
-Given('I am logged in and have noted the alerts count', async ({ browser: b }) => {
-    browser = b
-    context = await browser.newContext(getBrowserContext('alerts'))
-    page = await context.newPage()
-
-    await login(page)
-    home = new HomePage(page)
-    alertCount = await home.getAlertsCount()
+Given('I have noted the alerts count', async ({ ctx }) => {
+    const home = new HomePage(ctx.base.page)
+    const alertCount = await home.getAlertsCount()
+    ctx.alerts.alertCount = alertCount
 });
 
-Given('A new offender has been created with an alert', async () => {
-    console.time("loginDeliusAndCreateOffender-Alerts")
-    const login = await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam, true)
-    console.timeEnd("loginDeliusAndCreateOffender-Alerts")
-    person = login[0]
-    crn = login[1]
-    await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-    await createContact(page, crn, deliusAlert)
+Given('The offender has been given an alert', async ({ ctx }) => {
+    await createContact(ctx.base.page, ctx.case.crn, deliusAlert)
 });
 
-Given('I have navigated to alerts', async () => {
-    alerts = new AlertsPage(page)
-    alerts.navigateTo(page)
+Given('I have navigated to alerts', async ({ ctx }) => {
+    const alerts = new AlertsPage(ctx.base.page)
+    await alerts.navigateTo(ctx.base.page)
+    ctx.alerts.alertsPage = alerts
 })
 
-Then('the page should be rendered', async () => {
-    await alerts.checkOnPage()
+Then('the page should be rendered', async ({ ctx }) => {
+    await ctx.alerts.alertsPage.checkOnPage()
 });
 
-Then('the new alert should be present', async () => {
+Then('the new alert should be present', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    await alerts.navigateTo(ctx.base.page)
+    const updatedCount = await alerts.getAlertsCount()
+    expect(updatedCount).toBeGreaterThan(ctx.alerts.alertCount)
+});
+
+When('I click the person link', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    const page = ctx.base.page
+    const person = ctx.case.person
+    const crn = ctx.case.crn
     await alerts.navigateTo(page)
-    const home = new HomePage(page)
-    const updatedCount = await home.getAlertsCount()
-    expect(updatedCount).toBeGreaterThan(alertCount)
-});
-
-When('I click the person link', async () => {
-    alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-    await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person.lastName}, ${person.firstName}`}).click()
+    await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person!.lastName}, ${person.firstName}`}).click()
 });
 
-Then('I should be taken to the overview page', async () => {
-    const overviewPage = new OverviewPage(page)
-    expect(overviewPage.page.url()).toContain(crn)
+Then('I should be taken to the overview page', async ({ ctx }) => {
+    const overviewPage = new OverviewPage(ctx.base.page)
+    expect(overviewPage.page.url()).toContain(ctx.case.crn)
 });
 
-When('I click the activity link', async () => {
-    alerts.navigateTo(page)
+When('I click the activity link', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    const page = ctx.base.page
+    const person = ctx.case.person
+    const crn = ctx.case.crn
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
 });
 
-Then('I should be taken to the manage appointments page', async () => {
-    const managePage = new ManageAppointmentsPage(page)
-    expect(managePage.page.url()).toContain(crn)
+Then('I should be taken to the manage appointments page', async ({ ctx }) => {
+    const managePage = new ManageAppointmentsPage(ctx.base.page)
+    expect(managePage.page.url()).toContain(ctx.case.crn)
     await managePage.clickBackLink()
-    await alerts.checkOnPage()
+    await ctx.alerts.alertsPage.checkOnPage()
 });
 
-When('I view the activity note', async () => {
-    alerts.navigateTo(page)
+When('I view the activity note', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    const page = ctx.base.page
+    const person = ctx.case.person
+    const crn = ctx.case.crn
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await alerts.getQA('alertActivity', row).getByText('More information').click()
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "View full note"}).click()
 });
 
-Then('I should be on the note page', async () => {
-    const notePage = new NotePage(page)
+Then('I should be on the note page', async ({ ctx }) => {
+    const notePage = new NotePage(ctx.base.page)
     await notePage.checkOnPage()
     await notePage.clickBackLink()
-    await alerts.checkOnPage()
+    await ctx.alerts.alertsPage.checkOnPage()
 });
 
-When('I navigate through pagination', async () => {
-    alerts.navigateTo(page)
+When('I navigate through pagination', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    await alerts.navigateTo(ctx.base.page)
     await alerts.pagination("Next")
 });
 
-Then('the alerts list should be updated', async () => {
+Then('the alerts list should be updated', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
     await expect(alerts.getQA("alertsCount")).toContainText('Showing 11 to 20')
     await alerts.pagination(1)
     await expect(alerts.getQA("alertsCount")).toContainText('Showing 1 to 10')
 });
 
-When('I select and deselect all alerts', async () => {
-    alerts.navigateTo(page)
+When('I select and deselect all alerts', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    await alerts.navigateTo(ctx.base.page)
     await alerts.getQA("selectAllAlertsBtn").click()
     const checkboxes : Locator[] = await alerts.page.getByRole('checkbox').all()
     for (const checkbox of checkboxes){
@@ -123,25 +115,30 @@ When('I select and deselect all alerts', async () => {
     }
 });
 
-When('I try to clear alerts without selection', async () => {
-    alerts.navigateTo(page)
+When('I try to clear alerts without selection', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    await alerts.navigateTo(ctx.base.page)
     await alerts.getQA("clearSelectedAlerts").click()
 });
 
-Then('I should see an error message', async () => {
-    await expect(alerts.getClass('moj-alert moj-alert--error')).toContainText('Select an alert to clear it')
+Then('I should see an error message', async ({ ctx }) => {
+    await expect(ctx.alerts.alertsPage.getClass('moj-alert moj-alert--error')).toContainText('Select an alert to clear it')
 });
 
-When('I select and clear an alert', async () => {
-    alerts.navigateTo(page)
+When('I select and clear an alert', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    const page = ctx.base.page
+    const person = ctx.case.person
+    const crn = ctx.case.crn
+    await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
     await row.getByRole('checkbox').click()
     await alerts.getQA("clearSelectedAlerts").click()
 });
 
-Then('the alert should be cleared', async () => {
+Then('the alert should be cleared', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
     await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
     const finalCount = await alerts.getAlertsCount()
-    expect(finalCount).toBe(alertCount)
-    await context.close()
+    expect(finalCount).toBe(ctx.alerts.alertCount)
 });

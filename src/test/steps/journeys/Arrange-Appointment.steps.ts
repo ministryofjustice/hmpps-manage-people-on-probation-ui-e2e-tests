@@ -1,37 +1,16 @@
-import { Browser, BrowserContext, expect, Page } from '@playwright/test'
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
-import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
+import { expect, Page } from '@playwright/test'
 import { createBdd } from 'playwright-bdd';
-import { attendee, testUser } from '../../util/Data'
+import { attendee } from '../../util/Data'
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
 import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../util/DateTime'
 import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../util/ArrangeAppointment'
-import { login } from '../../util/Login';
-import loginDeliusAndCreateOffender from '../../util/Delius';
-import { getBrowserContext } from '../../util/Common';
+import { testContext } from '../../features/Fixtures';
 
-const { Given, When, Then } = createBdd();
+const { Given, When, Then } = createBdd(testContext);
 
-let crn: string
-let browser: Browser
-let context: BrowserContext
-let page: Page
-
-Given('A new offender has been created', async ({ browser: b }) => {
-    browser = b
-    context = await browser.newContext(getBrowserContext('appointments'))
-    page = await context.newPage()
-    console.time("loginDeliusAndCreateOffender-appointments")
-    crn = (await loginDeliusAndCreateOffender(page, 'Wales', testUser, data.teams.allocationsTestTeam))[1]
-    console.timeEnd("loginDeliusAndCreateOffender-appointments")
-    await createCustodialEvent(page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-});
-
-Given('I am logged in', async () => {
-    await login(page)
-});
-
-When('I create an appointment', async () => {
+When('I create an appointment', async ({ ctx }) => {
+    const page = ctx.base.page
+    const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
     await appointments.navigateTo()
     await appointments.checkOnPage()
@@ -49,22 +28,23 @@ When('I create an appointment', async () => {
       attendee: attendee,
       dateTime: dateTime,
       locationId: 0,
+      text: false,
       note: "hello world",
       sensitivity: true
     }
     await createAppointmentMPop(page, appointment)
 });
 
-When('a similar appointment', async () => {
+When('a similar appointment', async ({ ctx }) => {
     const dateTime_similar: MpopDateTime = {
         date: luxonString(plus3Months),
         startTime: "15:15",
         endTime: "16:15"
     }
-    await createSimilarAppointmentMPop(page, dateTime_similar, false)
+    await createSimilarAppointmentMPop(ctx.base.page, dateTime_similar, false, false)
 });
 
-When('another appointment', async () => {
+When('another appointment', async ({ ctx }) => {
     const dateTime_another: MpopDateTime = {
         date: luxonString(plus6Months),
         startTime: "15:15",
@@ -75,13 +55,13 @@ When('another appointment', async () => {
         typeId: 0,
         dateTime: dateTime_another,
         locationId: 0,
+        text: false,
         note: "hello world",
         sensitivity: false
     }
-    await createAnotherAppointmentMPop(page, appointmentNoAttendee)
+    await createAnotherAppointmentMPop(ctx.base.page, appointmentNoAttendee)
 });
 
-Then('the appointment should be created successfully', async () => {
-    await expect(page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")
-    await context.close()
+Then('the appointment should be created successfully', async ({ ctx }) => {
+    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")
 });

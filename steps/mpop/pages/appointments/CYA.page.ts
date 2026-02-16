@@ -20,6 +20,7 @@ export default class CYAPage extends MPopPage {
         "Attending",
         "Location",
         "Date and time",
+        "Text message confirmation",
         "Supporting information",
         "Sensitivity",
         ]
