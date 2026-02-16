@@ -6,9 +6,14 @@ export default class SentencePage extends ContactPage {
         super(page, 'What is this appointment for?', crn, uuid)
     }
 
-    async completePage(id: number) {
-      await this.clickRadio("sentences", id)
-      await this.submit()
+    async completePage(id: number | "person") {
+        if (id === "person"){
+            const options = await this.getQA("sentences").getByRole('radio').count()
+            await this.clickRadio("sentences", options-1)
+        } else {
+            await this.clickRadio("sentences", id)
+        }
+        await this.submit()
     }
 
     async testBacklink(previousPage: string) {

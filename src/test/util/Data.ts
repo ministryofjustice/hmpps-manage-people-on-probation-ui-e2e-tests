@@ -1,7 +1,7 @@
 // /steps/test-data.ts
 import { Contact, data } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs"
 import path from 'path'
-import { tomorrow } from "./DateTime"
+import { luxonString, MpopDateTime, tomorrow } from "./DateTime"
 import * as dotenv from 'dotenv'
 import { MpopAttendee } from "./ArrangeAppointment"
 
@@ -17,6 +17,11 @@ export const testCrn = "X756510"
 export const attendee: MpopAttendee = {
     team: "N07AAT",
     user: "jsftest"
+}
+export const dateTime: MpopDateTime = {
+    date: luxonString(tomorrow),
+    startTime: "15:15",
+    endTime: "16:15"
 }
 
 export const deliusAlert: Contact = { 

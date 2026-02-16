@@ -35,7 +35,7 @@ When('I create an appointment', async ({ ctx }) => {
     await createAppointmentMPop(page, appointment)
 });
 
-When('a similar appointment', async ({ ctx }) => {
+When('I create a similar appointment', async ({ ctx }) => {
     const dateTime_similar: MpopDateTime = {
         date: luxonString(plus3Months),
         startTime: "15:15",
@@ -44,7 +44,7 @@ When('a similar appointment', async ({ ctx }) => {
     await createSimilarAppointmentMPop(ctx.base.page, dateTime_similar, false, false)
 });
 
-When('another appointment', async ({ ctx }) => {
+When('I create another appointment', async ({ ctx }) => {
     const dateTime_another: MpopDateTime = {
         date: luxonString(plus6Months),
         startTime: "15:15",
