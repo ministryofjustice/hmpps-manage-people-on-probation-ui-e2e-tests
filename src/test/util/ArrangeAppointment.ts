@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { luxonString, MpopDateTime, nextWeek, tomorrow, yesterday } from "../util/DateTime"
+import { luxonString, MpopDateTime, nextWeek, plus3Months, tomorrow, yesterday } from "../util/DateTime"
 import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page"
 import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page"
 import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page"
@@ -24,6 +24,19 @@ export interface MpopArrangeAppointment {
   mobile?: string
   note?: string
   sensitivity: boolean
+}
+
+export interface MpopAppointmentChanges {
+  sentenceId?: number | "person"
+  typeId?: number
+  attendee?: MpopAttendee
+  isVisor?: boolean
+  dateTime?: MpopDateTime
+  locationId?: number | "not needed" | "not in list"
+  text?: boolean,
+  mobile?: string
+  note?: string
+  sensitivity?: boolean
 }
 
 export interface MpopAttendee {
@@ -55,13 +68,13 @@ export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeA
   await confirmationPage.checkOnPage()
 }
 
-export const createSimilarAppointmentMPop = async(page:Page, dateTime: MpopDateTime, text: boolean, sensitivity: boolean, note?: string, mobile?: string) => {
+export const createSimilarAppointmentMPop = async(page:Page, changes: MpopAppointmentChanges) => {
   const confirmationPage = new ConfirmationPage(page)
   await confirmationPage.completePage("createAnother")
   const nextAppointmentPage = new NextAppointmentPage(page)
   await nextAppointmentPage.completePage(NextAction.Similar)
   const arrangeAnotherPage = new ArrangeAnotherPage(page)
-  await arrangeAnotherPage.completePage(dateTime,text,sensitivity,note,mobile)
+  await arrangeAnotherPage.completePage(changes)
 }
 
 export const createAnotherAppointmentMPop = async(page:Page, appointment: MpopArrangeAppointment) => {
@@ -72,16 +85,16 @@ export const createAnotherAppointmentMPop = async(page:Page, appointment: MpopAr
   await createAppointmentMPop(page, appointment)
 }
 
-export const appointmentDataTable = (data: DataTable) : MpopArrangeAppointment => {
-    let sentenceId: number | 'person' = 0
-    let typeId: number = 0
-    let attendee: MpopAttendee = self
-    let isVisor: boolean = false
+export const appointmentDataTable = (data: DataTable, full:boolean = false) : MpopAppointmentChanges => {
+    let sentenceId: number | 'person' | undefined = full ? 0 : undefined
+    let typeId: number | undefined = full ? 0 : undefined
+    let attendee: MpopAttendee | undefined = full ? self : undefined
+    let isVisor: boolean 
     let dateTime: MpopDateTime = defaultTime
-    let locationId: number | "not needed" | "not in list" = 0
+    let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
     let text: boolean = false
-    let mobile: string | undefined
-    let note: string | undefined
+    let mobile: string
+    let note: string
     let sensitivity: boolean = false
     for (const row of data.hashes()){
         if (row.label === 'sentenceId'){
@@ -95,12 +108,21 @@ export const appointmentDataTable = (data: DataTable) : MpopArrangeAppointment =
             //0 only option for person
         }
         if (row.label === 'attendeeProvider'){
+            if (!attendee){
+              attendee = {}
+            }
             attendee.provider = row.value
         }
         if (row.label === 'attendeeTeam'){
+            if (!attendee){
+              attendee = {}
+            }
             attendee.team = row.value
         }
         if (row.label === 'attendeeName'){
+            if (!attendee){
+              attendee = {}
+            }
             attendee.user = row.value
         }
         if (row.label === 'isVisor'){
@@ -115,6 +137,9 @@ export const appointmentDataTable = (data: DataTable) : MpopArrangeAppointment =
           } 
           if (row.value === 'nextweek'){
               dateTime.date = luxonString(nextWeek)
+          }
+          if (row.value === '3months'){
+              dateTime.date = luxonString(plus3Months)
           }
         }
         if (row.label === 'startTime'){
@@ -140,19 +165,18 @@ export const appointmentDataTable = (data: DataTable) : MpopArrangeAppointment =
         if (row.label === 'sensitive'){
             sensitivity = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
         }
-
     }
 
-    const appointment : MpopArrangeAppointment = {
+    const appointment : MpopAppointmentChanges = {
       sentenceId: sentenceId,
       typeId: typeId,
       attendee: attendee,
-      isVisor: isVisor,
+      isVisor: isVisor!,
       dateTime: dateTime,
       locationId: locationId,
       text: text,
-      mobile: mobile,
-      note: note,
+      mobile: mobile!,
+      note: note!,
       sensitivity: sensitivity
     }
 

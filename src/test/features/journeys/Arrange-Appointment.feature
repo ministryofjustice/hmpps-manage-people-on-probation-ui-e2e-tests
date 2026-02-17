@@ -10,14 +10,28 @@ Feature: Create Appointments
         And A new offender has been created in Ndelius
         And I am logged in
         When I create an appointment
+            | label      | value |
+            | sentenceId | 0     |
+            | typeId     | 0     |
+            | locationId | 0     |
+            | note       | note  |
+            | sensitive  | NO    |
         Then the appointment should be created successfully
 
     @smoke @appointments
     Scenario: Create Similar Appointment
         When I create a similar appointment
+            | label      | value    |
+            | date       | nextweek |
+            | sensitive  | YES      |
         Then the appointment should be created successfully
 
     @smoke @appointments
     Scenario: Create Another Appointment
         When I create another appointment
+            | label      | value   | 
+            | sentenceId | person  |
+            | typeId     | 0       |
+            | date       | 3months |
+            | locationId | 0       |
         Then the appointment should be created successfully

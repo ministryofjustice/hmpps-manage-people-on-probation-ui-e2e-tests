@@ -18,8 +18,8 @@ export default class LocationDateTimePage extends ContactPage {
             await this.fillText("startTime", dateTime.startTime)
             await this.fillText("endTime", dateTime.endTime)
         }
-        if (typeof locationId === "number"){
-            await this.clickRadio("locationCode", locationId)
+        if (locationId !== undefined){
+            await this.clickRadio("locationCode", locationId as number)
         }
         await this.submit()
         if (validation){

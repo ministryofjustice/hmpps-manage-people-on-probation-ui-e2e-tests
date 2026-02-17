@@ -1,14 +1,12 @@
 import { expect, Page } from '@playwright/test'
-import { createBdd } from 'playwright-bdd';
-import { attendee } from '../../util/Data'
+import { createBdd, DataTable } from 'playwright-bdd';
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
-import { luxonString, MpopDateTime, plus3Months, plus6Months, tomorrow } from '../../util/DateTime'
-import { createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopArrangeAppointment } from '../../util/ArrangeAppointment'
+import { appointmentDataTable, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopAppointmentChanges, MpopArrangeAppointment } from '../../util/ArrangeAppointment'
 import { testContext } from '../../features/Fixtures';
 
 const { Given, When, Then } = createBdd(testContext);
 
-When('I create an appointment', async ({ ctx }) => {
+When('I create an appointment', async ({ ctx }, data: DataTable) => {
     const page = ctx.base.page
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
@@ -16,50 +14,21 @@ When('I create an appointment', async ({ ctx }) => {
     await appointments.checkOnPage()
     await appointments.startArrangeAppointment()
 
-    //arrange appointment
-    const dateTime: MpopDateTime = {
-      date: luxonString(tomorrow),
-      startTime: "15:15",
-      endTime: "16:15"
-    }
-    const appointment: MpopArrangeAppointment = {
-      sentenceId: 0,
-      typeId: 0,
-      attendee: attendee,
-      dateTime: dateTime,
-      locationId: 0,
-      text: false,
-      note: "hello world",
-      sensitivity: true
-    }
+    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
+    console.log(appointment)
     await createAppointmentMPop(page, appointment)
 });
 
-When('I create a similar appointment', async ({ ctx }) => {
-    const dateTime_similar: MpopDateTime = {
-        date: luxonString(plus3Months),
-        startTime: "15:15",
-        endTime: "16:15"
-    }
-    await createSimilarAppointmentMPop(ctx.base.page, dateTime_similar, false, false)
+When('I create a similar appointment', async ({ ctx }, data: DataTable) => {
+    const changes: MpopAppointmentChanges = appointmentDataTable(data)
+    console.log(changes)
+    await createSimilarAppointmentMPop(ctx.base.page, changes)
 });
 
-When('I create another appointment', async ({ ctx }) => {
-    const dateTime_another: MpopDateTime = {
-        date: luxonString(plus6Months),
-        startTime: "15:15",
-        endTime: "16:15"
-    }
-    const appointmentNoAttendee: MpopArrangeAppointment = {
-        sentenceId: 0,
-        typeId: 0,
-        dateTime: dateTime_another,
-        locationId: 0,
-        text: false,
-        note: "hello world",
-        sensitivity: false
-    }
-    await createAnotherAppointmentMPop(ctx.base.page, appointmentNoAttendee)
+When('I create another appointment', async ({ ctx }, data:DataTable) => {
+    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
+    console.log(appointment)
+    await createAnotherAppointmentMPop(ctx.base.page, appointment)
 });
 
 Then('the appointment should be created successfully', async ({ ctx }) => {
