@@ -32,5 +32,5 @@ When('I create another appointment', async ({ ctx }, data:DataTable) => {
 });
 
 Then('the appointment should be created successfully', async ({ ctx }) => {
-    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("Appointment arranged")
+    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("arranged")
 });

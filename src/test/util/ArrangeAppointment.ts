@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { luxonString, MpopDateTime, nextWeek, plus3Months, tomorrow, yesterday } from "../util/DateTime"
+import { luxonString, MpopDateTime, nextWeek, plus3Months, today, tomorrow, yesterday } from "../util/DateTime"
 import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page"
 import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page"
 import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page"
@@ -12,6 +12,9 @@ import ArrangeAnotherPage from "../pageObjects/Case/Contacts/Appointments/arrang
 import { DataTable } from "playwright-bdd"
 import { dateTime as defaultTime, attendee as self } from "./Data"
 import { YesNoCheck } from "./ReviewCheckins"
+import { DateTime } from "luxon"
+import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page"
+import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page"
 
 export interface MpopArrangeAppointment {
   sentenceId: number | "person"
@@ -45,26 +48,37 @@ export interface MpopAttendee {
   user?: string
 }
 
-export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
+export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment, past:boolean = false) => {
   const sentencePage = new SentencePage(page)
   await sentencePage.completePage(appointment.sentenceId)
   const typeAttendancePage = new TypeAttendancePage(page)
   await typeAttendancePage.completePage(appointment.typeId, appointment.attendee, appointment.isVisor)
   const locationDateTimePage = new LocationDateTimePage(page)
   await locationDateTimePage.completePage(appointment.dateTime, appointment.locationId)
-  const textConfirmationPage = new TextConfirmationPage(page)
-  await textConfirmationPage.completePage(appointment.text, appointment.mobile)
-  const supportingInformationPage = new SupportingInformationPage(page)
-  await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
+  if (past){
+    console.log('past appointment')
+    const attendedCompliedPage = new AttendedCompliedPage(page)
+    await attendedCompliedPage.checkOnPage()
+    await attendedCompliedPage.completePage()
+    const addNotePage = new AddNotePage(page)
+    await addNotePage.checkOnPage()
+    await addNotePage.completePage(appointment.sensitivity, appointment.note)//file
+  } else {
+    const textConfirmationPage = new TextConfirmationPage(page)
+    await textConfirmationPage.completePage(appointment.text, appointment.mobile)
+    const supportingInformationPage = new SupportingInformationPage(page)
+    await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
+  }
   const cyaPage = new CYAPage(page)
   await cyaPage.checkOnPage()
 }
 
 export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
-  await setupAppointmentMPop(page, appointment)
+  const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
+  await setupAppointmentMPop(page, appointment, past)
   const cyaPage = new CYAPage(page)
-  await cyaPage.completePage(appointment.isVisor)
-  const confirmationPage = new ConfirmationPage(page)
+  await cyaPage.completePage(appointment.isVisor, past)
+  const confirmationPage = new ConfirmationPage(page, past)
   await confirmationPage.checkOnPage()
 }
 
