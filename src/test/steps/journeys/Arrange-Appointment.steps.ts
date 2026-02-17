@@ -3,6 +3,7 @@ import { createBdd, DataTable } from 'playwright-bdd';
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
 import { appointmentDataTable, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, MpopAppointmentChanges, MpopArrangeAppointment } from '../../util/ArrangeAppointment'
 import { testContext } from '../../features/Fixtures';
+import LocationNotInListPage from '../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -33,4 +34,9 @@ When('I create another appointment', async ({ ctx }, data:DataTable) => {
 
 Then('the appointment should be created successfully', async ({ ctx }) => {
     await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("arranged")
+});
+
+Then('I end up on the location-not-in-list page', async ({ ctx }) => {
+    const locationNotInListPage = new LocationNotInListPage(ctx.base.page)
+    await locationNotInListPage.checkOnPage()
 });

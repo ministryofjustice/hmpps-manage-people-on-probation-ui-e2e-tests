@@ -38,6 +38,21 @@ export const nextWeekend = (today: DateTime) => {
     return today
 }
 
+type Mapping = {
+    [key: string]: DateTime
+}
+export const dateTimeMapping: Mapping = {
+    LASTWEEK: lastWeek,
+    TWODAYSAGO: twoDaysAgo,
+    YESTERDAY: yesterday,
+    TODAY: today,
+    TOMORROW: tomorrow,
+    NEXTWEEKEND: nextWeekend(today),
+    NEXTWEEK: nextWeek,
+    PLUS3MONTHS: plus3Months,
+    PLUS6MONTHS: plus6Months
+}
+
 export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
     if (parseInt(date.endTime.substring(0,2)) <= 22 && parseInt(date.startTime.substring(0,2)) <= 22){
         date.startTime = (parseInt(date.startTime.substring(0,2))+1).toString() + date.startTime.substring(2,5)

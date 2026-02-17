@@ -12,7 +12,30 @@ export default class LocationDateTimePage extends ContactPage {
         await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
     }
 
-    async completePage(dateTime?: MpopDateTime, locationId?: number | "not needed" | "not in list", validation: boolean= true) {
+    async findLocationId(typeId: number, location: number | "not needed" | "not in list") {
+      if (typeof location === 'number'){
+        return location
+      } else {
+         const locationNotNeeded = typeId === 1 || typeId === 5
+         const locations = await this.countRadioOptions('locationCode')
+         if (locationNotNeeded){
+            if (location === 'not needed'){
+                return locations-1
+            } else if (location === 'not in list'){
+                return locations-2
+            }
+         } else {
+            if (location === 'not needed'){
+                console.log('location needed so can`t select')
+                return locations-1
+            } else if (location === 'not in list'){
+                return locations-1
+            }
+         }
+      }
+    }
+
+    async completePage(dateTime?: MpopDateTime, locationId?: number, validation: boolean= true) {
         if (dateTime != undefined){
             await this.getClass("moj-datepicker").locator('[type="text"]').fill(dateTime.date)
             await this.fillText("startTime", dateTime.startTime)
@@ -27,7 +50,7 @@ export default class LocationDateTimePage extends ContactPage {
         }
     }
 
-    async validateDateTime(dateTime: MpopDateTime, locationId?: number | "not needed" | "not in list"){
+    async validateDateTime(dateTime: MpopDateTime, locationId?: number){
         try {
             await this.checkOnPage()
             dateTime = updateDateTime(dateTime)

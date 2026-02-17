@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { luxonString, MpopDateTime, nextWeek, plus3Months, today, tomorrow, yesterday } from "../util/DateTime"
+import { dateTimeMapping, luxonString, MpopDateTime, nextWeek, plus3Months, today, tomorrow, yesterday } from "../util/DateTime"
 import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page"
 import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page"
 import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page"
@@ -15,6 +15,7 @@ import { YesNoCheck } from "./ReviewCheckins"
 import { DateTime } from "luxon"
 import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page"
 import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page"
+import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page"
 
 export interface MpopArrangeAppointment {
   sentenceId: number | "person"
@@ -54,7 +55,12 @@ export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAp
   const typeAttendancePage = new TypeAttendancePage(page)
   await typeAttendancePage.completePage(appointment.typeId, appointment.attendee, appointment.isVisor)
   const locationDateTimePage = new LocationDateTimePage(page)
-  await locationDateTimePage.completePage(appointment.dateTime, appointment.locationId)
+  const locationId = await locationDateTimePage.findLocationId(appointment.typeId, appointment.locationId)
+  await locationDateTimePage.completePage(appointment.dateTime, locationId)
+  if (appointment.locationId === 'not in list'){
+    console.log('location not in list')
+    return
+  }
   if (past){
     console.log('past appointment')
     const attendedCompliedPage = new AttendedCompliedPage(page)
@@ -76,6 +82,9 @@ export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAp
 export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
   const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
   await setupAppointmentMPop(page, appointment, past)
+  if (appointment.locationId === 'not in list'){
+    return
+  }
   const cyaPage = new CYAPage(page)
   await cyaPage.completePage(appointment.isVisor, past)
   const confirmationPage = new ConfirmationPage(page, past)
@@ -143,18 +152,7 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             isVisor = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
         }
         if (row.label === 'date'){
-          if (row.value === 'yesterday'){
-              dateTime.date = luxonString(yesterday)
-          }
-          if (row.value === 'tomorrow'){
-              dateTime.date = luxonString(tomorrow)
-          } 
-          if (row.value === 'nextweek'){
-              dateTime.date = luxonString(nextWeek)
-          }
-          if (row.value === '3months'){
-              dateTime.date = luxonString(plus3Months)
-          }
+          dateTime.date = luxonString(dateTimeMapping[row.value])
         }
         if (row.label === 'startTime'){
             dateTime.startTime = row.value
