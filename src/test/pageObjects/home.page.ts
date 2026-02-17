@@ -10,5 +10,9 @@ export default class HomePage extends MPopPage {
     async goTo(){
        await this.page.goto(`${MPOP_URL}/`)
     }
+
+    async logMoreOutcomes(){
+        await this.getQA('homepage-outcomes').getByRole('link', {name: "Log more outcomes"}).click()
+    }
     
 }

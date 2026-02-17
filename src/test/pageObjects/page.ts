@@ -39,6 +39,10 @@ export default abstract class MPopPage {
         return locator.locator(`[data-qa="${qa}"]`)
     }
 
+    getByID(id: string, locator: Locator|Page=this.page){
+        return locator.locator(`[id="${id}"]`)
+    }
+
     async expectElementVisible(selector: string) {
         await expect(this.page.locator(selector)).toBeVisible();
     }

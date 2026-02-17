@@ -10,6 +10,7 @@ type Ctx = {
   base: Base,
   case: Case
   alerts: Alerts
+  manage: Manage
 };
 
 type CheckIns = {
@@ -33,6 +34,9 @@ type Alerts = {
   alertCount: number
   alertsPage: AlertsPage
 }
+type Manage = {
+  noteCount: number
+}
 
 export const test = base
 
@@ -43,7 +47,8 @@ export const testContext = base.extend<{ ctx: Ctx }>({
       contact: {},
       base: {},
       case: {},
-      alerts: {}
+      alerts: {},
+      manage: {}
     } as Ctx;
     await use(ctx);
   },
