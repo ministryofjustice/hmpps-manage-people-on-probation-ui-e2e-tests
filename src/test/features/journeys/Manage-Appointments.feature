@@ -3,7 +3,7 @@ Feature: Manage Appointments
     I want to manage existing appointments
     So that I can update their details
 
-    @manage @note
+    @smoke @manage @note
     Scenario: Add Note to Appointment
         Given Context has been created for "Manage" test
         And I am logged in
@@ -11,7 +11,7 @@ Feature: Manage Appointments
         And I add a note to the appointment
         Then I can see the new note on the appointment
 
-    @manage @attended
+    @smoke @manage @attended
     Scenario: Add Attended Complied Outcome
         Given Context has been created for "Manage" test
         And I am logged in

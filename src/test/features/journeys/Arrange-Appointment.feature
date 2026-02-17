@@ -1,15 +1,37 @@
+@mode:serial
 Feature: Create Appointments
     As a user
     I want to create appointments
     So that I can manage my schedule
 
     @smoke @appointments
-    Scenario: Create Appointments Full
+    Scenario: Create Future Appointment
         Given Context has been created for "Appointments" test
         And A new offender has been created in Ndelius
         And I am logged in
         When I create an appointment
-        And a similar appointment
-        And another appointment
+            | label      | value |
+            | sentenceId | 0     |
+            | typeId     | 0     |
+            | locationId | 0     |
+            | note       | note  |
+            | sensitive  | NO    |
         Then the appointment should be created successfully
-        And I close the context
+
+    @smoke @appointments
+    Scenario: Create Similar Appointment
+        When I create a similar appointment
+            | label      | value    |
+            | date       | nextweek |
+            | sensitive  | YES      |
+        Then the appointment should be created successfully
+
+    @smoke @appointments
+    Scenario: Create Another Appointment
+        When I create another appointment
+            | label      | value   | 
+            | sentenceId | person  |
+            | typeId     | 0       |
+            | date       | 3months |
+            | locationId | 0       |
+        Then the appointment should be created successfully
