@@ -13,7 +13,7 @@ export default class LocationDateTimePage extends ContactPage {
     }
 
     async findLocationId(typeId: number, location: number | "not needed" | "not in list") {
-      if (typeof location === 'number'){
+      if (location !== 'not needed' && location !== 'not in list'){
         return location
       } else {
          const locationNotNeeded = typeId === 1 || typeId === 5
@@ -41,6 +41,7 @@ export default class LocationDateTimePage extends ContactPage {
             await this.fillText("startTime", dateTime.startTime)
             await this.fillText("endTime", dateTime.endTime)
         }
+        console.log(locationId)
         if (locationId !== undefined){
             await this.clickRadio("locationCode", locationId as number)
         }
