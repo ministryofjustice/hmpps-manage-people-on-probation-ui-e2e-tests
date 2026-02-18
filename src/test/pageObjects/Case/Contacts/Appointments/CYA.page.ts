@@ -11,15 +11,15 @@ export default class CYAPage extends ContactPage {
         super(page, "Check your answers then confirm the appointment", crn, uuid)
     }
 
-    async completePage(isVisor?: boolean) {
+    async completePage(isVisor: boolean = false, past: boolean = false) {
         const rows = [
         "Appointment for",
         "Appointment type",
-        ...(isVisor != undefined ? ["VISOR report"] : []),
+        ...(isVisor ? ["VISOR report"] : []),
         "Attending",
         "Location",
         "Date and time",
-        "Text message confirmation",
+        ...(past ? ["Attended and complied"] : ["Text message confirmation"]),
         "Supporting information",
         "Sensitivity",
         ]

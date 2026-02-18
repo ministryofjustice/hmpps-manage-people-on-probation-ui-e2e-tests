@@ -48,7 +48,18 @@ When('I navigate to latest appointment requiring an outcome', async ({ ctx }) =>
     await logPage.checkOnPage()
     await logPage.selectFirst()
     const managePage = new ManageAppointmentsPage(page)
-    await managePage.checkOnPage()
+    let id = 1
+    while (true){
+        await managePage.checkOnPage()
+        await page.waitForTimeout(1000)
+        try {
+            await logPage.checkOnPage()
+            await logPage.selectFirst(id)
+            id += 1
+        } catch { 
+            break
+        }
+    }
     await expect(managePage.getQA("appointmentAlert")).toContainText("You must log an outcome")
 });
 

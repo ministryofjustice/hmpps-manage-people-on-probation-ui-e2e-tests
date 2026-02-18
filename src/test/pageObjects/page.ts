@@ -47,6 +47,10 @@ export default abstract class MPopPage {
         await expect(this.page.locator(selector)).toBeVisible();
     }
 
+    async countRadioOptions(qa: string){
+        return await this.getQA(qa).getByRole('radio').count()
+    }
+
     // Safer clickRadio that works for radio buttons
     async clickRadio(qa: string, id: number) {
         const radio = this.getQA(qa).getByRole('radio').nth(id);

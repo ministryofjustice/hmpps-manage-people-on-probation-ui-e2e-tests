@@ -3,8 +3,8 @@ import NextAppointmentPage from "./next-appointment.page";
 import ContactPage from "../contactpage";
 
 export default class ConfirmationPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Appointment arranged", crn, uuid)
+    constructor(page: Page, past: boolean = false, crn?: string, uuid?: string) {
+        super(page, past ? "Past appointment arrange" : "Appointment arranged", crn, uuid)
     }
     
     async completePage(option: string) {
@@ -13,7 +13,7 @@ export default class ConfirmationPage extends ContactPage {
             return new NextAppointmentPage(this.page)
         } else if (option === "returnToAll") {
             await this.clickLink('Return to all cases')
-        } else {
+        } else if (option === "overview") {
             await this.submit()
         }
     }

@@ -114,25 +114,19 @@ export const getValidCrnForExpiredCheckin = async(page: Page, crn?: string) : Pr
             crnNumber = crnNumber-1
             crn = 'X' + crnNumber.toString()
         }
-        console.log(crn)
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
-        console.log(pages)
         if (pages > 0){
-            console.log('exists')
             await searchPage.selectCaseByID(1)
             const casePage = new OverviewPage(page, crn)
             setup = await casePage.checkOnlineCheckInsSetup()
             if (setup === true){
-                console.log("setup")
                 old = await casePage.NotMadeToday()
                 if (old === true){
-                    console.log("old")
                     await casePage.useSubNavigation("activityLogTab")
                     const contactPage = new ActivityLogPage(page) 
                     available = await contactPage.checkAvailable()
                     if (available === true){
-                        console.log("unused today")
                         await page.getByRole('link', {name: "Personal details"}).click()
                         const personalDetailsPage = new PersonalDetailsPage(page)
                         personalDetailsPage.checkOnPage()

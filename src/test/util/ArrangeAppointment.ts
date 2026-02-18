@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test"
-import { luxonString, MpopDateTime, nextWeek, plus3Months, tomorrow, yesterday } from "../util/DateTime"
+import { dateTimeMapping, luxonString, MpopDateTime, nextWeek, plus3Months, today, tomorrow, yesterday } from "../util/DateTime"
 import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page"
 import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page"
 import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page"
@@ -12,6 +12,10 @@ import ArrangeAnotherPage from "../pageObjects/Case/Contacts/Appointments/arrang
 import { DataTable } from "playwright-bdd"
 import { dateTime as defaultTime, attendee as self } from "./Data"
 import { YesNoCheck } from "./ReviewCheckins"
+import { DateTime } from "luxon"
+import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page"
+import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page"
+import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page"
 
 export interface MpopArrangeAppointment {
   sentenceId: number | "person"
@@ -45,26 +49,45 @@ export interface MpopAttendee {
   user?: string
 }
 
-export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
+export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment, past:boolean = false) => {
   const sentencePage = new SentencePage(page)
   await sentencePage.completePage(appointment.sentenceId)
   const typeAttendancePage = new TypeAttendancePage(page)
   await typeAttendancePage.completePage(appointment.typeId, appointment.attendee, appointment.isVisor)
   const locationDateTimePage = new LocationDateTimePage(page)
-  await locationDateTimePage.completePage(appointment.dateTime, appointment.locationId)
-  const textConfirmationPage = new TextConfirmationPage(page)
-  await textConfirmationPage.completePage(appointment.text, appointment.mobile)
-  const supportingInformationPage = new SupportingInformationPage(page)
-  await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
+  const locationId = await locationDateTimePage.findLocationId(appointment.typeId, appointment.locationId)
+  await locationDateTimePage.completePage(appointment.dateTime, locationId)
+  if (appointment.locationId === 'not in list'){
+    console.log('location not in list')
+    return
+  }
+  if (past){
+    console.log('past appointment')
+    const attendedCompliedPage = new AttendedCompliedPage(page)
+    await attendedCompliedPage.checkOnPage()
+    await attendedCompliedPage.completePage()
+    const addNotePage = new AddNotePage(page)
+    await addNotePage.checkOnPage()
+    await addNotePage.completePage(appointment.sensitivity, appointment.note)//file
+  } else {
+    const textConfirmationPage = new TextConfirmationPage(page)
+    await textConfirmationPage.completePage(appointment.text, appointment.mobile)
+    const supportingInformationPage = new SupportingInformationPage(page)
+    await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
+  }
   const cyaPage = new CYAPage(page)
   await cyaPage.checkOnPage()
 }
 
 export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
-  await setupAppointmentMPop(page, appointment)
+  const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
+  await setupAppointmentMPop(page, appointment, past)
+  if (appointment.locationId === 'not in list'){
+    return
+  }
   const cyaPage = new CYAPage(page)
-  await cyaPage.completePage(appointment.isVisor)
-  const confirmationPage = new ConfirmationPage(page)
+  await cyaPage.completePage(appointment.isVisor, past)
+  const confirmationPage = new ConfirmationPage(page, past)
   await confirmationPage.checkOnPage()
 }
 
@@ -90,7 +113,9 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     let typeId: number | undefined = full ? 0 : undefined
     let attendee: MpopAttendee | undefined = full ? self : undefined
     let isVisor: boolean 
-    let dateTime: MpopDateTime = defaultTime
+    let date: string = luxonString(tomorrow)
+    let startTime: string = "15:15"
+    let endTime: string = "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
     let text: boolean = false
     let mobile: string
@@ -129,24 +154,13 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             isVisor = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
         }
         if (row.label === 'date'){
-          if (row.value === 'yesterday'){
-              dateTime.date = luxonString(yesterday)
-          }
-          if (row.value === 'tomorrow'){
-              dateTime.date = luxonString(tomorrow)
-          } 
-          if (row.value === 'nextweek'){
-              dateTime.date = luxonString(nextWeek)
-          }
-          if (row.value === '3months'){
-              dateTime.date = luxonString(plus3Months)
-          }
+            date = luxonString(dateTimeMapping[row.value])
         }
         if (row.label === 'startTime'){
-            dateTime.startTime = row.value
+            startTime = row.value
         }
         if (row.label === 'endTime'){
-            dateTime.endTime = row.value
+            endTime = row.value
         }
         if (row.label === 'locationId'){
             locationId = row.value as unknown as number | "not needed" | "not in list" 
@@ -172,7 +186,11 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
       typeId: typeId,
       attendee: attendee,
       isVisor: isVisor!,
-      dateTime: dateTime,
+      dateTime: {
+        date: date,
+        startTime: startTime,
+        endTime: endTime
+      },
       locationId: locationId,
       text: text,
       mobile: mobile!,
@@ -181,4 +199,20 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     }
 
     return appointment
+}
+
+export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: MpopArrangeAppointment) : MpopArrangeAppointment => {
+  const appointment : MpopArrangeAppointment = {
+    sentenceId: changes.sentenceId ?? base.sentenceId!,
+    typeId: changes.typeId ?? base.typeId!,
+    attendee: changes.attendee ?? base.attendee!,
+    isVisor: changes.isVisor ?? base.isVisor,
+    dateTime: changes.dateTime ?? base.dateTime!,
+    locationId: changes.locationId ?? base.locationId!,
+    text: changes.text ?? base.text!,
+    mobile: changes.mobile ?? base.mobile,
+    note: changes.note ?? base.note,
+    sensitivity: changes.sensitivity ?? base.sensitivity!
+  }
+  return appointment
 }

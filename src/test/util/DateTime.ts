@@ -38,6 +38,21 @@ export const nextWeekend = (today: DateTime) => {
     return today
 }
 
+type Mapping = {
+    [key: string]: DateTime
+}
+export const dateTimeMapping: Mapping = {
+    LASTWEEK: lastWeek,
+    TWODAYSAGO: twoDaysAgo,
+    YESTERDAY: yesterday,
+    TODAY: today,
+    TOMORROW: tomorrow,
+    NEXTWEEKEND: nextWeekend(today),
+    NEXTWEEK: nextWeek,
+    PLUS3MONTHS: plus3Months,
+    PLUS6MONTHS: plus6Months
+}
+
 export const updateDateTime = (date: MpopDateTime): MpopDateTime => {
     if (parseInt(date.endTime.substring(0,2)) <= 22 && parseInt(date.startTime.substring(0,2)) <= 22){
         date.startTime = (parseInt(date.startTime.substring(0,2))+1).toString() + date.startTime.substring(2,5)
@@ -83,3 +98,17 @@ export const dateWithDayAndWithoutYear = (datetimeString: string) => {
 
 export const futureTimes = [tomorrow, nextWeek]
 
+export const to12Hour = (time: string) => {
+     const hour = time.substring(0,2) as unknown as number
+     if (hour < 12){
+        return time + 'am'
+     } else {
+        return (hour === 12 ? 12 : hour-12) + time.substring(2) + 'pm'
+     }
+}
+
+export const mpopTime = (start: string, end: string) => {
+    const startTime = to12Hour(start)
+    const endTime = to12Hour(end)
+    return startTime + ' to ' + endTime
+}
