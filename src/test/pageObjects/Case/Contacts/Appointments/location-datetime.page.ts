@@ -26,7 +26,7 @@ export default class LocationDateTimePage extends ContactPage {
             }
          } else {
             if (location === 'not needed'){
-                console.log('location needed so can`t select')
+                console.log('Location needed so can`t select')
                 return locations-1
             } else if (location === 'not in list'){
                 return locations-1
@@ -41,7 +41,6 @@ export default class LocationDateTimePage extends ContactPage {
             await this.fillText("startTime", dateTime.startTime)
             await this.fillText("endTime", dateTime.endTime)
         }
-        console.log(locationId)
         if (locationId !== undefined){
             await this.clickRadio("locationCode", locationId as number)
         }

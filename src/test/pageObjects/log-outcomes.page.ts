@@ -6,7 +6,7 @@ export default class LogOutcomesPage extends MPopPage {
         super(page, "Outcomes to log")
     }
 
-    async selectFirst(){
-        await this.page.getByRole('link', {name: /^Manage$/i }).first().click()
+    async selectFirst(id: number = 0){
+        await this.page.getByRole('link', {name: /^Manage$/i }).nth(id).click()
     }
 }

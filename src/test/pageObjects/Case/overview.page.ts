@@ -32,7 +32,6 @@ export default class OverviewPage extends CasePage {
     async NotMadeToday(): Promise<boolean> {
         const dateStr = await (await this.getSummaryRowValue(await this.getSummaryRowByKey('First check in'))).allTextContents()
         const string = dateStr[0].trim() + ' 2026'
-        console.log(string)
         const date = DateTime.fromFormat(string,'cccc d MMMM y')
         if (date <= yesterday){
             return true
