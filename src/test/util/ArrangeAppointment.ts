@@ -113,7 +113,9 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     let typeId: number | undefined = full ? 0 : undefined
     let attendee: MpopAttendee | undefined = full ? self : undefined
     let isVisor: boolean 
-    let dateTime: MpopDateTime = defaultTime
+    let date: string = luxonString(tomorrow)
+    let startTime: string = "15:15"
+    let endTime: string = "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
     let text: boolean = false
     let mobile: string
@@ -152,13 +154,13 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             isVisor = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
         }
         if (row.label === 'date'){
-          dateTime.date = luxonString(dateTimeMapping[row.value])
+            date = luxonString(dateTimeMapping[row.value])
         }
         if (row.label === 'startTime'){
-            dateTime.startTime = row.value
+            startTime = row.value
         }
         if (row.label === 'endTime'){
-            dateTime.endTime = row.value
+            endTime = row.value
         }
         if (row.label === 'locationId'){
             locationId = row.value as unknown as number | "not needed" | "not in list" 
@@ -184,7 +186,11 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
       typeId: typeId,
       attendee: attendee,
       isVisor: isVisor!,
-      dateTime: dateTime,
+      dateTime: {
+        date: date,
+        startTime: startTime,
+        endTime: endTime
+      },
       locationId: locationId,
       text: text,
       mobile: mobile!,
@@ -193,4 +199,20 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     }
 
     return appointment
+}
+
+export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: MpopArrangeAppointment) : MpopArrangeAppointment => {
+  const appointment : MpopArrangeAppointment = {
+    sentenceId: changes.sentenceId ?? base.sentenceId!,
+    typeId: changes.typeId ?? base.typeId!,
+    attendee: changes.attendee ?? base.attendee!,
+    isVisor: changes.isVisor ?? base.isVisor,
+    dateTime: changes.dateTime ?? base.dateTime!,
+    locationId: changes.locationId ?? base.locationId!,
+    text: changes.text ?? base.text!,
+    mobile: changes.mobile ?? base.mobile,
+    note: changes.note ?? base.note,
+    sensitivity: changes.sensitivity ?? base.sensitivity!
+  }
+  return appointment
 }

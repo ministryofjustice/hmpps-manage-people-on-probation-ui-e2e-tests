@@ -2,6 +2,9 @@ import { expect, Page } from "@playwright/test";
 import * as dotenv from 'dotenv'
 import { caseNavigation } from "../../util/Navigation";
 import CasePage from "./casepage";
+import { MpopArrangeAppointment } from "../../util/ArrangeAppointment";
+import { DateTime } from "luxon";
+import { mpopLongMonthFormat, mpopTime, today } from "../../util/DateTime";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -60,5 +63,15 @@ export default class AppointmentsPage extends CasePage{
         const btn = this.getQA("online-checkin-btn")
         await expect(btn).toBeVisible({ timeout: 10000 })  // ensure visible
         await btn.click()
+    }
+
+    async manageAppointment(appointment: MpopArrangeAppointment){
+        const dateTime = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")
+        const date = dateTime.toFormat('d MMMM yyyy')
+        const time = mpopTime(appointment.dateTime.startTime, appointment.dateTime.endTime)
+        console.log(date)
+        console.log(time)
+        const row = this.getClass('govuk-table__row').filter({hasText: date}).filter({hasText: time})
+        await row.getByRole('link', {name: 'Manage'}).click()
     }
 }

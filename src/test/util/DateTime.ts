@@ -98,3 +98,17 @@ export const dateWithDayAndWithoutYear = (datetimeString: string) => {
 
 export const futureTimes = [tomorrow, nextWeek]
 
+export const to12Hour = (time: string) => {
+     const hour = time.substring(0,2) as unknown as number
+     if (hour < 12){
+        return time + 'am'
+     } else {
+        return (hour === 12 ? 12 : hour-12) + time.substring(2) + 'pm'
+     }
+}
+
+export const mpopTime = (start: string, end: string) => {
+    const startTime = to12Hour(start)
+    const endTime = to12Hour(end)
+    return startTime + ' to ' + endTime
+}

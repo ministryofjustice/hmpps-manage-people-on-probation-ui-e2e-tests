@@ -3,6 +3,7 @@ import { test as base } from 'playwright-bdd';
 import { MpopSetupChanges, MpopSetupCheckin } from '../util/SetupOnlineCheckins';
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person';
 import AlertsPage from '../pageObjects/alerts';
+import { MpopArrangeAppointment } from '../util/ArrangeAppointment';
 
 type Ctx = {
   checkIns: CheckIns,
@@ -11,6 +12,7 @@ type Ctx = {
   case: Case
   alerts: Alerts
   manage: Manage
+  appointments: MpopArrangeAppointment[]
 };
 
 type CheckIns = {
@@ -48,7 +50,8 @@ export const testContext = base.extend<{ ctx: Ctx }, { ctxMap: Record<string, Ct
       base: {},
       case: {},
       alerts: {},
-      manage: {}
+      manage: {},
+      appointments: []
     }
     await use(ctxMap[testInfo.file])
   },

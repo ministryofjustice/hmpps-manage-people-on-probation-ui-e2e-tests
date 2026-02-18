@@ -4,7 +4,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments
+    @smoke @appointments @sequential
     Scenario: Create Future Appointment
         Given Context has been created for "Appointments" test
         And A new offender has been created in Ndelius
@@ -18,7 +18,7 @@ Feature: Create Appointments
             | sensitive  | NO    |
         Then the appointment should be created successfully
 
-    @smoke @appointments
+    @smoke @appointments @sequential
     Scenario: Create Similar Appointment
         When I create a similar appointment
             | label      | value    |
@@ -26,7 +26,7 @@ Feature: Create Appointments
             | sensitive  | YES      |
         Then the appointment should be created successfully
 
-    @smoke @appointments
+    @smoke @appointments @sequential
     Scenario: Create Another Appointment
         When I create another appointment
             | label      | value       | 
@@ -35,3 +35,4 @@ Feature: Create Appointments
             | date       | PLUS3MONTHS |
             | locationId | 0           |
         Then the appointment should be created successfully
+        And I can check appointment details with the manage page

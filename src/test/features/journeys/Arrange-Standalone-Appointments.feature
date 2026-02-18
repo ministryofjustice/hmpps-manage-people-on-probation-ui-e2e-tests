@@ -17,6 +17,7 @@ Feature: Create Appointments
             | note       | note      |
             | sensitive  | NO        |
         Then the appointment should be created successfully
+        And I can check appointment details with the manage page
 
     @smoke @appointments @location-not-needed
     Scenario: Location Not Needed
@@ -32,6 +33,7 @@ Feature: Create Appointments
             | note       | note        |
             | sensitive  | NO          |
         Then the appointment should be created successfully
+        And I can check appointment details with the manage page
 
     @smoke @appointments @location-not-in-list
     Scenario: Location Not In List

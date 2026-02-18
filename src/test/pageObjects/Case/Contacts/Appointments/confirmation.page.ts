@@ -13,7 +13,7 @@ export default class ConfirmationPage extends ContactPage {
             return new NextAppointmentPage(this.page)
         } else if (option === "returnToAll") {
             await this.clickLink('Return to all cases')
-        } else {
+        } else if (option === "overview") {
             await this.submit()
         }
     }
