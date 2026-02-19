@@ -16,6 +16,8 @@ import { DateTime } from "luxon"
 import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page"
 import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page"
 import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page"
+import ReschedulePage from "../pageObjects/Case/Contacts/Appointments/reschedule.page"
+import RescheduleDetailsPage from "../pageObjects/Case/Contacts/Appointments/reschedule-details"
 
 export interface MpopArrangeAppointment {
   sentenceId: number | "person"
@@ -47,6 +49,12 @@ export interface MpopAttendee {
   provider?: string
   team?: string
   user?: string
+}
+
+export interface RescheduleDetails {
+  user: number,
+  reason: string,
+  sensitivity: boolean
 }
 
 export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment, past:boolean = false) => {
@@ -106,6 +114,13 @@ export const createAnotherAppointmentMPop = async(page:Page, appointment: MpopAr
   const nextAppointmentPage = new NextAppointmentPage(page)
   await nextAppointmentPage.completePage(NextAction.New)
   await createAppointmentMPop(page, appointment)
+}
+
+export const rescheduleAppointmentMPop = async(page:Page, rescheduleDetails: RescheduleDetails, changes: MpopAppointmentChanges) => {
+  const reschedulePage = new ReschedulePage(page)
+  await reschedulePage.completePage(rescheduleDetails.user, rescheduleDetails.reason, rescheduleDetails.sensitivity)
+  const rescheduleDetailsPage = new RescheduleDetailsPage(page)
+  await rescheduleDetailsPage.completePage(changes)
 }
 
 export const appointmentDataTable = (data: DataTable, full:boolean = false) : MpopAppointmentChanges => {
@@ -199,6 +214,30 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     }
 
     return appointment
+}
+
+export const rescheduleDataTable = (data: DataTable) : RescheduleDetails => {
+    let who: "person" | "system"
+    let reason: string
+    let sensitivity: boolean = false
+    for (const row of data.hashes()){
+        if (row.label === 'who'){
+            who = row.value as "person" | "system"
+        }
+        if (row.label === 'reason'){
+            reason = row.value
+        }
+        if (row.label === 'sensitive'){
+            sensitivity = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
+        }
+    }
+    const reschedule : RescheduleDetails = {
+      user: who! === 'person' ? 0 : 1,
+      reason: reason!,
+      sensitivity: sensitivity
+    }
+
+    return reschedule
 }
 
 export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: MpopArrangeAppointment) : MpopArrangeAppointment => {

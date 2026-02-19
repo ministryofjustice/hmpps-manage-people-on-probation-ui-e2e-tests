@@ -9,9 +9,9 @@ import { DateTime } from "luxon";
 import AttendedCompliedPage from "./attended-complied.page";
 import AddNotePage from "./add-note.page";
 
-export default class ArrangeAnotherPage extends ContactPage {
+export default class RescheduleDetailsPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Arrange another appointment", crn, uuid)
+        super(page, "Change appointment details and reschedule", crn, uuid)
     }
 
     async completePage(changes: MpopAppointmentChanges) {
