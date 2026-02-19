@@ -36,3 +36,27 @@ Feature: Create Appointments
             | locationId | 0           |
         Then the appointment should be created successfully
         And I can check appointment details with the manage page
+
+    @smoke @appointments @sequential @reschedule
+    Scenario:Reschedule an appointment
+        When I access an existing future appointment
+        And I reschedule it with the following information
+            | label      | value       |
+            | date       | PLUS6MONTHS |
+            | sensitive  | YES         |
+            | who        | person      |
+            | reason     | just cos    |
+        Then the appointment should be rescheduled successfully
+        And I can check appointment details with the manage page
+
+    @smoke @appointments @sequential @reschedule @past
+    Scenario:Reschedule an appointment in past
+        When I access an existing future appointment
+        And I reschedule it with the following information
+            | label      | value       |
+            | date       | TWODAYSAGO  |
+            | sensitive  | NO          |
+            | who        | system      |
+            | reason     | just cos    |
+        Then the appointment should be rescheduled successfully
+        And I can check appointment details with the manage page
