@@ -4,7 +4,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments @sequential
+    @smoke @appointments @sequential @kk
     Scenario Outline: Create Future Appointment for <ScenarioName>
     Given Context has been created for "Appointments" test
     And A new offender has been created in Ndelius
@@ -21,16 +21,22 @@ Feature: Create Appointments
     Then the appointment should be created successfully
     Examples:
       | ScenarioName | sentenceId | typeId | locationId | text                     | mobile      | note       | sensitive |
-      | Scenario 2   | 0          | 0      | 0          | Yes, add a mobile number | 07771900900 | Test note1 | No        |
-      | Scenario 3   | 0          | 0      | 0          | No                       | 07771900900 | Test note2 | Yes       |
+      | Scenario 1   | 0          | 0      | 0          | Yes, add a mobile number | 07771900900 | Test note1 | No        |
+    #  | Scenario 2   | 0          | 0      | 0          | No                       | 07771900900 | Test note2 | Yes       |
 
-    @smoke @appointments @sequential
-    Scenario: Create Similar Appointment
+    @smoke @appointments @sequential @kk
+    Scenario Outline: Create Similar Appointment for <ScenarioName>
         When I create a similar appointment
-            | label      | value    |
-            | date       | NEXTWEEK |
-            | sensitive  | YES      |
+          | label     | value       |
+          | date      | <date>      |
+          | text      | <text>      |
+          | mobile    | <mobile>    |
+          | note      | <note>      |
+          | sensitive | <sensitive> |
         Then the appointment should be created successfully
+      Examples:
+        | ScenarioName | date     | text                            | mobile      | note       | sensitive |
+        | Scenario 1   | NEXTWEEK | Yes, update their mobile number | 07771900900 | Test note1 | YES       |
 
     @smoke @appointments @sequential
     Scenario: Create Another Appointment
