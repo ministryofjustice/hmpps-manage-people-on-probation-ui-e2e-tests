@@ -1,2 +1,67 @@
-<testsuites id="" name="" tests="0" failures="0" skipped="0" errors="0" time="0.006451000000000022">
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="56.669923000000004">
+<testsuite name="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" timestamp="2026-02-20T09:13:33.633Z" hostname="chromium" tests="1" failures="1" skipped="0" time="53.094" errors="0">
+<testcase name="Create Appointments › Create Future Appointment" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="53.094">
+<failure message="Arrange-Sequential-Appointments.feature.spec.js:7:3 Create Future Appointment" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:7:3 › Create Appointments › Create Future Appointment @mode:serial @smoke @appointments @sequential @kk › When I create an appointment 
+
+    TimeoutError: locator.fill: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for locator('[data-qa="notes"]').getByRole('textbox')
+        - waiting for" https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation" navigation to finish...
+        - navigated to "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation"
+
+
+       at ../src/test/pageObjects/page.ts:224
+
+      222 |
+      223 |     async fillText(qa: string, note: string){
+    > 224 |        await this.getQA(qa).getByRole('textbox').fill(note)
+          |                                                  ^
+      225 |     }
+      226 | }
+        at SupportingInformationPage.fillText (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts:224:50)
+        at SupportingInformationPage.completePage (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/Case/Contacts/Appointments/supporting-information.page.ts:12:24)
+        at setupAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:87:37)
+        at createAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:95:3)
+        at Object.<anonymous> (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/steps/journeys/Arrange-Appointment.steps.ts:25:5)
+        at /Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen/src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:11:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[{
+  sentenceId: [32m'0'[39m,
+  typeId: [32m'0'[39m,
+  attendee: { team: [32m'N07AAT'[39m, user: [32m'jsftest'[39m },
+  isVisor: [90mundefined[39m,
+  dateTime: { date: [32m'21/2/2026'[39m, startTime: [32m'15:15'[39m, endTime: [32m'16:15'[39m },
+  locationId: [32m'0'[39m,
+  text: [90mundefined[39m,
+  mobile: [90mundefined[39m,
+  note: [32m'note'[39m,
+  sensitivity: [33mfalse[39m
+}
+
+[[ATTACHMENT|test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
 </testsuites>
