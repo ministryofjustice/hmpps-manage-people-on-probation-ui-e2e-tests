@@ -4,20 +4,25 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments @sequential @kk
-    Scenario: Create Future Appointment
-        Given Context has been created for "Appointments" test
-        And A new offender has been created in Ndelius
-        And I am logged in
-        When I create an appointment
-          | label      | value   |
-          | sentenceId | 0       |
-          | typeId     | 0       |
-          | locationId | 0       |
-          | text       | yes-add |
-          | note       | note    |
-          | sensitive  | no      |
-        Then the appointment should be created successfully
+    @smoke @appointments @sequential
+    Scenario Outline: Create Future Appointment for <ScenarioName>
+    Given Context has been created for "Appointments" test
+    And A new offender has been created in Ndelius
+    And I am logged in
+    When I create an appointment
+      | label      | value        |
+      | sentenceId | <sentenceId> |
+      | typeId     | <typeId>     |
+      | locationId | <locationId> |
+      | text       | <text>       |
+      | mobile     | <mobile>     |
+      | note       | <note>       |
+      | sensitive  | <sensitive>  |
+    Then the appointment should be created successfully
+    Examples:
+      | ScenarioName | sentenceId | typeId | locationId | text                     | mobile      | note       | sensitive |
+      | Scenario 2   | 0          | 0      | 0          | Yes, add a mobile number | 07771900900 | Test note1 | No        |
+      | Scenario 3   | 0          | 0      | 0          | No                       | 07771900900 | Test note2 | Yes       |
 
     @smoke @appointments @sequential
     Scenario: Create Similar Appointment

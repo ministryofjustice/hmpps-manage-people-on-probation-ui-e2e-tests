@@ -7,33 +7,45 @@ export default class TextConfirmationPage extends ContactPage {
         super(page, "Text message confirmation", crn, uuid)
     }
 
-    // async completePage(option: boolean, mobile: string = '') {
-    //     await this.clickRadio("smsOptIn", option ? 0 : 1)
-    //     await this.submit()
-    // }
     async completePage(text: TextMessageOption, mobile?: string) {
 
         switch (text) {
 
             case 'yes':
                 await this.page.locator('input[type="radio"][value="YES"]').check()
-                console.log(text)
+                await this.submit()
                 break
 
             case 'yes-add':
                 await this.page.locator('input[type="radio"][value="YES_ADD_MOBILE_NUMBER"]').check()
-                console.log(text)
+                await this.submit()
+                // Wait for navigation to mobile page
+                await this.page.waitForLoadState('networkidle')
+
+                if (!mobile) {
+                    throw new Error('Mobile number is required when using yes-add')
+                }
+
+                await this.page.getByRole('textbox', { name: /mobile/i }).fill(mobile)
+                await this.continueButton()
                 break
 
             case 'yes-update':
                 await this.page.locator('input[type="radio"][value="YES_UPDATE_MOBILE_NUMBER"]').check()
-                console.log(text)
-                await this.page.getByRole('textbox', { name: /mobile/i }).fill(mobile!)
+                await this.submit()
+                await this.page.waitForLoadState('networkidle')
+
+                if (!mobile) {
+                    throw new Error('Mobile number is required when using yes-add')
+                }
+
+                await this.page.getByRole('textbox', { name: /mobile/i }).fill(mobile)
+                await this.continueButton()
                 break
 
             case 'no':
                 await this.page.locator('input[type="radio"][value="NO"]').check()
-                console.log(text)
+                await this.submit()
                 break
         }
     }
