@@ -7,6 +7,8 @@ import LocationNotInListPage from '../../pageObjects/Case/Contacts/Appointments/
 import ConfirmationPage from '../../pageObjects/Case/Contacts/Appointments/confirmation.page';
 import OverviewPage from '../../pageObjects/Case/overview.page';
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page';
+import { getCalenderEvent, getClientToken, getExternalReference } from '../../util/API';
+import { getUrn, getUuid } from '../../util/Common';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -66,6 +68,13 @@ Then('I can check appointment details with the manage page', async ({ ctx }) => 
         await appointmentsPage.manageAppointment(appointment)
         const managePage = new ManageAppointmentsPage(page)
         await managePage.checkOnPage()
+        const urn = getUrn(page)
+        const token = await getClientToken()
+        const external = await getExternalReference(ctx.case.crn, urn, token)
+        const body = await getCalenderEvent(external, token)
+        console.log(body)
+        expect(body.status).toBe(200)
+        console.log(body.startDate)
         await managePage.clickBackLink()
     }
 });
@@ -91,3 +100,28 @@ When('I reschedule it with the following information', async ({ ctx }, data:Data
     console.log(rescheduleDetails)
     await rescheduleAppointmentMPop(page, rescheduleDetails, changes)
 });
+
+Then('I can check calendar event created', async({ ctx }, data:DataTable) => {
+    const page = ctx.base.page
+    const uuid = getUuid(page, 2)
+    console.log(uuid)
+    // const token = await getClientToken()
+    // const urn = await getExternalReference(ctx.case.crn, uuid, token)
+    // console.log(urn)
+    // const body = await getCalenderEvent(urn, token)
+    // console.log(body)
+    // expect(body.status).toBe(200)
+    // console.log(body.startDate)
+})
+
+Then('I can check calendar event removed', async({ ctx }, data:DataTable) => {
+    // const page = ctx.base.page
+    // const uuid = getUuid(page, 2)
+    // console.log(uuid)
+    // const token = await getClientToken()
+    // const urn = await getExternalReference(ctx.case.crn, uuid, token)
+    // console.log(urn)
+    // const body = await getCalenderEvent(urn, token)
+    // console.log(body)
+    // expect(body.status).not.toBe(200)
+})
