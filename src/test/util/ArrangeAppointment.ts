@@ -146,7 +146,7 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     let endTime: string = "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
 
-    let text: TextMessageOption | undefined
+    let text: TextMessageOption = 'no'
 
     let mobile: string
     let note: string
