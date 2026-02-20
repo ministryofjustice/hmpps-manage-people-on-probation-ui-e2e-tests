@@ -59,6 +59,7 @@ Then('I end up on the location-not-in-list page', async ({ ctx }) => {
 
 Then('I can check appointment details with the manage page', async ({ ctx }) => {
     const page = ctx.base.page
+    const token = await getClientToken()
     const confirmationPage = new ConfirmationPage(page)
     await confirmationPage.completePage("overview")
     const overviewPage = new OverviewPage(page)
@@ -72,7 +73,7 @@ Then('I can check appointment details with the manage page', async ({ ctx }) => 
         await appointmentsPage.manageAppointment(appointment)
         const managePage = new ManageAppointmentsPage(page)
         await managePage.checkOnPage()
-        await checkOutlook(page, ctx.case.crn, past)
+        await checkOutlook(page, ctx.case.crn, token, past)
         await managePage.clickBackLink()
     }
 });
