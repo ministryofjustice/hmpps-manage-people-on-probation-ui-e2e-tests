@@ -99,9 +99,10 @@ export const dateWithDayAndWithoutYear = (datetimeString: string) => {
 export const futureTimes = [tomorrow, nextWeek]
 
 export const to12Hour = (time: string) => {
-     const hour = time.substring(0,2) as unknown as number
+     const hour = Number(time.substring(0,2))
+     console.log(hour)
      if (hour < 12){
-        return time + 'am'
+        return hour + time.substring(2) + 'am'
      } else {
         return (hour === 12 ? 12 : hour-12) + time.substring(2) + 'pm'
      }

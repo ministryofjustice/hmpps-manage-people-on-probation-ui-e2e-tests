@@ -17,6 +17,7 @@ Feature: Create Appointments
             | note       | note  |
             | sensitive  | NO    |
         Then the appointment should be created successfully
+        And I can check calendar event created
 
     @smoke @appointments @sequential
     Scenario: Create Similar Appointment
@@ -60,3 +61,4 @@ Feature: Create Appointments
             | reason     | just cos    |
         Then the appointment should be rescheduled successfully
         And I can check appointment details with the manage page
+        And I can check calendar event created
