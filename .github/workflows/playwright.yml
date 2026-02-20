@@ -37,6 +37,7 @@ jobs:
         MAS_API_URL: https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk
         E_SUPERVISION_API_URL: https://esupervision-api-dev.hmpps.service.justice.gov.uk
         SIGN_IN_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
+        OUTLOOK_API_URL: https://probation-supervision-appointments-api-dev.hmpps.service.justice.gov.uk
 
         # Credentials
         DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
