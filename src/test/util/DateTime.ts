@@ -100,7 +100,6 @@ export const futureTimes = [tomorrow, nextWeek]
 
 export const to12Hour = (time: string) => {
      const hour = Number(time.substring(0,2))
-     console.log(hour)
      if (hour < 12){
         return hour + time.substring(2) + 'am'
      } else {
