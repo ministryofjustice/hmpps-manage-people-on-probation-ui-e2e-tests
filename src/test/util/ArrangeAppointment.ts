@@ -18,6 +18,9 @@ import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page
 import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page"
 import ReschedulePage from "../pageObjects/Case/Contacts/Appointments/reschedule.page"
 import RescheduleDetailsPage from "../pageObjects/Case/Contacts/Appointments/reschedule-details"
+import {e} from "@faker-js/faker/dist/airline-BUL6NtOJ";
+
+
 
 export interface MpopArrangeAppointment {
   sentenceId: number | "person"
@@ -26,7 +29,7 @@ export interface MpopArrangeAppointment {
   isVisor?: boolean
   dateTime: MpopDateTime
   locationId: number | "not needed" | "not in list"
-  text: boolean,
+  text: TextMessageOption,
   mobile?: string
   note?: string
   sensitivity: boolean
@@ -39,7 +42,7 @@ export interface MpopAppointmentChanges {
   isVisor?: boolean
   dateTime?: MpopDateTime
   locationId?: number | "not needed" | "not in list"
-  text?: boolean,
+  text?: TextMessageOption,
   mobile?: string
   note?: string
   sensitivity?: boolean
@@ -123,6 +126,17 @@ export const rescheduleAppointmentMPop = async(page:Page, rescheduleDetails: Res
   await rescheduleDetailsPage.completePage(changes)
 }
 
+
+export const textMap = {
+    'Yes': 'yes',
+    'Yes, add a mobile number' : 'yes-add',
+    'Yes, update their mobile number': 'yes-update',
+    'No': 'no'
+} as const
+
+type TextMapKey = keyof typeof textMap
+export type TextMessageOption = typeof textMap[TextMapKey]
+
 export const appointmentDataTable = (data: DataTable, full:boolean = false) : MpopAppointmentChanges => {
     let sentenceId: number | 'person' | undefined = full ? 0 : undefined
     let typeId: number | undefined = full ? 0 : undefined
@@ -132,7 +146,9 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     let startTime: string = "15:15"
     let endTime: string = "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
-    let text: boolean = false
+
+    let text: TextMessageOption
+
     let mobile: string
     let note: string
     let sensitivity: boolean = false
@@ -182,8 +198,11 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             //not needed - last if an option
             //not in list - last otherwise (2nd last if not needed is option)
         }
+        // if (row.label === 'text'){
+        //     text = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
+        // }
         if (row.label === 'text'){
-            text = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
+            text = textMap[row.value as TextMapKey]
         }
         if (row.label === 'mobile'){
             mobile = row.value

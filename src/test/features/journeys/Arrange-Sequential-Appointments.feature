@@ -4,18 +4,19 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments @sequential
+    @smoke @appointments @sequential @kk
     Scenario: Create Future Appointment
         Given Context has been created for "Appointments" test
         And A new offender has been created in Ndelius
         And I am logged in
         When I create an appointment
-            | label      | value |
-            | sentenceId | 0     |
-            | typeId     | 0     |
-            | locationId | 0     |
-            | note       | note  |
-            | sensitive  | NO    |
+          | label      | value   |
+          | sentenceId | 0       |
+          | typeId     | 0       |
+          | locationId | 0       |
+          | text       | yes-add |
+          | note       | note    |
+          | sensitive  | no      |
         Then the appointment should be created successfully
 
     @smoke @appointments @sequential

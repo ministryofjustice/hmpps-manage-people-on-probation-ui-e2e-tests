@@ -1,16 +1,18 @@
 {
   "config": {
-    "configFile": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/playwright.config.ts",
-    "rootDir": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
+    "configFile": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/playwright.config.ts",
+    "rootDir": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
     "forbidOnly": false,
     "fullyParallel": true,
     "globalSetup": null,
-    "globalTeardown": null,
+    "globalTeardown": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/global-teardown.ts",
     "globalTimeout": 0,
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 1
+    },
     "preserveOutput": "always",
     "reporter": [
       [
@@ -47,18 +49,20 @@
     "quiet": false,
     "projects": [
       {
-        "outputDir": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/test-results",
+        "outputDir": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 1
+        },
         "id": "chromium",
         "name": "chromium",
-        "testDir": "/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
+        "testDir": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
         "testIgnore": [],
         "testMatch": [
           "**/*.@(spec|test).?(c|m)[jt]s?(x)"
         ],
-        "timeout": 120000
+        "timeout": 180000
       }
     ],
     "shard": null,
@@ -68,19 +72,144 @@
     "workers": 5,
     "webServer": null
   },
-  "suites": [],
-  "errors": [
+  "suites": [
     {
-      "message": "Error: No tests found",
-      "stack": "Error: No tests found"
+      "title": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+      "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Create Appointments",
+          "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+          "line": 4,
+          "column": 6,
+          "specs": [
+            {
+              "title": "Create Future Appointment",
+              "ok": false,
+              "tags": [
+                "mode:serial",
+                "smoke",
+                "appointments",
+                "sequential",
+                "kk"
+              ],
+              "tests": [
+                {
+                  "timeout": 180000,
+                  "annotations": [],
+                  "expectedStatus": "passed",
+                  "projectId": "chromium",
+                  "projectName": "chromium",
+                  "results": [
+                    {
+                      "workerIndex": 0,
+                      "parallelIndex": 0,
+                      "status": "failed",
+                      "duration": 53094,
+                      "error": {
+                        "message": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"notes\"]').getByRole('textbox')\u001b[22m\n\u001b[2m    - waiting for\" https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\"\u001b[22m\n",
+                        "stack": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"notes\"]').getByRole('textbox')\u001b[22m\n\u001b[2m    - waiting for\" https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\"\u001b[22m\n\n    at SupportingInformationPage.fillText (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts:224:50)\n    at SupportingInformationPage.completePage (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/Case/Contacts/Appointments/supporting-information.page.ts:12:24)\n    at setupAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:87:37)\n    at createAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:95:3)\n    at Object.<anonymous> (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/steps/journeys/Arrange-Appointment.steps.ts:25:5)\n    at /Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen/src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:11:5",
+                        "location": {
+                          "file": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts",
+                          "column": 50,
+                          "line": 224
+                        },
+                        "snippet": "\u001b[90m   at \u001b[39m../src/test/pageObjects/page.ts:224\n\n\u001b[0m \u001b[90m 222 |\u001b[39m\n \u001b[90m 223 |\u001b[39m     \u001b[36masync\u001b[39m fillText(qa\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m note\u001b[33m:\u001b[39m string){\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 224 |\u001b[39m        \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgetQA(qa)\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m)\u001b[33m.\u001b[39mfill(note)\n \u001b[90m     |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 225 |\u001b[39m     }\n \u001b[90m 226 |\u001b[39m }\u001b[0m"
+                      },
+                      "errors": [
+                        {
+                          "location": {
+                            "file": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts",
+                            "column": 50,
+                            "line": 224
+                          },
+                          "message": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"notes\"]').getByRole('textbox')\u001b[22m\n\u001b[2m    - waiting for\" https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\"\u001b[22m\n\n\n\u001b[90m   at \u001b[39m../src/test/pageObjects/page.ts:224\n\n\u001b[0m \u001b[90m 222 |\u001b[39m\n \u001b[90m 223 |\u001b[39m     \u001b[36masync\u001b[39m fillText(qa\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m note\u001b[33m:\u001b[39m string){\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 224 |\u001b[39m        \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgetQA(qa)\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m)\u001b[33m.\u001b[39mfill(note)\n \u001b[90m     |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 225 |\u001b[39m     }\n \u001b[90m 226 |\u001b[39m }\u001b[0m\n\u001b[2m    at SupportingInformationPage.fillText (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts:224:50)\u001b[22m\n\u001b[2m    at SupportingInformationPage.completePage (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/Case/Contacts/Appointments/supporting-information.page.ts:12:24)\u001b[22m\n\u001b[2m    at setupAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:87:37)\u001b[22m\n\u001b[2m    at createAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:95:3)\u001b[22m\n\u001b[2m    at Object.<anonymous> (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/steps/journeys/Arrange-Appointment.steps.ts:25:5)\u001b[22m\n\u001b[2m    at /Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen/src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:11:5\u001b[22m"
+                        }
+                      ],
+                      "stdout": [
+                        {
+                          "text": "{\n  sentenceId: \u001b[32m'0'\u001b[39m,\n  typeId: \u001b[32m'0'\u001b[39m,\n  attendee: { team: \u001b[32m'N07AAT'\u001b[39m, user: \u001b[32m'jsftest'\u001b[39m },\n  isVisor: \u001b[90mundefined\u001b[39m,\n  dateTime: { date: \u001b[32m'21/2/2026'\u001b[39m, startTime: \u001b[32m'15:15'\u001b[39m, endTime: \u001b[32m'16:15'\u001b[39m },\n  locationId: \u001b[32m'0'\u001b[39m,\n  text: \u001b[90mundefined\u001b[39m,\n  mobile: \u001b[90mundefined\u001b[39m,\n  note: \u001b[32m'note'\u001b[39m,\n  sensitivity: \u001b[33mfalse\u001b[39m\n}\n"
+                        }
+                      ],
+                      "stderr": [],
+                      "retry": 0,
+                      "steps": [
+                        {
+                          "title": "Given Context has been created for \"Appointments\" test",
+                          "duration": 1070
+                        },
+                        {
+                          "title": "And A new offender has been created in Ndelius",
+                          "duration": 1
+                        },
+                        {
+                          "title": "And I am logged in",
+                          "duration": 1841
+                        },
+                        {
+                          "title": "When I create an appointment",
+                          "duration": 49738,
+                          "error": {
+                            "message": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"notes\"]').getByRole('textbox')\u001b[22m\n\u001b[2m    - waiting for\" https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\"\u001b[22m\n",
+                            "stack": "TimeoutError: locator.fill: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-qa=\"notes\"]').getByRole('textbox')\u001b[22m\n\u001b[2m    - waiting for\" https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\" navigation to finish...\u001b[22m\n\u001b[2m    - navigated to \"https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X986977/arrange-appointment/ea76c632-5151-4e91-890e-9b555f9a20e4/location-date-time?back=text-message-confirmation\"\u001b[22m\n\n    at SupportingInformationPage.fillText (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts:224:50)\n    at SupportingInformationPage.completePage (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/Case/Contacts/Appointments/supporting-information.page.ts:12:24)\n    at setupAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:87:37)\n    at createAppointmentMPop (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/util/ArrangeAppointment.ts:95:3)\n    at Object.<anonymous> (/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/steps/journeys/Arrange-Appointment.steps.ts:25:5)\n    at /Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen/src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:11:5",
+                            "location": {
+                              "file": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts",
+                              "column": 50,
+                              "line": 224
+                            },
+                            "snippet": "\u001b[90m   at \u001b[39m../src/test/pageObjects/page.ts:224\n\n\u001b[0m \u001b[90m 222 |\u001b[39m\n \u001b[90m 223 |\u001b[39m     \u001b[36masync\u001b[39m fillText(qa\u001b[33m:\u001b[39m string\u001b[33m,\u001b[39m note\u001b[33m:\u001b[39m string){\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 224 |\u001b[39m        \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgetQA(qa)\u001b[33m.\u001b[39mgetByRole(\u001b[32m'textbox'\u001b[39m)\u001b[33m.\u001b[39mfill(note)\n \u001b[90m     |\u001b[39m                                                  \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 225 |\u001b[39m     }\n \u001b[90m 226 |\u001b[39m }\u001b[0m"
+                          }
+                        }
+                      ],
+                      "startTime": "2026-02-20T09:13:34.449Z",
+                      "annotations": [],
+                      "attachments": [
+                        {
+                          "name": "screenshot",
+                          "contentType": "image/png",
+                          "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/test-failed-1.png"
+                        },
+                        {
+                          "name": "error-context",
+                          "contentType": "text/markdown",
+                          "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/error-context.md"
+                        },
+                        {
+                          "name": "trace",
+                          "contentType": "application/zip",
+                          "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-cfa27-s-Create-Future-Appointment-chromium/trace.zip"
+                        }
+                      ],
+                      "errorLocation": {
+                        "file": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/src/test/pageObjects/page.ts",
+                        "column": 50,
+                        "line": 224
+                      }
+                    }
+                  ],
+                  "status": "unexpected"
+                }
+              ],
+              "id": "056c5eb194dbdad2fca4-4d43e30c717635d5507e",
+              "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+              "line": 7,
+              "column": 3
+            }
+          ]
+        }
+      ]
     }
   ],
+  "errors": [],
   "stats": {
-    "startTime": "2026-01-28T15:34:24.525Z",
-    "duration": 6.451000000000022,
+    "startTime": "2026-02-20T09:13:33.590Z",
+    "duration": 56669.923,
     "expected": 0,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }
