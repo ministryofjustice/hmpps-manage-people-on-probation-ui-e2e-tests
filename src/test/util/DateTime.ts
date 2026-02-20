@@ -29,7 +29,7 @@ export const plus3Months = today.plus({ months: 3 })  // => 12 Sep 2025
 export const plus6Months = today.plus({ months: 6 })  // => 12 Dec 2025
 export const nextWeek = today.plus({ days: 7 })
 export const lastWeek = today.minus({ days: 7 })
-export const twoDaysAgo = today.minus({ days: 2 })
+export const threeDaysAgo = today.minus({ days: 3 })
 
 export const nextWeekend = (today: DateTime) => {
     while (!today.isWeekend){
@@ -43,7 +43,7 @@ type Mapping = {
 }
 export const dateTimeMapping: Mapping = {
     LASTWEEK: lastWeek,
-    TWODAYSAGO: twoDaysAgo,
+    THREEDAYSAGO: threeDaysAgo,
     YESTERDAY: yesterday,
     TODAY: today,
     TOMORROW: tomorrow,
@@ -99,9 +99,9 @@ export const dateWithDayAndWithoutYear = (datetimeString: string) => {
 export const futureTimes = [tomorrow, nextWeek]
 
 export const to12Hour = (time: string) => {
-     const hour = time.substring(0,2) as unknown as number
+     const hour = Number(time.substring(0,2))
      if (hour < 12){
-        return time + 'am'
+        return hour + time.substring(2) + 'am'
      } else {
         return (hour === 12 ? 12 : hour-12) + time.substring(2) + 'pm'
      }

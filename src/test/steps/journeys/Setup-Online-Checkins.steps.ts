@@ -3,7 +3,7 @@ import OverviewPage from '../../pageObjects/Case/overview.page';
 import ConfirmationPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/confirmation.page';
 import CheckInSummaryPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page';
 import { test as base, createBdd, DataTable } from 'playwright-bdd';
-import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../util/DateTime';
+import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, threeDaysAgo, yesterday } from '../../util/DateTime';
 import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../util/SetupOnlineCheckins';
 import { test, testContext } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../util/API';
