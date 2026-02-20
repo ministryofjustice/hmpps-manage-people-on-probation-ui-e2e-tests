@@ -18,7 +18,6 @@ import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page
 import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page"
 import ReschedulePage from "../pageObjects/Case/Contacts/Appointments/reschedule.page"
 import RescheduleDetailsPage from "../pageObjects/Case/Contacts/Appointments/reschedule-details"
-import {e} from "@faker-js/faker/dist/airline-BUL6NtOJ";
 
 
 
