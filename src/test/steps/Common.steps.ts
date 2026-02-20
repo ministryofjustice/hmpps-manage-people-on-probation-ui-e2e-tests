@@ -21,9 +21,17 @@ Given(`Context has been created for {string} test`, async ({browser: b, ctx}, na
     }
 })
 
+// Given('A new offender has been created in Ndelius', async ({ ctx }) => {
+//     const [person, crn] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam, true))
+//     await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+//     ctx.case.crn = crn
+//     ctx.case.person = person
+// });
+
 Given('A new offender has been created in Ndelius', async ({ ctx }) => {
-    const [person, crn] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam, true))
-    await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    const  crn = "X986977";
+    const  person = "Ben Jakubowski"; //= (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam, true))
+   // await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
     ctx.case.crn = crn
     ctx.case.person = person
 });
