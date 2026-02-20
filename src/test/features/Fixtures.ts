@@ -1,7 +1,7 @@
 import { Browser, BrowserContext, Page } from '@playwright/test';
 import { test as base } from 'playwright-bdd';
 import { MpopSetupChanges, MpopSetupCheckin } from '../util/SetupOnlineCheckins';
-import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person';
+import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs';
 import AlertsPage from '../pageObjects/alerts';
 import { MpopArrangeAppointment } from '../util/ArrangeAppointment';
 

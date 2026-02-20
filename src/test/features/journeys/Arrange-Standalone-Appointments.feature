@@ -3,49 +3,40 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments @past
-    Scenario: Create Past Appointment
-        Given Context has been created for "Appointments" test
-        And A new offender has been created in Ndelius
-        And I am logged in
-        When I create an appointment
-            | label      | value     |
-            | sentenceId | 0         |
-            | typeId     | 0         |
-            | date       | YESTERDAY |
-            | locationId | 0         |
-            | note       | note      |
-            | sensitive  | NO        |
-        Then the appointment should be created successfully
-        And I can check appointment details with the manage page
+  @smoke @appointments @standalones
+  Scenario Outline: Create Appointment for <ScenarioName>
+    Given Context has been created for "Appointments" test
+    And A new offender has been created or existing made available
+    And I am logged in
+    When I create an appointment
+      | label      | value        |
+      | sentenceId | <sentenceId> |
+      | typeId     | <typeId>     |
+      | locationId | <locationId> |
+      | date       | <date>       |
+      | text       | <text>       |
+      | mobile     | <mobile>     |
+      | note       | <note>       |
+      | sensitive  | <sensitive>  |
+    Then the appointment should be created successfully
+    And I can check appointment details with the manage page
+    Examples:
+      | ScenarioName         | sentenceId | typeId | date        | locationId  | text | mobile | note       | sensitive |
+      | Past                 | 0          | 0      | LASTWEEK    | 0           |      |        | Test note1 | NO        |
+      | Location-not-needed  | 0          | 1      | PLUS6MONTHS | not needed  | No   |        | Test note2 | NO        |
 
-    @smoke @appointments @location-not-needed
-    Scenario: Location Not Needed
-        Given Context has been created for "Appointments" test
-        And A new offender has been created in Ndelius
-        And I am logged in
-        When I create an appointment
-            | label      | value       |
-            | sentenceId | 0           |
-            | typeId     | 1           |
-            | date       | PLUS6MONTHS |
-            | locationId | not needed  |
-            | note       | note        |
-            | sensitive  | NO          |
-        Then the appointment should be created successfully
-        And I can check appointment details with the manage page
+  @smoke @appointments @failures
+  Scenario: Create Appointment for <ScenarioName>
+      Given Context has been created for "Appointments" test
+      And A new offender has been created or existing made available
+      And I am logged in
+      When I create an appointment
+        | label      | value        |
+        | sentenceId | <sentenceId> |
+        | typeId     | <typeId>     |
+        | locationId | <locationId> |
+      Then I end up on the location-not-in-list page
 
-    @smoke @appointments @location-not-in-list
-    Scenario: Location Not In List
-        Given Context has been created for "Appointments" test
-        And A new offender has been created in Ndelius
-        And I am logged in
-        When I create an appointment
-            | label      | value        |
-            | sentenceId | 0            |
-            | typeId     | 0            |
-            | date       | TOMORROW     |
-            | locationId | not in list  |
-            | note       | note         |
-            | sensitive  | NO           |
-        Then I end up on the location-not-in-list page
+      Examples:
+        | ScenarioName         | sentenceId | typeId | locationId  |
+        | Location-not-in-list | 0          | 0      | not in list |

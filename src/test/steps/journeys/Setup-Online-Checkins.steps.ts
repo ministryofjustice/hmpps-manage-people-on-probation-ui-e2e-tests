@@ -3,7 +3,7 @@ import OverviewPage from '../../pageObjects/Case/overview.page';
 import ConfirmationPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/confirmation.page';
 import CheckInSummaryPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page';
 import { test as base, createBdd, DataTable } from 'playwright-bdd';
-import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, twoDaysAgo, yesterday } from '../../util/DateTime';
+import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, threeDaysAgo, yesterday } from '../../util/DateTime';
 import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../util/SetupOnlineCheckins';
 import { test, testContext } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../util/API';
@@ -112,7 +112,7 @@ Then('I can access the new checkIn in the contact log', async({ ctx }) => {
    const contactLog = new ActivityLogPage(page, 'compact', crn)
    await contactLog.navigateTo()
    await contactLog.checkOnPage()
-   await contactLog.getLink('Update').first().click()
+   await contactLog.getLink('Manage').first().click()
 })
 
 When('I review the completed checkIn', async({ ctx }) => {
@@ -130,7 +130,7 @@ Then('I can view the reviewed checkIn', async({ ctx }) => {
    const crn = ctx.case.crn
    const contactLog = new ActivityLogPage(page, 'compact', crn)
    await contactLog.checkOnPage()
-   await contactLog.getLink('Update').first().click()
+   await contactLog.getLink('Manage').first().click()
    const reviewedSubmittedPage = new ReviewedSubmittedPage(page, crn)
    await reviewedSubmittedPage.checkOnPage()
 })
@@ -158,7 +158,7 @@ Then('I can access the expired checkIn in the contact log', async({ ctx }) => {
    const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
    await contactLog.navigateTo()
    await contactLog.checkOnPage()
-   await contactLog.getLink('Update').first().click()
+   await contactLog.getLink('Manage').first().click()
 })
 
 When('I review the missed checkIn', async({ ctx }) => {
@@ -176,7 +176,7 @@ Then('I can view the expired and reviewed checkIn', async({ ctx }) => {
    const expiredCrn = ctx.checkIns.expiredCrn
    const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
    await contactLog.checkOnPage()
-   await contactLog.getLink('Update').first().click()
+   await contactLog.getLink('Manage').first().click()
    const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
    await reviewedExpiredPage.checkOnPage()
 })
