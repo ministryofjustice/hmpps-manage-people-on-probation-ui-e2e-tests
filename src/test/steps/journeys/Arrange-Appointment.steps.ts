@@ -5,7 +5,6 @@ import { appointmentDataTable, createAnotherAppointmentMPop, createAppointmentMP
 import { testContext } from '../../features/Fixtures';
 import LocationNotInListPage from '../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page';
 import ConfirmationPage from '../../pageObjects/Case/Contacts/Appointments/confirmation.page';
-import NextAppointmentPage, { NextAction } from '../../pageObjects/Case/Contacts/Appointments/next-appointment.page';
 import OverviewPage from '../../pageObjects/Case/overview.page';
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page';
 import { getCalenderEvent, getClientToken, getExternalReference } from '../../util/API';

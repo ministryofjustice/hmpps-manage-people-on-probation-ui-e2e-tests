@@ -126,7 +126,7 @@ export const rescheduleAppointmentMPop = async(page:Page, rescheduleDetails: Res
   await rescheduleDetailsPage.completePage(changes)
 }
 
-
+// SMS messages options
 export const textMap = {
     'Yes': 'yes',
     'Yes, add a mobile number' : 'yes-add',
@@ -147,7 +147,7 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     let endTime: string = "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
 
-    let text: TextMessageOption
+    let text: TextMessageOption | undefined
 
     let mobile: string
     let note: string
@@ -198,9 +198,6 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             //not needed - last if an option
             //not in list - last otherwise (2nd last if not needed is option)
         }
-        // if (row.label === 'text'){
-        //     text = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
-        // }
         if (row.label === 'text'){
             text = textMap[row.value as TextMapKey]
         }
