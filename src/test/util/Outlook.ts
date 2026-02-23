@@ -8,7 +8,8 @@ export const checkOutlook = async(page: Page, crn: string, token: string, past: 
     const external = await getExternalReference(crn, urn, token)
     const [status, body] = await getCalenderEvent(external, token)
     if (past){
-        expect(status).not.toBe(200)
+        console.log('appointment in past. no outlook event')
+        expect(status).toBe(404)
     } else {
         expect(status).toBe(200)
     }
