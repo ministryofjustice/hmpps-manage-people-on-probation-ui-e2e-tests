@@ -36,8 +36,8 @@ Feature: Create Appointments
         Then the appointment should be created successfully
 
         Examples:
-            | ScenarioName | date     | text | mobile      | note       | sensitive |
-            | Sequential   | NEXTWEEK | No   | 07771900900 | Test note1 | YES       |
+            | ScenarioName | date     | text                            | mobile      | note       | sensitive |
+            | Sequential   | NEXTWEEK | Yes, update their mobile number | 07771900900 | Test note1 | YES       |
 
     @smoke @appointments @sequential
     Scenario: Create Another Appointment for <ScenarioName>
