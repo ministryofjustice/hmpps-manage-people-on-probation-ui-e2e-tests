@@ -7,6 +7,11 @@ import LocationNotInListPage from '../../pageObjects/Case/Contacts/Appointments/
 import ConfirmationPage from '../../pageObjects/Case/Contacts/Appointments/confirmation.page';
 import OverviewPage from '../../pageObjects/Case/overview.page';
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page';
+import { getCalenderEvent, getClientToken, getExternalReference } from '../../util/API';
+import { getUrn, getUuid } from '../../util/Common';
+import { DateTime } from 'luxon';
+import { today } from '../../util/DateTime';
+import { checkOutlook } from '../../util/Outlook';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -54,6 +59,7 @@ Then('I end up on the location-not-in-list page', async ({ ctx }) => {
 
 Then('I can check appointment details with the manage page', async ({ ctx }) => {
     const page = ctx.base.page
+    const token = await getClientToken()
     const confirmationPage = new ConfirmationPage(page)
     await confirmationPage.completePage("overview")
     const overviewPage = new OverviewPage(page)
@@ -61,11 +67,13 @@ Then('I can check appointment details with the manage page', async ({ ctx }) => 
     await overviewPage.useSubNavigation("appointmentsTab")
     for (let a = 0; a < ctx.appointments.length; a++){
         const appointment : MpopArrangeAppointment = ctx.appointments[a]
+        const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
         const appointmentsPage = new AppointmentsPage(page)
         await appointmentsPage.checkOnPage()
         await appointmentsPage.manageAppointment(appointment)
         const managePage = new ManageAppointmentsPage(page)
         await managePage.checkOnPage()
+        await checkOutlook(page, ctx.case.crn, token, past)
         await managePage.clickBackLink()
     }
 });

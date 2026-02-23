@@ -1,4 +1,4 @@
-import { Page, request } from '@playwright/test';
+import { APIResponse, Page, request } from '@playwright/test';
 import * as dotenv from 'dotenv'
 import { luxonString } from './DateTime';
 import { photo_1_path, video_1_path } from './Data';
@@ -8,7 +8,7 @@ dotenv.config({ path: '.env' })
 const MAS_API_URL = process.env.MAS_API_URL
 const SIGN_IN_URL = process.env.SIGN_IN_URL
 const E_SUPERVISION_API_URL = process.env.E_SUPERVISION_API_URL
-
+const OUTLOOK_API_URL = process.env.OUTLOOK_API_URL
 
 export const getClientToken = async() : Promise<string> => {
     const signin_context = await request.newContext({
@@ -21,6 +21,32 @@ export const getClientToken = async() : Promise<string> => {
     const token = await signin_context.post('/auth/oauth/token?grant_type=client_credentials')
     const body: any = await token.json()
     return await body.access_token
+}
+
+export const getCalenderEvent = async(urn: string, token: string) => {
+    const context = await request.newContext({
+        baseURL: OUTLOOK_API_URL,
+    });
+    const response: APIResponse = await context.get(`/calendar/event?supervisionAppointmentUrn=${urn}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    const body : any = await response.json()
+    return [response.status(), body]
+}
+
+export const getExternalReference = async(crn: string, contactId: string, token: string) => {
+    const context = await request.newContext({
+        baseURL: MAS_API_URL,
+    });
+    const response = await context.get(`/schedule/${crn}/appointment/${contactId}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    const body : any = await response.json()
+    return body.appointment.externalReference
 }
 
 export const getProbationPractitioner = async(crn: string, token: string) => {
