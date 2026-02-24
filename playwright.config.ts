@@ -2,18 +2,18 @@ import { defineConfig, devices } from '@playwright/test';
 import {
   secondsToMilliseconds
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs'
-import { defineBddConfig } from 'playwright-bdd';
+
 import path from "path";
 
 const ROOT_DIR = process.cwd();
-const testDir = defineBddConfig({
-  "paths": [
-    "src/test/**/features"
-  ],
-  "import":[
-    "src/test/**/*.ts"
-  ],
-});
+// const testDir = defineBddConfig({
+//   "paths": [
+//     "src/test/**/features"
+//   ],
+//   "import":[
+//     "src/test/**/*.ts"
+//   ],
+// });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -26,7 +26,7 @@ export default defineConfig({
         ['junit', { outputFile: 'junit.xml' }],
         ['json', { outputFile: 'results.json' }],
     ],
-  testDir,
+ // testDir,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -42,7 +42,7 @@ export default defineConfig({
     viewport: null,
     actionTimeout: secondsToMilliseconds(30),
     timezoneId: 'Europe/London',
-    launchOptions: { slowMo: 150 },
+    launchOptions: { slowMo: process.env.SLOWMO ? Number(process.env.SLOWMO) : 150 },
     screenshot: 'only-on-failure',
     trace: process.env.CI ? 'off' : 'on',
     ...devices['Desktop Chrome'],

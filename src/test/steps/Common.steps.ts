@@ -42,3 +42,10 @@ Given('I am logged in', async ({ ctx }) => {
 Given('I close the context', async ({ ctx }) => {
     await ctx.base.context.close()
 });
+
+Given('I navigate to {String} page',async ({ctx},nav: String)=>{
+    switch(nav){
+        case "contact":
+
+    }
+})
