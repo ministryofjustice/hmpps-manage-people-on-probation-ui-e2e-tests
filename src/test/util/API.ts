@@ -15,7 +15,8 @@ export const getClientToken = async() : Promise<string> => {
         baseURL: SIGN_IN_URL,
         httpCredentials: {
             username: process.env.API_USERNAME!,
-            password: process.env.API_PASSWORD!
+            password: process.env.API_PASSWORD!,
+            send: "always"
         }
     });
     const token = await signin_context.post('/auth/oauth/token?grant_type=client_credentials')

@@ -1,7 +1,5 @@
 import { expect, type Page } from '@playwright/test'
 import HomePage from '../pageObjects/home.page'
-import * as dotenv from 'dotenv'
-dotenv.config({ path: '.env' })
 
 export const login = async (page: Page) => {
     await page.goto(process.env.MANAGE_PEOPLE_ON_PROBATION_URL!)
