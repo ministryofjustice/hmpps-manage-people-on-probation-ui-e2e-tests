@@ -22,4 +22,8 @@ export default abstract class CasePage extends MPopPage {
     async useBreadcrumbs(id: number) { //0 returns to cases, 1 returns to overview
         await this.getClass('govuk-breadcrumbs').getByRole('link').nth(id).click()
     }
+
+    async checkCrn(crn?: string){
+        await this.checkQA('crn', (crn ?? this.crn)!)
+    }
 }

@@ -6,7 +6,8 @@ Feature: As a practitioner
     Given Context has been created for "Overview" test
     And I am logged in
     And I navigate to '<case>'
-    Then the overview page is populated
+    Then the pop header is correct
+    And the overview page is populated
     And the overview page links work correctly 
 
     Examples:
