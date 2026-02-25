@@ -37,6 +37,19 @@ export const getCalenderEvent = async(urn: string, token: string) => {
     return [response.status(), body]
 }
 
+export const getContacts = async(crn: string, token: string) => {
+    const context = await request.newContext({
+        baseURL: MAS_API_URL,
+    });
+    const response = await context.get(`/activity/${crn}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    const body : any = await response.json()
+    return body.activities
+}
+
 export const getExternalReference = async(crn: string, contactId: string, token: string) => {
     const context = await request.newContext({
         baseURL: MAS_API_URL,

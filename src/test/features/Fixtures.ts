@@ -8,6 +8,7 @@ import { MpopArrangeAppointment } from '../util/ArrangeAppointment';
 type Ctx = {
   checkIns: CheckIns,
   contact: Contact
+  contacts: Activity[]
   base: Base,
   case: Case
   alerts: Alerts
@@ -38,6 +39,22 @@ type Alerts = {
 }
 type Manage = {
   noteCount: number
+}
+type Activity = {
+  type: string
+  startDateTime: string
+  endDateTime?: string
+  appointmentNotes?: Note[]
+  appointmentNote?: Note
+  isSensitive?: boolean
+  hasOutcome?: boolean
+}
+type Note = {
+  id: number
+  createdBy?: string
+  createdByDate?: string
+  note: string
+  hasNotesBeenTruncated?: boolean
 }
 
 export const test = base

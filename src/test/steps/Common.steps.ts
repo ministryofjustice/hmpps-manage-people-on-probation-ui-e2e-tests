@@ -7,6 +7,7 @@ import { login } from '../util/Login';
 import { loginDeliusAndCreateOffender } from '../util/Delius';
 import { getBrowserContext } from '../util/Common';
 import { testContext } from '../features/Fixtures';
+import OverviewPage from '../pageObjects/Case/overview.page';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -42,3 +43,9 @@ Given('I am logged in', async ({ ctx }) => {
 Given('I close the context', async ({ ctx }) => {
     await ctx.base.context.close()
 });
+
+Given('I navigate to {string}',async ({ctx}, crn)=>{
+    const overviewPage = new OverviewPage(ctx.base.page, crn)
+    await overviewPage.navigateTo(crn)
+    ctx.case.crn = crn
+})

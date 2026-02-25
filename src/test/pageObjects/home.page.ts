@@ -14,5 +14,8 @@ export default class HomePage extends MPopPage {
     async logMoreOutcomes(){
         await this.getQA('homepage-outcomes').getByRole('link', {name: "Log more outcomes"}).click()
     }
-    
+
+    async viewUpcoming(){
+        await this.getQA('homepage-appointments').getByRole('link', {name: "View all upcoming appointments"}).click()
+    } 
 }

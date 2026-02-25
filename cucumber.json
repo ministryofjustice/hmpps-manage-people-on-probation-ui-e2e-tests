@@ -3,16 +3,44 @@
     "formatOptions": {
       "snippetInterface": "async-await"
     },
-    "paths": [
-      "src/test/**/features"
-    ],
-    "import":[
-      "src/test/steps/**/*.ts"
-    ],
-    "loader": [
-      "ts-node/esm"
+    "paths": ["src/test/**/features"],
+    "import": ["src/test/steps/**/*.ts", "src/test/util/**/*.ts"],
+    "loader": ["ts-node/esm"],
+    "format": [
+      "progress",
+      "html:reports/cucumber-report.html",
+      "json:reports/cucumber-report.json"
     ],
     "publishQuiet": true,
     "dryRun": false
+  },
+
+  "debug": {
+    "formatOptions": {
+      "snippetInterface": "async-await"
+    },
+    "paths": ["src/test/**/features"],
+    "import": ["src/test/steps/**/*.ts", "src/test/util/**/*.ts"],
+    "loader": ["ts-node/esm"],
+
+    "format": [
+      "progress",
+      "html:reports/cucumber-report.html",
+      "json:reports/cucumber-report.json"
+    ],
+
+    "publishQuiet": true,
+    "dryRun": false,
+
+    "worldParameters": {
+      "headless": false,
+      "slowMo": 75,
+      "trace": true,
+      "video": true,
+      "screenshotOnFailure": true,
+      "keepBrowserOpenOnFailure": true,
+      "backtrace": true,
+      "forceExit": true
+    }
   }
 }

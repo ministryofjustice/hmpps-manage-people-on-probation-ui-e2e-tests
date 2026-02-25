@@ -8,6 +8,7 @@ import AddNotePage from '../../pageObjects/Case/Contacts/Appointments/add-note.p
 import HomePage from '../../pageObjects/home.page';
 import LogOutcomesPage from '../../pageObjects/log-outcomes.page';
 import AttendedCompliedPage from '../../pageObjects/Case/Contacts/Appointments/attended-complied.page';
+import UpcomingAppiointmentsPage from '../../pageObjects/upcoming.page';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -17,6 +18,18 @@ When('I navigate to latest past appointment', async ({ ctx }) => {
     await appointments.navigateTo()
     await appointments.checkOnPage()
     await appointments.selectPastAppointment(1)
+    const managePage = new ManageAppointmentsPage(page)
+    await managePage.checkOnPage()
+});
+
+When('I navigate to first upcoming appointment', async ({ ctx }) => {
+    const page = ctx.base.page
+    const home = new HomePage(page)
+    await home.checkOnPage()
+    await home.viewUpcoming()
+    const upcomingAppointments = new UpcomingAppiointmentsPage(page)
+    await upcomingAppointments.checkOnPage()
+    await upcomingAppointments.selectOfficeVisit()
     const managePage = new ManageAppointmentsPage(page)
     await managePage.checkOnPage()
 });

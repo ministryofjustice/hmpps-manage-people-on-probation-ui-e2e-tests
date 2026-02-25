@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "cucumber-js test"
+    "test": "cucumber-js test",
+    "bdd": "cucumber-js",
+    "bdd:tags": "cucumber-js --tags",
+    "bdd:headed": "HEADLESS=false cucumber-js",
+    "bdd:debug": "npx cucumber-js --profile debug"
   },
   "keywords": [],
   "author": "",
@@ -17,10 +21,9 @@
     "@types/luxon": "^3.7.1",
     "@types/node": "^22.14.1",
     "dotenv": "^16.5.0",
-    "eslint": "^9.27.0",
+    "eslint": "^10.0.2",
     "luxon": "^3.6.1",
     "playwright-bdd": "^8.4.2",
-    "ts-node": "^10.9.2",
     "tsx": "^4.19.3"
   },
   "dependencies": {
