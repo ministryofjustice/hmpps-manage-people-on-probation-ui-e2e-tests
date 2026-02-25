@@ -18,4 +18,8 @@ export default abstract class CasePage extends MPopPage {
             await this.clickBackLink()
         }
     }
+
+    async useBreadcrumbs(id: number) { //0 returns to cases, 1 returns to overview
+        await this.getClass('govuk-breadcrumbs').getByRole('link').nth(id).click()
+    }
 }
