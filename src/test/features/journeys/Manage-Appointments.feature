@@ -7,7 +7,7 @@ Feature: Manage Appointments
     Scenario: Add Note to Appointment
         Given Context has been created for "Manage" test
         And I am logged in
-        When I navigate to latest past appointment
+        When I navigate to first upcoming appointment
         And I add a note to the appointment
         Then I can see the new note on the appointment
 
