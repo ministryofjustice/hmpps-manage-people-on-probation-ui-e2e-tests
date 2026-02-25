@@ -1,17 +1,12 @@
 # Manage Person on Probation UI tests
-
-
-### Install npm and npm playwright
+### Install npm dependencies and playwright
 ```shell
-npm install --save-dev playwright
+npm install 
 npx playwright install
-
-### If using Mac, install the below commands to run the tests
-brew install --cask 1password-cli
 
 ### Running end-to-end tests
 ### Create Env file
-Create a .env file in the Project root folder and add the content from the 1Password filename is '.env.playwright'
+Create a .env file in the Project root folder and add the content from the 1Password file called '.env.playwright'
 You can use `.env.example` as a template.
 ```shell
 cp -n .env.example .env
@@ -19,19 +14,19 @@ cp -n .env.example .env
 
 Run the tests
 ```shell
-npm run e2e-test
+npx bddgen && npx playwright test
 
 # Run a single test
-npx playwright test tests/pages/verify-activityLog.spec.ts
+npx bddgen && npx playwright test -g '@tag' 
 
 #Run in headed mode or in a browser
-npx playwright test tests/pages/verify-activityLog.spec.ts --headed
+npx bddgen && npx playwright test --headed
 
-## The below command will run the complete suite with the 1password details
-op run --account ministryofjustice.1password.eu --env-file=./.env.1password -- npx playwright test
+#Adjust number of workers - set to 1 to remove parralelism  
+npx bddgen && npx playwright test --workers=1
 
 # Or, run in debug mode to enable breakpoints and test recorder
-npm run e2e-test:debug
+npx bddgen && npx playwright test --debug
 ```
 
 ### See the Run Reports
@@ -39,7 +34,13 @@ npm run e2e-test:debug
 npx playwright show-report
 ```
 
-### Dependency Checks
+## Working with playwright-bdd
+- Install playwright and playwright-bbd or cucumber extensions for syntax highlighting 
+- Use features folder / .feature files to describe tests in natural language
+- Fixtures.ts describes data which can be set and passed between tests 
+- Use steps folder / .steps.ts files to describe the technical steps that comprise these natural language instructions
+- Common.steps.ts provides steps used by multiple feature files
+- Use pageObjects folder / .page.ts files to build page objects 
+- Use util folder for additional util functions
 
-The template project has implemented some scheduled checks to ensure that key dependencies are kept up to date.
-If these are not desired in the cloned project, remove references to `check_outdated` job from `.circleci/config.yml`
+
