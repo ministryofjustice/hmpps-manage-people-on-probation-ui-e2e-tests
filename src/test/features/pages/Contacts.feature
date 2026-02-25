@@ -24,4 +24,4 @@ Feature: As a practitioner
       | date range       | X793504 | 11/2/2026 | 15/2/2026 |          |         |          |              | 5     | no errors               |
       | keyword          | X793504 |           |           | online   |         |          |              | 13    | no errors               |
       | no results       | X793504 |           |           | house    |         |          | YES          | 0     | no errors               |
-      | validation error | X793504 | 11/2/2026 |           |          |         |          |              | 606   | a missing date to error |
+      | validation error | X793504 | 11/2/2026 |           |          |         |          |              | 607   | a missing date to error |
