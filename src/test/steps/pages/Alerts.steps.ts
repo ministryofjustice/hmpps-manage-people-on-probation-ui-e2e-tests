@@ -34,6 +34,7 @@ Then('the page should be rendered', async ({ ctx }) => {
 Then('the new alert should be present', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
     await alerts.navigateTo(ctx.base.page)
+    await alerts.checkOnPage()
     const updatedCount = await alerts.getAlertsCount()
     expect(updatedCount).toBeGreaterThan(ctx.alerts.alertCount)
 });
