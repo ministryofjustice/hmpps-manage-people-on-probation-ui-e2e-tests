@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { ContactDetails } from "../../../../../util/SetupOnlineCheckins";
+import { ContactDetails } from "../../../../../features/Fixtures";
 
 export default class ContactDetailsPage extends ContactPage {
 
@@ -9,14 +9,15 @@ export default class ContactDetailsPage extends ContactPage {
     }
 
     async completePage(contacts: ContactDetails){
+        if (contacts.phone){
+            await this.fillText('phoneNumber', contacts.phone)
+        }
         if (contacts.mobile){
-            await this.page.locator('input[id$="editCheckInMobile"]').waitFor({ state: 'visible' });
-            await this.page.locator('input[id$="editCheckInMobile"]').fill(contacts.mobile);
+            await this.fillText('mobileNumber', contacts.mobile)
         }
         if (contacts.email){
-            await this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]').waitFor({ state: 'visible' });
-            await this.page.locator('input[aria-describedby$="editCheckInEmail-hint"]').fill(contacts.email);
+            await this.fillText('emailAddress', contacts.email)
         }
-        await this.submit();
+        await this.continueButton();
     }
 }

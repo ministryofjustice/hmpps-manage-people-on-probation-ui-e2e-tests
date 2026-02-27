@@ -5,7 +5,7 @@ import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests
 import AlertsPage from '../pageObjects/alerts';
 import { MpopArrangeAppointment } from '../util/ArrangeAppointment';
 
-type Ctx = {
+export interface Ctx {
   checkIns: CheckIns,
   contact: Contact
   contacts: Activity[]
@@ -14,33 +14,38 @@ type Ctx = {
   alerts: Alerts
   manage: Manage
   appointments: MpopArrangeAppointment[]
+  details: Details
+  addressTypes: AddressType[]
 };
-
-type CheckIns = {
+export interface AddressType {
+  code: string
+  description: string
+}
+export interface CheckIns {
   setup: MpopSetupCheckin
   changes: MpopSetupChanges
   expiredCrn: string
 }
-type Contact = {
+export interface Contact {
   uuid: string
 }
-type Base = {
+export interface Base {
   page: Page,
   browser: Browser,
   context: BrowserContext
 }
-type Case = {
+export interface Case {
   crn: string
   person: Person
 }
-type Alerts = {
+export interface Alerts {
   alertCount: number
   alertsPage: AlertsPage
 }
-type Manage = {
+export interface Manage {
   noteCount: number
 }
-type Activity = {
+export interface Activity {
   type: string
   startDateTime: string
   endDateTime?: string
@@ -49,12 +54,27 @@ type Activity = {
   isSensitive?: boolean
   hasOutcome?: boolean
 }
-type Note = {
+export interface Note {
   id: number
   createdBy?: string
   createdByDate?: string
   note: string
   hasNotesBeenTruncated?: boolean
+}
+export interface Details {
+  contactDetails?: ContactDetails
+  addressDetails?: AddressDetails
+}
+export interface ContactDetails {
+  phone?: string
+  mobile?: string
+  email?: string
+}
+export interface AddressDetails {
+  address?: string
+  type?: string
+  startDate?: string
+  note?: string
 }
 
 export const test = base
@@ -68,7 +88,8 @@ export const testContext = base.extend<{ ctx: Ctx }, { ctxMap: Record<string, Ct
       case: {},
       alerts: {},
       manage: {},
-      appointments: []
+      appointments: [],
+      details: {}
     }
     await use(ctxMap[testInfo.file])
   },
