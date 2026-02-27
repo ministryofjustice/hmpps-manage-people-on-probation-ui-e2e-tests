@@ -18,6 +18,10 @@ export default class ContactDetailsPage extends ContactPage {
         if (contacts.email){
             await this.fillText('emailAddress', contacts.email)
         }
-        await this.continueButton();
+        try {
+            await this.continueButton();
+        } catch {
+            await this.submit()
+        }
     }
 }
