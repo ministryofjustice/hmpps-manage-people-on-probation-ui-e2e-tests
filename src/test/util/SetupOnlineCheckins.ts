@@ -89,12 +89,6 @@ export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChan
             const dateFrequencyPage = new DateFrequencyPage(page)
             await dateFrequencyPage.checkOnPage()
             await dateFrequencyPage.changePage(changes.date, changes.frequency)
-            try {
-                await dateFrequencyPage.checkOnPage()
-                await dateFrequencyPage.clickBackLink()
-            } catch {
-                break 
-            }
         }
     }
 

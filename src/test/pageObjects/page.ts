@@ -66,10 +66,10 @@ export default abstract class MPopPage {
     }
 
     async submit(){
-        await this.getQA("submit-btn").click()
+        await this.getQA("submit-btn").click({timeout: 5000})
     }
     async continueButton(){
-        await this.getQA("submitBtn").click()
+        await this.getQA("submitBtn").click({timeout: 5000})
     }
 
     getLink(name: string, locator: Locator|Page=this.page){
@@ -221,6 +221,6 @@ export default abstract class MPopPage {
     }
 
     async fillText(qa: string, note: string){
-       await this.getQA(qa).getByRole('textbox').fill(note)
+       await this.getQA(qa).getByRole('textbox').fill(note, {timeout: 5000})
     }
 }
