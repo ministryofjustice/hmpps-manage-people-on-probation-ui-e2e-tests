@@ -50,6 +50,19 @@ export const getContacts = async(crn: string, token: string) => {
     return body.activities
 }
 
+export const getPersonalDetails = async(crn: string, token: string) => {
+    const context = await request.newContext({
+        baseURL: MAS_API_URL,
+    });
+    const response = await context.get(`/personal-details/${crn}`, {
+        headers: {
+            'Authorization': 'Bearer ' + token
+        }
+    })
+    const body : any = await response.json()
+    return body
+}
+
 export const getExternalReference = async(crn: string, contactId: string, token: string) => {
     const context = await request.newContext({
         baseURL: MAS_API_URL,

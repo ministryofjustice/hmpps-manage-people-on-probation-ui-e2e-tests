@@ -5,7 +5,7 @@ export default abstract class ContactPage extends CasePage {
     readonly uuid?: string
 
     protected constructor(page: Page, title?: string, crn?: string, uuid?: string) {
-        super(page, title)
+        super(page, title, crn)
         this.uuid = uuid
     }
 
