@@ -16,7 +16,11 @@ export default class ContactDetailsPage extends ContactPage {
             await this.fillText('mobileNumber', contacts.mobile)
         }
         if (contacts.email){
-            await this.fillText('emailAddress', contacts.email)
+            try {
+                await this.fillText('emailAddress', contacts.email)
+            } catch {
+                await this.fillText('editEmail', contacts.email)
+            }
         }
         try {
             await this.continueButton();
