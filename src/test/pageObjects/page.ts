@@ -62,7 +62,7 @@ export default abstract class MPopPage {
         await radio.check();
 
         // Optionally, you can verify it’s selected
-        await expect(radio).toBeChecked({ timeout: 5000 });
+        await expect(radio).toBeChecked();
     }
 
     async submit(){
@@ -221,6 +221,6 @@ export default abstract class MPopPage {
     }
 
     async fillText(qa: string, note: string){
-       await this.getQA(qa).getByRole('textbox').fill(note, {timeout: 5000})
+       await this.getQA(qa).getByRole('textbox').fill(note)
     }
 }
