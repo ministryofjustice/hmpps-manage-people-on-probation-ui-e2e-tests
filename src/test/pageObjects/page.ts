@@ -66,10 +66,10 @@ export default abstract class MPopPage {
     }
 
     async submit(){
-        await this.getQA("submit-btn").click({timeout: 5000})
+        await this.getQA("submit-btn").click()
     }
     async continueButton(){
-        await this.getQA("submitBtn").click({timeout: 5000})
+        await this.getQA("submitBtn").click()
     }
 
     getLink(name: string, locator: Locator|Page=this.page){
