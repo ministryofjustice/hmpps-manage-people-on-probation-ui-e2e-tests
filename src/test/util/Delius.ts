@@ -25,18 +25,20 @@ export const loginDeliusAndCreateOffender = async (
     staff?: Staff,
     team?: Team,
     createNewOffender?: boolean,
-): Promise<[Person, string]> => {
+): Promise<[Person, string, boolean]> => {
     await loginToDelius(page);
     const person = deliusPerson();
-    let crn;
+    let created: boolean;
+    let crn: string;
     if (createNewOffender) {
         console.time("createOffender-forced");
         crn = await createOffender(page, { person, providerName });
+        created = true
         console.timeEnd("createOffender-forced");
         console.log("Forced offender creation, CRN: ", crn);
     } else {
         console.time("manageCreateOffender");
-        crn = await manageCreateOffender(page, person, providerName);
+        [crn, created] = await manageCreateOffender(page, person, providerName);
         console.timeEnd("manageCreateOffender");
     }
 
@@ -48,18 +50,18 @@ export const loginDeliusAndCreateOffender = async (
         });
     }
 
-    return [person, crn];
+    return [person, crn, created];
 };
 
 export const manageCreateOffender = async (
   page: Page,
   person: Person,
   providerName?: string,
-): Promise<string> => {
+): Promise<[string, boolean]> => {
   if (fs.existsSync(USER_FILE)) {
     const data = JSON.parse(fs.readFileSync(USER_FILE, "utf-8"));
     console.log("READING CRN from existing file:", data.crn);
-    return data.crn;
+    return [data.crn, false];
   }
 
   let crn;
@@ -73,7 +75,7 @@ export const manageCreateOffender = async (
     fs.renameSync(TMP_FILE, USER_FILE);
 
     console.log("Offender Created, CRN: ", crn);
-    return crn;
+    return [crn, true];
   } catch (err: any) {
     if (err.code !== "EEXIST") throw err;
     while (!fs.existsSync(USER_FILE)) {
@@ -81,7 +83,7 @@ export const manageCreateOffender = async (
     }
     const data = JSON.parse(fs.readFileSync(USER_FILE, "utf-8"));
     console.log("Reading Offender CRN from file: ", data.crn);
-    return data.crn;
+    return [data.crn, false];
   }
 };
 

@@ -37,6 +37,7 @@ export interface Base {
 export interface Case {
   crn: string
   person: Person
+  created: boolean
 }
 export interface Alerts {
   alertCount: number

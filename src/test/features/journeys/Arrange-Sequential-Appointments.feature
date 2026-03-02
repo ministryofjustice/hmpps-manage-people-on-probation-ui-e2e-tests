@@ -7,8 +7,9 @@ Feature: Create Appointments
     @smoke @appointments @sequential @kk
     Scenario Outline: Create Future Appointment for <ScenarioName>
         Given Context has been created for "Appointments" test
-        And A new offender has been created in Ndelius
+        And A new offender has been created or existing made available
         And I am logged in
+        And I clear the contact details if set
         When I create an appointment
         | label      | value        |
         | sentenceId | <sentenceId> |

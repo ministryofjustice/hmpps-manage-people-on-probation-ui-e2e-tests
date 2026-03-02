@@ -5,8 +5,9 @@ Feature: Update personal details
     @smoke @personaldetails
     Scenario: Update current details - '<description>'
         Given Context has been created for "Personal details" test
-        And A new offender has been created in Ndelius
+        And A new offender has been created or existing made available
         And I am logged in
+        And I clear the contact details if set
         And I navigate to personal details page
         And I make a note of possible address types and codes
         When I can note the current details
