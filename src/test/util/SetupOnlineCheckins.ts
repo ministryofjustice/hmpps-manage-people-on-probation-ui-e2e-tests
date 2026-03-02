@@ -79,17 +79,15 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
 export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChanges) => {
     const checkInSummaryPage = new CheckInSummaryPage(page)
     if (changes.date || changes.frequency !== undefined){
-        while (true){
-            await checkInSummaryPage.checkOnPage()
-            if (changes.date){
-                await checkInSummaryPage.clickDateChangeLink()
-            } else {
-                await checkInSummaryPage.clickDateIntervalChangeLink()
-            }
-            const dateFrequencyPage = new DateFrequencyPage(page)
-            await dateFrequencyPage.checkOnPage()
-            await dateFrequencyPage.changePage(changes.date, changes.frequency)
+        await checkInSummaryPage.checkOnPage()
+        if (changes.date){
+            await checkInSummaryPage.clickDateChangeLink()
+        } else {
+            await checkInSummaryPage.clickDateIntervalChangeLink()
         }
+        const dateFrequencyPage = new DateFrequencyPage(page)
+        await dateFrequencyPage.checkOnPage()
+        await dateFrequencyPage.changePage(changes.date, changes.frequency)
     }
 
     if (changes.contact?.email || changes.contact?.mobile || changes.preference){
