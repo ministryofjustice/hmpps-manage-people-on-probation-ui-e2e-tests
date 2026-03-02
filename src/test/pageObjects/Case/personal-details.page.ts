@@ -96,7 +96,7 @@ export default class PersonalDetailsPage extends CasePage {
     async checkForPractitioner(): Promise<boolean>{
         try {
             expect(await this.getSummaryRowByKey('Probation practitioner')).toBeDefined()
-            await expect((await this.getSummaryRowValue(await this.getSummaryRowByKey('Probation practitioner')))).not.toHaveText('Unallocated', {timeout: 1000})
+            await expect((await this.getSummaryRowValue(await this.getSummaryRowByKey('Probation practitioner')))).not.toHaveText('Unallocated')
             return true
         } catch {
             return false

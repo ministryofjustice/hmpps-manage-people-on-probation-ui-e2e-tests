@@ -17,7 +17,7 @@ export default abstract class MPopPage {
         await this.page.waitForLoadState('domcontentloaded', { timeout });
         const locator = this.page.locator(`[data-qa="${qa}"]`);
 
-        await expect(locator).toBeVisible({ timeout: 120000 });
+        await expect(locator).toBeVisible();
 
         const text = (await locator.textContent())
             ?.replace(/\s+/g, ' ')
@@ -56,7 +56,7 @@ export default abstract class MPopPage {
         const radio = this.getQA(qa).getByRole('radio').nth(id);
 
         // Ensure the radio button is visible
-        await expect(radio).toBeVisible({ timeout: 10000 });
+        await expect(radio).toBeVisible();
 
         // Use .check() for radio buttons (safer than click)
         await radio.check();
@@ -87,7 +87,7 @@ export default abstract class MPopPage {
     }
 
     async checkQA(qa: string, value: string | RegExp){
-        await expect(this.getQA(qa)).toContainText(value, {timeout: 10000})
+        await expect(this.getQA(qa)).toContainText(value)
     }
 
     async checkQAExists(qa: string) {
@@ -101,7 +101,7 @@ export default abstract class MPopPage {
         await expect(header).toBeVisible();
         // Ensure we are no longer on the previous page
          await expect(header).not.toHaveText(/Contact preferences/);
-        await expect(header).toContainText(expectedText, {timeout: 10000});
+        await expect(header).toContainText(expectedText);
         //await expect(header).toHaveText(expectedText);
         const fullText = await header.innerText();
 

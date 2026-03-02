@@ -31,7 +31,7 @@ export default class OverviewPage extends CasePage {
 
     async checkOnlineCheckInsSetup(): Promise<boolean> {
         try {
-            await expect(this.getQA("checkinCard").getByRole('link')).toHaveText("View all online check in details", {timeout: 1000})
+            await expect(this.getQA("checkinCard").getByRole('link')).toHaveText("View all online check in details")
             return true
         } catch {
             return false

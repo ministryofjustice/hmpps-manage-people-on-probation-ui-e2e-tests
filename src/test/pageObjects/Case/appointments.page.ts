@@ -61,7 +61,7 @@ export default class AppointmentsPage extends CasePage{
 
     async clickSetupOnlineCheckInsBtn() {
         const btn = this.getQA("online-checkin-btn")
-        await expect(btn).toBeVisible({ timeout: 10000 })  // ensure visible
+        await expect(btn).toBeVisible()  // ensure visible
         await btn.click()
     }
 
