@@ -1,17 +1,18 @@
-import { Page } from '@playwright/test'
+import { expect, Page } from '@playwright/test'
 import { login as loginToDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login.mjs'
 import {
     deliusPerson,
     Person,
 } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs'
 import { createOffender } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/create-offender.mjs'
-import {
-    internalTransfer
-} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/transfer/internal-transfer.mjs'
 import { data, Staff, Team } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import fs from "fs";
 import path from "path";
 import { createOffender as deliusCreateOffender } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/create-offender.mjs";
+import { selectOption } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/inputs'
+import { findOffenderByCRN } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender'
+import { Allocation, Optional } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data'
+
 
 import { ROOT_DIR } from "./Paths";
 
@@ -33,18 +34,18 @@ export const loginDeliusAndCreateOffender = async (
         crn = await createOffender(page, { person, providerName });
         console.timeEnd("createOffender-forced");
         console.log("Forced offender creation, CRN: ", crn);
-
-        // Only call internalTransfer if providerName, staff, and team are provided
-        if (providerName && staff && team) {
-            await internalTransfer(page, {
-                crn,
-                allocation: { staff, team },
-            });
-        }
     } else {
         console.time("manageCreateOffender");
         crn = await manageCreateOffender(page, person, providerName);
         console.timeEnd("manageCreateOffender");
+    }
+
+    // Only call internalTransfer if providerName, staff, and team are provided
+    if (providerName && staff && team) {
+        await internalTransfer(page, {
+            crn,
+            allocation: { staff, team },
+        });
     }
 
     return [person, crn];
@@ -83,3 +84,35 @@ export const manageCreateOffender = async (
     return data.crn;
   }
 };
+
+export async function internalTransfer(
+    page: Page,
+    {
+        crn,
+        allocation,
+        reason = 'Initial Allocation',
+    }: {
+        crn: string
+        allocation?: Optional<Allocation>
+        reason?: string
+    }
+) {
+    await findOffenderByCRN(page, crn)
+    await page.locator('input', { hasText: 'Transfers' }).click()
+    await expect(page).toHaveTitle(/Consolidated Transfer Request/)
+    await selectOption(page, '#Trust\\:selectOneMenu', allocation?.team?.provider)
+    await selectOption(page, '#Team\\:selectOneMenu', allocation?.team?.name)
+    const selectedStaff = await selectOption(page, '#Staff\\:selectOneMenu', allocation?.staff?.name)
+
+    const options = await page.locator('#offenderTransferRequestTable').locator('select')
+
+    const count = await options.count()
+    for (let i = 0; i < count; i++) {
+        await options.nth(i).selectOption({ label: reason })
+    }
+
+    await page.locator('input', { hasText: 'Transfer' }).click()
+    await expect(page).toHaveTitle(/Consolidated Transfer Request/)
+
+    return selectedStaff
+}
