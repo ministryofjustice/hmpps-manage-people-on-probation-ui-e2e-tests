@@ -33,18 +33,18 @@ export const loginDeliusAndCreateOffender = async (
         crn = await createOffender(page, { person, providerName });
         console.timeEnd("createOffender-forced");
         console.log("Forced offender creation, CRN: ", crn);
+
+        // Only call internalTransfer if providerName, staff, and team are provided
+        if (providerName && staff && team) {
+            await internalTransfer(page, {
+                crn,
+                allocation: { staff, team },
+            });
+        }
     } else {
         console.time("manageCreateOffender");
         crn = await manageCreateOffender(page, person, providerName);
         console.timeEnd("manageCreateOffender");
-    }
-
-    // Only call internalTransfer if providerName, staff, and team are provided
-    if (providerName && staff && team) {
-        await internalTransfer(page, {
-            crn,
-            allocation: { staff, team },
-        });
     }
 
     return [person, crn];
