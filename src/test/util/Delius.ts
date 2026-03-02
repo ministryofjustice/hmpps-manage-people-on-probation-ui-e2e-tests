@@ -43,13 +43,12 @@ export const loginDeliusAndCreateOffender = async (
     }
 
     // Only call internalTransfer if providerName, staff, and team are provided
-    if (providerName && staff && team) {
+    if (providerName && staff && team && created) {
         await internalTransfer(page, {
             crn,
             allocation: { staff, team },
         });
     }
-
     return [person, crn, created];
 };
 

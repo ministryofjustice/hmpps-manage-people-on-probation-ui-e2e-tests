@@ -25,7 +25,6 @@ export default class PersonalDetailsPage extends CasePage {
     }
 
     async updateContactDetails(details: ContactDetails){
-        console.log(details)
         if (details.phone){
             await this.getQA('telephoneNumberAction').click()
         } else if (details.mobile) {

@@ -19,7 +19,6 @@ Given('I record the full list of activities',async ({ctx})=>{
     const token = await getClientToken()
     const contacts = await getContacts(ctx.case.crn, token)
     ctx.contacts = contacts
-    console.log(contacts)
 })
 
 When('I filter the contact log with values',async ({ctx}, data:DataTable)=>{

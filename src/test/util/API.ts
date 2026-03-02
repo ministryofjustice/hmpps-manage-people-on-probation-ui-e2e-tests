@@ -105,7 +105,6 @@ export const createEsupervisionCheckin = async(practitioner: string, crn: string
         }
     })
     const body = await response.json()
-    console.log(body)
     return body.uuid
 }
 

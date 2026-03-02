@@ -36,7 +36,6 @@ When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
 When('I set up checkIns with random values', async({ ctx }) => {
     const page = ctx.base.page
     const setup : MpopSetupCheckin = randomCheckIn() as MpopSetupCheckin
-    console.log(setup)
     const setUpOnLineCheckinsPage = new AppointmentsPage(page)
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)
@@ -50,7 +49,6 @@ When('I set up checkIns with random values', async({ ctx }) => {
 When('I make the following changes', async({ ctx }, data:DataTable) => {
     const page = ctx.base.page
     const changes: MpopSetupChanges = setupDataTable(data)
-    console.log(changes)
     await makeChangesSetupCheckins(page, changes)
     const checkInSummaryPage = new CheckInSummaryPage(page)
     await checkInSummaryPage.checkOnPage()
@@ -140,7 +138,6 @@ When('I find a suitable CRN', async({ctx}) => {
     const crn = ctx.case.crn
     const newCrn = crn ?? undefined
     const expiredCrn = await getValidCrnForExpiredCheckin(page, newCrn) 
-    console.log(expiredCrn)
     ctx.checkIns.expiredCrn = expiredCrn
 })
 
