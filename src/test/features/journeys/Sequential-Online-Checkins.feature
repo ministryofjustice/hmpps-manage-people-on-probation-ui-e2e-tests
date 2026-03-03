@@ -41,4 +41,24 @@ Feature: Setup Checkins
         Then I can access the new checkIn in the contact log
         When I review the completed checkIn
         Then I can view the reviewed checkIn
+
+    @smoke @esupervision @sequential
+    Scenario: Stop CheckIns 
+        When I navigate to checkIn details
+        And I stop checkIns with '<reason>'
+        Then checkIns are labelled as stopped
+
+        Examples:
+            | reason       |
+            | just because |
+
+    @smoke @esupervision @sequential
+    Scenario: Restart CheckIns   
+        When I restart checkIns with values
+            | label      | value           |
+            | date       | nextweek        |
+            | frequency  | EVERY_8_WEEKS   |
+            | mobile     | 07771 900 900   |
+            | preference | TEXT            |
+        Then Checkins should be setup
         And I close the context

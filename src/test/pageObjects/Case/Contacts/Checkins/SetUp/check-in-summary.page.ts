@@ -4,8 +4,8 @@ import { MPOP_URL } from "../../../../../util/Data";
 
 export default class CheckInSummaryPage extends ContactPage {
 
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Check your answers before adding", crn, uuid);
+    constructor(page: Page, restart: boolean = false, crn?: string, uuid?: string) {
+        super(page, restart ? "Check your answers before restarting online check ins" : "Check your answers before adding", crn, uuid);
     }
 
     async goTo(crn?: string, uuid?: string){

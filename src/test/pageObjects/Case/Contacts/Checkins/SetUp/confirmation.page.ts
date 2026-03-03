@@ -2,8 +2,8 @@ import { Page } from "@playwright/test";
 import ContactPage from "../../contactpage";
 
 export default class ConfirmationPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Online check ins added", crn, uuid);
+    constructor(page: Page, restart: boolean = false, crn?: string, uuid?: string) {
+        super(page, restart ? "Online check ins restarted": "Online check ins added", crn, uuid);
     }
 
     async checkWhatHappensNextTextExists() {

@@ -20,6 +20,13 @@ export interface MpopSetupCheckin {
     photo: PhotoOptions
 }
 
+export interface MpopSetupRestart {
+    date: string
+    frequency: FrequencyOptions
+    contact: ContactDetails
+    preference: Preference
+}
+
 export interface MpopSetupChanges {
     date?: string
     frequency?: FrequencyOptions
