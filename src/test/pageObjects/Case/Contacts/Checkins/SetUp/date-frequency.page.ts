@@ -21,8 +21,8 @@ export default class DateFrequencyPage extends ContactPage {
     datepickerQA: string;
     datePickerIcon: string;
     checkInFrequencySection: string;
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, 'Set up online check ins', crn, uuid);
+    constructor(page: Page, restart: boolean = false, crn?: string, uuid?: string) {
+        super(page, restart ? 'Online check in settings' : 'Set up online check ins', crn, uuid);
         this.checkInSummaryPage = new CheckInSummaryPage(page);
         this.datepickerQA = DATEPICKER_QA;
         this.datePickerIcon = DATEPICKER_ICON;

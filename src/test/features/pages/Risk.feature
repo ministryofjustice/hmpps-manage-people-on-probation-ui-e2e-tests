@@ -9,6 +9,7 @@ Feature: As a practitioner
     And I navigate to risk page
     Then the risk page is populated
     And the risk page links work correctly
+    And I close the context
 
     Examples:
       | case    |

@@ -9,6 +9,7 @@ Feature: As a practitioner
     Then the pop header is correct
     And the overview page is populated
     And the overview page links work correctly 
+    And I close the context
 
     Examples:
       | case    |

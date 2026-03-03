@@ -4,8 +4,8 @@ import { MPOP_URL } from "../../../../../util/Data";
 
 export default class CheckInSummaryPage extends ContactPage {
 
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Check your answers before adding", crn, uuid);
+    constructor(page: Page, restart: boolean = false, crn?: string, uuid?: string) {
+        super(page, restart ? "Check your answers before restarting online check ins" : "Check your answers before adding", crn, uuid);
     }
 
     async goTo(crn?: string, uuid?: string){
@@ -33,7 +33,6 @@ export default class CheckInSummaryPage extends ContactPage {
     async clickDateChangeLink() {
         await this.getQA(this.dateActionChangeLink).isEnabled();
         await this.getQA(this.dateActionChangeLink).click();
-        await this.page.locator('h2', { hasText: 'Set up online check ins' }).waitFor();
     }
 
     async clickDateIntervalChangeLink() {

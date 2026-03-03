@@ -9,7 +9,6 @@ export default class TakePhotoPage extends ContactPage {
 
     async completePage() {
         await this.takePhoto()
-        await this.page.waitForTimeout(1000)
         await this.submit()
     }
 

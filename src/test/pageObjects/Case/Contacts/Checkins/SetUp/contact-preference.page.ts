@@ -1,7 +1,7 @@
 import {expect, Locator, Page} from "@playwright/test";
 import ContactPage from "../../contactpage";
-import { ContactDetails } from "../../../../../util/SetupOnlineCheckins";
 import ContactDetailsPage from "./update-contact-details.page";
+import { ContactDetails } from "../../../../../features/Fixtures";
 
 export enum Preference {
     TEXT = 0,
@@ -11,8 +11,8 @@ export type contactMethod = 'Text message' | 'email' | 'textUpdate'| 'emailUpdat
 
 export default class ContactPreferencePage extends ContactPage {
 
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Contact preferences", crn, uuid)
+    constructor(page: Page, restart: boolean = false, crn?: string, uuid?: string) {
+        super(page, restart ? "Contact details" : "Contact preferences", crn, uuid)
     }
 
     async completePage(

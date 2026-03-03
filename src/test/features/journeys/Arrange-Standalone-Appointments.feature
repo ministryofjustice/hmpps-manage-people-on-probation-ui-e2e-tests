@@ -20,6 +20,7 @@ Feature: Create Appointments
       | sensitive  | <sensitive>  |
     Then the appointment should be created successfully
     And I can check appointment details with the manage page
+    And I close the context
     Examples:
       | ScenarioName         | sentenceId | typeId | date        | locationId  | text | mobile | note       | sensitive |
       | Past                 | 0          | 0      | LASTWEEK    | 0           |      |        | Test note1 | NO        |
@@ -36,6 +37,7 @@ Feature: Create Appointments
         | typeId     | <typeId>     |
         | locationId | <locationId> |
       Then I end up on the location-not-in-list page
+      And I close the context
 
       Examples:
         | ScenarioName         | sentenceId | typeId | locationId  |

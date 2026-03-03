@@ -64,7 +64,6 @@ When('I navigate to latest appointment requiring an outcome', async ({ ctx }) =>
     let id = 1
     while (true){
         await managePage.checkOnPage()
-        await page.waitForTimeout(1000)
         try {
             await logPage.checkOnPage()
             await logPage.selectFirst(id)

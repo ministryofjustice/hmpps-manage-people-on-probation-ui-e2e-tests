@@ -1,6 +1,6 @@
 import { Browser, BrowserContext, Page } from '@playwright/test';
 import { test as base } from 'playwright-bdd';
-import { MpopSetupChanges, MpopSetupCheckin } from '../util/SetupOnlineCheckins';
+import { MpopSetupChanges, MpopSetupCheckin, MpopSetupRestart } from '../util/SetupOnlineCheckins';
 import { Person } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs';
 import AlertsPage from '../pageObjects/alerts';
 import { MpopArrangeAppointment } from '../util/ArrangeAppointment';
@@ -25,6 +25,7 @@ export interface CheckIns {
   setup: MpopSetupCheckin
   changes: MpopSetupChanges
   expiredCrn: string
+  restart?: MpopSetupRestart
 }
 export interface Contact {
   uuid: string

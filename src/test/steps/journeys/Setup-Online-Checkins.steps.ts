@@ -4,7 +4,7 @@ import ConfirmationPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/con
 import CheckInSummaryPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page';
 import { test as base, createBdd, DataTable } from 'playwright-bdd';
 import { dueDateString, lastWeek, luxonString, nextWeek, today, tomorrow, threeDaysAgo, yesterday } from '../../util/DateTime';
-import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../util/SetupOnlineCheckins';
+import { makeChangesSetupCheckins, MPoPCheckinDetails, MpopSetupChanges, MpopSetupCheckin, MpopSetupRestart, randomCheckIn, setupCheckinsMPop, setupDataTable } from '../../util/SetupOnlineCheckins';
 import { test, testContext } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../util/API';
 import { getBrowserContext, getUuid } from '../../util/Common';
@@ -12,6 +12,9 @@ import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
 import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../util/ReviewCheckins';
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
 import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
+import ManageCheckInsPage from '../../pageObjects/Case/Contacts/Checkins/manage.page';
+import StopCheckInsPage from '../../pageObjects/Case/Contacts/Checkins/stop.page';
+import { restartCheckinsMPop } from '../../util/StopStartCheckins';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -75,20 +78,6 @@ When('I submit the checkin', async({ ctx }, data:DataTable) => {
     await confirmationPage.checkGoToAllCasesLinkExists()
     await confirmationPage.returnToPoPsOverviewButtonExist()
     await confirmationPage.selectPoPsOverviewButton()
-})
-
-Then('Checkins should be setup', async({ ctx }) => {
-    const setup = ctx.checkIns.setup
-    const changes = ctx.checkIns.changes
-    const details: MPoPCheckinDetails = {
-        date: changes.date ?? setup.date,
-        frequency: changes.frequency ?? setup.frequency,
-        preference: changes.preference ?? setup.preference
-    }
-    //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
-    const overviewPage = new OverviewPage(ctx.base.page)
-    await overviewPage.checkOnPage()
-    await overviewPage.verifyCheckinDetails(details)
 })
 
 When('I mock the completion of a completed checkin', async({ ctx }, data:DataTable) => {
@@ -176,4 +165,77 @@ Then('I can view the expired and reviewed checkIn', async({ ctx }) => {
    await contactLog.getQA('esup-manage-link').first().click()
    const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
    await reviewedExpiredPage.checkOnPage()
+})
+
+When('I navigate to checkIn details', async({ ctx }) => {
+   const page = ctx.base.page
+   const crn = ctx.case.crn
+   const managePage = new ManageCheckInsPage(page, crn)
+   await managePage.navigateTo()
+   await managePage.checkOnPage()
+})
+
+When('I stop checkIns with {string}', async({ ctx }, reason) => {
+   const page = ctx.base.page
+   const managePage = new ManageCheckInsPage(page)
+   await managePage.checkOnPage()
+   await managePage.clickStopCheckIns()
+   const stopPage = new StopCheckInsPage(page)
+   await stopPage.completePage(true, reason)
+})
+
+Then('checkIns are labelled as stopped', async({ ctx }) => {
+   const page = ctx.base.page
+   const managePage = new ManageCheckInsPage(page)
+   await managePage.checkOnPage()
+   await managePage.clickBackLink()
+   const overview = new OverviewPage(page)
+   await overview.checkOnPage()
+   await overview.checkSummaryRowValue(await overview.getSummaryRowByKey('Next check in due'), 'Check ins stopped')
+})
+
+Then('I restart checkIns with values', async({ ctx }, data:DataTable) => {
+    const page = ctx.base.page
+    const overview = new OverviewPage(page)
+    await overview.checkOnPage()
+    await overview.checkOnlineCheckInsLink(false)
+    const managePage = new ManageCheckInsPage(page)
+    await managePage.checkOnPage()
+    await managePage.clickRestartCheckIns()
+    const restart: MpopSetupRestart = setupDataTable(data) as MpopSetupRestart
+    ctx.checkIns.restart = restart
+    await restartCheckinsMPop(page, restart)
+    const checkInSummaryPage = new CheckInSummaryPage(page, true)
+    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.submit()
+    const confirmationPage = new ConfirmationPage(ctx.base.page, true)
+    await confirmationPage.checkOnPage()
+    await confirmationPage.checkWhatHappensNextTextExists()
+    await confirmationPage.checkGoToAllCasesLinkExists()
+    await confirmationPage.returnToPoPsOverviewButtonExist()
+    await confirmationPage.selectPoPsOverviewButton()
+})
+
+Then('Checkins should be setup', async({ ctx }) => {
+    const restart = ctx.checkIns.restart
+    let details: MPoPCheckinDetails
+    if (restart){
+        details = {
+            date: restart.date,
+            frequency: restart.frequency,
+            preference: restart.preference   
+        }
+    } else {
+        const setup = ctx.checkIns.setup
+        const changes = ctx.checkIns.changes
+        details = {
+            date: changes.date ?? setup.date,
+            frequency: changes.frequency ?? setup.frequency,
+            preference: changes.preference ?? setup.preference
+        }
+    }
+    //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
+    const overviewPage = new OverviewPage(ctx.base.page)
+    await overviewPage.checkOnPage()
+    await overviewPage.verifyCheckinDetails(details)
 })

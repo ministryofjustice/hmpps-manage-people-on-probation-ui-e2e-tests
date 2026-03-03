@@ -69,12 +69,12 @@ export default class OverviewPage extends CasePage {
     async checkAppointmentsLink() {
         await this.checkLink('scheduleCard', 'View appointments', new AppointmentsPage(this.page))
     }
-    async checkOnlineCheckInsLink() {
+    async checkOnlineCheckInsLink(back: boolean = true) {
         const setup = await this.checkOnlineCheckInsSetup()
         if (setup){
-            await this.checkLink('checkinCard', 'View all online check in details', new ManageCheckInsPage(this.page))
+            await this.checkLink('checkinCard', 'View all online check in details', new ManageCheckInsPage(this.page), back)
         } else {
-            await this.checkLink('checkinCard', 'Set up online check ins', new InstructionsPage(this.page))
+            await this.checkLink('checkinCard', 'Set up online check ins', new InstructionsPage(this.page), back)
         }
     }
     async checkPersonalDetailsLink() {
@@ -94,13 +94,15 @@ export default class OverviewPage extends CasePage {
     async checkContactsLink(){
         await this.checkLink('activityAndComplianceCard', 'View all contacts details', new ActivityLogPage(this.page))
     }
-    async checkLink(qa: string, link: string, page: CasePage){
+    async checkLink(qa: string, link: string, page: CasePage, back: boolean = true){
         await this.getQA(qa).getByRole('link', {name: link}).click()
         await page.checkOnPage()
-        if (page instanceof ContactPage){
-            await page.clickBackLink()
-        } else {
-            await page.useBreadcrumbs(1)
+        if (back){
+            if (page instanceof ContactPage){
+                await page.clickBackLink()
+            } else {
+                await page.useBreadcrumbs(1)
+            }
         }
     }
     async checkLinks() {

@@ -31,7 +31,6 @@ When('I filter the contact log with values',async ({ctx}, data:DataTable)=>{
 Then('the contact log contains the correct info',async ({ctx})=>{
     const page = ctx.base.page
     const contactsPage = new ActivityLogPage(page)
-    await page.waitForTimeout(3000)
     await contactsPage.checkOnPage()
 })
 
