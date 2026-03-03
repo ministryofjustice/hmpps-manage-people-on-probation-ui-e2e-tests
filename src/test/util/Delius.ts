@@ -26,12 +26,12 @@ export const loginDeliusAndCreateOffender = async (
     team?: Team,
     createNewOffender?: boolean,
 ): Promise<[Person, string, boolean]> => {
-    await loginToDelius(page);
     const person = deliusPerson();
     let created: boolean;
     let crn: string;
     if (createNewOffender) {
         console.time("createOffender-forced");
+        await loginToDelius(page);
         crn = await createOffender(page, { person, providerName });
         created = true
         console.timeEnd("createOffender-forced");
@@ -67,6 +67,7 @@ export const manageCreateOffender = async (
   try {
     const fd = fs.openSync(TMP_FILE, "wx");
     console.time("deliusCreateOffender")
+    await loginToDelius(page);
     crn = await deliusCreateOffender(page, { person, providerName });
     console.timeEnd("deliusCreateOffender");
     fs.writeSync(fd, JSON.stringify({ crn }));

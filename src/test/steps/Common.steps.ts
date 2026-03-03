@@ -33,7 +33,9 @@ Given('A new offender has been created in Ndelius', async ({ ctx }) => {
 
 Given('A new offender has been created or existing made available', async ({ ctx }) => {
     const [person, crn, created] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam))
-    await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    if (created){
+        await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
+    }
     ctx.case.crn = crn
     ctx.case.person = person
     ctx.case.created = created
