@@ -26,7 +26,7 @@ export const loginDeliusAndCreateOffender = async (
     team?: Team,
     createNewOffender?: boolean,
 ): Promise<[Person, string, boolean]> => {
-    const person = deliusPerson();
+    let person: Person = deliusPerson();
     let created: boolean;
     let crn: string;
     if (createNewOffender) {
@@ -38,7 +38,7 @@ export const loginDeliusAndCreateOffender = async (
         console.log("Forced offender creation, CRN: ", crn);
     } else {
         console.time("manageCreateOffender");
-        [crn, created] = await manageCreateOffender(page, person, providerName);
+        [crn, person, created] = await manageCreateOffender(page, person, providerName);
         console.timeEnd("manageCreateOffender");
     }
 
@@ -56,11 +56,11 @@ export const manageCreateOffender = async (
   page: Page,
   person: Person,
   providerName?: string,
-): Promise<[string, boolean]> => {
+): Promise<[string, Person, boolean]> => {
   if (fs.existsSync(USER_FILE)) {
     const data = JSON.parse(fs.readFileSync(USER_FILE, "utf-8"));
     console.log("READING CRN from existing file:", data.crn);
-    return [data.crn, false];
+    return [data.crn, data.person, false];
   }
 
   let crn;
@@ -70,12 +70,15 @@ export const manageCreateOffender = async (
     await loginToDelius(page);
     crn = await deliusCreateOffender(page, { person, providerName });
     console.timeEnd("deliusCreateOffender");
-    fs.writeSync(fd, JSON.stringify({ crn }));
+    fs.writeSync(fd, JSON.stringify({ 
+      crn,
+      person
+    }));
     fs.closeSync(fd);
     fs.renameSync(TMP_FILE, USER_FILE);
 
     console.log("Offender Created, CRN: ", crn);
-    return [crn, true];
+    return [crn, person, true];
   } catch (err: any) {
     if (err.code !== "EEXIST") throw err;
     while (!fs.existsSync(USER_FILE)) {
@@ -83,7 +86,7 @@ export const manageCreateOffender = async (
     }
     const data = JSON.parse(fs.readFileSync(USER_FILE, "utf-8"));
     console.log("Reading Offender CRN from file: ", data.crn);
-    return [data.crn, false];
+    return [data.crn, data.person, false];
   }
 };
 
