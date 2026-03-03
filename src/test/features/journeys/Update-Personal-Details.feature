@@ -25,6 +25,7 @@ Feature: Update personal details
             | endDate   | <end>      |
             | note      | <note>     |
         Then I can see the updated details
+        And I close the context
 
         Examples:
             | description           | phone         | mobile        | email            | address                                           | type    | verified | start        | end         | note   |

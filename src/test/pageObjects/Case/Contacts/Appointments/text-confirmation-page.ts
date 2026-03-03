@@ -19,8 +19,6 @@ export default class TextConfirmationPage extends ContactPage {
             case 'yes-add':
                 await this.page.locator('input[type="radio"][value="YES_ADD_MOBILE_NUMBER"]').check()
                 await this.submit()
-                // Wait for navigation to mobile page
-                await this.page.waitForLoadState('networkidle')
 
                 if (!mobile) {
                     throw new Error('Mobile number is required when using yes-add')
@@ -33,7 +31,6 @@ export default class TextConfirmationPage extends ContactPage {
             case 'yes-update':
                 await this.page.locator('input[type="radio"][value="YES_UPDATE_MOBILE_NUMBER"]').check()
                 await this.submit()
-                await this.page.waitForLoadState('networkidle')
 
                 if (!mobile) {
                     throw new Error('Mobile number is required when using yes-add')

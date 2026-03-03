@@ -18,6 +18,7 @@ Feature: As a practitioner
       | not_complied | <not_complied> |
     Then the contact log contains '<count>' entries
     And there are '<errors>'
+    And I close the context
 
     Examples:
       | description      | case    | from      | to        | keywords | outcome | complied | not_complied | count | errors                  |

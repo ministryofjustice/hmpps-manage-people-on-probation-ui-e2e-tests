@@ -33,7 +33,6 @@ export default class CheckInSummaryPage extends ContactPage {
     async clickDateChangeLink() {
         await this.getQA(this.dateActionChangeLink).isEnabled();
         await this.getQA(this.dateActionChangeLink).click();
-        await this.page.locator('h2', { hasText: 'Set up online check ins' }).waitFor();
     }
 
     async clickDateIntervalChangeLink() {
