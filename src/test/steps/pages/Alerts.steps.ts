@@ -8,6 +8,7 @@ import OverviewPage from '../../pageObjects/Case/overview.page'
 import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page'
 import NotePage from '../../pageObjects/Case/Contacts/Appointments/note.page'
 import { testContext } from '../../features/Fixtures'
+import { login as loginToDelius } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login.mjs'
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -18,6 +19,7 @@ Given('I have noted the alerts count', async ({ ctx }) => {
 });
 
 Given('The offender has been given an alert', async ({ ctx }) => {
+    await loginToDelius(ctx.base.page);
     await createContact(ctx.base.page, ctx.case.crn, deliusAlert)
 });
 

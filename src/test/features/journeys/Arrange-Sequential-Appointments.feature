@@ -22,8 +22,8 @@ Feature: Create Appointments
         Then the appointment should be created successfully
         
         Examples:
-        | ScenarioName | sentenceId | typeId | locationId | text                     | mobile      | note       | sensitive |
-        | Sequential   | 0          | 0      | 0          | Yes, add a mobile number | 07771900900 | Test note1 | No        |
+        | ScenarioName | sentenceId | typeId | locationId | text                     | mobile        | note       | sensitive |
+        | Sequential   | 0          | 0      | 0          | Yes, add a mobile number | 07771 900 900 | Test note1 | No        |
 
     @smoke @appointments @sequential @kk
     Scenario Outline: Create Similar Appointment for <ScenarioName>
@@ -37,8 +37,8 @@ Feature: Create Appointments
         Then the appointment should be created successfully
 
         Examples:
-            | ScenarioName | date     | text                            | mobile      | note       | sensitive |
-            | Sequential   | NEXTWEEK | Yes, update their mobile number | 07771900900 | Test note1 | YES       |
+            | ScenarioName | date     | text                            | mobile        | note       | sensitive |
+            | Sequential   | NEXTWEEK | Yes, update their mobile number | 07771 900 900 | Test note1 | YES       |
 
     @smoke @appointments @sequential
     Scenario: Create Another Appointment for <ScenarioName>
@@ -84,5 +84,5 @@ Feature: Create Appointments
         And I can check appointment details with the manage page
 
         Examples:
-            | ScenarioName | date       | sensitive | who    | reason   |
+            | ScenarioName | date         | sensitive | who    | reason   |
             | Sequential   | THREEDAYSAGO | NO        | system | just cos |

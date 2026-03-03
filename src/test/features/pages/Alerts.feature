@@ -8,7 +8,7 @@ Feature: Alerts page
         Given Context has been created for "Alerts" test
         And I am logged in
         And I have noted the alerts count
-        And A new offender has been created in Ndelius
+        And A new offender has been created or existing made available
         And The offender has been given an alert
         And I have navigated to alerts
         Then the page should be rendered
