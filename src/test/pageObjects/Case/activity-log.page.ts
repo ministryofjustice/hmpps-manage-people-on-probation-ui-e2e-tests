@@ -53,11 +53,11 @@ export default class ActivityLogPage extends CasePage {
 
     async checkAvailable(): Promise<boolean> {
         try {
-            await expect(this.getClass('govuk-table__cell govuk-!-width-one-quarter').first()).toHaveText('Today', {timeout: 1000})
+            await expect(this.getClass('govuk-table__cell govuk-!-width-one-quarter').first()).toHaveText('Today')
             for (const entry of await this.getClass('govuk-details', this.getTimelineCard(1)).filter({hasText: 'Online probation check in'}).all()){
                 try {
                     await entry.click()
-                    await expect(this.getClass('govuk-details__text', entry)).toContainText('Check in status: Missed', {timeout: 1000})
+                    await expect(this.getClass('govuk-details__text', entry)).toContainText('Check in status: Missed')
                     return false
                 } catch {
                     continue

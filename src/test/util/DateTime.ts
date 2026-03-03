@@ -6,15 +6,6 @@ export interface MpopDateTime {
   endTime: string
 }
 
-export const mpopFormatDate = (date: Date) => {
-    return DateTime.fromJSDate(date).toFormat('d MMM yyyy')
-}
-export const mpopLongMonthFormat = (date: Date) =>
-    DateTime.fromJSDate(date).toFormat('d MMMM yyyy')
-export const mpopShortMonthFormat = (date: Date) => {
-    return DateTime.fromJSDate(date).toFormat('d MMM yyyy')
-}
-
 export const luxonString = (date: DateTime) : string => {
     return date.toFormat("d/M/yyyy")
 }
@@ -93,7 +84,13 @@ export const formatToDMY = (dateStr: string) => {
 }
 
 export const dateWithDayAndWithoutYear = (datetimeString: string) => {
-  return DateTime.fromFormat(datetimeString, "d/M/yyyy").toFormat('cccc d MMMM')
+  return stringToDate(datetimeString).toFormat('cccc d MMMM')
+}
+export const dateWithLongMonth = (datetimeString: string) => {
+    return stringToDate(datetimeString).toFormat('d MMMM yyyy')
+}
+export const stringToDate = (datetimeString: string) : DateTime => {
+  return DateTime.fromFormat(datetimeString, "d/M/yyyy")
 }
 
 export const futureTimes = [tomorrow, nextWeek]

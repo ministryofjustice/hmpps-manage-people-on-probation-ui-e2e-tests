@@ -24,7 +24,6 @@ When('I create an appointment', async ({ ctx }, data: DataTable) => {
     await appointments.startArrangeAppointment()
 
     const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    console.log(appointment)
     ctx.appointments.push(appointment)
     await createAppointmentMPop(page, appointment)
 });
@@ -32,14 +31,12 @@ When('I create an appointment', async ({ ctx }, data: DataTable) => {
 When('I create a similar appointment', async ({ ctx }, data: DataTable) => {
     const changes: MpopAppointmentChanges = appointmentDataTable(data)
     const appointment = fullDetailsFromChanges(changes, ctx.appointments[ctx.appointments.length-1])
-    console.log(appointment)
     ctx.appointments.push(appointment)
     await createSimilarAppointmentMPop(ctx.base.page, changes)
 });
 
 When('I create another appointment', async ({ ctx }, data:DataTable) => {
     const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    console.log(appointment)
     ctx.appointments.push(appointment)
     await createAnotherAppointmentMPop(ctx.base.page, appointment)
 });
@@ -93,9 +90,7 @@ When('I reschedule it with the following information', async ({ ctx }, data:Data
     const page = ctx.base.page
     const changes: MpopAppointmentChanges = appointmentDataTable(data)
     const appointment = fullDetailsFromChanges(changes, ctx.appointments[0])
-    console.log(appointment)
     ctx.appointments[0] = appointment
     const rescheduleDetails: RescheduleDetails = rescheduleDataTable(data)
-    console.log(rescheduleDetails)
     await rescheduleAppointmentMPop(page, rescheduleDetails, changes)
 });

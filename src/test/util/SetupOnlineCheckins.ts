@@ -10,6 +10,7 @@ import { futureTimes, luxonString, nextWeek, tomorrow } from "./DateTime"
 import { DataTable } from "playwright-bdd"
 import TakePhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/take-photo.page"
 import { chance, randomEnum, randomPicker } from "./Common"
+import { ContactDetails } from "../features/Fixtures"
 
 export interface MpopSetupCheckin {
     date: string
@@ -31,11 +32,6 @@ export interface MPoPCheckinDetails {
     date: string
     frequency: FrequencyOptions
     preference: Preference
-}
-
-export interface ContactDetails {
-    mobile?: string
-    email?: string
 }
 
 export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
@@ -83,23 +79,15 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
 export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChanges) => {
     const checkInSummaryPage = new CheckInSummaryPage(page)
     if (changes.date || changes.frequency !== undefined){
-        while (true){
-            await checkInSummaryPage.checkOnPage()
-            if (changes.date){
-                await checkInSummaryPage.clickDateChangeLink()
-            } else {
-                await checkInSummaryPage.clickDateIntervalChangeLink()
-            }
-            const dateFrequencyPage = new DateFrequencyPage(page)
-            await dateFrequencyPage.checkOnPage()
-            await dateFrequencyPage.changePage(changes.date, changes.frequency)
-            try {
-                await dateFrequencyPage.checkOnPage()
-                await dateFrequencyPage.clickBackLink()
-            } catch {
-                break 
-            }
+        await checkInSummaryPage.checkOnPage()
+        if (changes.date){
+            await checkInSummaryPage.clickDateChangeLink()
+        } else {
+            await checkInSummaryPage.clickDateIntervalChangeLink()
         }
+        const dateFrequencyPage = new DateFrequencyPage(page)
+        await dateFrequencyPage.checkOnPage()
+        await dateFrequencyPage.changePage(changes.date, changes.frequency)
     }
 
     if (changes.contact?.email || changes.contact?.mobile || changes.preference){

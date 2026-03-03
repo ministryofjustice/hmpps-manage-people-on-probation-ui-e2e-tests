@@ -4,7 +4,7 @@ import { caseNavigation } from "../../util/Navigation";
 import CasePage from "./casepage";
 import { MpopArrangeAppointment } from "../../util/ArrangeAppointment";
 import { DateTime } from "luxon";
-import { mpopLongMonthFormat, mpopTime, today } from "../../util/DateTime";
+import { mpopTime, today } from "../../util/DateTime";
 
 dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
@@ -61,7 +61,7 @@ export default class AppointmentsPage extends CasePage{
 
     async clickSetupOnlineCheckInsBtn() {
         const btn = this.getQA("online-checkin-btn")
-        await expect(btn).toBeVisible({ timeout: 10000 })  // ensure visible
+        await expect(btn).toBeVisible()  // ensure visible
         await btn.click()
     }
 

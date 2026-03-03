@@ -36,7 +36,6 @@ When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
 When('I set up checkIns with random values', async({ ctx }) => {
     const page = ctx.base.page
     const setup : MpopSetupCheckin = randomCheckIn() as MpopSetupCheckin
-    console.log(setup)
     const setUpOnLineCheckinsPage = new AppointmentsPage(page)
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)
@@ -50,7 +49,6 @@ When('I set up checkIns with random values', async({ ctx }) => {
 When('I make the following changes', async({ ctx }, data:DataTable) => {
     const page = ctx.base.page
     const changes: MpopSetupChanges = setupDataTable(data)
-    console.log(changes)
     await makeChangesSetupCheckins(page, changes)
     const checkInSummaryPage = new CheckInSummaryPage(page)
     await checkInSummaryPage.checkOnPage()
@@ -112,7 +110,7 @@ Then('I can access the new checkIn in the contact log', async({ ctx }) => {
    const contactLog = new ActivityLogPage(page, 'compact', crn)
    await contactLog.navigateTo()
    await contactLog.checkOnPage()
-   await contactLog.getLink('Manage').first().click()
+   await contactLog.getQA('esup-manage-link').first().click()
 })
 
 When('I review the completed checkIn', async({ ctx }) => {
@@ -130,7 +128,7 @@ Then('I can view the reviewed checkIn', async({ ctx }) => {
    const crn = ctx.case.crn
    const contactLog = new ActivityLogPage(page, 'compact', crn)
    await contactLog.checkOnPage()
-   await contactLog.getLink('Manage').first().click()
+   await contactLog.getQA('esup-manage-link').first().click()
    const reviewedSubmittedPage = new ReviewedSubmittedPage(page, crn)
    await reviewedSubmittedPage.checkOnPage()
 })
@@ -140,7 +138,6 @@ When('I find a suitable CRN', async({ctx}) => {
     const crn = ctx.case.crn
     const newCrn = crn ?? undefined
     const expiredCrn = await getValidCrnForExpiredCheckin(page, newCrn) 
-    console.log(expiredCrn)
     ctx.checkIns.expiredCrn = expiredCrn
 })
 
@@ -158,7 +155,7 @@ Then('I can access the expired checkIn in the contact log', async({ ctx }) => {
    const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
    await contactLog.navigateTo()
    await contactLog.checkOnPage()
-   await contactLog.getLink('Manage').first().click()
+   await contactLog.getQA('esup-manage-link').first().click()
 })
 
 When('I review the missed checkIn', async({ ctx }) => {
@@ -176,7 +173,7 @@ Then('I can view the expired and reviewed checkIn', async({ ctx }) => {
    const expiredCrn = ctx.checkIns.expiredCrn
    const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
    await contactLog.checkOnPage()
-   await contactLog.getLink('Manage').first().click()
+   await contactLog.getQA('esup-manage-link').first().click()
    const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
    await reviewedExpiredPage.checkOnPage()
 })
