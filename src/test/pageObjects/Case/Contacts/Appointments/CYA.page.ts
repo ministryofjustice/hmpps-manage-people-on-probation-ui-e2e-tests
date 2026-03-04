@@ -3,7 +3,6 @@ import AttendancePage from "./attendance.page";
 import SentencePage from "./sentence.page";
 import TypeAttendancePage from "./type-attendance.page";
 import LocationDateTimePage from "./location-datetime.page";
-import TextConfirmationPage from "./text-confirmation-page"
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
