@@ -26,11 +26,19 @@ export default class CasesPage extends MPopPage {
     }
 
     async selectCaseByID(id: number){
-        this.clickTableLink("myCasesCard", `nameOrCrnValue${id}`)
+        await this.clickTableLink("myCasesCard", `nameOrCrnValue${id}`)
     }
 
-    async navigateTo(page: Page) {
-        await baseNavigation(page, "Cases")
+    async getCount(): Promise<number>{
+        const text = await this.getQA('pagination').textContent()
+        console.log(text)
+        const count = text?.match(/\d+(,\d+)*/g) as unknown as number[]
+        console.log(count)
+        return parseInt(count[2].toString().replace(/\,/g,''),10)
+    }
+
+    async navigateTo() {
+        await baseNavigation(this.page, "Cases")
     }
     
 }

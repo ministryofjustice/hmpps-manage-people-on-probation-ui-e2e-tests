@@ -9,12 +9,14 @@ import { test, testContext } from '../../features/Fixtures';
 import { createEsupervisionCheckin, getClientToken, getProbationPractitioner, postEsupervisionVideo, submitEsupervisionCheckin, verifyEsupervisionVideo } from '../../util/API';
 import { getBrowserContext, getUuid } from '../../util/Common';
 import ActivityLogPage from '../../pageObjects/Case/activity-log.page';
-import { getValidCrnForExpiredCheckin, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../util/ReviewCheckins';
+import { getCasesWithCheckInsSetup, getCrnsWithCheckInsSetup, Review, reviewCheckinMpop, reviewDataTable, reviewSubmittedCheckinMpop, ReviewType, SurveyResponse, YesNoCheck } from '../../util/ReviewCheckins';
 import ReviewedSubmittedPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-submitted.page';
 import ReviewedExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page';
 import ManageCheckInsPage from '../../pageObjects/Case/Contacts/Checkins/manage.page';
 import StopCheckInsPage from '../../pageObjects/Case/Contacts/Checkins/stop.page';
 import { restartCheckinsMPop } from '../../util/StopStartCheckins';
+import ReviewExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/review-expired.page';
+import { expect } from '@playwright/test';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -96,7 +98,7 @@ Then('I can access the new checkIn in the contact log', async({ ctx }) => {
    const page = ctx.base.page
    const crn = ctx.case.crn
    await page.waitForTimeout(5000)
-   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   const contactLog = new ActivityLogPage(page, crn)
    await contactLog.navigateTo()
    await contactLog.checkOnPage()
    await contactLog.getQA('esup-manage-link').first().click()
@@ -115,19 +117,22 @@ When('I review the completed checkIn', async({ ctx }) => {
 Then('I can view the reviewed checkIn', async({ ctx }) => {
    const page = ctx.base.page
    const crn = ctx.case.crn
-   const contactLog = new ActivityLogPage(page, 'compact', crn)
+   const contactLog = new ActivityLogPage(page, crn)
    await contactLog.checkOnPage()
    await contactLog.getQA('esup-manage-link').first().click()
    const reviewedSubmittedPage = new ReviewedSubmittedPage(page, crn)
    await reviewedSubmittedPage.checkOnPage()
 })
 
-When('I find a suitable CRN', async({ctx}) => {
+When('I find a number of valid CRNs', async({ctx}) => {
     const page = ctx.base.page
-    const crn = ctx.case.crn
-    const newCrn = crn ?? undefined
-    const expiredCrn = await getValidCrnForExpiredCheckin(page, newCrn) 
-    ctx.checkIns.expiredCrn = expiredCrn
+    const startCrn = 'X983000'
+    await getCrnsWithCheckInsSetup(page, startCrn) 
+})
+
+When('I find a number of valid cases', async({ctx}) => {
+    const page = ctx.base.page
+    await getCasesWithCheckInsSetup(page) 
 })
 
 When('I mock the completion of an expired checkin', async({ ctx }) => {
@@ -135,16 +140,6 @@ When('I mock the completion of an expired checkin', async({ ctx }) => {
     const token = await getClientToken()
     const practitioner = await getProbationPractitioner(expiredCrn, token)
     await createEsupervisionCheckin(practitioner, expiredCrn, dueDateString(today.minus({days: 7})), token)
-})
-
-Then('I can access the expired checkIn in the contact log', async({ ctx }) => {
-   const page = ctx.base.page
-   const expiredCrn = ctx.checkIns.expiredCrn
-   await page.waitForTimeout(5000)
-   const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
-   await contactLog.navigateTo()
-   await contactLog.checkOnPage()
-   await contactLog.getQA('esup-manage-link').first().click()
 })
 
 When('I review the missed checkIn', async({ ctx }) => {
@@ -160,7 +155,7 @@ When('I review the missed checkIn', async({ ctx }) => {
 Then('I can view the expired and reviewed checkIn', async({ ctx }) => {
    const page = ctx.base.page
    const expiredCrn = ctx.checkIns.expiredCrn
-   const contactLog = new ActivityLogPage(page, 'compact', expiredCrn)
+   const contactLog = new ActivityLogPage(page, expiredCrn)
    await contactLog.checkOnPage()
    await contactLog.getQA('esup-manage-link').first().click()
    const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
@@ -239,3 +234,42 @@ Then('Checkins should be setup', async({ ctx }) => {
     await overviewPage.checkOnPage()
     await overviewPage.verifyCheckinDetails(details)
 })
+
+Then('I mock the completion of an expired checkin for {string}', async({ ctx }, cases) => {
+    const caseList = cases.split(',')
+    for (let i=0; i<caseList.length; i++){
+        const crn = caseList[i]
+        console.log(crn)
+        const token = await getClientToken()
+        const practitioner = await getProbationPractitioner(crn, token)
+        await createEsupervisionCheckin(practitioner, crn, dueDateString(yesterday), token)
+    }
+})
+
+When('I find valid case from {string}', async({ ctx }, cases) => {
+    const page = ctx.base.page
+    const caseList = cases.split(',')
+    for (let i=0; i<caseList.length; i++){
+        const crn = caseList[i]
+        console.log(crn)
+        const contactPage = new ActivityLogPage(page, crn)
+        await contactPage.navigateTo()
+        await contactPage.checkOnPage()
+        try {
+            await contactPage.getQA('esup-manage-link').first().click({timeout: 1000})
+        } catch {
+            console.log('no checkins')
+            continue
+        }
+        const review = new ReviewExpiredPage(page)
+        try {
+            await expect(review.getQA('pageHeading')).toContainText(review.title!, {timeout: 1000})
+            ctx.checkIns.expiredCrn = crn
+            return 
+        } catch {
+            console.log('completed or reviewed')
+        }
+    }
+    console.log('No valid cases left')
+})
+
