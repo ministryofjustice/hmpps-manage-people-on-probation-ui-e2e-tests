@@ -42,6 +42,19 @@ When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
     await createAppointmentMPop(page, appointment)
 });
 
+When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
+    const page = ctx.base.page
+    const crn = ctx.case.crn
+    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
+    await appointments.navigateTo()
+    await appointments.checkOnPage()
+    await appointments.startArrangeAppointment()
+
+    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
+    ctx.appointments.push(appointment)
+    await createAppointmentMPop(page, appointment)
+});
+
 When('I create a similar appointment', async ({ ctx }, data: DataTable) => {
     const changes: MpopAppointmentChanges = appointmentDataTable(data)
     const appointment = fullDetailsFromChanges(changes, ctx.appointments[ctx.appointments.length-1])
