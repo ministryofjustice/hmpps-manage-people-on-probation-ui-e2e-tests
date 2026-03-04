@@ -24,7 +24,6 @@ export default class CYAPage extends ContactPage {
         "Location",
         "Date and time",
         ...(past ? ["Attended and complied"] : ["Text message confirmation"]),
-        "Text message confirmation",
         "Supporting information",
         "Sensitivity",
         ]
@@ -164,7 +163,7 @@ export default class CYAPage extends ContactPage {
                 else if (changes.sensitivity){
                     await this.clickSummaryAction(rows.indexOf("Sensitivity"))
                 }
-            } 
+            }
             if (newPast){
                 const addNotePage = new AddNotePage(this.page)
                 await addNotePage.assertOnPage()
