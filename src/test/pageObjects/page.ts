@@ -157,7 +157,6 @@ export default abstract class MPopPage {
             let target: number[] = [id as number]
             while (true){
                 try {
-                    console.log(target)
                     await this.getNavigation(`${target[target.length-1]}`).click({timeout: 1000})
                     target.pop()
                     if (target.length == 0){
