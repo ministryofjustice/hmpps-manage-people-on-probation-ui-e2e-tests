@@ -91,7 +91,7 @@ Then('the appointment should be rescheduled successfully', async ({ ctx }) => {
 
 Then('I end up on the location-not-in-list page', async ({ ctx }) => {
     const locationNotInListPage = new LocationNotInListPage(ctx.base.page)
-    await locationNotInListPage.assertOnPage()
+    await locationNotInListPage.checkOnPage()
 });
 
 Then('I can check appointment details with the manage page', async ({ ctx }) => {
