@@ -3,7 +3,6 @@ import AttendancePage from "./attendance.page";
 import SentencePage from "./sentence.page";
 import TypeAttendancePage from "./type-attendance.page";
 import LocationDateTimePage from "./location-datetime.page";
-import TextConfirmationPage from "./text-confirmation-page"
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
@@ -164,7 +163,7 @@ export default class CYAPage extends ContactPage {
                 else if (changes.sensitivity){
                     await this.clickSummaryAction(rows.indexOf("Sensitivity"))
                 }
-            } 
+            }
             if (newPast){
                 const addNotePage = new AddNotePage(this.page)
                 await addNotePage.assertOnPage()
@@ -172,7 +171,7 @@ export default class CYAPage extends ContactPage {
             } else {
                 const supportingInformationPage = new SupportingInformationPage(this.page)
                 await supportingInformationPage.assertOnPage()
-                await supportingInformationPage.changePage(changes.sensitivity, changes.note) 
+                await supportingInformationPage.changePage(changes.sensitivity, changes.note)
             }
         }
 
