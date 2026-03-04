@@ -7,7 +7,7 @@ Feature: As a practitioner
     And I am logged in
     And I navigate to '<case_crn>'
     When I navigate to sentence page
-    And the sentence page is populated with title 'Adult Custody < 12m - Sentence - Manage people on probation'
+    Then the sentence page is populated with title 'Adult Custody < 12m - Sentence - Manage people on probation'
     And the sentence page has the heading 'Sentence'
     And the sentence page links work correctly
     And the sentence page is populated with title 'Adult Custody < 12m - Sentence - Manage people on probation'
