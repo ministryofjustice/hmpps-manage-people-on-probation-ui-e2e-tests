@@ -7,7 +7,6 @@ import TextConfirmationPage from "./text-confirmation-page"
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
-import TextConfirmationPage from "./text-confirmation-page";
 import AttendedCompliedPage from "./attended-complied.page";
 import AddNotePage from "./add-note.page";
 
