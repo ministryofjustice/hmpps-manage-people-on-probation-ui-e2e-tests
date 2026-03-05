@@ -69,7 +69,7 @@ export default class AppointmentsPage extends CasePage{
         const dateTime = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")
         const date = dateTime.toFormat('d MMMM yyyy')
         const time = mpopTime(appointment.dateTime.startTime, appointment.dateTime.endTime)
-        const row = this.getClass('govuk-table__row').filter({hasText: date}).filter({hasText: time})
+        const row = this.getClass('govuk-table__row').filter({hasText: new RegExp(' ' + date)}).filter({hasText: new RegExp(' ' + time)})
         await row.getByRole('link', {name: 'Manage'}).click()
     }
 }
