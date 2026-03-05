@@ -10,8 +10,9 @@ export default class CaseUpcomingAppointmentsPage extends CasePage {
        await this.page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${(crn ?? this.crn)!}/upcoming-appointments/`)
     }
 
-    async checkOnPage(){
+    async checkOnPage(): Promise<boolean>{
         await this.checkQA("upcomingAppointments", "All upcoming appointments")
+        return true
     }
 
     async selectAppointment(id: number, byName: boolean){

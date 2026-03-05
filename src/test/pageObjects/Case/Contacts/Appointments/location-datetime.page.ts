@@ -8,8 +8,9 @@ export default class LocationDateTimePage extends ContactPage {
         super(page, "Appointment date, time and location", crn, uuid)
     }
 
-    async checkOnPage() {
+    async checkOnPage(): Promise<boolean> {
         await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
+        return true
     }
 
     async findLocationId(typeId: number, location: number | "not needed" | "not in list") {
