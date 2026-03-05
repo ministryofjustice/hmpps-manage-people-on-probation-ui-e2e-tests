@@ -9,6 +9,7 @@ import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
 import TextConfirmationPage from "./text-confirmation-page";
 import AttendedCompliedPage from "./attended-complied.page";
+import AddNotePage from "./add-note.page";
 
 export default class CYAPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
@@ -68,9 +69,8 @@ export default class CYAPage extends ContactPage {
             const sentencePage = new SentencePage(this.page)
             await sentencePage.checkOnPage()
             await sentencePage.completePage(changes.sentenceId)
-            try {
-                this.checkOnPage()
-            } catch {
+            const returned = await this.checkOnPage()
+            if (!returned){
                 const typeAttendancePage = new TypeAttendancePage(this.page)
                 await typeAttendancePage.checkOnPage()
                 autoRedirected = true
@@ -93,9 +93,8 @@ export default class CYAPage extends ContactPage {
             const typeAttendancePage = new TypeAttendancePage(this.page)
             await typeAttendancePage.checkOnPage()
             await typeAttendancePage.changePage(changes.typeId, changes.attendee, changes.isVisor)
-            try {
-                this.checkOnPage()
-            } catch {
+            const returned = await this.checkOnPage()
+            if (!returned){
                 const locationDateTimePage = new LocationDateTimePage(this.page)
                 await locationDateTimePage.checkOnPage()
                 autoRedirected = true
@@ -119,19 +118,63 @@ export default class CYAPage extends ContactPage {
                 locationId = await locationDateTimePage.findLocationId(typeId, changes.locationId)
             }
             await locationDateTimePage.completePage(changes.dateTime, locationId)
-            try {
-                this.checkOnPage()
-            } catch {
-                if (currentPast){
-                    const textConfirmationPage = new TextConfirmationPage(this.page)
-                    await textConfirmationPage.checkOnPage()
-                } else {
+            const returned = await this.checkOnPage()
+            if (!returned){
+                if (newPast){
                     const attendedCompliedPage = new AttendedCompliedPage(this.page)
                     await attendedCompliedPage.checkOnPage()
+                } else {
+                    const textConfirmationPage = new TextConfirmationPage(this.page)
+                    await textConfirmationPage.checkOnPage()
                 }
                 autoRedirected = true
             }
         }
-        //rest of journeys
+        if (changes.text){
+            if (!autoRedirected){
+                await this.clickSummaryAction(rows.indexOf("Text message confirmation"))
+            } else {
+                autoRedirected = false
+            }
+            const textConfirmationPage = new TextConfirmationPage(this.page)
+            await textConfirmationPage.checkOnPage()
+            await textConfirmationPage.completePage(changes.text, changes.mobile)
+            const returned = await this.checkOnPage()
+            if (!returned){
+                if (newPast){
+                    const supportingInformationPage = new SupportingInformationPage(this.page)
+                    await supportingInformationPage.checkOnPage()
+                } else {
+                    const addNotePage = new AddNotePage(this.page)
+                    await addNotePage.checkOnPage()
+                }
+                autoRedirected = true
+            }
+        } else if (!currentPast && newPast && autoRedirected){
+            const attendedCompliedPage = new AttendedCompliedPage(this.page)
+            await attendedCompliedPage.checkOnPage()
+            await attendedCompliedPage.completePage()
+            autoRedirected = true
+        }
+        if (changes.note || changes.sensitivity){
+            if (!autoRedirected){
+                if (changes.note){
+                    await this.clickSummaryAction(rows.indexOf("Supporting information"))
+                }
+                else if (changes.sensitivity){
+                    await this.clickSummaryAction(rows.indexOf("Sensitivity"))
+                }
+            } 
+            if (newPast){
+                const addNotePage = new AddNotePage(this.page)
+                await addNotePage.checkOnPage()
+                await addNotePage.changePage(changes.sensitivity, changes.note)
+            } else {
+                const supportingInformationPage = new SupportingInformationPage(this.page)
+                await supportingInformationPage.checkOnPage()
+                await supportingInformationPage.changePage(changes.sensitivity, changes.note) 
+            }
+        }
+
     }
 }

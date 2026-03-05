@@ -154,10 +154,6 @@ When('I complete the submission', async({ ctx }) => {
     const page = ctx.base.page
     const appointment = ctx.appointments[ctx.appointments.length-1]
     const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-    await setupAppointmentMPop(page, appointment, past)
-    if (appointment.locationId === 'not in list'){
-        return
-    }
     const cyaPage = new CYAPage(page)
     await cyaPage.completePage(appointment.isVisor, past)
     const confirmationPage = new ConfirmationPage(page, past)

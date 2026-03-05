@@ -10,8 +10,9 @@ export default class TierPage extends CasePage {
         super(page, "", crn)
     }
 
-    async checkOnPage(){
+    async checkOnPage(): Promise<boolean>{
         await expect(this.getClass('govuk-heading-l').first()).toContainText('Summary')
+        return true
     }
 
     async checkTier(tier: string){

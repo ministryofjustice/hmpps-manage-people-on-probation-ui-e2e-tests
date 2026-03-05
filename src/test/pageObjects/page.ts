@@ -10,8 +10,9 @@ export default abstract class MPopPage {
         this.title = title
     }
 
-    async checkOnPage() {
+    async checkOnPage(): Promise<boolean> {
         await this.checkQA("pageHeading", this.title ?? "")
+        return true
     }
 
     async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {

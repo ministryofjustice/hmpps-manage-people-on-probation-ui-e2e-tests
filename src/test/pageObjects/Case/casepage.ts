@@ -9,13 +9,20 @@ export default abstract class CasePage extends MPopPage {
         this.crn = crn
     }
 
-    async checkOnPage() {
+    async checkOnPage(): Promise<boolean> {
         try {
             await this.checkQA("pageHeading", this.title ?? "")
+            return true
         } catch {
-            await expect(this.getClass("govuk-heading-l")).toContainText("You are restricted from viewing this case")
-            console.log("restricted")
-            await this.clickBackLink()
+            try {
+                await expect(this.getClass("govuk-heading-l")).toContainText("You are restricted from viewing this case")
+                console.log("restricted")
+                await this.clickBackLink()
+                return false
+            } catch {
+                console.log("on unexpected page")
+                return false
+            }
         }
     }
 

@@ -43,6 +43,7 @@ Feature: Create Appointments
         | ScenarioName         | sentenceId | typeId | locationId  |
         | Location-not-in-list | 0          | 0      | not in list |
 
+  @smoke @appointments @standalones @changes
   Scenario Outline: Create Appointment and make changes for <ScenarioName>
     Given Context has been created for "Appointments" test
     And A new offender has been created or existing made available
@@ -53,7 +54,7 @@ Feature: Create Appointments
       | typeId     | 0        |
       | locationId | 0        |
       | date       | TOMORROW |
-      | text       |          |
+      | text       | No       |
       | mobile     |          |
       | note       |          |
       | sensitive  | NO       |
