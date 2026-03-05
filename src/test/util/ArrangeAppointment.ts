@@ -81,7 +81,7 @@ export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAp
     await addNotePage.completePage(appointment.sensitivity, appointment.note)//file
   } else {
     const textConfirmationPage = new TextConfirmationPage(page)
-    await textConfirmationPage.completePage(appointment.text, appointment.mobile)
+    await textConfirmationPage.completePage(appointment.text, appointment.mobile, appointment.dateTime.date, appointment.dateTime.startTime, appointment.locationId)
     const supportingInformationPage = new SupportingInformationPage(page)
     await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
   }
