@@ -25,6 +25,7 @@ export default class CYAPage extends ContactPage {
         "Location",
         "Date and time",
         ...(past ? ["Attended and complied"] : ["Text message confirmation"]),
+        "Text message confirmation",
         "Supporting information",
         "Sensitivity",
         ]
