@@ -242,7 +242,7 @@ Then('I mock the completion of an expired checkin for {string}', async({ ctx }, 
         console.log(crn)
         const token = await getClientToken()
         const practitioner = await getProbationPractitioner(crn, token)
-        await createEsupervisionCheckin(practitioner, crn, dueDateString(yesterday), token)
+        await createEsupervisionCheckin(practitioner, crn, dueDateString(today), token)
     }
 })
 
