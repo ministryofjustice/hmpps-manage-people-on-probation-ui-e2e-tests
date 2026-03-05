@@ -3,6 +3,7 @@ import AttendancePage from "./attendance.page";
 import SentencePage from "./sentence.page";
 import TypeAttendancePage from "./type-attendance.page";
 import LocationDateTimePage from "./location-datetime.page";
+import TextConfirmationPage from "./text-confirmation-page"
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
@@ -24,6 +25,7 @@ export default class CYAPage extends ContactPage {
         "Location",
         "Date and time",
         ...(past ? ["Attended and complied"] : ["Text message confirmation"]),
+        "Text message confirmation",
         "Supporting information",
         "Sensitivity",
         ]
@@ -42,6 +44,7 @@ export default class CYAPage extends ContactPage {
             AttendancePage,
             LocationDateTimePage,
             LocationDateTimePage,
+            TextConfirmationPage,
             SupportingInformationPage,
             SupportingInformationPage
         ]

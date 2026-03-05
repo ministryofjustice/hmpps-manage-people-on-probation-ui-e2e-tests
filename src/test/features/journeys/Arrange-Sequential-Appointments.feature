@@ -25,7 +25,7 @@ Feature: Create Appointments
         | ScenarioName | sentenceId | typeId | locationId | text                     | mobile        | note       | sensitive |
         | Sequential   | 0          | 0      | 0          | Yes, add a mobile number | 07771 900 900 | Test note1 | No        |
 
-    @smoke @appointments @sequential @kk
+    @smoke @appointments @sequential
     Scenario Outline: Create Similar Appointment for <ScenarioName>
         When I create a similar appointment
           | label     | value       |
