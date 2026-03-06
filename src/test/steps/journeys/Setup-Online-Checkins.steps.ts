@@ -256,7 +256,7 @@ When('I find valid case from {string}', async({ ctx }, cases) => {
         await contactPage.navigateTo()
         await contactPage.checkOnPage()
         try {
-            await contactPage.getQA('esup-manage-link').first().click({timeout: 1000})
+            await contactPage.getQA('esup-manage-link').first().click({timeout: 3000})
         } catch {
             console.log('no checkins')
             continue
