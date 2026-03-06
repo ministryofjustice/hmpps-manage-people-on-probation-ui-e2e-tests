@@ -203,7 +203,7 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false, chan
         }
         if (row.label === 'locationId'){
             if (row.value != ''){
-              locationId = row.value as unknown as number | "not needed" | "not in list" 
+              locationId = row.value as unknown as number | "not needed" | "not in list"
             }
             //not needed - last if an option
             //not in list - last otherwise (2nd last if not needed is option)
