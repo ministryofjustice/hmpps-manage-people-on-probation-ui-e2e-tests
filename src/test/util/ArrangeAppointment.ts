@@ -145,20 +145,23 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
     let startTime: string = "15:15"
     let endTime: string = "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
-
-    let text: TextMessageOption = 'no'
-
+    let text: TextMessageOption | undefined = full ? 'no' : undefined
     let mobile: string
     let note: string
     let sensitivity: boolean = false
+    let noDate = false
     for (const row of data.hashes()){
         if (row.label === 'sentenceId'){
-            sentenceId = row.value as unknown as number | 'person'
+            if (row.value != ''){
+              sentenceId = row.value as unknown as number | 'person'
+            }
             //0 - X are sentences
             //last entry is person (use text 'person')
         }
         if (row.label === 'typeId'){
-            typeId = row.value as unknown as number
+            if (row.value != ''){
+              typeId = row.value as unknown as number
+            }
             //0 - 8 options for sentence (1 requires no location)
             //0 only option for person
         }
@@ -184,7 +187,11 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             isVisor = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
         }
         if (row.label === 'date'){
-            date = luxonString(dateTimeMapping[row.value])
+            if (row.value != ''){
+              date = luxonString(dateTimeMapping[row.value])
+            } else if (!full) {
+              noDate = true
+            }
         }
         if (row.label === 'startTime'){
             startTime = row.value
@@ -193,12 +200,16 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             endTime = row.value
         }
         if (row.label === 'locationId'){
-            locationId = row.value as unknown as number | "not needed" | "not in list" 
+            if (row.value != ''){
+              locationId = row.value as unknown as number | "not needed" | "not in list" 
+            }
             //not needed - last if an option
             //not in list - last otherwise (2nd last if not needed is option)
         }
         if (row.label === 'text'){
-            text = textMap[row.value as TextMapKey]
+            if (row.value != ''){
+              text = textMap[row.value as TextMapKey]
+            }
         }
         if (row.label === 'mobile'){
             mobile = row.value
@@ -216,11 +227,11 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
       typeId: typeId,
       attendee: attendee,
       isVisor: isVisor!,
-      dateTime: {
+      dateTime: noDate ? undefined : {
         date: date,
         startTime: startTime,
         endTime: endTime
-      },
+      } ,
       locationId: locationId,
       text: text,
       mobile: mobile!,
