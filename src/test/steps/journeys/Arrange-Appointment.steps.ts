@@ -126,6 +126,7 @@ When('I setup an appointment', async ({ ctx }, data: DataTable) => {
 When('I make the following changes to appointment', async({ ctx }, data:DataTable) => {
     const page = ctx.base.page
     const changes: MpopAppointmentChanges = appointmentDataTable(data)
+    console.log(changes)
     let appointment = ctx.appointments[ctx.appointments.length-1]
     const currentPast = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
     appointment = fullDetailsFromChanges(changes, appointment)

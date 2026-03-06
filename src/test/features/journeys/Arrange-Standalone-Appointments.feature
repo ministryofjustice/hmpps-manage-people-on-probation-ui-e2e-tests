@@ -75,4 +75,4 @@ Feature: Create Appointments
     Examples:
       | ScenarioName         | sentenceId | typeId | date        | locationId  | text | mobile | note       | sensitive |
       | ChangeToPast         |            |        | LASTWEEK    |             |      |        | past       | YES       |
-      | PersonAppointment    | person     | 1      |             | 0           |      |        |            |           |
+      | PersonAppointment    | person     | 0      |             | 0           |      |        |            |           |

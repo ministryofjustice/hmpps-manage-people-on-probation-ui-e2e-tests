@@ -67,7 +67,7 @@ export default class CYAPage extends ContactPage {
             const sentencePage = new SentencePage(this.page)
             await sentencePage.checkOnPage()
             await sentencePage.completePage(changes.sentenceId)
-            const returned = await this.checkOnPage()
+            const returned = await this.checkOnPage(true)
             if (!returned){
                 const typeAttendancePage = new TypeAttendancePage(this.page)
                 await typeAttendancePage.checkOnPage()
@@ -91,7 +91,7 @@ export default class CYAPage extends ContactPage {
             const typeAttendancePage = new TypeAttendancePage(this.page)
             await typeAttendancePage.checkOnPage()
             await typeAttendancePage.changePage(changes.typeId, changes.attendee, changes.isVisor)
-            const returned = await this.checkOnPage()
+            const returned = await this.checkOnPage(true)
             if (!returned){
                 const locationDateTimePage = new LocationDateTimePage(this.page)
                 await locationDateTimePage.checkOnPage()
@@ -116,7 +116,7 @@ export default class CYAPage extends ContactPage {
                 locationId = await locationDateTimePage.findLocationId(typeId, changes.locationId)
             }
             await locationDateTimePage.completePage(changes.dateTime, locationId)
-            const returned = await this.checkOnPage()
+            const returned = await this.checkOnPage(true)
             if (!returned){
                 if (newPast){
                     const attendedCompliedPage = new AttendedCompliedPage(this.page)
@@ -137,7 +137,7 @@ export default class CYAPage extends ContactPage {
             const textConfirmationPage = new TextConfirmationPage(this.page)
             await textConfirmationPage.checkOnPage()
             await textConfirmationPage.completePage(changes.text, changes.mobile)
-            const returned = await this.checkOnPage()
+            const returned = await this.checkOnPage(true)
             if (!returned){
                 if (newPast){
                     const supportingInformationPage = new SupportingInformationPage(this.page)
