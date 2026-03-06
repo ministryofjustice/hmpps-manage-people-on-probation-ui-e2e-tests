@@ -136,16 +136,16 @@ export const textMap = {
 type TextMapKey = keyof typeof textMap
 export type TextMessageOption = typeof textMap[TextMapKey]
 
-export const appointmentDataTable = (data: DataTable, full:boolean = false) : MpopAppointmentChanges => {
+export const appointmentDataTable = (data: DataTable, full:boolean = false, changes:boolean=false) : MpopAppointmentChanges => {
     let sentenceId: number | 'person' | undefined = full ? 0 : undefined
     let typeId: number | undefined = full ? 0 : undefined
     let attendee: MpopAttendee | undefined = full ? self : undefined
     let isVisor: boolean 
-    let date: string = luxonString(tomorrow)
-    let startTime: string = "15:15"
-    let endTime: string = "16:15"
+    let date: string | undefined = changes ? undefined : luxonString(tomorrow)
+    let startTime: string | undefined = changes ? undefined : "15:15"
+    let endTime: string | undefined = changes ? undefined : "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
-    let text: TextMessageOption | undefined = full ? 'no' : undefined
+    let text: TextMessageOption | undefined = changes ? undefined : 'no'
     let mobile: string
     let note: string
     let sensitivity: boolean = false
@@ -189,8 +189,6 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
         if (row.label === 'date'){
             if (row.value != ''){
               date = luxonString(dateTimeMapping[row.value])
-            } else if (!full) {
-              noDate = true
             }
         }
         if (row.label === 'startTime'){
@@ -227,10 +225,10 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
       typeId: typeId,
       attendee: attendee,
       isVisor: isVisor!,
-      dateTime: noDate ? undefined : {
-        date: date,
-        startTime: startTime,
-        endTime: endTime
+      dateTime: date === undefined && startTime === undefined && endTime === undefined ? undefined : {
+        date: date!,
+        startTime: startTime!,
+        endTime: endTime!
       } ,
       locationId: locationId,
       text: text,

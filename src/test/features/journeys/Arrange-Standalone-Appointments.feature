@@ -54,6 +54,8 @@ Feature: Create Appointments
       | typeId     | 0        |
       | locationId | 0        |
       | date       | TOMORROW |
+      | startTime  | 09:15    |
+      | endTime    | 10:15    |
       | text       | No       |
       | mobile     |          |
       | note       |          |
@@ -64,6 +66,8 @@ Feature: Create Appointments
       | typeId     | <typeId>     |
       | locationId | <locationId> |
       | date       | <date>       |
+      | startTime  | <start>      |
+      | endTime    | <end>        |
       | text       | <text>       |
       | mobile     | <mobile>     |
       | note       | <note>       |
@@ -73,6 +77,6 @@ Feature: Create Appointments
     And I can check appointment details with the manage page
     And I close the context
     Examples:
-      | ScenarioName         | sentenceId | typeId | date        | locationId  | text | mobile | note       | sensitive |
-      | ChangeToPast         |            |        | LASTWEEK    |             |      |        | past       | YES       |
-      | PersonAppointment    | person     | 0      |             | 0           |      |        |            |           |
+      | ScenarioName         | sentenceId | typeId | date        | start | end   | locationId  | text | mobile | note       | sensitive |
+      | ChangeToPast         |            |        | LASTWEEK    | 09:15 | 10:15 |             |      |        | past       | YES       |
+      | PersonAppointment    | person     | 0      |             |       |       | 0           |      |        |            |           |
