@@ -9,8 +9,9 @@ export default class NotePage extends ContactPage {
         this.noteId = noteId
     }
 
-    async checkOnPage(){
+    async checkOnPage(): Promise<boolean>{
         expect(this.getQA("appointmentType")).toBeDefined()
         expect(this.getQA("appointmentTitle")).toBeDefined()
+        return true
     }
 }

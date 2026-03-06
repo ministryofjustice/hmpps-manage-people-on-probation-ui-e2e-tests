@@ -18,9 +18,10 @@ export default class AppointmentsPage extends CasePage{
        await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/appointments/`)
     }
 
-    async checkOnPage(){
+    async checkOnPage(): Promise<boolean>{
         await this.checkQA("upcomingAppointments", "Upcoming appointments")
         await this.checkQA("appointmentHistory", "Appointment history")
+        return true
     }
 
     async startArrangeAppointment() {

@@ -136,29 +136,32 @@ export const textMap = {
 type TextMapKey = keyof typeof textMap
 export type TextMessageOption = typeof textMap[TextMapKey]
 
-export const appointmentDataTable = (data: DataTable, full:boolean = false) : MpopAppointmentChanges => {
+export const appointmentDataTable = (data: DataTable, full:boolean = false, changes:boolean=false) : MpopAppointmentChanges => {
     let sentenceId: number | 'person' | undefined = full ? 0 : undefined
     let typeId: number | undefined = full ? 0 : undefined
     let attendee: MpopAttendee | undefined = full ? self : undefined
     let isVisor: boolean 
-    let date: string = luxonString(tomorrow)
-    let startTime: string = "15:15"
-    let endTime: string = "16:15"
+    let date: string | undefined = changes ? undefined : luxonString(tomorrow)
+    let startTime: string | undefined = changes ? undefined : "15:15"
+    let endTime: string | undefined = changes ? undefined : "16:15"
     let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
-
-    let text: TextMessageOption = 'no'
-
+    let text: TextMessageOption | undefined = changes ? undefined : 'no'
     let mobile: string
     let note: string
     let sensitivity: boolean = false
+    let noDate = false
     for (const row of data.hashes()){
         if (row.label === 'sentenceId'){
-            sentenceId = row.value as unknown as number | 'person'
+            if (row.value != ''){
+              sentenceId = row.value as unknown as number | 'person'
+            }
             //0 - X are sentences
             //last entry is person (use text 'person')
         }
         if (row.label === 'typeId'){
-            typeId = row.value as unknown as number
+            if (row.value != ''){
+              typeId = row.value as unknown as number
+            }
             //0 - 8 options for sentence (1 requires no location)
             //0 only option for person
         }
@@ -184,21 +187,31 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
             isVisor = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
         }
         if (row.label === 'date'){
-            date = luxonString(dateTimeMapping[row.value])
+            if (row.value != ''){
+              date = luxonString(dateTimeMapping[row.value])
+            }
         }
         if (row.label === 'startTime'){
-            startTime = row.value
+            if (row.value != ''){
+              startTime = row.value
+            }
         }
         if (row.label === 'endTime'){
-            endTime = row.value
+            if (row.value != ''){
+              endTime = row.value
+            }
         }
         if (row.label === 'locationId'){
-            locationId = row.value as unknown as number | "not needed" | "not in list" 
+            if (row.value != ''){
+              locationId = row.value as unknown as number | "not needed" | "not in list" 
+            }
             //not needed - last if an option
             //not in list - last otherwise (2nd last if not needed is option)
         }
         if (row.label === 'text'){
-            text = textMap[row.value as TextMapKey]
+            if (row.value != ''){
+              text = textMap[row.value as TextMapKey]
+            }
         }
         if (row.label === 'mobile'){
             mobile = row.value
@@ -216,11 +229,11 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false) : Mp
       typeId: typeId,
       attendee: attendee,
       isVisor: isVisor!,
-      dateTime: {
-        date: date,
-        startTime: startTime,
-        endTime: endTime
-      },
+      dateTime: date === undefined && startTime === undefined && endTime === undefined ? undefined : {
+        date: date!,
+        startTime: startTime!,
+        endTime: endTime!
+      } ,
       locationId: locationId,
       text: text,
       mobile: mobile!,
@@ -261,7 +274,11 @@ export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: Mp
     typeId: changes.typeId ?? base.typeId!,
     attendee: changes.attendee ?? base.attendee!,
     isVisor: changes.isVisor ?? base.isVisor,
-    dateTime: changes.dateTime ?? base.dateTime!,
+    dateTime: {
+      date: changes.dateTime?.date ?? base.dateTime.date,
+      startTime: changes.dateTime?.startTime ?? base.dateTime.startTime,
+      endTime: changes.dateTime?.endTime ?? base.dateTime.endTime
+    },
     locationId: changes.locationId ?? base.locationId!,
     text: changes.text ?? base.text!,
     mobile: changes.mobile ?? base.mobile,

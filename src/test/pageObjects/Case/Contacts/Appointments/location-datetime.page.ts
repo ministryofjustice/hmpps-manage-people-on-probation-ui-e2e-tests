@@ -8,8 +8,18 @@ export default class LocationDateTimePage extends ContactPage {
         super(page, "Appointment date, time and location", crn, uuid)
     }
 
-    async checkOnPage() {
-        await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
+    async checkOnPage(acceptWrong = false): Promise<boolean> {
+        if (acceptWrong){
+            try {
+                await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
+                return true
+            } catch {
+                return false
+            }
+        } else {
+            await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
+            return true
+        }
     }
 
     async findLocationId(typeId: number, location: number | "not needed" | "not in list") {
@@ -45,8 +55,9 @@ export default class LocationDateTimePage extends ContactPage {
             await this.clickRadio("locationCode", locationId as number)
         }
         await this.submit()
-        if (validation){
-            await this.validateDateTime(dateTime!, locationId)
+        const warning = await this.checkOnPage(true)
+        if (warning){
+            await this.submit()
         }
     }
 

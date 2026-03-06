@@ -7,12 +7,18 @@ export default class SupportingInformationPage extends ContactPage {
         super(page, "Add supporting information (optional)", crn, uuid)
     }
 
-    async completePage(sensitivity: boolean, note?: string) {
+    async changePage(sensitivity?: boolean, note?: string) {
         if (note != undefined){
             await this.fillText("notes", note)
         }
-        await this.clickRadio("visorReport", sensitivity ? 0 : 1)
+        if (sensitivity != undefined){
+            await this.clickRadio("visorReport", sensitivity ? 0 : 1)
+        }
         await this.submit()
+    }
+
+    async completePage(sensitivity: boolean, note?: string) {
+        await this.changePage(sensitivity, note)
     }
 
     async testBacklink(change: boolean) {
