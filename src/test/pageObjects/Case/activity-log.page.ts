@@ -8,11 +8,9 @@ dotenv.config({ path: '.env' })
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
 
 export default class ActivityLogPage extends CasePage {
-    view : string = "default"
 
-    constructor(page: Page, view: string = "default", crn?: string) {
+    constructor(page: Page, crn?: string) {
         super(page, "Contacts", crn)
-        this.view = view
     }
 
     async applyFilters(filters: ContactFilters){
@@ -35,20 +33,6 @@ export default class ActivityLogPage extends CasePage {
             await this.toggleComplianceFilter(2)
         }
         await this.page.getByRole('button', {name: 'Apply filters'}).click()
-    }
-
-    async goTo(crn?: string){
-       await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/activity-log/${this.view === "default" ? "" : `?view=${this.view}`}`)
-    }
-
-    async changeView(){
-        if (this.view === "default"){
-            this.clickLink("Compact view")
-            this.view = "compact"
-        } else {
-            this.clickLink("Default view")
-            this.view = "default"
-        }
     }
 
     async checkAvailable(): Promise<boolean> {

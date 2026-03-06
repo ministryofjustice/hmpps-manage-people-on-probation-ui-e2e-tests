@@ -154,7 +154,21 @@ export default abstract class MPopPage {
         } else if (id == "next"){
             await this.getNavigation("Next").click()
         } else {
-            await this.getNavigation(`${id}`).click()
+            let target: number[] = [id as number]
+            while (true){
+                try {
+                    await this.getNavigation(`${target[target.length-1]}`).click({timeout: 1000})
+                    target.pop()
+                    if (target.length == 0){
+                        break
+                    }
+                } catch {
+                    target.push((target[target.length-1])-3)
+                    if ((target[target.length-1]) <= 1){
+                        target.pop()
+                    }
+                }
+            }
         }
     }
 
