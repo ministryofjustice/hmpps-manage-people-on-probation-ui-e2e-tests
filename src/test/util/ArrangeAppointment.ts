@@ -192,10 +192,14 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false, chan
             }
         }
         if (row.label === 'startTime'){
-            startTime = row.value
+            if (row.value != ''){
+              startTime = row.value
+            }
         }
         if (row.label === 'endTime'){
-            endTime = row.value
+            if (row.value != ''){
+              endTime = row.value
+            }
         }
         if (row.label === 'locationId'){
             if (row.value != ''){
@@ -270,7 +274,11 @@ export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: Mp
     typeId: changes.typeId ?? base.typeId!,
     attendee: changes.attendee ?? base.attendee!,
     isVisor: changes.isVisor ?? base.isVisor,
-    dateTime: changes.dateTime ?? base.dateTime!,
+    dateTime: {
+      date: changes.dateTime?.date ?? base.dateTime.date,
+      startTime: changes.dateTime?.startTime ?? base.dateTime.startTime,
+      endTime: changes.dateTime?.endTime ?? base.dateTime.endTime
+    },
     locationId: changes.locationId ?? base.locationId!,
     text: changes.text ?? base.text!,
     mobile: changes.mobile ?? base.mobile,
