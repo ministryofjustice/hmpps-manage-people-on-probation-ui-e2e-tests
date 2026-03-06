@@ -263,7 +263,7 @@ When('I find valid case from {string}', async({ ctx }, cases) => {
         }
         const review = new ReviewExpiredPage(page)
         try {
-            await expect(review.getQA('pageHeading')).toContainText(review.title!, {timeout: 1000})
+            await expect(review.getQA('pageHeading')).toHaveText(review.title!, {timeout: 3000})
             ctx.checkIns.expiredCrn = crn
             return 
         } catch {
