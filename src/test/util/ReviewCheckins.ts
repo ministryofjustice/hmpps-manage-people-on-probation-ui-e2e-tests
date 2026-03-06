@@ -9,6 +9,9 @@ import ContactPage from "../pageObjects/Case/Contacts/contactpage"
 import ActivityLogPage from "../pageObjects/Case/activity-log.page"
 import PersonalDetailsPage from "../pageObjects/Case/personal-details.page"
 import { DataTable } from "playwright-bdd"
+import { start } from "repl"
+import HomePage from "../pageObjects/home.page"
+import CasesPage from "../pageObjects/cases.page"
 
 export enum ReviewType {
     SUBMITTED = 0,
@@ -92,52 +95,66 @@ export const reviewSubmittedCheckinMpop = async(page: Page, review: SubmittedRev
     await reviewNotesPage.completePage(review.note, review.risk)
 }
 
-export const getValidCrnForExpiredCheckin = async(page: Page, crn?: string) : Promise<string> => {
-    let setup = false
-    let old = false
-    let available = false
-    let practitioner = false
-    const searchPage = new SearchPage(page)
-    await searchPage.navigateTo(page)
-    crn = crn ?? 'X977280' 
-    crn = 'X982076'
-    let index = 0
-    let passedCRNs : string[] = ['X981726','X982081','X981982', 'X980729', 'X980718', 'X980722', 'X980721', 'X977961', 'X977632'] 
-    let crnNumber = crn.substring(1) as unknown as number
-    while (setup === false || old === false || available === false || practitioner === false){
-        setup = false
-        old = false
-        if (passedCRNs.length > index){
-            crn = passedCRNs[index]
-            index += 1
-        } else {
-            crnNumber = crnNumber-1
-            crn = 'X' + crnNumber.toString()
+export const getCasesWithCheckInsSetup = async(page: Page) => {
+    const cases = new CasesPage(page)
+    await cases.navigateTo()
+    await cases.checkOnPage()
+    let totalId = 0
+    let pageNum = 1
+    let crns = []
+    const count = await cases.getCount()
+    console.log(count)
+    while (totalId < count){
+        for (let i=1; i<=10; i++){
+            totalId += 1
+            console.log(totalId)
+            await cases.selectCaseByID(i)
+            const casePage = new OverviewPage(page)
+            const crn = await casePage.getQA('crn').textContent()
+            console.log(crn)
+            const setup = await casePage.checkOnlineCheckInsSetup()
+            if (setup){
+                console.log('setupCRN: ' + crn)
+                if (crns.indexOf(crn) === -1){
+                    crns.push(crn)
+                    console.log(crns)
+                } else {
+                    console.log('already in')
+                } 
+            }
+            await casePage.useBreadcrumbs(0)
+            if (pageNum > 1){
+                await cases.pagination(pageNum)
+            }
         }
+        pageNum += 1
+        await cases.pagination(pageNum)
+        console.log('new page')
+    }
+
+}
+
+export const getCrnsWithCheckInsSetup = async(page: Page, startCrn: string) => {
+    let crn = startCrn
+    let crnNumber = crn.substring(1) as unknown as number
+    const searchPage = new SearchPage(page)
+    while (true){
+        crnNumber = crnNumber - 1
+        crn = 'X' + crnNumber.toString()
+        console.log(crn)
+        await searchPage.navigateTo(page)
         await searchPage.searchCases(crn)
         const pages = await searchPage.countCases()
         if (pages > 0){
+            console.log('validCRN')
             await searchPage.selectCaseByID(1)
             const casePage = new OverviewPage(page, crn)
-            setup = await casePage.checkOnlineCheckInsSetup()
-            if (setup === true){
-                old = await casePage.NotMadeToday()
-                if (old === true){
-                    await casePage.useSubNavigation("activityLogTab")
-                    const contactPage = new ActivityLogPage(page) 
-                    available = await contactPage.checkAvailable()
-                    if (available === true){
-                        await page.getByRole('link', {name: "Personal details"}).click()
-                        const personalDetailsPage = new PersonalDetailsPage(page)
-                        personalDetailsPage.checkOnPage()
-                        practitioner = await personalDetailsPage.checkForPractitioner()
-                    }
-                }
+            const setup = await casePage.checkOnlineCheckInsSetup()
+            if (setup){
+                console.log('setupCRN: ' + crn)
             }
-            await casePage.usePrimaryNavigation('Search')
-        }  
+        }
     }
-    return crn!
 }
 
 export const reviewDataTable = (data: DataTable) : SurveyResponse => {

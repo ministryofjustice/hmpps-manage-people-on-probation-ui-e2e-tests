@@ -94,7 +94,7 @@ Then('I should be on the note page', async ({ ctx }) => {
 When('I navigate through pagination', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
     await alerts.navigateTo(ctx.base.page)
-    await alerts.pagination("Next")
+    await alerts.pagination("next")
 });
 
 Then('the alerts list should be updated', async ({ ctx }) => {
