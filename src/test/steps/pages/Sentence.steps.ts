@@ -20,7 +20,8 @@ Then('the sentence page has the heading {string}', async ({ctx}, heading: string
     await sentencePage.checkPageHeading(heading)
 })
 
-Then('the sentence page links work correctly', async ({ctx})=>{
+Then('the link {string} at sentence page works correctly', async ({ctx}, linkName :string)=>{
     const sentencePage = new SentencePage(ctx.base.page)
-    await sentencePage.checkLinks()
+    await sentencePage.checkLinks(linkName)
 })
+
