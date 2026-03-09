@@ -9,8 +9,11 @@ Feature: As a practitioner
     When I navigate to sentence page
     Then the sentence page is populated with title 'Adult Custody < 12m - Sentence - Manage people on probation'
     And the sentence page has the heading 'Sentence'
-    And the sentence page links work correctly
     And the sentence page is populated with title 'Adult Custody < 12m - Sentence - Manage people on probation'
+    And the link 'Probation history' at sentence page works correctly
+    And the link 'CJA - Deferred Sentence' at sentence page works correctly
+    And the link 'ORA Community Order' at sentence page works correctly
+    And the link 'Adult Custody < 12m' at sentence page works correctly
     And I close the context
     Examples:
       | case_crn |
