@@ -19,9 +19,8 @@ export default class PersonalDetailsPage extends CasePage {
        await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/personal-details/`)
     }
 
-    async navigateTo(crn?: string){
-        await navigateToCase(this.page, (crn ?? this.crn)!)
-        await this.getQA("personalDetailsTab").getByRole('link').first().click()
+    async navigateTo(crn?: string) {
+        await caseNavigation(this.page, (crn ?? this.crn)!, "personalDetailsTab")
     }
 
     async updateContactDetails(details: ContactDetails){
