@@ -6,7 +6,7 @@ import { testUser } from '../util/Data'
 import { login } from '../util/Login';
 import { loginDeliusAndCreateOffender } from '../util/Delius';
 import { getBrowserContext } from '../util/Common';
-import { testContext } from '../features/Fixtures';
+import { Ctx, testContext } from '../features/Fixtures';
 import OverviewPage from '../pageObjects/Case/overview.page';
 import PersonalDetailsPage from '../pageObjects/Case/personal-details.page';
 
@@ -62,8 +62,10 @@ Given('I am logged in', async ({ ctx }) => {
     await login(ctx.base.page)
 });
 
-Given('I close the context', async ({ ctx }) => {
-    await ctx.base.context.close()
+Then('I close the context', async ({ ctx }) => {
+    const context = ctx.base.context
+    ctx.appointments = []
+    await context.close()
 });
 
 Given('I navigate to {string}',async ({ctx}, crn)=>{

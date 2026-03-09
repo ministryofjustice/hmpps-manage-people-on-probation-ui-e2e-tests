@@ -12,6 +12,9 @@ Given('I navigate to contact log',async ({ctx})=>{
     const overviewPage = new OverviewPage(ctx.base.page)
     await overviewPage.checkOnPage()
     await overviewPage.useSubNavigation('activityLogTab')
+    const contactsPage = new ActivityLogPage(ctx.base.page)
+    await contactsPage.checkOnPage()
+    ctx.contacts.count = (await contactsPage.getQA('results-count-total').textContent())!
 })
 
 Given('I record the full list of activities',async ({ctx})=>{
@@ -37,7 +40,9 @@ Then('the contact log contains the correct info',async ({ctx})=>{
 Then('the contact log contains {string} entries',async ({ctx}, count: string)=>{
     const page = ctx.base.page
     const contactsPage = new ActivityLogPage(page)
-    if (count === '0'){
+    if (count === 'full'){
+        await expect(contactsPage.getQA('results-count-total')).toHaveText(ctx.contacts.count)
+    } else if (count === '0'){
         await expect(contactsPage.getQA('no-results')).toContainText('0 search results')
     } else {
         await expect(contactsPage.getQA('results-count-total')).toHaveText(count)

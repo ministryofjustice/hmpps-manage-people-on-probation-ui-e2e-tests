@@ -6,7 +6,7 @@ Feature: Create Appointments
 
     @smoke @appointments @sequential @kk
     Scenario Outline: Create Future Appointment for <ScenarioName>
-        Given Context has been created for "Appointments" test
+        Given Context has been created for "Sequential appointments" test
         And A new offender has been created or existing made available
         And I am logged in
         And I clear the contact details if set
@@ -82,6 +82,7 @@ Feature: Create Appointments
             | reason     | just cos    |
         Then the appointment should be rescheduled successfully
         And I can check appointment details with the manage page
+        And I close the context
 
         Examples:
             | ScenarioName | date         | sensitive | who    | reason   |
