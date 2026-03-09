@@ -23,16 +23,17 @@ export default class ActivityLogPage extends CasePage {
         if (filters.to){
             await this.fillText('date-to', filters.to)
         }
-        if ((filters.outcome && !await this.getFilter(0).isChecked()) || (!filters.outcome && await this.getFilter(0).isChecked())){
-            await this.toggleComplianceFilter(0)
+        for (let i=0; i<filters.compliance_filters.length; i++){
+            await this.toggleFilter(filters.compliance_filters[i]-1, 'compliance')
         }
-        if ((filters.complied && !await this.getFilter(1).isChecked()) || (!filters.complied && await this.getFilter(1).isChecked())){
-            await this.toggleComplianceFilter(1)
-        }
-        if ((filters.not_complied && !await this.getFilter(2).isChecked()) || (!filters.not_complied && await this.getFilter(2).isChecked())){
-            await this.toggleComplianceFilter(2)
+        for (let i=0; i<filters.category_filters.length; i++){
+            await this.toggleFilter(filters.category_filters[i]-1, 'category')
         }
         await this.page.getByRole('button', {name: 'Apply filters'}).click()
+        if (filters.hide_system_generated){
+            await this.toggleFilter(0, 'hideContact')
+            await this.getQA('submit-apply-button').click()
+        }
     }
 
     async checkAvailable(): Promise<boolean> {
@@ -61,12 +62,12 @@ export default class ActivityLogPage extends CasePage {
        await this.getQA(qa).locator('[type="text"]').fill(text)
     }
 
-    getFilter(id:number){
-        return this.getClass("govuk-checkboxes__item", this.getQA("compliance")).nth(id).getByRole("checkbox")
+    getFilter(id: number, qa: string){
+        return this.getClass("govuk-checkboxes__item", this.getQA(qa)).nth(id).getByRole("checkbox")
     }
 
-    async toggleComplianceFilter(id: number){
-        const filter = this.getFilter(id)
+    async toggleFilter(id: number, qa: string){
+        const filter = this.getFilter(id,qa)
         if (await filter.isChecked()){
             await filter.uncheck()
         } else {
