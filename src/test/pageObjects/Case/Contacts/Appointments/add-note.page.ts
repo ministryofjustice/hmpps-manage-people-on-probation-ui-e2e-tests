@@ -10,12 +10,18 @@ export default class AddNotePage extends ContactPage {
         super(page, "Add a note", crn, uuid)
     }
 
-    async completePage(sensitivity: boolean, note?: string, file?: string) {
+    async changePage(sensitivity?: boolean, note?: string, file?: string) {
         if (note){
             await this.fillText("notes", note)
         }
         //file
-        await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1)
+        if (sensitivity != undefined){
+            await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1)
+        }
         await this.submit()
+    }
+
+    async completePage(sensitivity: boolean, note?: string, file?: string) {
+        await this.changePage(sensitivity, note, file)
     }
 }

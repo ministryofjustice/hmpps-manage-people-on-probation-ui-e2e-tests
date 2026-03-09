@@ -1,7 +1,7 @@
 import { expect, Page } from '@playwright/test'
 import { createBdd, DataTable } from 'playwright-bdd';
 import AppointmentsPage from '../../pageObjects/Case/appointments.page'
-import { appointmentDataTable, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, fullDetailsFromChanges, MpopAppointmentChanges, MpopArrangeAppointment, rescheduleAppointmentMPop, rescheduleDataTable, RescheduleDetails } from '../../util/ArrangeAppointment'
+import { appointmentDataTable, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, fullDetailsFromChanges, MpopAppointmentChanges, MpopArrangeAppointment, rescheduleAppointmentMPop, rescheduleDataTable, RescheduleDetails, setupAppointmentMPop } from '../../util/ArrangeAppointment'
 import { testContext } from '../../features/Fixtures';
 import LocationNotInListPage from '../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page';
 import ConfirmationPage from '../../pageObjects/Case/Contacts/Appointments/confirmation.page';
@@ -12,10 +12,24 @@ import { getUrn, getUuid } from '../../util/Common';
 import { DateTime } from 'luxon';
 import { today } from '../../util/DateTime';
 import { checkOutlook } from '../../util/Outlook';
+import CYAPage from '../../pageObjects/Case/Contacts/Appointments/CYA.page';
 
 const { Given, When, Then } = createBdd(testContext);
 
 When('I create an appointment', async ({ ctx }, data: DataTable) => {
+    const page = ctx.base.page
+    const crn = ctx.case.crn
+    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
+    await appointments.navigateTo()
+    await appointments.checkOnPage()
+    await appointments.startArrangeAppointment()
+
+    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
+    ctx.appointments.push(appointment)
+    await createAppointmentMPop(page, appointment)
+});
+
+When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
     const page = ctx.base.page
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
@@ -94,3 +108,40 @@ When('I reschedule it with the following information', async ({ ctx }, data:Data
     const rescheduleDetails: RescheduleDetails = rescheduleDataTable(data)
     await rescheduleAppointmentMPop(page, rescheduleDetails, changes)
 });
+
+When('I setup an appointment', async ({ ctx }, data: DataTable) => {
+    const page = ctx.base.page
+    const crn = ctx.case.crn
+    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
+    await appointments.navigateTo()
+    await appointments.checkOnPage()
+    await appointments.startArrangeAppointment()
+
+    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
+    ctx.appointments.push(appointment)
+    const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
+    await setupAppointmentMPop(page, appointment, past)
+});
+
+When('I make the following changes to appointment', async({ ctx }, data:DataTable) => {
+    const page = ctx.base.page
+    const changes: MpopAppointmentChanges = appointmentDataTable(data, false, true)
+    let appointment = ctx.appointments[ctx.appointments.length-1]
+    const currentPast = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
+    appointment = fullDetailsFromChanges(changes, appointment)
+    ctx.appointments[ctx.appointments.length-1] = appointment
+    const cyaPage = new CYAPage(page)
+    await cyaPage.checkOnPage()
+    const newPast = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
+    await cyaPage.makeChanges(changes, appointment.typeId, currentPast, newPast)
+})
+
+When('I complete the submission', async({ ctx }) => {
+    const page = ctx.base.page
+    const appointment = ctx.appointments[ctx.appointments.length-1]
+    const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
+    const cyaPage = new CYAPage(page)
+    await cyaPage.completePage(appointment.isVisor, past)
+    const confirmationPage = new ConfirmationPage(page, past)
+    await confirmationPage.checkOnPage()
+})

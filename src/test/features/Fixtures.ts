@@ -8,7 +8,7 @@ import { MpopArrangeAppointment } from '../util/ArrangeAppointment';
 export interface Ctx {
   checkIns: CheckIns,
   contact: Contact
-  contacts: Activity[]
+  contacts: Contacts
   base: Base,
   case: Case
   alerts: Alerts
@@ -17,6 +17,10 @@ export interface Ctx {
   details: Details
   addressTypes: AddressType[]
 };
+export interface Contacts{
+  contacts: Activity[]
+  count: string
+}
 export interface AddressType {
   code: string
   description: string
@@ -86,6 +90,7 @@ export const testContext = base.extend<{ ctx: Ctx }, { ctxMap: Record<string, Ct
     ctxMap[testInfo.file] = ctxMap[testInfo.file] || {
       checkIns: {},
       contact: {},
+      contacts: {},
       base: {},
       case: {},
       alerts: {},
