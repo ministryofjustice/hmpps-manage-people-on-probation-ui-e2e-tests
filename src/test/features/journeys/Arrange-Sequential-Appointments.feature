@@ -4,7 +4,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments @sequential
+    @smoke @appointments @sequential @kk
     Scenario Outline: Create Future Appointment for <ScenarioName>
         Given Context has been created for "Sequential appointments" test
         And A new offender has been created or existing made available
@@ -51,7 +51,7 @@ Feature: Create Appointments
             | date       | <date>       |
             | locationId | <locationId> |
         Then the appointment should be created successfully
-        And the sms text message confirmation and appointment added to your calendar text is displayed
+        And give the appointment details and your calendar text is displayed
         And I can check appointment details with the manage page
         
         Examples:
@@ -68,7 +68,7 @@ Feature: Create Appointments
             | who        | <who>       |
             | reason     | <reason>    |
         Then the appointment should be rescheduled successfully
-        And the sms text message confirmation and appointment added to your calendar text is displayed
+        And give the appointment details and your calendar text is displayed
         And I can check appointment details with the manage page
 
         Examples:
