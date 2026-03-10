@@ -25,6 +25,7 @@ export default class SearchPage extends MPopPage {
 
     async selectCaseByID(id: number){
         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+        await this.page.waitForTimeout(15000)
     }
 
     async navigateTo(page: Page) {

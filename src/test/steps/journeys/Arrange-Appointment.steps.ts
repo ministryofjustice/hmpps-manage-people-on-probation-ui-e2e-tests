@@ -12,7 +12,6 @@ import { getUrn, getUuid } from '../../util/Common';
 import { DateTime } from 'luxon';
 import { today } from '../../util/DateTime';
 import { checkOutlook } from '../../util/Outlook';
-
 const { Given, When, Then } = createBdd(testContext);
 
 When('I create an appointment', async ({ ctx }, data: DataTable) => {
@@ -43,6 +42,20 @@ When('I create another appointment', async ({ ctx }, data:DataTable) => {
 
 Then('the appointment should be created successfully', async ({ ctx }) => {
     await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("arranged")
+});
+
+Then('the sms text message confirmation and appointment added to your calendar text is displayed', async ({ ctx }) => {
+    await expect(
+        ctx.base.page.locator('p') // selects all <p> elements
+            .filter({ hasText: 'will receive a confirmation text message with the appointment details. This will also be logged as a contact on NDelius.' }) // narrows down to the one containing your text
+    ).toBeVisible();
+    await expect(
+        ctx.base.page.locator('ul[data-qa="outlook-msg"]')
+    ).toContainText([
+        'your calendar',
+        'the NDelius contact log and officer diary, along with any supporting information'
+    ]);
+
 });
 
 Then('the appointment should be rescheduled successfully', async ({ ctx }) => {
@@ -94,3 +107,5 @@ When('I reschedule it with the following information', async ({ ctx }, data:Data
     const rescheduleDetails: RescheduleDetails = rescheduleDataTable(data)
     await rescheduleAppointmentMPop(page, rescheduleDetails, changes)
 });
+
+
