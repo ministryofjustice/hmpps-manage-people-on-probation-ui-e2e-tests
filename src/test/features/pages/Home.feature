@@ -6,5 +6,5 @@ Feature: As a practitioner
     Given Context has been created for "Home" test
     And I am logged in
     Then the home page is populated
-    And the home page links work correctly 
+    And the home page links work correctly
     And I close the context
