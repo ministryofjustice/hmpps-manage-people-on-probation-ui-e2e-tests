@@ -21,7 +21,7 @@ Feature: Create Appointments
         | sensitive  | <sensitive>  |
         Then the appointment should be created successfully
         And the sms text message confirmation and appointment added to your calendar text is displayed
-        
+
         Examples:
         | ScenarioName | sentenceId | typeId | locationId | text                     | mobile        | note       | sensitive |
         | Sequential   | 0          | 0      | 0          | Yes, add a mobile number | 07771 900 900 | Test note1 | No        |
