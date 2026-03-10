@@ -4,7 +4,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @appointments @sequential
+    @smoke @appointments @sequential @kk
     Scenario Outline: Create Future Appointment for <ScenarioName>
         Given Context has been created for "Sequential appointments" test
         And A new offender has been created or existing made available
