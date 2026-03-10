@@ -42,6 +42,8 @@ Then('the contact log contains {string} entries',async ({ctx}, count: string)=>{
     const contactsPage = new ActivityLogPage(page)
     if (count === 'full'){
         await expect(contactsPage.getQA('results-count-total')).toHaveText(ctx.contacts.count)
+    } else if (count === 'filtered') {
+        await expect(contactsPage.getQA('results-count-total')).not.toHaveText(ctx.contacts.count)
     } else if (count === '0'){
         await expect(contactsPage.getQA('no-results')).toContainText('0 search results')
     } else {
