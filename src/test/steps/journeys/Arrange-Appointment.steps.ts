@@ -65,12 +65,24 @@ Then('the sms text message confirmation and appointment added to your calendar t
             .filter({ hasText: 'will receive a confirmation text message with the appointment details. This will also be logged as a contact on NDelius.' }) // narrows down to the one containing your text
     ).toBeVisible();
     await expect(
-        ctx.base.page.locator('ul[data-qa="outlook-msg"]')
+        ctx.base.page.locator('ul[data-qa="outlook-msg"] li')
     ).toContainText([
         'your calendar',
         'the NDelius contact log and officer diary, along with any supporting information'
     ]);
+});
 
+Then('give the appointment details and your calendar text is displayed', async ({ ctx }) => {
+    await expect(
+        ctx.base.page.locator('p') // selects all <p> elements
+            .filter({ hasText: 'You need to give' }) // narrows down to the one containing your text
+    ).toBeVisible();
+    await expect(
+        ctx.base.page.locator('ul[data-qa="outlook-msg"] li')
+    ).toContainText([
+        'your calendar',
+        'the NDelius contact log and officer diary, along with any supporting information'
+    ]);
 });
 
 Then('the appointment should be rescheduled successfully', async ({ ctx }) => {
