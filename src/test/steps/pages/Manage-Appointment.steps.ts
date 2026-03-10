@@ -59,14 +59,19 @@ When('I navigate to latest appointment requiring an outcome', async ({ ctx }) =>
     await home.logMoreOutcomes()
     const logPage = new LogOutcomesPage(page)
     await logPage.checkOnPage()
-    await logPage.selectFirst()
     const managePage = new ManageAppointmentsPage(page)
-    let id = 1
+    let id = 0
     while (true){
-        await managePage.checkOnPage()
+        try {
+            await logPage.selectFirst(id)
+        } catch {
+            await logPage.pagination("Next")
+            id = 0
+            continue
+        }
+        await managePage.checkOnPage() //will backLink if restricted
         try {
             await logPage.checkOnPage()
-            await logPage.selectFirst(id)
             id += 1
         } catch { 
             break
