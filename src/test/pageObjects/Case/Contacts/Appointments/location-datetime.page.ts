@@ -57,6 +57,14 @@ export default class LocationDateTimePage extends ContactPage {
         await this.submit()
         const warning = await this.checkOnPage(true)
         if (warning){
+            if (dateTime != undefined){
+                await this.getClass("moj-datepicker").locator('[type="text"]').fill(dateTime.date)
+                await this.fillText("startTime", dateTime.startTime)
+                await this.fillText("endTime", dateTime.endTime)
+            }
+            if (locationId !== undefined){
+                await this.clickRadio("locationCode", locationId as number)
+            }
             await this.submit()
         }
     }
