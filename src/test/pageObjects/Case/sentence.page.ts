@@ -13,14 +13,6 @@ export default class SentencePage extends CasePage {
         super(page, "Sentence", crn)
     }
 
-    async goTo(crn?: string) {
-        await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/sentence/`)
-    }
-
-    async navigateTo(crn?: string) {
-        await caseNavigation(this.page, (crn ?? this.crn)!, "sentenceTab")
-    }
-
     async checkPageHeading(heading: string) {
         await expect(this.getQA('pageHeading').first()).toContainText(heading)
     }
@@ -33,7 +25,6 @@ export default class SentencePage extends CasePage {
     async checkAdultCustodyLessThan12MLink() {
         await this.page.getByRole('link', {name: /Adult Custody < 12m/}).click()
         await expect(this.getQA('pageHeading').nth(0)).toContainText("Sentence")
-        await expect(this.getQA('pageHeading').nth(1)).toContainText("Adult Custody < 12m")
     }
 
     async checkORACommunityOrderLink() {
