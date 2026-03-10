@@ -20,6 +20,7 @@ Feature: Create Appointments
         | note       | <note>       |
         | sensitive  | <sensitive>  |
         Then the appointment should be created successfully
+        And the sms text message confirmation and appointment added to your calendar text is displayed
         
         Examples:
         | ScenarioName | sentenceId | typeId | locationId | text                     | mobile        | note       | sensitive |
@@ -35,13 +36,14 @@ Feature: Create Appointments
           | note      | <note>      |
           | sensitive | <sensitive> |
         Then the appointment should be created successfully
+        And the sms text message confirmation and appointment added to your calendar text is displayed
 
         Examples:
             | ScenarioName | date     | text                            | mobile        | note       | sensitive |
             | Sequential   | NEXTWEEK | Yes, update their mobile number | 07771 900 900 | Test note1 | YES       |
 
     @smoke @appointments @sequential
-    Scenario: Create Another Appointment for <ScenarioName>
+    Scenario Outline: Create Another Appointment for <ScenarioName>
         When I create another appointment
             | label      | value        | 
             | sentenceId | <sentenceId> |
@@ -49,6 +51,7 @@ Feature: Create Appointments
             | date       | <date>       |
             | locationId | <locationId> |
         Then the appointment should be created successfully
+        And the sms text message confirmation and appointment added to your calendar text is displayed
         And I can check appointment details with the manage page
         
         Examples:
@@ -56,7 +59,7 @@ Feature: Create Appointments
             | Sequential   | person     | 0      | PLUS3MONTHS | 0          |
 
     @smoke @appointments @sequential @reschedule
-    Scenario:Reschedule an appointment for <ScenarioName>
+    Scenario Outline:Reschedule an appointment for <ScenarioName>
         When I access an existing future appointment
         And I reschedule it with the following information
             | label      | value       |
@@ -65,6 +68,7 @@ Feature: Create Appointments
             | who        | <who>       |
             | reason     | <reason>    |
         Then the appointment should be rescheduled successfully
+        And the sms text message confirmation and appointment added to your calendar text is displayed
         And I can check appointment details with the manage page
 
         Examples:
@@ -72,7 +76,7 @@ Feature: Create Appointments
             | Sequential   | PLUS6MONTHS | YES       | person | just cos |
 
     @smoke @appointments @sequential @reschedule @past
-    Scenario:Reschedule an appointment in past for <ScenarioName>
+    Scenario Outline:Reschedule an appointment in past for <ScenarioName>
         When I access an existing future appointment
         And I reschedule it with the following information
             | label      | value       |

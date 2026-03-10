@@ -2,6 +2,7 @@ import { expect, Locator, Page } from "@playwright/test"
 
 export default abstract class MPopPage {
     readonly page: Page
+    readonly confirmationText;
     readonly title?: string | RegExp
 
     protected constructor(page: Page, title?: string | RegExp) {
@@ -248,5 +249,13 @@ export default abstract class MPopPage {
 
     async fillText(qa: string, note: string){
        await this.getQA(qa).getByRole('textbox').fill(note)
+    }
+
+    async locateConfirmationPageTextMessage(page: Page) {
+        await expect(
+            page.getByText(
+                /will receive a confirmation text message with the appointment details/
+            )
+        ).toBeVisible();
     }
 }
