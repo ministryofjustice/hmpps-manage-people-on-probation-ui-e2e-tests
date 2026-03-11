@@ -11,7 +11,7 @@ export default class ManageCheckInsPage extends ContactPage {
     async navigateTo(crn?: string){
         await navigateToCase(this.page, (crn ?? this.crn)!)
         const overview = new OverviewPage(this.page)
-        await overview.checkOnPage()
+        await overview.assertOnPage()
         await overview.checkOnlineCheckInsLink(false)
     }
 

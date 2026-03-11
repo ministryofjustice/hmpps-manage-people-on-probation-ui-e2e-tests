@@ -9,27 +9,24 @@ export default abstract class CasePage extends MPopPage {
         this.crn = crn
     }
 
-    async checkOnPage(acceptWrong = false): Promise<boolean> {
+    async assertOnPage(allowRestricted:boolean=true){
+        const onPage = await this.checkOnPage()
+        if (!onPage && allowRestricted){
+            const restricted = await this.isRestricted()
+            if (restricted){
+                await this.clickBackLink()
+                return
+            }
+        }
+        expect(onPage).toBeTruthy()
+    }
+
+    async isRestricted(): Promise<boolean>{
         try {
-            await this.checkQA("pageHeading", this.title ?? "")
+            await expect(this.getClass("govuk-heading-l")).toContainText("You are restricted from viewing this case")
             return true
         } catch {
-            if (acceptWrong){
-                try {
-                    await expect(this.getClass("govuk-heading-l")).toContainText("You are restricted from viewing this case")
-                    console.log("restricted")
-                    await this.clickBackLink()
-                    return false
-                } catch {
-                    console.log("on unexpected page")
-                    return false
-                }
-            } else {
-                await expect(this.getClass("govuk-heading-l")).toContainText("You are restricted from viewing this case")
-                console.log("restricted")
-                await this.clickBackLink()
-                return false
-            }
+            return false
         }
     }
 

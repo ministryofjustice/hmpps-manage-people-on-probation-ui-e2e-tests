@@ -32,7 +32,7 @@ When('I set up checkIns with values', async({ ctx }, data: DataTable) => {
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)
     const checkInSummaryPage = new CheckInSummaryPage(page)
-    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.assertOnPage()
     const uuid = getUuid(page)
     ctx.contact.uuid = uuid
     ctx.checkIns.setup = setup
@@ -45,7 +45,7 @@ When('I set up checkIns with random values', async({ ctx }) => {
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
     await setupCheckinsMPop(page, setup)
     const checkInSummaryPage = new CheckInSummaryPage(page)
-    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.assertOnPage()
     const uuid = getUuid(page)
     ctx.contact.uuid = uuid
     ctx.checkIns.setup = setup
@@ -56,7 +56,7 @@ When('I make the following changes', async({ ctx }, data:DataTable) => {
     const changes: MpopSetupChanges = setupDataTable(data)
     await makeChangesSetupCheckins(page, changes)
     const checkInSummaryPage = new CheckInSummaryPage(page)
-    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.assertOnPage()
     await checkInSummaryPage.submit()
     await new Promise(resolve => setTimeout(resolve, 4000));
     ctx.checkIns.changes = changes
@@ -67,7 +67,7 @@ When('I make random changes', async({ ctx }) => {
     const changes : MpopSetupChanges = randomCheckIn(false) as MpopSetupChanges
     await makeChangesSetupCheckins(page, changes)
     const checkInSummaryPage = new CheckInSummaryPage(page)
-    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.assertOnPage()
     await checkInSummaryPage.submit()
     await new Promise(resolve => setTimeout(resolve, 4000));
     ctx.checkIns.changes = changes
@@ -75,7 +75,7 @@ When('I make random changes', async({ ctx }) => {
 
 When('I submit the checkin', async({ ctx }, data:DataTable) => {
     const confirmationPage = new ConfirmationPage(ctx.base.page)
-    await confirmationPage.checkOnPage()
+    await confirmationPage.assertOnPage()
     await confirmationPage.checkWhatHappensNextTextExists()
     await confirmationPage.checkGoToAllCasesLinkExists()
     await confirmationPage.returnToPoPsOverviewButtonExist()
@@ -100,7 +100,7 @@ Then('I can access the new checkIn in the contact log', async({ ctx }) => {
    await page.waitForTimeout(5000)
    const contactLog = new ActivityLogPage(page, crn)
    await contactLog.navigateTo()
-   await contactLog.checkOnPage()
+   await contactLog.assertOnPage()
    await contactLog.getQA('esup-manage-link').first().click()
 })
 
@@ -118,10 +118,10 @@ Then('I can view the reviewed checkIn', async({ ctx }) => {
    const page = ctx.base.page
    const crn = ctx.case.crn
    const contactLog = new ActivityLogPage(page, crn)
-   await contactLog.checkOnPage()
+   await contactLog.assertOnPage()
    await contactLog.getQA('esup-manage-link').first().click()
    const reviewedSubmittedPage = new ReviewedSubmittedPage(page, crn)
-   await reviewedSubmittedPage.checkOnPage()
+   await reviewedSubmittedPage.assertOnPage()
 })
 
 When('I find a number of valid CRNs', async({ctx}) => {
@@ -156,10 +156,10 @@ Then('I can view the expired and reviewed checkIn', async({ ctx }) => {
    const page = ctx.base.page
    const expiredCrn = ctx.checkIns.expiredCrn
    const contactLog = new ActivityLogPage(page, expiredCrn)
-   await contactLog.checkOnPage()
+   await contactLog.assertOnPage()
    await contactLog.getQA('esup-manage-link').first().click()
    const reviewedExpiredPage = new ReviewedExpiredPage(page, expiredCrn)
-   await reviewedExpiredPage.checkOnPage()
+   await reviewedExpiredPage.assertOnPage()
 })
 
 When('I navigate to checkIn details', async({ ctx }) => {
@@ -167,13 +167,13 @@ When('I navigate to checkIn details', async({ ctx }) => {
    const crn = ctx.case.crn
    const managePage = new ManageCheckInsPage(page, crn)
    await managePage.navigateTo()
-   await managePage.checkOnPage()
+   await managePage.assertOnPage()
 })
 
 When('I stop checkIns with {string}', async({ ctx }, reason) => {
    const page = ctx.base.page
    const managePage = new ManageCheckInsPage(page)
-   await managePage.checkOnPage()
+   await managePage.assertOnPage()
    await managePage.clickStopCheckIns()
    const stopPage = new StopCheckInsPage(page)
    await stopPage.completePage(true, reason)
@@ -182,29 +182,29 @@ When('I stop checkIns with {string}', async({ ctx }, reason) => {
 Then('checkIns are labelled as stopped', async({ ctx }) => {
    const page = ctx.base.page
    const managePage = new ManageCheckInsPage(page)
-   await managePage.checkOnPage()
+   await managePage.assertOnPage()
    await managePage.clickBackLink()
    const overview = new OverviewPage(page)
-   await overview.checkOnPage()
+   await overview.assertOnPage()
    await overview.checkSummaryRowValue(await overview.getSummaryRowByKey('Next check in due'), 'Check ins stopped')
 })
 
 Then('I restart checkIns with values', async({ ctx }, data:DataTable) => {
     const page = ctx.base.page
     const overview = new OverviewPage(page)
-    await overview.checkOnPage()
+    await overview.assertOnPage()
     await overview.checkOnlineCheckInsLink(false)
     const managePage = new ManageCheckInsPage(page)
-    await managePage.checkOnPage()
+    await managePage.assertOnPage()
     await managePage.clickRestartCheckIns()
     const restart: MpopSetupRestart = setupDataTable(data) as MpopSetupRestart
     ctx.checkIns.restart = restart
     await restartCheckinsMPop(page, restart)
     const checkInSummaryPage = new CheckInSummaryPage(page, true)
-    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.assertOnPage()
     await checkInSummaryPage.submit()
     const confirmationPage = new ConfirmationPage(ctx.base.page, true)
-    await confirmationPage.checkOnPage()
+    await confirmationPage.assertOnPage()
     await confirmationPage.checkWhatHappensNextTextExists()
     await confirmationPage.checkGoToAllCasesLinkExists()
     await confirmationPage.returnToPoPsOverviewButtonExist()
@@ -231,7 +231,7 @@ Then('Checkins should be setup', async({ ctx }) => {
     }
     //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
     const overviewPage = new OverviewPage(ctx.base.page)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.verifyCheckinDetails(details)
 })
 
@@ -254,7 +254,7 @@ When('I find valid case from {string}', async({ ctx }, cases) => {
         console.log(crn)
         const contactPage = new ActivityLogPage(page, crn)
         await contactPage.navigateTo()
-        await contactPage.checkOnPage()
+        await contactPage.assertOnPage()
         try {
             await contactPage.getQA('esup-manage-link').first().click({timeout: 3000})
         } catch {

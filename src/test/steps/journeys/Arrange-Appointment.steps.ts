@@ -21,7 +21,7 @@ When('I create an appointment', async ({ ctx }, data: DataTable) => {
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
     await appointments.navigateTo()
-    await appointments.checkOnPage()
+    await appointments.assertOnPage()
     await appointments.startArrangeAppointment()
 
     const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
@@ -34,7 +34,7 @@ When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
     await appointments.navigateTo()
-    await appointments.checkOnPage()
+    await appointments.assertOnPage()
     await appointments.startArrangeAppointment()
 
     const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
@@ -91,7 +91,7 @@ Then('the appointment should be rescheduled successfully', async ({ ctx }) => {
 
 Then('I end up on the location-not-in-list page', async ({ ctx }) => {
     const locationNotInListPage = new LocationNotInListPage(ctx.base.page)
-    await locationNotInListPage.checkOnPage()
+    await locationNotInListPage.assertOnPage()
 });
 
 Then('I can check appointment details with the manage page', async ({ ctx }) => {
@@ -100,16 +100,16 @@ Then('I can check appointment details with the manage page', async ({ ctx }) => 
     const confirmationPage = new ConfirmationPage(page)
     await confirmationPage.completePage("overview")
     const overviewPage = new OverviewPage(page)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.useSubNavigation("appointmentsTab")
     for (let a = 0; a < ctx.appointments.length; a++){
         const appointment : MpopArrangeAppointment = ctx.appointments[a]
         const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
         const appointmentsPage = new AppointmentsPage(page)
-        await appointmentsPage.checkOnPage()
+        await appointmentsPage.assertOnPage()
         await appointmentsPage.manageAppointment(appointment)
         const managePage = new ManageAppointmentsPage(page)
-        await managePage.checkOnPage()
+        await managePage.assertOnPage()
         await checkOutlook(page, ctx.case.crn, token, past)
         await managePage.clickBackLink()
     }
@@ -119,10 +119,10 @@ When('I access an existing future appointment', async ({ ctx }) => {
     const page = ctx.base.page
     const appointment : MpopArrangeAppointment = ctx.appointments[0]
     const appointmentsPage = new AppointmentsPage(page)
-    await appointmentsPage.checkOnPage()
+    await appointmentsPage.assertOnPage()
     await appointmentsPage.manageAppointment(appointment)
     const managePage = new ManageAppointmentsPage(page)
-    await managePage.checkOnPage()
+    await managePage.assertOnPage()
     await managePage.page.getByRole('link', {name: "Reschedule"}).click()
 });
 
@@ -140,7 +140,7 @@ When('I setup an appointment', async ({ ctx }, data: DataTable) => {
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
     await appointments.navigateTo()
-    await appointments.checkOnPage()
+    await appointments.assertOnPage()
     await appointments.startArrangeAppointment()
 
     const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
@@ -157,7 +157,7 @@ When('I make the following changes to appointment', async({ ctx }, data:DataTabl
     appointment = fullDetailsFromChanges(changes, appointment)
     ctx.appointments[ctx.appointments.length-1] = appointment
     const cyaPage = new CYAPage(page)
-    await cyaPage.checkOnPage()
+    await cyaPage.assertOnPage()
     const newPast = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
     await cyaPage.makeChanges(changes, appointment.typeId, currentPast, newPast)
 })
@@ -169,5 +169,5 @@ When('I complete the submission', async({ ctx }) => {
     const cyaPage = new CYAPage(page)
     await cyaPage.completePage(appointment.isVisor, past)
     const confirmationPage = new ConfirmationPage(page, past)
-    await confirmationPage.checkOnPage()
+    await confirmationPage.assertOnPage()
 })
