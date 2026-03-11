@@ -7,7 +7,7 @@ export default class UpcomingAppointmentsPage extends MPopPage {
     }
 
     async selectOfficeVisit(id: number = 0){
-        await this.page.getByRole('link', {name: 'Planned Office Visit (NS)' }).nth(id).click()
+        await this.page.getByRole('link', {name: 'Planned' }).nth(id).click()
     }
 
     async checkTop5(upcoming: string[]){
