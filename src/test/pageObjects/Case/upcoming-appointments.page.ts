@@ -11,8 +11,12 @@ export default class CaseUpcomingAppointmentsPage extends CasePage {
     }
 
     async checkOnPage(): Promise<boolean>{
-        await this.checkQA("upcomingAppointments", "All upcoming appointments")
-        return true
+        try {
+            await this.checkQA("upcomingAppointments", "All upcoming appointments")
+            return true
+        } catch {
+            return false
+        }
     }
 
     async selectAppointment(id: number, byName: boolean){

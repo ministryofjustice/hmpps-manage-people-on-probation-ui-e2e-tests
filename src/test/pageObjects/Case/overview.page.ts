@@ -96,7 +96,7 @@ export default class OverviewPage extends CasePage {
     }
     async checkLink(qa: string, link: string, page: CasePage, back: boolean = true){
         await this.getQA(qa).getByRole('link', {name: link}).click()
-        await page.checkOnPage()
+        await page.assertOnPage()
         if (back){
             if (page instanceof ContactPage){
                 await page.clickBackLink()

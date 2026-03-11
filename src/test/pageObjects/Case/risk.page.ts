@@ -52,10 +52,10 @@ export default class RiskPage extends CasePage {
     async checkRemovedFlagsLink(){
         await this.getQA('riskFlagsCard').getByRole('link', {name: /View removed risk flags/}).click()
         const removedRiskFlagsPage = new RemovedRiskFlagsPage(this.page)
-        await removedRiskFlagsPage.checkOnPage()
+        await removedRiskFlagsPage.assertOnPage()
         await removedRiskFlagsPage.checkLinks()
         await removedRiskFlagsPage.useBreadcrumbs(2)
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
     async checkRiskFlagLinks(){
         const links = await this.getClass('govuk-table govuk-!-margin-bottom-4', this.getQA('riskFlagsCard')).getByRole('link').count()
@@ -64,7 +64,7 @@ export default class RiskPage extends CasePage {
             const title = await link.textContent()
             await link.click()
             const riskFlag = new RiskFlagPage(this.page, title!)
-            await riskFlag.checkOnPage()
+            await riskFlag.assertOnPage()
             await riskFlag.useBreadcrumbs(2)
         }
     }

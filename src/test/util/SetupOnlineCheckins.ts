@@ -43,57 +43,57 @@ export interface MPoPCheckinDetails {
 
 export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
     const instructionPage = new InstructionsPage(page)
-    await instructionPage.checkOnPage()
+    await instructionPage.assertOnPage()
     await instructionPage.completePage()
 
      // Navigate to Date frequency page, verify page header and complete the page
     const dateFrequencyPage = new DateFrequencyPage(page)
-    await dateFrequencyPage.checkOnPage()
+    await dateFrequencyPage.assertOnPage()
     await dateFrequencyPage.completePage(setup.date, setup.frequency)
 
     // Navigate to Contact preference page, verify page header and select TEXT Message option
     const contactPreferencePage = new ContactPreferencePage(page) 
-    await contactPreferencePage.checkOnPage()
+    await contactPreferencePage.assertOnPage()
     await contactPreferencePage.completePage(setup.contact, setup.preference )
     
     // Photo options page
     const photoOptionsPage = new PhotoOptionsPage(page) 
-    await photoOptionsPage.checkOnPage()
+    await photoOptionsPage.assertOnPage()
     await photoOptionsPage.completePage(setup.photo)
 
     if (setup.photo === PhotoOptions.UPLOAD){
         // Upload a Photo page
         const uploadPhotoPage = new UploadPhotoPage(page)
-        await uploadPhotoPage.checkOnPage()
+        await uploadPhotoPage.assertOnPage()
         // await uploadPhotoPage.checkPageHeaderPhoto("pageHeading", "Upload a photo of")
         await uploadPhotoPage.completePage()
     } else if (setup.photo === PhotoOptions.TAKE){
         // Take a Photo page
         const takePhotoPage = new TakePhotoPage(page)
-        await takePhotoPage.checkOnPage()
+        await takePhotoPage.assertOnPage()
         await takePhotoPage.completePage()  
     }
 
     // Photo Meet the rules page
     const photoMeetRulesPage = new PhotoMeetRulesPage(page)
-    await photoMeetRulesPage.checkOnPage()
+    await photoMeetRulesPage.assertOnPage()
     await photoMeetRulesPage.completePage()
 
     const checkInSummaryPage = new CheckInSummaryPage(page)
-    await checkInSummaryPage.checkOnPage()
+    await checkInSummaryPage.assertOnPage()
 }
 
 export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChanges) => {
     const checkInSummaryPage = new CheckInSummaryPage(page)
     if (changes.date || changes.frequency !== undefined){
-        await checkInSummaryPage.checkOnPage()
+        await checkInSummaryPage.assertOnPage()
         if (changes.date){
             await checkInSummaryPage.clickDateChangeLink()
         } else {
             await checkInSummaryPage.clickDateIntervalChangeLink()
         }
         const dateFrequencyPage = new DateFrequencyPage(page)
-        await dateFrequencyPage.checkOnPage()
+        await dateFrequencyPage.assertOnPage()
         await dateFrequencyPage.changePage(changes.date, changes.frequency)
     }
 
@@ -106,29 +106,29 @@ export const makeChangesSetupCheckins = async(page: Page, changes: MpopSetupChan
             await checkInSummaryPage.clickEmailActionChangeLink()
         }
         const contactPreferencePage = new ContactPreferencePage(page) 
-        await contactPreferencePage.checkOnPage()
+        await contactPreferencePage.assertOnPage()
         await contactPreferencePage.changePage(changes.contact, changes.preference)
     }
 
     if (changes.photo !== undefined){
         await checkInSummaryPage.clickTakeAPhotoActionChangeLink()
         const photoOptionsPage = new PhotoOptionsPage(page) 
-        await photoOptionsPage.checkOnPage()
+        await photoOptionsPage.assertOnPage()
         await photoOptionsPage.changePage(changes.photo)
 
         if (changes.photo === PhotoOptions.UPLOAD){
             const uploadPhotoPage = new UploadPhotoPage(page)
-            await uploadPhotoPage.checkOnPage()
+            await uploadPhotoPage.assertOnPage()
             await uploadPhotoPage.completePage()
         }
         else if (changes.photo === PhotoOptions.TAKE){
             const takePhotoPage = new TakePhotoPage(page)
-            await takePhotoPage.checkOnPage()
+            await takePhotoPage.assertOnPage()
             await takePhotoPage.completePage()
         }
 
         const photoMeetRulesPage = new PhotoMeetRulesPage(page)
-        await photoMeetRulesPage.checkOnPage()
+        await photoMeetRulesPage.assertOnPage()
         await photoMeetRulesPage.completePage()
     }
 }

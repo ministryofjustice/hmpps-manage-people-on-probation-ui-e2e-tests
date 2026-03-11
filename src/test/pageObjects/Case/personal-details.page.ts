@@ -35,14 +35,14 @@ export default class PersonalDetailsPage extends CasePage {
             return 
         }
         const contactDetailsPage = new ContactDetailsPage(this.page)
-        await contactDetailsPage.checkOnPage()
+        await contactDetailsPage.assertOnPage()
         await contactDetailsPage.completePage(details)
     }
 
     async updateMainAddress(details: Address){
         await this.getQA('mainAddressAction').click()
         const updateAddressPage = new UpdateAddressPage(this.page)
-        await updateAddressPage.checkOnPage()
+        await updateAddressPage.assertOnPage()
         await updateAddressPage.completePage(details)
     }
 

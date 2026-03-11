@@ -10,10 +10,10 @@ const { Given, When, Then } = createBdd(testContext);
 
 Given('I navigate to contact log',async ({ctx})=>{
     const overviewPage = new OverviewPage(ctx.base.page)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.useSubNavigation('activityLogTab')
     const contactsPage = new ActivityLogPage(ctx.base.page)
-    await contactsPage.checkOnPage()
+    await contactsPage.assertOnPage()
     ctx.contacts.count = (await contactsPage.getQA('results-count-total').textContent())!
 })
 
@@ -34,7 +34,7 @@ When('I filter the contact log with values',async ({ctx}, data:DataTable)=>{
 Then('the contact log contains the correct info',async ({ctx})=>{
     const page = ctx.base.page
     const contactsPage = new ActivityLogPage(page)
-    await contactsPage.checkOnPage()
+    await contactsPage.assertOnPage()
 })
 
 Then('the contact log contains {string} entries',async ({ctx}, count: string)=>{

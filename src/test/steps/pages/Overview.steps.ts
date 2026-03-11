@@ -7,20 +7,20 @@ const { Given, When, Then } = createBdd(testContext);
 
 Then('the overview page is populated',async ({ctx})=>{
     const overviewPage = new OverviewPage(ctx.base.page)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.checkSections()
 })
 
 Then('the overview page links work correctly',async ({ctx})=>{
     const overviewPage = new OverviewPage(ctx.base.page)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.checkLinks()
 })
 
 Then('the pop header is correct', async ({ctx})=>{
     const crn = ctx.case.crn
     const overviewPage = new OverviewPage(ctx.base.page, crn)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.checkCrn()
     const tierPage = new TierPage(ctx.base.page)
     await tierPage.checkTierLink()

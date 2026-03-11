@@ -11,8 +11,12 @@ export default class TierPage extends CasePage {
     }
 
     async checkOnPage(): Promise<boolean>{
-        await expect(this.getClass('govuk-heading-l').first()).toContainText('Summary')
-        return true
+        try {
+            await expect(this.getClass('govuk-heading-l').first()).toContainText('Summary')
+            return true
+        } catch {
+            return false
+        }
     }
 
     async checkTier(tier: string){
@@ -23,7 +27,7 @@ export default class TierPage extends CasePage {
         const link = this.getQA('tierLink')
         const tier = (await link.allTextContents())[0]
         await link.click()
-        await this.checkOnPage()
+        await this.assertOnPage()
         await this.checkTier(tier!)
         await this.useBreadcrumbs(1) //always return to case
     }

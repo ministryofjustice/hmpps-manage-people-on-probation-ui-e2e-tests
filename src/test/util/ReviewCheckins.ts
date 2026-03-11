@@ -82,23 +82,23 @@ export const reviewCheckinMpop = async(page: Page, review: Review) => {
 
 export const reviewExpiredCheckinMpop = async(page: Page, review: ExpiredReview) => {
     const reviewExpiredPage = new ReviewExpiredPage(page)
-    await reviewExpiredPage.checkOnPage()
+    await reviewExpiredPage.assertOnPage()
     await reviewExpiredPage.completePage(review.comment)
 }
 export const reviewSubmittedCheckinMpop = async(page: Page, review: SubmittedReview) => {
     const reviewIdentityPage = new ReviewIdentityPage(page)
-    await reviewIdentityPage.checkOnPage()
+    await reviewIdentityPage.assertOnPage()
     await reviewIdentityPage.completePage(review.identity)
 
     const reviewNotesPage = new ReviewNotesPage(page)
-    await reviewNotesPage.checkOnPage()
+    await reviewNotesPage.assertOnPage()
     await reviewNotesPage.completePage(review.note, review.risk)
 }
 
 export const getCasesWithCheckInsSetup = async(page: Page) => {
     const cases = new CasesPage(page)
     await cases.navigateTo()
-    await cases.checkOnPage()
+    await cases.assertOnPage()
     let totalId = 0
     let pageNum = 1
     let crns = []

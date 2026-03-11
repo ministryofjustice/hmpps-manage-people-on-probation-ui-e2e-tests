@@ -16,22 +16,22 @@ When('I navigate to latest past appointment', async ({ ctx }) => {
     const page = ctx.base.page
     const appointments: AppointmentsPage = new AppointmentsPage(page, testCrn)
     await appointments.navigateTo()
-    await appointments.checkOnPage()
+    await appointments.assertOnPage()
     await appointments.selectPastAppointment(1)
     const managePage = new ManageAppointmentsPage(page)
-    await managePage.checkOnPage()
+    await managePage.assertOnPage()
 });
 
 When('I navigate to first upcoming appointment', async ({ ctx }) => {
     const page = ctx.base.page
     const home = new HomePage(page)
-    await home.checkOnPage()
+    await home.assertOnPage()
     await home.viewUpcoming()
     const upcomingAppointments = new UpcomingAppiointmentsPage(page)
-    await upcomingAppointments.checkOnPage()
+    await upcomingAppointments.assertOnPage()
     await upcomingAppointments.selectOfficeVisit()
     const managePage = new ManageAppointmentsPage(page)
-    await managePage.checkOnPage()
+    await managePage.assertOnPage()
 });
 
 When('I add a note to the appointment', async ({ ctx }) => {
@@ -47,7 +47,7 @@ When('I add a note to the appointment', async ({ ctx }) => {
 Then('I can see the new note on the appointment', async ({ ctx }) => {
     const page = ctx.base.page
     const managePage = new ManageAppointmentsPage(page)
-    await managePage.checkOnPage()
+    await managePage.assertOnPage()
     expect(await managePage.getNoteCount()).toBe(ctx.manage.noteCount + 1)
     await expect((await managePage.getAppointmentNotes()).first()).toContainText("note")
 })
@@ -55,10 +55,10 @@ Then('I can see the new note on the appointment', async ({ ctx }) => {
 When('I navigate to latest appointment requiring an outcome', async ({ ctx }) => {
     const page = ctx.base.page
     const home = new HomePage(page)
-    await home.checkOnPage()
+    await home.assertOnPage()
     await home.logMoreOutcomes()
     const logPage = new LogOutcomesPage(page)
-    await logPage.checkOnPage()
+    await logPage.assertOnPage()
     const managePage = new ManageAppointmentsPage(page)
     let id = 0
     while (true){
@@ -69,13 +69,12 @@ When('I navigate to latest appointment requiring an outcome', async ({ ctx }) =>
             id = 0
             continue
         }
-        await managePage.checkOnPage() //will backLink if restricted
-        try {
-            await logPage.checkOnPage()
-            id += 1
-        } catch { 
+        await managePage.assertOnPage() //will backLink if restricted
+        const restricted = await logPage.checkOnPage()
+        if (!restricted){
             break
         }
+        id += 1
     }
     await expect(managePage.getQA("appointmentAlert")).toContainText("You must log an outcome")
 });
@@ -85,7 +84,7 @@ When('I mark the attended complied outcome', async ({ ctx }) => {
     const managePage = new ManageAppointmentsPage(page)
     await managePage.clickAttendedAndCompliedLink()
     const attendedCompliedPage = new AttendedCompliedPage(page)
-    await attendedCompliedPage.checkOnPage()
+    await attendedCompliedPage.assertOnPage()
     await attendedCompliedPage.completePage()
     const addNotePage = new AddNotePage(page)
     await addNotePage.completePage(false, "note")
@@ -94,6 +93,6 @@ When('I mark the attended complied outcome', async ({ ctx }) => {
 Then('I can see the attended and complied status', async ({ ctx }) => {
     const page = ctx.base.page
     const managePage = new ManageAppointmentsPage(page)
-    await managePage.checkOnPage()
+    await managePage.assertOnPage()
     await expect(managePage.getByID('appointment-actions-1-status')).toContainText('Complied')
 })

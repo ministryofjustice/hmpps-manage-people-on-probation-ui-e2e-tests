@@ -30,13 +30,13 @@ Given('I have navigated to alerts', async ({ ctx }) => {
 })
 
 Then('the page should be rendered', async ({ ctx }) => {
-    await ctx.alerts.alertsPage.checkOnPage()
+    await ctx.alerts.alertsPage.assertOnPage()
 });
 
 Then('the new alert should be present', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
     await alerts.navigateTo(ctx.base.page)
-    await alerts.checkOnPage()
+    await alerts.assertOnPage()
     const updatedCount = await alerts.getAlertsCount()
     expect(updatedCount).toBeGreaterThan(ctx.alerts.alertCount)
 });
@@ -70,7 +70,7 @@ Then('I should be taken to the manage appointments page', async ({ ctx }) => {
     const managePage = new ManageAppointmentsPage(ctx.base.page)
     expect(managePage.page.url()).toContain(ctx.case.crn)
     await managePage.clickBackLink()
-    await ctx.alerts.alertsPage.checkOnPage()
+    await ctx.alerts.alertsPage.assertOnPage()
 });
 
 When('I view the activity note', async ({ ctx }) => {
@@ -86,9 +86,9 @@ When('I view the activity note', async ({ ctx }) => {
 
 Then('I should be on the note page', async ({ ctx }) => {
     const notePage = new NotePage(ctx.base.page)
-    await notePage.checkOnPage()
+    await notePage.assertOnPage()
     await notePage.clickBackLink()
-    await ctx.alerts.alertsPage.checkOnPage()
+    await ctx.alerts.alertsPage.assertOnPage()
 });
 
 When('I navigate through pagination', async ({ ctx }) => {

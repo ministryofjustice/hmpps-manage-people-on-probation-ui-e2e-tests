@@ -8,18 +8,18 @@ const { Given, When, Then } = createBdd(testContext);
 
 Given('I navigate to risk page',async ({ctx})=>{
     const overviewPage = new OverviewPage(ctx.base.page)
-    await overviewPage.checkOnPage()
+    await overviewPage.assertOnPage()
     await overviewPage.useSubNavigation('riskTab')
 })
 
 Then('the risk page is populated',async ({ctx})=>{
     const riskPage = new RiskPage(ctx.base.page)
-    await riskPage.checkOnPage()
+    await riskPage.assertOnPage()
     await riskPage.checkSections()
 })
 
 Then('the risk page links work correctly',async ({ctx})=>{
     const riskPage = new RiskPage(ctx.base.page)
-    await riskPage.checkOnPage()
+    await riskPage.assertOnPage()
     await riskPage.checkLinks()
 })

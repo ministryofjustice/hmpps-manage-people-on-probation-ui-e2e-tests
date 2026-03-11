@@ -23,6 +23,6 @@ export default class SentencePage extends ContactPage {
         } else {
             //createAppointmentsPage and click link page to here
         }
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
 }

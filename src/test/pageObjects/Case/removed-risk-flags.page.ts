@@ -23,7 +23,7 @@ export default class RemovedRiskFlagsPage extends CasePage {
             const title = await link.textContent()
             await link.click()
             const riskFlag = new RiskFlagPage(this.page, title!)
-            await riskFlag.checkOnPage()
+            await riskFlag.assertOnPage()
             await riskFlag.useBreadcrumbs(3)
         }
     }

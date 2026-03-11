@@ -29,6 +29,6 @@ export default class AttendancePage extends ContactPage {
             const typeAttendancePage = new TypeAttendancePage(this.page)
             await typeAttendancePage.clickLink('change')
         }
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
 }
