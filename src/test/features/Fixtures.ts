@@ -11,6 +11,7 @@ export interface Ctx {
   contacts: Contacts
   base: Base,
   case: Case
+  cases: Cases
   alerts: Alerts
   manage: Manage
   appointments: MpopArrangeAppointment[]
@@ -33,6 +34,9 @@ export interface CheckIns {
 }
 export interface Contact {
   uuid: string
+}
+export interface Cases{
+  count: number
 }
 export interface Base {
   page: Page,
@@ -93,6 +97,7 @@ export const testContext = base.extend<{ ctx: Ctx }, { ctxMap: Record<string, Ct
       contacts: {},
       base: {},
       case: {},
+      cases: {},
       alerts: {},
       manage: {},
       appointments: [],
