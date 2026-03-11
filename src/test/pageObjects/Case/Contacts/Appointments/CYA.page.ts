@@ -163,7 +163,7 @@ export default class CYAPage extends ContactPage {
                 else if (changes.sensitivity){
                     await this.clickSummaryAction(rows.indexOf("Sensitivity"))
                 }
-            }
+            } 
             if (newPast){
                 const addNotePage = new AddNotePage(this.page)
                 await addNotePage.assertOnPage()
