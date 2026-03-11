@@ -47,7 +47,7 @@ When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
     await appointments.navigateTo()
-    await appointments.checkOnPage()
+    await appointments.assertOnPage()
     await appointments.startArrangeAppointment()
 
     const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
