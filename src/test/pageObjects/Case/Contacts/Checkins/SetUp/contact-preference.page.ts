@@ -33,7 +33,7 @@ export default class ContactPreferencePage extends ContactPage {
                 await this.getQA('emailAddressAction').click();
             }
             const contactDetailsPage = new ContactDetailsPage(this.page)
-            await contactDetailsPage.checkOnPage()
+            await contactDetailsPage.assertOnPage()
             await contactDetailsPage.completePage(values)
         }
 

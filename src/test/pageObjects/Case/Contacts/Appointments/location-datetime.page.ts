@@ -8,17 +8,12 @@ export default class LocationDateTimePage extends ContactPage {
         super(page, "Appointment date, time and location", crn, uuid)
     }
 
-    async checkOnPage(acceptWrong = false): Promise<boolean> {
-        if (acceptWrong){
-            try {
-                await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
-                return true
-            } catch {
-                return false
-            }
-        } else {
+    async checkOnPage(): Promise<boolean> {
+        try {
             await expect(this.page.locator('[data-qa="pageHeading"]').first()).toContainText(this.title!)
             return true
+        } catch {
+            return false
         }
     }
 
@@ -55,7 +50,7 @@ export default class LocationDateTimePage extends ContactPage {
             await this.clickRadio("locationCode", locationId as number)
         }
         await this.submit()
-        const warning = await this.checkOnPage(true)
+        const warning = await this.checkOnPage()
         if (warning){
             if (dateTime != undefined){
                 await this.getClass("moj-datepicker").locator('[type="text"]').fill(dateTime.date)
@@ -70,12 +65,10 @@ export default class LocationDateTimePage extends ContactPage {
     }
 
     async validateDateTime(dateTime: MpopDateTime, locationId?: number){
-        try {
-            await this.checkOnPage()
+        const onPage = await this.checkOnPage()
+        if (onPage){
             dateTime = updateDateTime(dateTime)
             await this.completePage(dateTime, locationId)
-        } catch {
-            return
         }
     }
 
@@ -87,7 +80,7 @@ export default class LocationDateTimePage extends ContactPage {
             const typeAttendancePage = new TypeAttendancePage(this.page)
             typeAttendancePage.submit()
         }
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
 
     async fillText(qa: string, text: string){

@@ -31,6 +31,6 @@ export default class TypeAttendancePage extends ContactPage {
             const sentencePage = new SentencePage(this.page)
             sentencePage.submit()
         }
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
 }
