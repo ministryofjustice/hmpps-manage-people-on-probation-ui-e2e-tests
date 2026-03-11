@@ -9,9 +9,18 @@ export default abstract class MPopPage {
         this.title = title
     }
 
+    async assertOnPage(){
+        const onPage = await this.checkOnPage()
+        expect(onPage).toBeTruthy()
+    }
+
     async checkOnPage(): Promise<boolean> {
-        await this.checkQA("pageHeading", this.title ?? "")
-        return true
+        try {
+            await this.checkQA("pageHeading", this.title ?? "")
+            return true
+        } catch {
+            return false
+        }
     }
 
     async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {

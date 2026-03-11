@@ -22,10 +22,10 @@ export default class RescheduleDetailsPage extends ContactPage {
         if (past){
             console.log('past appointment')
             const attendedCompliedPage = new AttendedCompliedPage(this.page)
-            await attendedCompliedPage.checkOnPage()
+            await attendedCompliedPage.assertOnPage()
             await attendedCompliedPage.completePage()
             const addNotePage = new AddNotePage(this.page)
-            await addNotePage.checkOnPage()
+            await addNotePage.assertOnPage()
             await addNotePage.completePage(changes.sensitivity!, changes.note!)//file
         } else {
             const textConfirmationPage = new TextConfirmationPage(this.page)

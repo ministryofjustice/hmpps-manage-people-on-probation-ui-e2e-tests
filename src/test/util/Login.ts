@@ -15,6 +15,6 @@ export const loginIfNotAlready = async(page: Page) => {
         await login(page)
     } catch {
         const homePage = new HomePage(page)
-        await homePage.checkOnPage()
+        await homePage.assertOnPage()
     }
 }

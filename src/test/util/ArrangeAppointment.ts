@@ -74,10 +74,10 @@ export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAp
   if (past){
     console.log('past appointment')
     const attendedCompliedPage = new AttendedCompliedPage(page)
-    await attendedCompliedPage.checkOnPage()
+    await attendedCompliedPage.assertOnPage()
     await attendedCompliedPage.completePage()
     const addNotePage = new AddNotePage(page)
-    await addNotePage.checkOnPage()
+    await addNotePage.assertOnPage()
     await addNotePage.completePage(appointment.sensitivity, appointment.note)//file
   } else {
     const textConfirmationPage = new TextConfirmationPage(page)
@@ -86,7 +86,7 @@ export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAp
     await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
   }
   const cyaPage = new CYAPage(page)
-  await cyaPage.checkOnPage()
+  await cyaPage.assertOnPage()
 }
 
 export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
@@ -98,7 +98,7 @@ export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeA
   const cyaPage = new CYAPage(page)
   await cyaPage.completePage(appointment.isVisor, past)
   const confirmationPage = new ConfirmationPage(page, past)
-  await confirmationPage.checkOnPage()
+  await confirmationPage.assertOnPage()
 }
 
 export const createSimilarAppointmentMPop = async(page:Page, changes: MpopAppointmentChanges) => {

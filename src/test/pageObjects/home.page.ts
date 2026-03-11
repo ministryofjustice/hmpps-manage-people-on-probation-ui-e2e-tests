@@ -30,7 +30,7 @@ export default class HomePage extends MPopPage {
 
     async returnToPage(){
         await this.usePrimaryNavigation('Home')
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
 
     async showUpcoming(){
@@ -45,7 +45,7 @@ export default class HomePage extends MPopPage {
         const upcoming = await this.noteUpcoming()
         await this.page.getByRole('link', {name: 'View all upcoming appointments'}).click()
         const upcomingPage = new UpcomingAppointmentsPage(this.page)
-        await upcomingPage.checkOnPage()
+        await upcomingPage.assertOnPage()
         await upcomingPage.checkTop5(upcoming)
         await this.returnToPage()
     }
@@ -62,7 +62,7 @@ export default class HomePage extends MPopPage {
         const outcomes = await this.noteOutcomes()
         await this.page.getByRole('link', {name: 'Log more outcomes'}).click()
         const outcomesPage = new LogOutcomesPage(this.page)
-        await outcomesPage.checkOnPage()
+        await outcomesPage.assertOnPage()
         await outcomesPage.checkTop5(outcomes)
         await this.returnToPage()
     }
