@@ -9,19 +9,19 @@ const { Given, When, Then } = createBdd(testContext);
 Given('I navigate to cases page', async({ctx})=>{
     const casePage = new CasesPage(ctx.base.page)
     await casePage.navigateTo()
-    await casePage.checkOnPage()
+    await casePage.assertOnPage()
     ctx.cases.count = await casePage.getCount()
 })
 
 Then('the cases page is populated',async ({ctx})=>{
     const casePage = new CasesPage(ctx.base.page)
-    await casePage.checkOnPage()
+    await casePage.assertOnPage()
     await casePage.checkSections()
 })
 
 Then('the cases page links work correctly',async ({ctx})=>{
     const casePage = new CasesPage(ctx.base.page)
-    await casePage.checkOnPage()
+    await casePage.assertOnPage()
     await casePage.checkLinks()
 })
 
@@ -35,7 +35,7 @@ When('I filter the cases with values',async ({ctx}, data:DataTable)=>{
 Then('the cases page contains {string} entries',async ({ctx}, count: string)=>{
     const page = ctx.base.page
     const casePage = new CasesPage(page)
-    await casePage.checkOnPage()
+    await casePage.assertOnPage()
     if (count === 'full'){
         expect(await casePage.getCount()).toEqual(ctx.cases.count)
     } else if (count === 'filtered') {
