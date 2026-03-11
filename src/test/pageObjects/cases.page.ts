@@ -2,6 +2,9 @@ import { expect, Page } from "@playwright/test";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 import { baseNavigation } from "../util/Navigation";
+import OverviewPage from "./Case/overview.page";
+import RecentCasesPage from "./recent-cases.page";
+import { CaseFilters } from "../util/Cases";
 
 export default class CasesPage extends MPopPage {
     constructor(page: Page) {
@@ -12,15 +15,15 @@ export default class CasesPage extends MPopPage {
        await this.page.goto(`${MPOP_URL}/case`)
     }
 
-    async filterCases(text?: string, sentenceCode?: string, typeCode?: string){
-        if (text){
-            await this.page.getByRole('textbox').fill(text)
+    async applyFilters(caseFilters: CaseFilters){
+        if (caseFilters.name_crn){
+            await this.page.getByRole('textbox').fill(caseFilters.name_crn)
         }
-        if (sentenceCode){
-            await this.page.locator(`[name="sentenceCode"]`).selectOption(sentenceCode)
+        if (caseFilters.sentence){
+            await this.page.locator(`[name="sentenceCode"]`).selectOption(caseFilters.sentence)
         }
-        if (typeCode){
-            await this.page.locator(`[name="nextContactCode"]`).selectOption(typeCode)
+        if (caseFilters.type){
+            await this.page.locator(`[name="nextContactCode"]`).selectOption(caseFilters.type)
         }
         await this.page.getByRole('button', {name: "Filter cases"}).click()
     }
@@ -30,15 +33,55 @@ export default class CasesPage extends MPopPage {
     }
 
     async getCount(): Promise<number>{
-        const text = await this.getQA('pagination').textContent()
-        console.log(text)
-        const count = text?.match(/\d+(,\d+)*/g) as unknown as number[]
-        console.log(count)
-        return parseInt(count[2].toString().replace(/\,/g,''),10)
+        try {
+            const text = await this.getQA('pagination').textContent()
+            const count = text?.match(/\d+(,\d+)*/g) as unknown as number[]
+            return parseInt(count[2].toString().replace(/\,/g,''),10)
+        } catch {
+            const count = await this.getClass('govuk-table__row').count()
+            return count-1
+        }
     }
 
     async navigateTo() {
         await baseNavigation(this.page, "Cases")
+    }
+
+    async checkSections(){
+        await this.getQA('caseloadNavigation').isVisible()
+        await this.getClass('govuk-filter-background govuk-!-margin-bottom-3').isVisible()
+        await this.getQA('myCasesCard').isVisible()
+    }
+
+    async checkNoRecentCases(){
+        await this.useSubNavigation('recentCasesTab')
+        const recentCasesPage = new RecentCasesPage(this.page)
+        await recentCasesPage.checkOnPage()
+        await recentCasesPage.checkNoRecentCases()
+        await this.useSubNavigation('overviewTab')
+    }
+
+    async checkRecentCases(){
+        await this.checkNoRecentCases()
+        await this.checkOnPage()
+        const text = await this.getQA('myCasesCard').getByRole('link', {name: /,/}).allTextContents()
+        const top5 = text.slice(0,5).map(i => i.trim())
+        for (let i=0; i<top5.length; i++){
+            await this.getQA('myCasesCard').getByRole('link', {name: top5[i]}).click()
+            const overviewPage = new OverviewPage(this.page)
+            await overviewPage.checkOnPage()
+            await overviewPage.useBreadcrumbs(0)
+            await this.checkOnPage()
+        }
+        await this.useSubNavigation('recentCasesTab')
+         const recentCasesPage = new RecentCasesPage(this.page)
+        await recentCasesPage.checkOnPage()
+        await recentCasesPage.checkRecentCases(top5)
+        await this.useSubNavigation('overviewTab')
+    }
+
+    async checkLinks(){
+        await this.checkRecentCases()
     }
     
 }
