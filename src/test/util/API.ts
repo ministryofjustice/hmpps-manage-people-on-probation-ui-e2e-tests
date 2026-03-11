@@ -90,7 +90,7 @@ export const getProbationPractitioner = async(crn: string, token: string) => {
 }
 
 
-export const createEsupervisionCheckin = async(practitioner: string, crn: string, date: string, token: string) : Promise<string> => {
+export const createEsupervisionCheckin = async(practitioner: string, crn: string, date: string, token: string, allowFail: boolean = false) : Promise<string> => {
     const context = await request.newContext({
         baseURL: E_SUPERVISION_API_URL,
     });
@@ -104,7 +104,16 @@ export const createEsupervisionCheckin = async(practitioner: string, crn: string
             "dueDate": date
         }
     })
-    const body = await response.json()
+    let body
+    if (allowFail){
+        try {
+            body = await response.json()
+        } catch {
+            console.log('failed for CRN: ' + crn)
+        }
+    } else {
+        body = await response.json()
+    }
     console.log(body)
     return body.uuid
 }
