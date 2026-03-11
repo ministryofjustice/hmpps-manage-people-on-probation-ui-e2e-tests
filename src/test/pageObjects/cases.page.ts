@@ -56,26 +56,26 @@ export default class CasesPage extends MPopPage {
     async checkNoRecentCases(){
         await this.useSubNavigation('recentCasesTab')
         const recentCasesPage = new RecentCasesPage(this.page)
-        await recentCasesPage.checkOnPage()
+        await recentCasesPage.assertOnPage()
         await recentCasesPage.checkNoRecentCases()
         await this.useSubNavigation('overviewTab')
     }
 
     async checkRecentCases(){
         await this.checkNoRecentCases()
-        await this.checkOnPage()
+        await this.assertOnPage()
         const text = await this.getQA('myCasesCard').getByRole('link', {name: /,/}).allTextContents()
         const top5 = text.slice(0,5).map(i => i.trim())
         for (let i=0; i<top5.length; i++){
             await this.getQA('myCasesCard').getByRole('link', {name: top5[i]}).click()
             const overviewPage = new OverviewPage(this.page)
-            await overviewPage.checkOnPage()
+            await overviewPage.assertOnPage()
             await overviewPage.useBreadcrumbs(0)
-            await this.checkOnPage()
+            await this.assertOnPage()
         }
         await this.useSubNavigation('recentCasesTab')
          const recentCasesPage = new RecentCasesPage(this.page)
-        await recentCasesPage.checkOnPage()
+        await recentCasesPage.assertOnPage()
         await recentCasesPage.checkRecentCases(top5)
         await this.useSubNavigation('overviewTab')
     }
