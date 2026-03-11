@@ -15,7 +15,7 @@ Given('I navigate to personal details page',async ({ctx})=>{
     const crn = ctx.case.crn
     const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(page, crn)
     await personalDetails.navigateTo()
-    await personalDetails.checkOnPage()
+    await personalDetails.assertOnPage()
 })
 
 Given('I make a note of possible address types and codes',async ({ctx})=>{
@@ -29,7 +29,7 @@ When('I can note the current details',async ({ctx})=>{
     const page = ctx.base.page
     const crn = ctx.case.crn
     const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(page, crn)
-    await personalDetails.checkOnPage()
+    await personalDetails.assertOnPage()
     ctx.details = await personalDetails.noteDetails()
 })
 
@@ -39,7 +39,7 @@ When('I change the contact details',async ({ctx}, data:DataTable)=>{
     const page = ctx.base.page
     const crn = ctx.case.crn
     const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(page, crn)
-    await personalDetails.checkOnPage()
+    await personalDetails.assertOnPage()
     await personalDetails.updateContactDetails(contactDetails)
 })
 
@@ -51,7 +51,7 @@ When('I update the main address',async ({ctx}, data:DataTable)=>{
     const page = ctx.base.page
     const crn = ctx.case.crn
     const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(page, crn)
-    await personalDetails.checkOnPage()
+    await personalDetails.assertOnPage()
     await personalDetails.updateMainAddress(address)
 })
 
@@ -59,6 +59,6 @@ Then('I can see the updated details',async ({ctx})=>{
     const page = ctx.base.page
     const crn = ctx.case.crn
     const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(page, crn)
-    await personalDetails.checkOnPage()
+    await personalDetails.assertOnPage()
     expect(await personalDetails.noteDetails()).toEqual(ctx.details)
 })

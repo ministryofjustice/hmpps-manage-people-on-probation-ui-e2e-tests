@@ -29,6 +29,6 @@ export default class SupportingInformationPage extends ContactPage {
             const locationDateTimePage = new LocationDateTimePage(this.page)
             locationDateTimePage.submit()
         }
-        await this.checkOnPage()
+        await this.assertOnPage()
     }
 }

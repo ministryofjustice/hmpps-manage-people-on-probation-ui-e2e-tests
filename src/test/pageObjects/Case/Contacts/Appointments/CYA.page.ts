@@ -65,12 +65,12 @@ export default class CYAPage extends ContactPage {
         if (changes.sentenceId){
             await this.clickSummaryAction(rows.indexOf("Appointment for"))
             const sentencePage = new SentencePage(this.page)
-            await sentencePage.checkOnPage()
+            await sentencePage.assertOnPage()
             await sentencePage.completePage(changes.sentenceId)
-            const returned = await this.checkOnPage(true)
+            const returned = await this.checkOnPage()
             if (!returned){
                 const typeAttendancePage = new TypeAttendancePage(this.page)
-                await typeAttendancePage.checkOnPage()
+                await typeAttendancePage.assertOnPage()
                 autoRedirected = true
             }
         }
@@ -89,12 +89,12 @@ export default class CYAPage extends ContactPage {
                 autoRedirected = false
             }
             const typeAttendancePage = new TypeAttendancePage(this.page)
-            await typeAttendancePage.checkOnPage()
+            await typeAttendancePage.assertOnPage()
             await typeAttendancePage.changePage(changes.typeId, changes.attendee, changes.isVisor)
-            const returned = await this.checkOnPage(true)
+            const returned = await this.checkOnPage()
             if (!returned){
                 const locationDateTimePage = new LocationDateTimePage(this.page)
-                await locationDateTimePage.checkOnPage()
+                await locationDateTimePage.assertOnPage()
                 autoRedirected = true
             }
         }
@@ -110,20 +110,20 @@ export default class CYAPage extends ContactPage {
                 autoRedirected = false
             }
             const locationDateTimePage = new LocationDateTimePage(this.page)
-            await locationDateTimePage.checkOnPage()
+            await locationDateTimePage.assertOnPage()
             let locationId = undefined
             if (changes.locationId){
                 locationId = await locationDateTimePage.findLocationId(typeId, changes.locationId)
             }
             await locationDateTimePage.completePage(changes.dateTime, locationId)
-            const returned = await this.checkOnPage(true)
+            const returned = await this.checkOnPage()
             if (!returned){
                 if (newPast){
                     const attendedCompliedPage = new AttendedCompliedPage(this.page)
-                    await attendedCompliedPage.checkOnPage()
+                    await attendedCompliedPage.assertOnPage()
                 } else {
                     const textConfirmationPage = new TextConfirmationPage(this.page)
-                    await textConfirmationPage.checkOnPage()
+                    await textConfirmationPage.assertOnPage()
                 }
                 autoRedirected = true
             }
@@ -135,22 +135,22 @@ export default class CYAPage extends ContactPage {
                 autoRedirected = false
             }
             const textConfirmationPage = new TextConfirmationPage(this.page)
-            await textConfirmationPage.checkOnPage()
+            await textConfirmationPage.assertOnPage()
             await textConfirmationPage.completePage(changes.text, changes.mobile)
-            const returned = await this.checkOnPage(true)
+            const returned = await this.checkOnPage()
             if (!returned){
                 if (newPast){
                     const supportingInformationPage = new SupportingInformationPage(this.page)
-                    await supportingInformationPage.checkOnPage()
+                    await supportingInformationPage.assertOnPage()
                 } else {
                     const addNotePage = new AddNotePage(this.page)
-                    await addNotePage.checkOnPage()
+                    await addNotePage.assertOnPage()
                 }
                 autoRedirected = true
             }
         } else if (!currentPast && newPast && autoRedirected){
             const attendedCompliedPage = new AttendedCompliedPage(this.page)
-            await attendedCompliedPage.checkOnPage()
+            await attendedCompliedPage.assertOnPage()
             await attendedCompliedPage.completePage()
             autoRedirected = true
         }
@@ -165,11 +165,11 @@ export default class CYAPage extends ContactPage {
             } 
             if (newPast){
                 const addNotePage = new AddNotePage(this.page)
-                await addNotePage.checkOnPage()
+                await addNotePage.assertOnPage()
                 await addNotePage.changePage(changes.sensitivity, changes.note)
             } else {
                 const supportingInformationPage = new SupportingInformationPage(this.page)
-                await supportingInformationPage.checkOnPage()
+                await supportingInformationPage.assertOnPage()
                 await supportingInformationPage.changePage(changes.sensitivity, changes.note) 
             }
         }

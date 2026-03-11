@@ -48,7 +48,7 @@ Given('I clear the contact details if set', async ({ ctx }) => {
     if (!created){
         const personalDetailsPage = new PersonalDetailsPage(page, crn)
         await personalDetailsPage.navigateTo()
-        await personalDetailsPage.checkOnPage()
+        await personalDetailsPage.assertOnPage()
         await personalDetailsPage.updateContactDetails({
             phone: '',
             mobile: '',
