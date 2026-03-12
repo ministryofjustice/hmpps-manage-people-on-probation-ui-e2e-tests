@@ -137,8 +137,8 @@ export default class CYAPage extends ContactPage {
             }
             const textConfirmationPage = new TextConfirmationPage(this.page)
             await textConfirmationPage.assertOnPage()
-            await textConfirmationPage.completePage(changes.text, changes.mobile)
-            const returned = await this.checkOnPage(true)
+            await textConfirmationPage.completePage(changes.text, changes.mobile, changes.dateTime.date, changes.dateTime.startTime, changes.locationId)
+            const returned = await this.checkOnPage()
             if (!returned){
                 if (newPast){
                     const supportingInformationPage = new SupportingInformationPage(this.page)
