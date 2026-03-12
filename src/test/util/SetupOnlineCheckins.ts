@@ -11,6 +11,8 @@ import { DataTable } from "playwright-bdd"
 import TakePhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/take-photo.page"
 import { chance, randomEnum, randomPicker } from "./Common"
 import { ContactDetails } from "../features/Fixtures"
+import EligibilityPage from "../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page"
+import EligiblePage from "../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page"
 
 export interface MpopSetupCheckin {
     date: string
@@ -42,9 +44,14 @@ export interface MPoPCheckinDetails {
 }
 
 export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
-    const instructionPage = new InstructionsPage(page)
-    await instructionPage.assertOnPage()
-    await instructionPage.completePage()
+    //Just assume eligible for this test
+    const eligibilityPage = new EligibilityPage(page)
+    await eligibilityPage.assertOnPage()
+    await eligibilityPage.completePage([9])
+
+    const eligiblePage = new EligiblePage(page)
+    await eligiblePage.assertOnPage()
+    await eligiblePage.completePage(0)
 
      // Navigate to Date frequency page, verify page header and complete the page
     const dateFrequencyPage = new DateFrequencyPage(page)

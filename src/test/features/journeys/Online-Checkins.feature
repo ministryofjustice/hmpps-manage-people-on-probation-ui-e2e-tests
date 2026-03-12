@@ -45,3 +45,20 @@ Feature: Non serial checkIn journeys
         And I submit the checkin
         Then Checkins should be setup
         And I close the context
+
+    @smoke @esupervision @eligibility
+    Scenario: View Eligibility Options       
+        Given Context has been created for "Esupervision" test
+        And A new offender has been created or existing made available
+        And I am logged in
+        And I have navigated to new offender
+        When I fill eligibility values with '<ids>'
+        Then I '<can>' use checkIns
+        And I close the context
+
+        Examples:
+            | ids   | can |
+            | 0,2,4 | can, alongside face-to-face contact, |
+            | 8     | cannot |
+            | 9     | can    |
+

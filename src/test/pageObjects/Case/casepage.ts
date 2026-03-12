@@ -4,12 +4,13 @@ import MPopPage from "../page";
 export default abstract class CasePage extends MPopPage {
     readonly crn?: string
 
-    protected constructor(page: Page, title?: string, crn?: string) {
+    protected constructor(page: Page, title?: string | RegExp, crn?: string) {
         super(page, title)
         this.crn = crn
     }
 
     async assertOnPage(allowRestricted:boolean=true){
+        await this.page.waitForLoadState('networkidle')
         const onPage = await this.checkOnPage()
         if (!onPage && allowRestricted){
             const restricted = await this.isRestricted()

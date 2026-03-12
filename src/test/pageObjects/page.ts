@@ -2,20 +2,22 @@ import { expect, Locator, Page } from "@playwright/test"
 
 export default abstract class MPopPage {
     readonly page: Page
-    readonly title?: string
+    readonly title?: string | RegExp
 
-    protected constructor(page: Page, title?: string) {
+    protected constructor(page: Page, title?: string | RegExp) {
         this.page = page
         this.title = title
     }
 
     async assertOnPage(){
+        await this.page.waitForLoadState('networkidle')
         const onPage = await this.checkOnPage()
         expect(onPage).toBeTruthy()
     }
 
     async checkOnPage(): Promise<boolean> {
         try {
+            const text = await this.getQA('pageHeading').textContent()
             await this.checkQA("pageHeading", this.title ?? "")
             return true
         } catch {
