@@ -8,6 +8,7 @@ import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
 import AttendedCompliedPage from "./attended-complied.page";
 import AddNotePage from "./add-note.page";
+import TextConfirmationPage from "./text-confirmation-page";
 
 export default class CYAPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
