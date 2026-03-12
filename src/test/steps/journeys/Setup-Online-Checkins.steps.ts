@@ -17,6 +17,11 @@ import StopCheckInsPage from '../../pageObjects/Case/Contacts/Checkins/stop.page
 import { restartCheckinsMPop } from '../../util/StopStartCheckins';
 import ReviewExpiredPage from '../../pageObjects/Case/Contacts/Checkins/Review/review-expired.page';
 import { expect } from '@playwright/test';
+import EligibilityPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page';
+import PartiallyEligiblePage from '../../pageObjects/Case/Contacts/Checkins/SetUp/partially-eligible.page';
+import DateFrequencyPage from '../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page';
+import EligiblePage from '../../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page';
+import IneligiblePage from '../../pageObjects/Case/Contacts/Checkins/SetUp/ineligible.page';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -273,3 +278,36 @@ When('I find valid case from {string}', async({ ctx }, cases) => {
     console.log('No valid cases left')
 })
 
+When('I fill eligibility values with {string}', async({ ctx }, ids: string) => {
+    const page = ctx.base.page
+    const numbers = ids.split(',').map(i => Number(i))
+    const setUpOnLineCheckinsPage = new AppointmentsPage(page)
+    await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn()
+    const eligibilityPage = new EligibilityPage(page)
+    await eligibilityPage.assertOnPage()
+    await eligibilityPage.completePage(numbers)
+})
+
+Then('I {string} use checkIns', async({ ctx }, can: string) => {
+    const page = ctx.base.page
+    if (can === 'can, alongside face-to-face contact,'){
+        const partialPage = new PartiallyEligiblePage(page)
+        await partialPage.assertOnPage()
+        await partialPage.completePage()
+        const dateFrequencyPage = new DateFrequencyPage(page)
+        await dateFrequencyPage.assertOnPage()
+    } else if (can === 'can'){
+        const eligiblePage = new EligiblePage(page)
+        await eligiblePage.assertOnPage()
+        await eligiblePage.completePage(1)
+        const dateFrequencyPage = new DateFrequencyPage(page)
+        await dateFrequencyPage.assertOnPage()
+    } else if (can === 'cannot'){
+        const ineligiblePage = new IneligiblePage(page)
+        await ineligiblePage.assertOnPage()
+        await ineligiblePage.completePage()
+        const overview = new OverviewPage(page)
+        await overview.assertOnPage()
+    }
+
+})

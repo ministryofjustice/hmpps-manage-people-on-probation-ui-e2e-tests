@@ -4,7 +4,7 @@ import CasePage from "../casepage";
 export default abstract class ContactPage extends CasePage {
     readonly uuid?: string
 
-    protected constructor(page: Page, title?: string, crn?: string, uuid?: string) {
+    protected constructor(page: Page, title?: string | RegExp, crn?: string, uuid?: string) {
         super(page, title, crn)
         this.uuid = uuid
     }
