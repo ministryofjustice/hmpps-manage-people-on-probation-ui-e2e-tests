@@ -1,0 +1,51 @@
+<testsuites id="" name="" tests="1" failures="1" skipped="0" errors="0" time="37.113687000000006">
+<testsuite name="src/test/features/pages/Contacts.feature.spec.js" timestamp="2026-03-13T12:55:59.395Z" hostname="chromium" tests="1" failures="1" skipped="0" time="36.006" errors="0">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - no results" classname="src/test/features/pages/Contacts.feature.spec.js" time="36.006">
+<failure message="Contacts.feature.spec.js:8:5 View contacts for a Pop - no results" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/pages/Contacts.feature.spec.js:8:5 › As a practitioner › View contacts for a Pop - <description> › View contacts for a Pop - no results @smoke @contacts › When I filter the contact log with values 
+
+    TimeoutError: locator.check: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('group', { name: 'Compliance filters' }).getByLabel('NaN')
+
+
+       at ../src/test/pageObjects/Case/activity-log.page.ts:31
+
+      29 |
+      30 |         for (const label of filters.compliance_filters) {
+    > 31 |             await complianceGroup.getByLabel(label, { exact: true }).check()
+         |                                                                      ^
+      32 |         }
+      33 |
+      34 |         for (const label of filters.category_filters) {
+        at ActivityLogPage.applyFilters (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts:31:70)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:31:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:13:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/trace.zip]]
+]]>
+</system-out>
+</testcase>
+</testsuite>
+</testsuites>

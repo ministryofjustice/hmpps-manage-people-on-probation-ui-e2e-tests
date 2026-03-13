@@ -1,0 +1,221 @@
+{
+  "config": {
+    "configFile": "/Users/shilpa.basu/Projects/MPOP_Automation/playwright.config.ts",
+    "rootDir": "/Users/shilpa.basu/Projects/MPOP_Automation/.features-gen",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": "/Users/shilpa.basu/Projects/MPOP_Automation/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "github",
+        null
+      ],
+      [
+        "line",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "junit.xml"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/shilpa.basu/Projects/MPOP_Automation/.features-gen",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 300000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 7,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "src/test/features/pages/Contacts.feature.spec.js",
+      "file": "src/test/features/pages/Contacts.feature.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "As a practitioner",
+          "file": "src/test/features/pages/Contacts.feature.spec.js",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "View contacts for a Pop - <description>",
+              "file": "src/test/features/pages/Contacts.feature.spec.js",
+              "line": 6,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "View contacts for a Pop - no results",
+                  "ok": false,
+                  "tags": [
+                    "smoke",
+                    "contacts"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 300000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 36006,
+                          "error": {
+                            "message": "TimeoutError: locator.check: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('group', { name: 'Compliance filters' }).getByLabel('NaN')\u001b[22m\n",
+                            "stack": "TimeoutError: locator.check: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('group', { name: 'Compliance filters' }).getByLabel('NaN')\u001b[22m\n\n    at ActivityLogPage.applyFilters (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts:31:70)\n    at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:31:5)\n    at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:13:7",
+                            "location": {
+                              "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts",
+                              "column": 70,
+                              "line": 31
+                            },
+                            "snippet": "\u001b[90m   at \u001b[39m../src/test/pageObjects/Case/activity-log.page.ts:31\n\n\u001b[0m \u001b[90m 29 |\u001b[39m\n \u001b[90m 30 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m label \u001b[36mof\u001b[39m filters\u001b[33m.\u001b[39mcompliance_filters) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m             \u001b[36mawait\u001b[39m complianceGroup\u001b[33m.\u001b[39mgetByLabel(label\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mcheck()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m         }\n \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m label \u001b[36mof\u001b[39m filters\u001b[33m.\u001b[39mcategory_filters) {\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts",
+                                "column": 70,
+                                "line": 31
+                              },
+                              "message": "TimeoutError: locator.check: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('group', { name: 'Compliance filters' }).getByLabel('NaN')\u001b[22m\n\n\n\u001b[90m   at \u001b[39m../src/test/pageObjects/Case/activity-log.page.ts:31\n\n\u001b[0m \u001b[90m 29 |\u001b[39m\n \u001b[90m 30 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m label \u001b[36mof\u001b[39m filters\u001b[33m.\u001b[39mcompliance_filters) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m             \u001b[36mawait\u001b[39m complianceGroup\u001b[33m.\u001b[39mgetByLabel(label\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mcheck()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m         }\n \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m label \u001b[36mof\u001b[39m filters\u001b[33m.\u001b[39mcategory_filters) {\u001b[0m\n\u001b[2m    at ActivityLogPage.applyFilters (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts:31:70)\u001b[22m\n\u001b[2m    at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:31:5)\u001b[22m\n\u001b[2m    at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:13:7\u001b[22m"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "Given Context has been created for \"Contacts\" test",
+                              "duration": 107
+                            },
+                            {
+                              "title": "And I am logged in",
+                              "duration": 1678
+                            },
+                            {
+                              "title": "And I navigate to 'X793504'",
+                              "duration": 3042
+                            },
+                            {
+                              "title": "And I navigate to contact log",
+                              "duration": 843
+                            },
+                            {
+                              "title": "When I filter the contact log with values",
+                              "duration": 30024,
+                              "error": {
+                                "message": "TimeoutError: locator.check: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('group', { name: 'Compliance filters' }).getByLabel('NaN')\u001b[22m\n",
+                                "stack": "TimeoutError: locator.check: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('group', { name: 'Compliance filters' }).getByLabel('NaN')\u001b[22m\n\n    at ActivityLogPage.applyFilters (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts:31:70)\n    at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:31:5)\n    at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:13:7",
+                                "location": {
+                                  "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts",
+                                  "column": 70,
+                                  "line": 31
+                                },
+                                "snippet": "\u001b[90m   at \u001b[39m../src/test/pageObjects/Case/activity-log.page.ts:31\n\n\u001b[0m \u001b[90m 29 |\u001b[39m\n \u001b[90m 30 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m label \u001b[36mof\u001b[39m filters\u001b[33m.\u001b[39mcompliance_filters) {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 31 |\u001b[39m             \u001b[36mawait\u001b[39m complianceGroup\u001b[33m.\u001b[39mgetByLabel(label\u001b[33m,\u001b[39m { exact\u001b[33m:\u001b[39m \u001b[36mtrue\u001b[39m })\u001b[33m.\u001b[39mcheck()\n \u001b[90m    |\u001b[39m                                                                      \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 32 |\u001b[39m         }\n \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m         \u001b[36mfor\u001b[39m (\u001b[36mconst\u001b[39m label \u001b[36mof\u001b[39m filters\u001b[33m.\u001b[39mcategory_filters) {\u001b[0m"
+                              }
+                            }
+                          ],
+                          "startTime": "2026-03-13T12:55:59.760Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/error-context.md"
+                            },
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-95421-acts-for-a-Pop---no-results-chromium/trace.zip"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts",
+                            "column": 70,
+                            "line": 31
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "527351177a9bfc6dae33-ab744d4374f70f5e835c",
+                  "file": "src/test/features/pages/Contacts.feature.spec.js",
+                  "line": 8,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-13T12:55:59.319Z",
+    "duration": 37113.687000000005,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

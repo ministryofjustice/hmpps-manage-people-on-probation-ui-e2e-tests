@@ -14,6 +14,9 @@ export default class ActivityLogPage extends CasePage {
     }
 
     async applyFilters(filters: ContactFilters){
+        const complianceGroup = this.page.getByRole('group', { name: 'Compliance filters' })
+        const categoryGroup = this.page.getByRole('group', { name: 'Category filters' })
+
         if (filters.keywords){
             await this.fillText('keywords', filters.keywords)
         }
@@ -23,12 +26,20 @@ export default class ActivityLogPage extends CasePage {
         if (filters.to){
             await this.fillText('date-to', filters.to)
         }
-        for (let i=0; i<filters.compliance_filters.length; i++){
-            await this.toggleFilter(filters.compliance_filters[i]-1, 'compliance')
+
+        for (const label of filters.compliance_filters) {
+            await complianceGroup.getByLabel(label, { exact: true }).check()
         }
-        for (let i=0; i<filters.category_filters.length; i++){
-            await this.toggleFilter(filters.category_filters[i]-1, 'category')
+
+        for (const label of filters.category_filters) {
+            await categoryGroup.getByLabel(label, { exact: true }).check()
         }
+        // for (let i=0; i<filters.compliance_filters.length; i++){
+        //     await this.toggleFilter(filters.compliance_filters[i]-1, 'compliance')
+        // }
+        // for (let i=0; i<filters.category_filters.length; i++){
+        //     await this.toggleFilter(filters.category_filters[i]-1, 'category')
+        // }
         await this.page.getByRole('button', {name: 'Apply filters'}).click()
         if (filters.hide_system_generated){
             await this.toggleFilter(0, 'hideContact')
