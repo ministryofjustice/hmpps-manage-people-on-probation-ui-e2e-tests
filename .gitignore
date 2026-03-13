@@ -45,5 +45,6 @@ known_hosts
 authorized_keys
 
 ### MacOS ###
-.DS_Storejunit.xml
+.DS_Store
+junit.xml
 results.json
