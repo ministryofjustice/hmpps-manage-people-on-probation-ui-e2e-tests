@@ -26,6 +26,6 @@ Feature: As a practitioner
       | keyword          | X793504 |           |           | online   |      |            |            | filtered | no errors               |
       | no results       | X793504 |           |           | house    |      | 3          |            | 0        | no errors               |
       | catergories      | X793504 |           |           |          |      |            | 8,9,11     | filtered | no errors               |
-      | hide system gen  | X793504 |           |           |          | YES  |            |            | filtered | no errors               |            
+      | hide system gen  | X793504 |           |           |          | YES  |            |            | filtered | no errors               |
       | combined         | X793504 | 1/2/2026  | 8/3/2026  | visit    | YES  | 2          | 1          | filtered | no errors               |
       | validation error | X793504 | 11/2/2026 |           |          |      |            |            | full     | a missing date to error |

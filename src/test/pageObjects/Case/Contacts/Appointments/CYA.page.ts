@@ -6,9 +6,9 @@ import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../contactpage";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
-import TextConfirmationPage from "./text-confirmation-page";
 import AttendedCompliedPage from "./attended-complied.page";
 import AddNotePage from "./add-note.page";
+import TextConfirmationPage from "./text-confirmation-page";
 
 export default class CYAPage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {
@@ -42,6 +42,7 @@ export default class CYAPage extends ContactPage {
             AttendancePage,
             LocationDateTimePage,
             LocationDateTimePage,
+            TextConfirmationPage,
             SupportingInformationPage,
             SupportingInformationPage
         ]
@@ -136,7 +137,7 @@ export default class CYAPage extends ContactPage {
             }
             const textConfirmationPage = new TextConfirmationPage(this.page)
             await textConfirmationPage.assertOnPage()
-            await textConfirmationPage.completePage(changes.text, changes.mobile)
+            await textConfirmationPage.completePage(changes.text, changes.mobile, changes.dateTime.date, changes.dateTime.startTime, changes.locationId)
             const returned = await this.checkOnPage()
             if (!returned){
                 if (newPast){
@@ -162,7 +163,7 @@ export default class CYAPage extends ContactPage {
                 else if (changes.sensitivity){
                     await this.clickSummaryAction(rows.indexOf("Sensitivity"))
                 }
-            } 
+            }
             if (newPast){
                 const addNotePage = new AddNotePage(this.page)
                 await addNotePage.assertOnPage()
@@ -170,7 +171,7 @@ export default class CYAPage extends ContactPage {
             } else {
                 const supportingInformationPage = new SupportingInformationPage(this.page)
                 await supportingInformationPage.assertOnPage()
-                await supportingInformationPage.changePage(changes.sensitivity, changes.note) 
+                await supportingInformationPage.changePage(changes.sensitivity, changes.note)
             }
         }
 

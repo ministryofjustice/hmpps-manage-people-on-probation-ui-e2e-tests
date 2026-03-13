@@ -27,7 +27,7 @@ Feature: Create Appointments
       | Location-not-needed  | 0          | 1      | PLUS6MONTHS | not needed  | No   |        | Test note2 | NO        |
 
   @smoke @appointments @failures
-  Scenario: Create Appointment for <ScenarioName>
+  Scenario Outline: Create Appointment for <ScenarioName>
       Given Context has been created for "Appointments" test
       And A new offender has been created or existing made available
       And I am logged in
