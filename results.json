@@ -1,0 +1,567 @@
+{
+  "config": {
+    "configFile": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/playwright.config.ts",
+    "rootDir": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "github",
+        null
+      ],
+      [
+        "line",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "junit.xml"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/.features-gen",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 300000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 5,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+      "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "Create Appointments",
+          "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+          "line": 4,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Create Future Appointment for <ScenarioName>",
+              "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+              "line": 7,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Create Future Appointment for Sequential",
+                  "ok": true,
+                  "tags": [
+                    "mode:serial",
+                    "smoke",
+                    "appointments",
+                    "sequential"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 300000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 71179,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "Person details: {\n  firstName: \u001b[32m'Kim'\u001b[39m,\n  lastName: \u001b[32m'Sporer'\u001b[39m,\n  sex: \u001b[32m'Male'\u001b[39m,\n  dob: \u001b[35m1982-04-23T08:05:57.708Z\u001b[39m,\n  pnc: \u001b[32m'1982/2566661W'\u001b[39m\n}\n"
+                            },
+                            {
+                              "text": "CRN: X991662\n"
+                            },
+                            {
+                              "text": "deliusCreateOffender: 12.369s\n"
+                            },
+                            {
+                              "text": "Offender Created, CRN:  X991662\n"
+                            },
+                            {
+                              "text": "manageCreateOffender: 12.384s\n"
+                            },
+                            {
+                              "text": "text: yes-add\n"
+                            },
+                            {
+                              "text": "mobile: 07771 900 900\n"
+                            },
+                            {
+                              "text": "formattedDate: Saturday 14 March\n"
+                            },
+                            {
+                              "text": "formattedStartTime: 3:15pm\n"
+                            },
+                            {
+                              "text": "location Id : 0\n"
+                            },
+                            {
+                              "text": "SMS Text (YES_ADD): [DEV]Dear Kim,\nYou have an appointment at Wrexham Team Office on Saturday 14 March at 3:15pm.\nThis is an automated message. Do not reply.\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "Given Context has been created for \"Sequential appointments\" test",
+                              "duration": 206
+                            },
+                            {
+                              "title": "And A new offender has been created or existing made available",
+                              "duration": 37177
+                            },
+                            {
+                              "title": "And I am logged in",
+                              "duration": 1967
+                            },
+                            {
+                              "title": "And I clear the contact details if set",
+                              "duration": 0
+                            },
+                            {
+                              "title": "When I create an appointment",
+                              "duration": 31439
+                            },
+                            {
+                              "title": "Then the appointment should be created successfully",
+                              "duration": 4
+                            },
+                            {
+                              "title": "And the sms text message confirmation and appointment added to your calendar text is displayed",
+                              "duration": 9
+                            }
+                          ],
+                          "startTime": "2026-03-13T11:30:31.740Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/trace.zip"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "056c5eb194dbdad2fca4-3e5c468667e580f365dd",
+                  "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+                  "line": 9,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Create Similar Appointment for <ScenarioName>",
+              "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+              "line": 21,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Create Similar Appointment for Sequential",
+                  "ok": true,
+                  "tags": [
+                    "mode:serial",
+                    "smoke",
+                    "appointments",
+                    "sequential"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 300000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 14416,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "text: yes-update\n"
+                            },
+                            {
+                              "text": "mobile: 07771 900 900\n"
+                            },
+                            {
+                              "text": "formattedDate: \u001b[90mundefined\u001b[39m\n"
+                            },
+                            {
+                              "text": "formattedStartTime: \u001b[90mundefined\u001b[39m\n"
+                            },
+                            {
+                              "text": "SMS Text (YES_UPDATE): [DEV]Dear Kim,\nYou have an appointment at Wrexham Team Office on Friday 20 March at 3:15pm.\nThis is an automated message. Do not reply.\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "When I create a similar appointment",
+                              "duration": 14337
+                            },
+                            {
+                              "title": "Then the appointment should be created successfully",
+                              "duration": 39
+                            },
+                            {
+                              "title": "And the sms text message confirmation and appointment added to your calendar text is displayed",
+                              "duration": 36
+                            }
+                          ],
+                          "startTime": "2026-03-13T11:31:44.346Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/trace.zip"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "056c5eb194dbdad2fca4-6dec68c3f7125c73a42f",
+                  "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+                  "line": 23,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Create Another Appointment for <ScenarioName>",
+              "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+              "line": 31,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Create Another Appointment for Sequential",
+                  "ok": true,
+                  "tags": [
+                    "mode:serial",
+                    "smoke",
+                    "appointments",
+                    "sequential"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 300000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 22137,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "text: no\n"
+                            },
+                            {
+                              "text": "mobile: \u001b[90mundefined\u001b[39m\n"
+                            },
+                            {
+                              "text": "formattedDate: Saturday 13 June\n"
+                            },
+                            {
+                              "text": "formattedStartTime: 3:15pm\n"
+                            },
+                            {
+                              "text": "SMS Text (No): [DEV]Dear Kim,\nYou have an appointment at Wrexham Team Office on Saturday 13 June at 3:15pm.\nThis is an automated message. Do not reply.\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "When I create another appointment",
+                              "duration": 11351
+                            },
+                            {
+                              "title": "Then the appointment should be created successfully",
+                              "duration": 2
+                            },
+                            {
+                              "title": "And give the appointment details and your calendar text is displayed",
+                              "duration": 5
+                            },
+                            {
+                              "title": "And I can check appointment details with the manage page",
+                              "duration": 10776
+                            }
+                          ],
+                          "startTime": "2026-03-13T11:31:59.195Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-b05c6--Appointment-for-Sequential-chromium/trace.zip"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "056c5eb194dbdad2fca4-697dd077e93d56e49d2a",
+                  "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+                  "line": 33,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Reschedule an appointment for <ScenarioName>",
+              "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+              "line": 42,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Reschedule an appointment for Sequential",
+                  "ok": true,
+                  "tags": [
+                    "mode:serial",
+                    "smoke",
+                    "appointments",
+                    "sequential",
+                    "reschedule"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 300000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 19880,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "text: no\n"
+                            },
+                            {
+                              "text": "mobile: \u001b[90mundefined\u001b[39m\n"
+                            },
+                            {
+                              "text": "formattedDate: \u001b[90mundefined\u001b[39m\n"
+                            },
+                            {
+                              "text": "formattedStartTime: \u001b[90mundefined\u001b[39m\n"
+                            },
+                            {
+                              "text": "SMS Text (No): [DEV]Dear Kim,\nYou have an appointment at Wrexham Team Office on Sunday 13 September at 3:15pm.\nThis is an automated message. Do not reply.\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "When I access an existing future appointment",
+                              "duration": 2078
+                            },
+                            {
+                              "title": "And I reschedule it with the following information",
+                              "duration": 7142
+                            },
+                            {
+                              "title": "Then the appointment should be rescheduled successfully",
+                              "duration": 44
+                            },
+                            {
+                              "title": "And give the appointment details and your calendar text is displayed",
+                              "duration": 36
+                            },
+                            {
+                              "title": "And I can check appointment details with the manage page",
+                              "duration": 10575
+                            }
+                          ],
+                          "startTime": "2026-03-13T11:32:22.029Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-27ca5--appointment-for-Sequential-chromium/trace.zip"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "056c5eb194dbdad2fca4-b9102094c8ea58d33e01",
+                  "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+                  "line": 44,
+                  "column": 5
+                }
+              ]
+            },
+            {
+              "title": "Reschedule an appointment in past for <ScenarioName>",
+              "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+              "line": 54,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Reschedule an appointment in past for Sequential",
+                  "ok": true,
+                  "tags": [
+                    "mode:serial",
+                    "smoke",
+                    "appointments",
+                    "sequential",
+                    "reschedule",
+                    "past"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 300000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "passed",
+                          "duration": 25622,
+                          "errors": [],
+                          "stdout": [
+                            {
+                              "text": "past appointment\n"
+                            },
+                            {
+                              "text": "appointment in past. no outlook event\n"
+                            }
+                          ],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "When I access an existing future appointment",
+                              "duration": 1974
+                            },
+                            {
+                              "title": "And I reschedule it with the following information",
+                              "duration": 12788
+                            },
+                            {
+                              "title": "Then the appointment should be rescheduled successfully",
+                              "duration": 44
+                            },
+                            {
+                              "title": "And I can check appointment details with the manage page",
+                              "duration": 10269
+                            },
+                            {
+                              "title": "And I close the context",
+                              "duration": 543
+                            }
+                          ],
+                          "startTime": "2026-03-13T11:32:42.806Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/karuna.kanumuri/hmpps-manage-people-on-probation-ui-e2e-tests/test-results/src-test-features-journeys-e8ef7-ment-in-past-for-Sequential-chromium/trace.zip"
+                            }
+                          ]
+                        }
+                      ],
+                      "status": "expected"
+                    }
+                  ],
+                  "id": "056c5eb194dbdad2fca4-13f75788ee71b5354484",
+                  "file": "src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js",
+                  "line": 56,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-03-13T11:30:30.972Z",
+    "duration": 158102.51700000002,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}
