@@ -12,12 +12,12 @@ When('I navigate to sentence page',async ({ctx})=>{
 
 Then('the sentence page is populated with title {string}', async ({ctx}, title :string)=>{
     const sentencePage = new SentencePage(ctx.base.page)
-    await sentencePage.checkSentenceTitle(title)
+    await sentencePage.assertSentenceTitle(title)
 })
 
 Then('the sentence page has the heading {string}', async ({ctx}, heading: string)=>{
     const sentencePage = new SentencePage(ctx.base.page)
-    await sentencePage.checkPageHeading(heading)
+    await sentencePage.assertPageHeading(heading)
 })
 
 Then('the link {string} at sentence page works correctly', async ({ctx}, linkName :string)=>{
