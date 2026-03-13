@@ -1,7 +1,7 @@
 name: Create Expired CheckIns in advance
 on:
   schedule:
-    - cron: "0 23 * * SUN-THU"
+    - cron: "0 16 * * SUN-THU"
 jobs:
   test:
     timeout-minutes: 60
