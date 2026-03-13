@@ -24,6 +24,8 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install
+    - name: Remove Stale Features-gen files
+      run: rm -rf .features-gen
     - name: Run Playwright tests
       id: tests
       run: npx bddgen && npx playwright test -g "@smoke"  --workers=1 --retries=0
