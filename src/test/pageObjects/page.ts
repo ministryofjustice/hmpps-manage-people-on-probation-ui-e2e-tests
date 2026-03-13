@@ -85,14 +85,14 @@ export default abstract class MPopPage {
         await this.getQA("submitBtn").click()
     }
 
-    getLink(name: string, locator: Locator|Page=this.page){
+    getLink(name: string | RegExp, locator: Locator|Page=this.page){
         return locator.getByRole('link', {name: name})
     }
     async clickLink(name: string){
         await this.getLink(name).click()
     }
     async clickBackLink(){
-        await this.getLink("back").click()
+        await this.getLink(/Back/).click()
     }
 
     async checkHref(name: string, value: string){
