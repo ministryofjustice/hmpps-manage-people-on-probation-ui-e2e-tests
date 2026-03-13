@@ -1,30 +1,25 @@
-import { DataTable } from "playwright-bdd"
-import { YesNoCheck } from "./ReviewCheckins"
+import {DataTable} from "playwright-bdd";
 
-export interface ContactFilters  {
-  keywords?: string
-  from?: string
-  to?: string
-  hide_system_generated: boolean
-  compliance_filters: string[]
-  category_filters: string[]
+export interface ContactFilters {
+    keywords?: string
+    from?: string
+    to?: string
+    hide_system_generated: boolean
+    compliance_filters: string[]
+    category_filters: string[]
 }
+
 const parseList = (value?: string): string[] => {
     if (!value) return []
 
     const result: string[] = []
     for (const item of value.split(',')) {
         const cleaned = item.trim()
-        if (cleaned && cleaned !== 'NaN' && !result.includes(cleaned)) {
+        if (cleaned && !result.includes(cleaned)) {
             result.push(cleaned)
         }
     }
     return result
-}
-
-const parseBoolean = (value?: string): boolean => {
-    if (!value) return false
-    return value.trim().toUpperCase() === 'YES'
 }
 
 export const contactDataTable = (data: DataTable): ContactFilters => {
@@ -39,27 +34,21 @@ export const contactDataTable = (data: DataTable): ContactFilters => {
         const value = row.value?.trim()
 
         switch (label) {
-
-            case 'keywords':
-                filters.keywords = value
-                break
-
             case 'date_from':
                 filters.from = value
                 break
-
             case 'date_to':
                 filters.to = value
                 break
-
-            case 'system_generated':
-                filters.hide_system_generated = parseBoolean(value)
+            case 'keywords':
+                filters.keywords = value
                 break
-
+            case 'system_generated':
+                filters.hide_system_generated = value === 'YES'
+                break
             case 'compliance_filters':
                 filters.compliance_filters = parseList(value)
                 break
-
             case 'category_filters':
                 filters.category_filters = parseList(value)
                 break

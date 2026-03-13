@@ -21,11 +21,11 @@ Feature: As a practitioner
     And I close the context
 
     Examples:
-      | description      | case    | from      | to        | keywords | hide | compliance   | categories                                 | count    | errors                  |
-#      | date range       | X793504 | 11/2/2026 | 15/2/2026 |          |      |              |                                            | filtered | no errors               |
-#      | keyword          | X793504 |           |           | online   |      |              |                                            | filtered | no errors               |
-      | no results       | X793504 |           |           | house    |      | Complied     |                                            | 0        | no errors               |
-#      | categories       | X793504 |           |           |          |      |              | Approved Premises, Internal communications | filtered | no errors               |
-#      | hide system gen  | X793504 |           |           |          | YES  |              |                                            | filtered | no errors               |
-#      | combined         | X793504 | 1/2/2026  | 8/3/2026  | visit    | YES  | Not complied | Appointments                               | filtered | no errors               |
-#      | validation error | X793504 | 11/2/2026 |           |          |      |              |                                            | full     | a missing date to error |
+      | description           | case    | from      | to        | keywords | hide | compliance   | categories                                 | count    | errors                  |
+      | date range            | X793504 | 11/2/2026 | 15/2/2026 |          |      |              |                                            | filtered | no errors               |
+      | keyword               | X793504 |           |           | online   |      |              |                                            | filtered | no errors               |
+      | categories            | X793504 |           |           |          |      |              | Approved Premises, Internal communications | filtered | no errors               |
+      | hide system gen       | X793504 |           |           |          | YES  |              |                                            | filtered | no errors               |
+      | combined no results   | X793504 | 1/2/2026  | 8/3/2026  | visit    | YES  | Not complied | Appointments                               | 0        | no errors               |
+      | combined with results | X793504 | 1/2/2026  | 8/3/2026  | visit    | YES  | Complied     | Appointments                               | filtered | no errors               |
+      | validation error      | X793504 | 11/2/2026 |           |          |      |              |                                            | full     | a missing date to error |

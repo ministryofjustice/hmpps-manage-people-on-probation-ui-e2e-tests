@@ -28,10 +28,16 @@ export default class ActivityLogPage extends CasePage {
         }
 
         for (const label of filters.compliance_filters) {
+            if (!label || label === 'NaN') {
+                throw new Error(`Invalid compliance filter value: ${label}`)
+            }
             await complianceGroup.getByLabel(label, { exact: true }).check()
         }
 
         for (const label of filters.category_filters) {
+            if (!label || label === 'NaN') {
+                throw new Error(`Invalid category filter value: ${label}`)
+            }
             await categoryGroup.getByLabel(label, { exact: true }).check()
         }
         // for (let i=0; i<filters.compliance_filters.length; i++){
