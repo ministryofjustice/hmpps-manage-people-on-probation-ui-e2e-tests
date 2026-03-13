@@ -2,7 +2,7 @@
 <testsuite name="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" timestamp="2026-03-13T14:20:43.188Z" hostname="chromium" tests="5" failures="1" skipped="4" time="50.028" errors="0">
 <testcase name="Create Appointments › Create Future Appointment for &lt;ScenarioName&gt; › Create Future Appointment for Sequential" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="50.028">
 <failure message="Arrange-Sequential-Appointments.feature.spec.js:9:5 Create Future Appointment for Sequential" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:9:5 › Create Appointments › Create Future Appointment for <ScenarioName> › Create Future Appointment for Sequential @mode:serial @smoke @appointments @sequential › And I clear the contact details if set 
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:9:5 › Create Appointments › Create Future Appointment for <ScenarioName> › Create Future Appointment for Sequential @mode:serial @smoke @appointments @sequential › And I clear the contact details if set
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
@@ -72,7 +72,7 @@ manageCreateOffender: 15.738s
 <testsuite name="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" timestamp="2026-03-13T14:20:43.188Z" hostname="chromium" tests="5" failures="5" skipped="0" time="264.427" errors="0">
 <testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Past" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="64.361">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:8:5 Create Appointment for Past" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:8:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Past @smoke @appointments @standalones › And I can check appointment details with the manage page 
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:8:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Past @smoke @appointments @standalones › And I can check appointment details with the manage page
 
     Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
 
@@ -128,7 +128,7 @@ past appointment
 </testcase>
 <testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Location-not-needed" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="50.018">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:18:5 Create Appointment for Location-not-needed" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:18:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Location-not-needed @smoke @appointments @standalones › When I create an appointment 
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:18:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Location-not-needed @smoke @appointments @standalones › When I create an appointment
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
@@ -180,7 +180,7 @@ manageCreateOffender: 15.747s
 </testcase>
 <testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Location-not-in-list" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="49.981">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:32:5 Create Appointment for Location-not-in-list" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:32:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Location-not-in-list @smoke @appointments @failures › When I create an appointment 
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:32:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Location-not-in-list @smoke @appointments @failures › When I create an appointment
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
@@ -232,7 +232,7 @@ manageCreateOffender: 15.721s
 </testcase>
 <testcase name="Create Appointments › Create Appointment and make changes for &lt;ScenarioName&gt; › Create Appointment and make changes for ChangeToPast" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="50">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:45:5 Create Appointment and make changes for ChangeToPast" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:45:5 › Create Appointments › Create Appointment and make changes for <ScenarioName> › Create Appointment and make changes for ChangeToPast @smoke @appointments @standalones @changes › When I setup an appointment 
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:45:5 › Create Appointments › Create Appointment and make changes for <ScenarioName> › Create Appointment and make changes for ChangeToPast @smoke @appointments @standalones @changes › When I setup an appointment
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
@@ -284,7 +284,7 @@ manageCreateOffender: 15.699s
 </testcase>
 <testcase name="Create Appointments › Create Appointment and make changes for &lt;ScenarioName&gt; › Create Appointment and make changes for PersonAppointment" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="50.067">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:57:5 Create Appointment and make changes for PersonAppointment" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:57:5 › Create Appointments › Create Appointment and make changes for <ScenarioName> › Create Appointment and make changes for PersonAppointment @smoke @appointments @standalones @changes › When I setup an appointment 
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:57:5 › Create Appointments › Create Appointment and make changes for <ScenarioName> › Create Appointment and make changes for PersonAppointment @smoke @appointments @standalones @changes › When I setup an appointment
 
     TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
@@ -345,7 +345,7 @@ manageCreateOffender: 15.721s
 </testcase>
 <testcase name="Manage Appointments › Add Attended Complied Outcome" classname="src/test/features/journeys/Manage-Appointments.feature.spec.js" time="35.378">
 <failure message="Manage-Appointments.feature.spec.js:15:3 Add Attended Complied Outcome" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Manage-Appointments.feature.spec.js:15:3 › Manage Appointments › Add Attended Complied Outcome @smoke @manage @attended › When I navigate to latest appointment requiring an outcome 
+<![CDATA[  [chromium] › src/test/features/journeys/Manage-Appointments.feature.spec.js:15:3 › Manage Appointments › Add Attended Complied Outcome @smoke @manage @attended › When I navigate to latest appointment requiring an outcome
 
     Error: locator.click: Error: strict mode violation: getByRole('link', { name: 'back' }) resolved to 2 elements:
         1) <a class="govuk-link" href="mailto:MPoP-Digital-Team@justice.gov.uk">feedback</a> aka getByRole('link', { name: 'feedback' })
@@ -398,7 +398,7 @@ manageCreateOffender: 15.721s
 <testsuite name="src/test/features/journeys/Online-Checkins.feature.spec.js" timestamp="2026-03-13T14:20:43.188Z" hostname="chromium" tests="7" failures="3" skipped="0" time="465.452" errors="0">
 <testcase name="Non serial checkIn journeys › Find Setup Checkins" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="300.051">
 <failure message="Online-Checkins.feature.spec.js:6:3 Find Setup Checkins" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:6:3 › Non serial checkIn journeys › Find Setup Checkins @esupervision @expired @find 
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:6:3 › Non serial checkIn journeys › Find Setup Checkins @esupervision @expired @find
 
     Test timeout of 300000ms exceeded.
 
@@ -849,7 +849,7 @@ X991177
 </testcase>
 <testcase name="Non serial checkIn journeys › Create Expired Checkins › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="0.462">
 <failure message="Online-Checkins.feature.spec.js:15:5 Example #1" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:15:5 › Non serial checkIn journeys › Create Expired Checkins › Example #1 @esupervision @expired @create › And I mock the completion of an expired checkin for 'X989788,X989912,X989984,X989995,X990011,X990012,X990017,X990023,X990039,X990099,X990108,X990175,X989472,X989522,X989510,X989610,X989612,X989687,X989667,X989632,X989622,X976093,X976094,X976110,X976108,X976235,X976250,X976614,X976858,X976842,X977034,X977246,X977262,X978243,X978245' 
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:15:5 › Non serial checkIn journeys › Create Expired Checkins › Example #1 @esupervision @expired @create › And I mock the completion of an expired checkin for 'X989788,X989912,X989984,X989995,X990011,X990012,X990017,X990023,X990039,X990099,X990108,X990175,X989472,X989522,X989510,X989610,X989612,X989687,X989667,X989632,X989622,X976093,X976094,X976110,X976108,X976235,X976250,X976614,X976858,X976842,X977034,X977246,X977262,X978243,X978245'
 
     Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
 
@@ -898,7 +898,7 @@ X991177
 </testcase>
 <testcase name="Non serial checkIn journeys › Randomised Setup" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="124.206">
 <failure message="Online-Checkins.feature.spec.js:36:3 Randomised Setup" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:36:3 › Non serial checkIn journeys › Randomised Setup @esupervision @random › When I set up checkIns with random values 
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:36:3 › Non serial checkIn journeys › Randomised Setup @esupervision @random › When I set up checkIns with random values
 
     Error: expect(received).toBeTruthy()
 
@@ -993,7 +993,7 @@ manageCreateOffender: 0.082ms
 </testcase>
 <testcase name="Setup Checkins › Make changes during setup" classname="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" time="70.028">
 <failure message="Sequential-Online-Checkins.feature.spec.js:15:3 Make changes during setup" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js:15:3 › Setup Checkins › Make changes during setup @mode:serial @smoke @esupervision @sequential › When I make the following changes 
+<![CDATA[  [chromium] › src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js:15:3 › Setup Checkins › Make changes during setup @mode:serial @smoke @esupervision @sequential › When I make the following changes
 
     Error: expect(locator).toBeVisible() failed
 
@@ -1063,7 +1063,7 @@ manageCreateOffender: 0.082ms
 <testsuite name="src/test/features/journeys/Update-Personal-Details.feature.spec.js" timestamp="2026-03-13T14:20:43.188Z" hostname="chromium" tests="3" failures="3" skipped="0" time="15.716" errors="0">
 <testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;full address&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="5.276">
 <failure message="Update-Personal-Details.feature.spec.js:8:5 Update current details - &apos;full address&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:8:5 › Update personal details › Update current details - '<description>' › Update current details - 'full address' @smoke @personaldetails › And I make a note of possible address types and codes 
+<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:8:5 › Update personal details › Update current details - '<description>' › Update current details - 'full address' @smoke @personaldetails › And I make a note of possible address types and codes
 
     Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
 
@@ -1109,7 +1109,7 @@ manageCreateOffender: 0.089ms
 </testcase>
 <testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;no fixed address&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="5.268">
 <failure message="Update-Personal-Details.feature.spec.js:22:5 Update current details - &apos;no fixed address&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:22:5 › Update personal details › Update current details - '<description>' › Update current details - 'no fixed address' @smoke @personaldetails › And I make a note of possible address types and codes 
+<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:22:5 › Update personal details › Update current details - '<description>' › Update current details - 'no fixed address' @smoke @personaldetails › And I make a note of possible address types and codes
 
     Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
 
@@ -1155,7 +1155,7 @@ manageCreateOffender: 0.284ms
 </testcase>
 <testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;previous address only&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="5.172">
 <failure message="Update-Personal-Details.feature.spec.js:36:5 Update current details - &apos;previous address only&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:36:5 › Update personal details › Update current details - '<description>' › Update current details - 'previous address only' @smoke @personaldetails › And I make a note of possible address types and codes 
+<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:36:5 › Update personal details › Update current details - '<description>' › Update current details - 'previous address only' @smoke @personaldetails › And I make a note of possible address types and codes
 
     Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
 
@@ -1203,7 +1203,7 @@ manageCreateOffender: 0.533ms
 <testsuite name="src/test/features/pages/Alerts.feature.spec.js" timestamp="2026-03-13T14:20:43.188Z" hostname="chromium" tests="1" failures="1" skipped="0" time="33.256" errors="0">
 <testcase name="Alerts page › Verify alerts page functionality" classname="src/test/features/pages/Alerts.feature.spec.js" time="33.256">
 <failure message="Alerts.feature.spec.js:6:3 Verify alerts page functionality" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/pages/Alerts.feature.spec.js:6:3 › Alerts page › Verify alerts page functionality @smoke @alerts › Then I should be taken to the manage appointments page 
+<![CDATA[  [chromium] › src/test/features/pages/Alerts.feature.spec.js:6:3 › Alerts page › Verify alerts page functionality @smoke @alerts › Then I should be taken to the manage appointments page
 
     Error: locator.click: Error: strict mode violation: getByRole('link', { name: 'back' }) resolved to 2 elements:
         1) <a class="govuk-link" href="mailto:MPoP-Digital-Team@justice.gov.uk">feedback</a> aka getByRole('link', { name: 'feedback' })
@@ -1271,7 +1271,7 @@ manageCreateOffender: 0.466ms
 </testcase>
 <testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;CRN filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="35.579">
 <failure message="Cases.feature.spec.js:27:5 Filter the cases page - &apos;CRN filter&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/pages/Cases.feature.spec.js:27:5 › As a practitioner › Filter the cases page - '<description>' › Filter the cases page - 'CRN filter' @smoke @cases › Then all cases are present on cases page 
+<![CDATA[  [chromium] › src/test/features/pages/Cases.feature.spec.js:27:5 › As a practitioner › Filter the cases page - '<description>' › Filter the cases page - 'CRN filter' @smoke @cases › Then all cases are present on cases page
 
     Error: expect(received).toEqual(expected) // deep equality
 
@@ -1400,7 +1400,7 @@ manageCreateOffender: 0.466ms
 <testsuite name="src/test/features/pages/Overview.feature.spec.js" timestamp="2026-03-13T14:20:43.188Z" hostname="chromium" tests="1" failures="1" skipped="0" time="11.916" errors="0">
 <testcase name="As a practitioner › View overview for a case - &apos;&lt;case&gt;&apos; › View overview for a case - &apos;X793504&apos;" classname="src/test/features/pages/Overview.feature.spec.js" time="11.916">
 <failure message="Overview.feature.spec.js:8:5 View overview for a case - &apos;X793504&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/pages/Overview.feature.spec.js:8:5 › As a practitioner › View overview for a case - '<case>' › View overview for a case - 'X793504' @smoke @overview › And the overview page links work correctly 
+<![CDATA[  [chromium] › src/test/features/pages/Overview.feature.spec.js:8:5 › As a practitioner › View overview for a case - '<case>' › View overview for a case - 'X793504' @smoke @overview › And the overview page links work correctly
 
     Error: locator.click: Error: strict mode violation: getByRole('link', { name: 'back' }) resolved to 2 elements:
         1) <a class="govuk-link" href="mailto:MPoP-Digital-Team@justice.gov.uk">feedback</a> aka getByRole('link', { name: 'feedback' })
