@@ -1,71 +1,60 @@
-<testsuites id="" name="" tests="45" failures="12" skipped="6" errors="0" time="358.349539">
-<testsuite name="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="5" failures="1" skipped="3" time="92.377" errors="0">
-<testcase name="Create Appointments › Create Future Appointment for &lt;ScenarioName&gt; › Create Future Appointment for Sequential" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="58.718">
-<system-out>
-<![CDATA[Person details: {
-  firstName: [32m'Cesar'[39m,
-  lastName: [32m'Homenick'[39m,
-  sex: [32m'Male'[39m,
-  dob: [35m1985-12-14T00:24:18.393Z[39m,
-  pnc: [32m'1985/0413988E'[39m
-}
-CRN: X991728
-deliusCreateOffender: 12.585s
-Offender Created, CRN:  X991728
-manageCreateOffender: 12.586s
+<testsuites id="" name="" tests="45" failures="17" skipped="8" errors="0" time="374.45895900000005">
+<testsuite name="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="5" failures="1" skipped="4" time="65.601" errors="0">
+<testcase name="Create Appointments › Create Future Appointment for &lt;ScenarioName&gt; › Create Future Appointment for Sequential" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="65.601">
+<failure message="Arrange-Sequential-Appointments.feature.spec.js:9:5 Create Future Appointment for Sequential" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:9:5 › Create Appointments › Create Future Appointment for <ScenarioName> › Create Future Appointment for Sequential @mode:serial @smoke @appointments @sequential › And I clear the contact details if set 
 
-[[ATTACHMENT|test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/trace.zip]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Create Appointments › Create Similar Appointment for &lt;ScenarioName&gt; › Create Similar Appointment for Sequential" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="33.659">
-<failure message="Arrange-Sequential-Appointments.feature.spec.js:22:5 Create Similar Appointment for Sequential" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:22:5 › Create Appointments › Create Similar Appointment for <ScenarioName> › Create Similar Appointment for Sequential @mode:serial @smoke @appointments @sequential @kk › When I create a similar appointment 
-
-    TimeoutError: locator.check: Timeout 30000ms exceeded.
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
-      - waiting for locator('input[type="radio"][value="YES_UPDATE_MOBILE_NUMBER"]')
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
 
 
-       at ../src/test/pageObjects/Case/Contacts/Appointments/text-confirmation-page.ts:32
+       at ../src/test/pageObjects/search.page.ts:27
 
-      30 |
-      31 |             case 'yes-update':
-    > 32 |                 await this.page.locator('input[type="radio"][value="YES_UPDATE_MOBILE_NUMBER"]').check()
-         |                                                                                                  ^
-      33 |                 await this.submit()
-      34 |
-      35 |                 if (!mobile) {
-        at TextConfirmationPage.completePage (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Appointments/text-confirmation-page.ts:32:98)
-        at ArrangeAnotherPage.completePage (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Appointments/arrange-another.page.ts:32:40)
-        at createSimilarAppointmentMPop (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/ArrangeAppointment.ts:110:3)
-        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Arrange-Appointment.steps.ts:49:5)
-        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:23:7
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at PersonalDetailsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/personal-details.page.ts:23:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/Common.steps.ts:50:9)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js:13:7
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/test-failed-1.png
+    ../test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ../test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/error-context.md
+    Error Context: ../test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/error-context.md
 
     attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/trace.zip
+    ../test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/trace.zip
     Usage:
 
-        npx playwright show-trace ../test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/trace.zip
+        npx playwright show-trace ../test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/test-failed-1.png]]
+<![CDATA[Reading Offender CRN from file:  X991741
+manageCreateOffender: 28.059s
 
-[[ATTACHMENT|test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/error-context.md]]
+[[ATTACHMENT|test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/test-failed-1.png]]
 
-[[ATTACHMENT|test-results/src-test-features-journeys-ba6cd--Appointment-for-Sequential-chromium/trace.zip]]
+[[ATTACHMENT|test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-caceb--Appointment-for-Sequential-chromium/trace.zip]]
 ]]>
 </system-out>
+</testcase>
+<testcase name="Create Appointments › Create Similar Appointment for &lt;ScenarioName&gt; › Create Similar Appointment for Sequential" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="0">
+<skipped>
+</skipped>
 </testcase>
 <testcase name="Create Appointments › Create Another Appointment for &lt;ScenarioName&gt; › Create Another Appointment for Sequential" classname="src/test/features/journeys/Arrange-Sequential-Appointments.feature.spec.js" time="0">
 <skipped>
@@ -80,8 +69,8 @@ manageCreateOffender: 12.586s
 </skipped>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="5" failures="5" skipped="0" time="236.019" errors="0">
-<testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Past" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="47.295">
+<testsuite name="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="5" failures="5" skipped="0" time="360.835" errors="0">
+<testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Past" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="66.556">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:8:5 Create Appointment for Past" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:8:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Past @smoke @appointments @standalones › When I create an appointment 
 
@@ -122,8 +111,8 @@ manageCreateOffender: 12.586s
 ]]>
 </failure>
 <system-out>
-<![CDATA[Reading Offender CRN from file:  X991728
-manageCreateOffender: 12.619s
+<![CDATA[Reading Offender CRN from file:  X991741
+manageCreateOffender: 28.069s
 
 [[ATTACHMENT|test-results/src-test-features-journeys-60f88-Create-Appointment-for-Past-chromium/test-failed-1.png]]
 
@@ -133,7 +122,7 @@ manageCreateOffender: 12.619s
 ]]>
 </system-out>
 </testcase>
-<testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Location-not-needed" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="47.315">
+<testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Location-not-needed" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="65.56">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:18:5 Create Appointment for Location-not-needed" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:18:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Location-not-needed @smoke @appointments @standalones › When I create an appointment 
 
@@ -174,8 +163,8 @@ manageCreateOffender: 12.619s
 ]]>
 </failure>
 <system-out>
-<![CDATA[Reading Offender CRN from file:  X991728
-manageCreateOffender: 12.613s
+<![CDATA[Reading Offender CRN from file:  X991741
+manageCreateOffender: 28.058s
 
 [[ATTACHMENT|test-results/src-test-features-journeys-b4ed4-ent-for-Location-not-needed-chromium/test-failed-1.png]]
 
@@ -185,7 +174,7 @@ manageCreateOffender: 12.613s
 ]]>
 </system-out>
 </testcase>
-<testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Location-not-in-list" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="47.295">
+<testcase name="Create Appointments › Create Appointment for &lt;ScenarioName&gt; › Create Appointment for Location-not-in-list" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="97.582">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:32:5 Create Appointment for Location-not-in-list" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:32:5 › Create Appointments › Create Appointment for <ScenarioName> › Create Appointment for Location-not-in-list @smoke @appointments @failures › When I create an appointment 
 
@@ -226,8 +215,17 @@ manageCreateOffender: 12.613s
 ]]>
 </failure>
 <system-out>
-<![CDATA[Reading Offender CRN from file:  X991728
-manageCreateOffender: 12.590s
+<![CDATA[Person details: {
+  firstName: [32m'Rosalie'[39m,
+  lastName: [32m'Vandervort'[39m,
+  sex: [32m'Female'[39m,
+  dob: [35m1957-06-14T04:57:35.657Z[39m,
+  pnc: [32m'1957/8009126N'[39m
+}
+CRN: X991741
+deliusCreateOffender: 28.040s
+Offender Created, CRN:  X991741
+manageCreateOffender: 28.049s
 
 [[ATTACHMENT|test-results/src-test-features-journeys-ca6e6-nt-for-Location-not-in-list-chromium/test-failed-1.png]]
 
@@ -237,7 +235,7 @@ manageCreateOffender: 12.590s
 ]]>
 </system-out>
 </testcase>
-<testcase name="Create Appointments › Create Appointment and make changes for &lt;ScenarioName&gt; › Create Appointment and make changes for ChangeToPast" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="47.076">
+<testcase name="Create Appointments › Create Appointment and make changes for &lt;ScenarioName&gt; › Create Appointment and make changes for ChangeToPast" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="65.558">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:45:5 Create Appointment and make changes for ChangeToPast" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:45:5 › Create Appointments › Create Appointment and make changes for <ScenarioName> › Create Appointment and make changes for ChangeToPast @smoke @appointments @standalones @changes › When I setup an appointment 
 
@@ -278,8 +276,8 @@ manageCreateOffender: 12.590s
 ]]>
 </failure>
 <system-out>
-<![CDATA[Reading Offender CRN from file:  X991728
-manageCreateOffender: 12.631s
+<![CDATA[Reading Offender CRN from file:  X991741
+manageCreateOffender: 28.049s
 
 [[ATTACHMENT|test-results/src-test-features-journeys-27119-ke-changes-for-ChangeToPast-chromium/test-failed-1.png]]
 
@@ -289,7 +287,7 @@ manageCreateOffender: 12.631s
 ]]>
 </system-out>
 </testcase>
-<testcase name="Create Appointments › Create Appointment and make changes for &lt;ScenarioName&gt; › Create Appointment and make changes for PersonAppointment" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="47.038">
+<testcase name="Create Appointments › Create Appointment and make changes for &lt;ScenarioName&gt; › Create Appointment and make changes for PersonAppointment" classname="src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js" time="65.579">
 <failure message="Arrange-Standalone-Appointments.feature.spec.js:57:5 Create Appointment and make changes for PersonAppointment" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Arrange-Standalone-Appointments.feature.spec.js:57:5 › Create Appointments › Create Appointment and make changes for <ScenarioName> › Create Appointment and make changes for PersonAppointment @smoke @appointments @standalones @changes › When I setup an appointment 
 
@@ -330,8 +328,8 @@ manageCreateOffender: 12.631s
 ]]>
 </failure>
 <system-out>
-<![CDATA[Reading Offender CRN from file:  X991728
-manageCreateOffender: 12.632s
+<![CDATA[Reading Offender CRN from file:  X991741
+manageCreateOffender: 28.063s
 
 [[ATTACHMENT|test-results/src-test-features-journeys-025a0-anges-for-PersonAppointment-chromium/test-failed-1.png]]
 
@@ -342,15 +340,15 @@ manageCreateOffender: 12.632s
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/journeys/Manage-Appointments.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="2" failures="0" skipped="0" time="86.997" errors="0">
-<testcase name="Manage Appointments › Add Note to Appointment" classname="src/test/features/journeys/Manage-Appointments.feature.spec.js" time="9.168">
+<testsuite name="src/test/features/journeys/Manage-Appointments.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="2" failures="0" skipped="0" time="103.411" errors="0">
+<testcase name="Manage Appointments › Add Note to Appointment" classname="src/test/features/journeys/Manage-Appointments.feature.spec.js" time="24.317">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-journeys-fb7df-nts-Add-Note-to-Appointment-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Manage Appointments › Add Attended Complied Outcome" classname="src/test/features/journeys/Manage-Appointments.feature.spec.js" time="77.829">
+<testcase name="Manage Appointments › Add Attended Complied Outcome" classname="src/test/features/journeys/Manage-Appointments.feature.spec.js" time="79.094">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-journeys-973ea-d-Attended-Complied-Outcome-chromium/trace.zip]]
@@ -358,8 +356,8 @@ manageCreateOffender: 12.632s
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/journeys/Online-Checkins.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="7" failures="2" skipped="0" time="497.757" errors="0">
-<testcase name="Non serial checkIn journeys › Find Setup Checkins" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="300.03">
+<testsuite name="src/test/features/journeys/Online-Checkins.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="7" failures="7" skipped="0" time="506.897" errors="0">
+<testcase name="Non serial checkIn journeys › Find Setup Checkins" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="300.055">
 <failure message="Online-Checkins.feature.spec.js:6:3 Find Setup Checkins" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:6:3 › Non serial checkIn journeys › Find Setup Checkins @esupervision @expired @find 
 
@@ -381,495 +379,344 @@ manageCreateOffender: 12.632s
 ]]>
 </failure>
 <system-out>
-<![CDATA[[33m3358[39m
+<![CDATA[[33m3365[39m
 [33m1[39m
-X991584
-setupCRN: X991584
-[ [32m'X991584'[39m ]
-[33m2[39m
-X991651
-setupCRN: X991651
-[ [32m'X991584'[39m, [32m'X991651'[39m ]
-[33m3[39m
-X991652
-setupCRN: X991652
-[ [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m ]
-[33m4[39m
-X991653
-[33m5[39m
-X991689
-setupCRN: X991689
-[ [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m, [32m'X991689'[39m ]
-[33m6[39m
-X991682
-setupCRN: X991682
-[ [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m, [32m'X991689'[39m, [32m'X991682'[39m ]
-[33m7[39m
-X991681
-setupCRN: X991681
-[ [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m, [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m ]
-[33m8[39m
-X991663
-setupCRN: X991663
-[
-  [32m'X991584'[39m,
-  [32m'X991651'[39m,
-  [32m'X991652'[39m,
-  [32m'X991689'[39m,
-  [32m'X991682'[39m,
-  [32m'X991681'[39m,
-  [32m'X991663'[39m
-]
-[33m9[39m
-X991658
-setupCRN: X991658
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m
-]
-[33m10[39m
-X991654
-new page
-[33m11[39m
-X991696
-setupCRN: X991696
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m
-]
-[33m12[39m
-X991695
-setupCRN: X991695
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m
-]
-[33m13[39m
-X991689
-setupCRN: X991689
-already in
-[33m14[39m
-X991682
-setupCRN: X991682
-already in
-[33m15[39m
-X991681
-setupCRN: X991681
-already in
-[33m16[39m
-X991663
-setupCRN: X991663
-already in
-[33m17[39m
-X991658
-setupCRN: X991658
-already in
-[33m18[39m
-X991654
-[33m19[39m
-X991692
-setupCRN: X991692
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m
-]
-[33m20[39m
-X991699
-new page
-[33m21[39m
-X991697
-[33m22[39m
-X991728
-[33m23[39m
-X991698
-[33m24[39m
-X991706
-setupCRN: X991706
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m
-]
-[33m25[39m
-X991709
-setupCRN: X991709
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m
-]
-[33m26[39m
-X991721
-setupCRN: X991721
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m
-]
-[33m27[39m
 X990748
 setupCRN: X990748
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m,
-  [32m'X990748'[39m
-]
-[33m28[39m
-X990768
-[33m29[39m
-X990757
-[33m30[39m
-X990749
-setupCRN: X990749
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m,
-  [32m'X990748'[39m, [32m'X990749'[39m
-]
-new page
-[33m31[39m
-X990942
-[33m32[39m
+[ [32m'X990748'[39m ]
+[33m2[39m
 X990920
-[33m33[39m
+[33m3[39m
 X990895
-[33m34[39m
+[33m4[39m
 X990795
-[33m35[39m
+[33m5[39m
 X990794
-[33m36[39m
+[33m6[39m
 X990790
-[33m37[39m
+[33m7[39m
 X990782
-[33m38[39m
+[33m8[39m
 X990768
-[33m39[39m
+[33m9[39m
 X990757
-[33m40[39m
+[33m10[39m
+X990749
+setupCRN: X990749
+[ [32m'X990748'[39m, [32m'X990749'[39m ]
+new page
+[33m11[39m
+X990942
+[33m12[39m
+X990920
+[33m13[39m
+X990895
+[33m14[39m
+X990795
+[33m15[39m
+X990794
+[33m16[39m
+X990790
+[33m17[39m
+X990782
+[33m18[39m
+X990768
+[33m19[39m
+X990757
+[33m20[39m
 X990749
 setupCRN: X990749
 already in
 new page
-[33m41[39m
-X990895
-[33m42[39m
-X990795
-[33m43[39m
-X990794
-[33m44[39m
-X990790
-[33m45[39m
-X990782
-[33m46[39m
-X990768
-[33m47[39m
+[33m21[39m
 X990757
-[33m48[39m
+[33m22[39m
 X990749
 setupCRN: X990749
 already in
-[33m49[39m
+[33m23[39m
 X991133
 setupCRN: X991133
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m,
-  [32m'X990748'[39m, [32m'X990749'[39m,
-  [32m'X991133'[39m
-]
-[33m50[39m
-X991139
-new page
-[33m51[39m
-X991181
-[33m52[39m
-X991179
-[33m53[39m
-X991178
-setupCRN: X991178
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m,
-  [32m'X990748'[39m, [32m'X990749'[39m,
-  [32m'X991133'[39m, [32m'X991178'[39m
-]
-[33m54[39m
+[ [32m'X990748'[39m, [32m'X990749'[39m, [32m'X991133'[39m ]
+[33m24[39m
 X991177
-[33m55[39m
+[33m25[39m
 X991158
-[33m56[39m
+[33m26[39m
 X991155
 setupCRN: X991155
-[
-  [32m'X991584'[39m, [32m'X991651'[39m,
-  [32m'X991652'[39m, [32m'X991689'[39m,
-  [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m,
-  [32m'X991696'[39m, [32m'X991695'[39m,
-  [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m,
-  [32m'X990748'[39m, [32m'X990749'[39m,
-  [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m
-]
-[33m57[39m
+[ [32m'X990748'[39m, [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991155'[39m ]
+[33m27[39m
 X991153
-[33m58[39m
+[33m28[39m
 X991151
-[33m59[39m
+[33m29[39m
 X991141
 setupCRN: X991141
-[
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m
-]
-[33m60[39m
+[ [32m'X990748'[39m, [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991155'[39m, [32m'X991141'[39m ]
+[33m30[39m
 X991139
 new page
-[33m61[39m
+[33m31[39m
 X991181
-[33m62[39m
+[33m32[39m
 X991179
-[33m63[39m
+[33m33[39m
 X991178
 setupCRN: X991178
-already in
-[33m64[39m
+[ [32m'X990748'[39m, [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991178'[39m ]
+[33m34[39m
 X991177
-[33m65[39m
+[33m35[39m
 X991158
-[33m66[39m
+[33m36[39m
 X991155
 setupCRN: X991155
 already in
-[33m67[39m
+[33m37[39m
 X991153
-[33m68[39m
+[33m38[39m
 X991151
-[33m69[39m
+[33m39[39m
 X991141
 setupCRN: X991141
 already in
-[33m70[39m
+[33m40[39m
 X991139
 new page
-[33m71[39m
+[33m41[39m
+X991177
+[33m42[39m
+X991158
+[33m43[39m
+X991155
+setupCRN: X991155
+already in
+[33m44[39m
+X991153
+[33m45[39m
+X991151
+[33m46[39m
 X991141
 setupCRN: X991141
 already in
-[33m72[39m
+[33m47[39m
 X991139
-[33m73[39m
+[33m48[39m
 X991307
 setupCRN: X991307
 [
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m
+  [32m'X990748'[39m,
+  [32m'X990749'[39m,
+  [32m'X991133'[39m,
+  [32m'X991155'[39m,
+  [32m'X991141'[39m,
+  [32m'X991178'[39m,
+  [32m'X991307'[39m
 ]
-[33m74[39m
-X991330
-setupCRN: X991330
-[
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m
-]
-[33m75[39m
-X991329
-setupCRN: X991329
-[
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m
-]
-[33m76[39m
-X991320
-setupCRN: X991320
-[
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m
-]
-[33m77[39m
-X991319
-setupCRN: X991319
-[
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m
-]
-[33m78[39m
-X991318
-setupCRN: X991318
-[
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m, [32m'X991318'[39m
-]
-[33m79[39m
+[33m49[39m
 X991311
 setupCRN: X991311
 [
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m, [32m'X991318'[39m, [32m'X991311'[39m
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m
 ]
-[33m80[39m
+[33m50[39m
 X991310
 setupCRN: X991310
 [
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m, [32m'X991318'[39m, [32m'X991311'[39m,
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
   [32m'X991310'[39m
 ]
 new page
-[33m81[39m
+[33m51[39m
 X991333
 setupCRN: X991333
 [
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m, [32m'X991318'[39m, [32m'X991311'[39m,
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
   [32m'X991310'[39m, [32m'X991333'[39m
 ]
-[33m82[39m
+[33m52[39m
 X991332
 setupCRN: X991332
 [
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m, [32m'X991318'[39m, [32m'X991311'[39m,
-  [32m'X991310'[39m, [32m'X991333'[39m, [32m'X991332'[39m
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m
 ]
-[33m83[39m
+[33m53[39m
 X991331
 setupCRN: X991331
 [
-  [32m'X991584'[39m, [32m'X991651'[39m, [32m'X991652'[39m,
-  [32m'X991689'[39m, [32m'X991682'[39m, [32m'X991681'[39m,
-  [32m'X991663'[39m, [32m'X991658'[39m, [32m'X991696'[39m,
-  [32m'X991695'[39m, [32m'X991692'[39m, [32m'X991706'[39m,
-  [32m'X991709'[39m, [32m'X991721'[39m, [32m'X990748'[39m,
-  [32m'X990749'[39m, [32m'X991133'[39m, [32m'X991178'[39m,
-  [32m'X991155'[39m, [32m'X991141'[39m, [32m'X991307'[39m,
-  [32m'X991330'[39m, [32m'X991329'[39m, [32m'X991320'[39m,
-  [32m'X991319'[39m, [32m'X991318'[39m, [32m'X991311'[39m,
-  [32m'X991310'[39m, [32m'X991333'[39m, [32m'X991332'[39m,
-  [32m'X991331'[39m
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m
 ]
-[33m84[39m
+[33m54[39m
+X991330
+setupCRN: X991330
+[
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m,
+  [32m'X991330'[39m
+]
+[33m55[39m
+X991329
+setupCRN: X991329
+[
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m,
+  [32m'X991330'[39m, [32m'X991329'[39m
+]
+[33m56[39m
+X991320
+setupCRN: X991320
+[
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m,
+  [32m'X991330'[39m, [32m'X991329'[39m,
+  [32m'X991320'[39m
+]
+[33m57[39m
+X991319
+setupCRN: X991319
+[
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m,
+  [32m'X991330'[39m, [32m'X991329'[39m,
+  [32m'X991320'[39m, [32m'X991319'[39m
+]
+[33m58[39m
+X991318
+setupCRN: X991318
+[
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m,
+  [32m'X991330'[39m, [32m'X991329'[39m,
+  [32m'X991320'[39m, [32m'X991319'[39m,
+  [32m'X991318'[39m
+]
+[33m59[39m
+X991311
+setupCRN: X991311
+already in
+[33m60[39m
+X991310
+setupCRN: X991310
+already in
+new page
+[33m61[39m
+X991332
+setupCRN: X991332
+already in
+[33m62[39m
+X991331
+setupCRN: X991331
+already in
+[33m63[39m
 X991330
 setupCRN: X991330
 already in
-[33m85[39m
+[33m64[39m
 X991329
 setupCRN: X991329
 already in
+[33m65[39m
+X991320
+setupCRN: X991320
+already in
+[33m66[39m
+X991319
+setupCRN: X991319
+already in
+[33m67[39m
+X991318
+setupCRN: X991318
+already in
+[33m68[39m
+X991311
+setupCRN: X991311
+already in
+[33m69[39m
+X991310
+setupCRN: X991310
+already in
+[33m70[39m
+X991516
+setupCRN: X991516
+[
+  [32m'X990748'[39m, [32m'X990749'[39m,
+  [32m'X991133'[39m, [32m'X991155'[39m,
+  [32m'X991141'[39m, [32m'X991178'[39m,
+  [32m'X991307'[39m, [32m'X991311'[39m,
+  [32m'X991310'[39m, [32m'X991333'[39m,
+  [32m'X991332'[39m, [32m'X991331'[39m,
+  [32m'X991330'[39m, [32m'X991329'[39m,
+  [32m'X991320'[39m, [32m'X991319'[39m,
+  [32m'X991318'[39m, [32m'X991516'[39m
+]
+new page
+[33m71[39m
+X991564
+[33m72[39m
+X991550
+[33m73[39m
+X991549
+[33m74[39m
+X991546
+[33m75[39m
+X991545
+[33m76[39m
+X991542
+[33m77[39m
+X991541
+[33m78[39m
+X991527
+[33m79[39m
+X991526
+[33m80[39m
+X991525
+new page
+[33m81[39m
+X991541
+[33m82[39m
+X991527
+[33m83[39m
+X991526
 
 [[ATTACHMENT|test-results/src-test-features-journeys-b0a14-ourneys-Find-Setup-Checkins-chromium/test-failed-1.png]]
 
@@ -879,7 +726,7 @@ already in
 ]]>
 </system-out>
 </testcase>
-<testcase name="Non serial checkIn journeys › Create Expired Checkins › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="0.509">
+<testcase name="Non serial checkIn journeys › Create Expired Checkins › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="0.453">
 <failure message="Online-Checkins.feature.spec.js:15:5 Example #1" type="FAILURE">
 <![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:15:5 › Non serial checkIn journeys › Create Expired Checkins › Example #1 @esupervision @expired @create › And I mock the completion of an expired checkin for 'X989788,X989912,X989984,X989995,X990011,X990012,X990017,X990023,X990039,X990099,X990108,X990175,X989472,X989522,X989510,X989610,X989612,X989687,X989667,X989632,X989622,X976093,X976094,X976110,X976108,X976235,X976250,X976614,X976858,X976842,X977034,X977246,X977262,X978243,X978245' 
 
@@ -920,130 +767,334 @@ already in
 ]]>
 </system-out>
 </testcase>
-<testcase name="Non serial checkIn journeys › Review Expired Checkin › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="38.602">
+<testcase name="Non serial checkIn journeys › Review Expired Checkin › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="13.971">
+<failure message="Online-Checkins.feature.spec.js:25:5 Example #1" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:25:5 › Non serial checkIn journeys › Review Expired Checkin › Example #1 @esupervision @expired @review › When I find valid case from 'X989788,X989912,X989984,X989995,X990011,X990012,X990017,X990023,X990039,X990099,X990108,X990175,X989472,X989522,X989510,X989610,X989612,X989687,X989667,X989632,X989622,X976093,X976094,X976110,X976108,X976235,X976250,X976614,X976858,X976842,X977034,X977246,X977262,X978243,X978245' 
+
+    Error: page.goto: Navigation to "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/" is interrupted by another navigation to "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/X989788/appointments/c1c93c52-c370-47cf-9edf-1c2fc7705256/check-in/view-expired?back=/case/X989788/activity-log"
+    Call log:
+      - navigating to "https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/", waiting until "load"
+
+
+       at ../src/test/pageObjects/home.page.ts:13
+
+      11 |
+      12 |     async goTo(){
+    > 13 |        await this.page.goto(`${MPOP_URL}/`)
+         |                        ^
+      14 |     }
+      15 |
+      16 |     async logMoreOutcomes(){
+        at HomePage.goTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/home.page.ts:13:24)
+        at baseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:8:20)
+        at SearchPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:31:15)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:20:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:11)
+        at ActivityLogPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/activity-log.page.ts:96:15)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:261:27)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Online-Checkins.feature.spec.js:28:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
 <![CDATA[X989788
 no checkins
 X989912
-completed or reviewed
-X989984
-completed or reviewed
-X989995
+
+[[ATTACHMENT|test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/error-context.md]]
 
 [[ATTACHMENT|test-results/src-test-features-journeys-b3f13-w-Expired-Checkin-Example-1-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Non serial checkIn journeys › Randomised Setup" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="129.311">
+<testcase name="Non serial checkIn journeys › Randomised Setup" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="91.109">
+<failure message="Online-Checkins.feature.spec.js:36:3 Randomised Setup" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:36:3 › Non serial checkIn journeys › Randomised Setup @esupervision @random › And I have navigated to new offender 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
+
+
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at AppointmentsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/appointments.page.ts:60:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:30:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Online-Checkins.feature.spec.js:40:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
 <![CDATA[Person details: {
-  firstName: [32m'Kirk'[39m,
-  lastName: [32m'Kilback'[39m,
+  firstName: [32m'Rick'[39m,
+  lastName: [32m'Gleason'[39m,
   sex: [32m'Male'[39m,
-  dob: [35m1980-09-05T23:43:26.650Z[39m,
-  pnc: [32m'1980/2732330Q'[39m
+  dob: [35m1960-04-14T18:05:50.994Z[39m,
+  pnc: [32m'1960/3041818L'[39m
 }
-CRN: X991729
-createOffender-forced: 12.214s
-Forced offender creation, CRN:  X991729
+CRN: X991742
+createOffender-forced: 23.039s
+Forced offender creation, CRN:  X991742
+
+[[ATTACHMENT|test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/error-context.md]]
 
 [[ATTACHMENT|test-results/src-test-features-journeys-65760-n-journeys-Randomised-Setup-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Non serial checkIn journeys › View Eligibility Options › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="10.316">
+<testcase name="Non serial checkIn journeys › View Eligibility Options › Example #1" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="33.718">
+<failure message="Online-Checkins.feature.spec.js:50:5 Example #1" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:50:5 › Non serial checkIn journeys › View Eligibility Options › Example #1 @smoke @esupervision @eligibility › And I have navigated to new offender 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
+
+
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at AppointmentsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/appointments.page.ts:60:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:30:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Online-Checkins.feature.spec.js:54:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 1.329ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.708ms
+
+[[ATTACHMENT|test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/error-context.md]]
 
 [[ATTACHMENT|test-results/src-test-features-journeys-309c9-igibility-Options-Example-1-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Non serial checkIn journeys › View Eligibility Options › Example #2" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="10.051">
+<testcase name="Non serial checkIn journeys › View Eligibility Options › Example #2" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="33.799">
+<failure message="Online-Checkins.feature.spec.js:60:5 Example #2" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:60:5 › Non serial checkIn journeys › View Eligibility Options › Example #2 @smoke @esupervision @eligibility › And I have navigated to new offender 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
+
+
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at AppointmentsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/appointments.page.ts:60:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:30:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Online-Checkins.feature.spec.js:64:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.495ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.224ms
+
+[[ATTACHMENT|test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/error-context.md]]
 
 [[ATTACHMENT|test-results/src-test-features-journeys-94351-igibility-Options-Example-2-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="Non serial checkIn journeys › View Eligibility Options › Example #3" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="8.938">
+<testcase name="Non serial checkIn journeys › View Eligibility Options › Example #3" classname="src/test/features/journeys/Online-Checkins.feature.spec.js" time="33.792">
+<failure message="Online-Checkins.feature.spec.js:70:5 Example #3" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Online-Checkins.feature.spec.js:70:5 › Non serial checkIn journeys › View Eligibility Options › Example #3 @smoke @esupervision @eligibility › And I have navigated to new offender 
+
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
+
+
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at AppointmentsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/appointments.page.ts:60:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:30:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Online-Checkins.feature.spec.js:74:7
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.3ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.707ms
+
+[[ATTACHMENT|test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/test-failed-1.png]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/error-context.md]]
 
 [[ATTACHMENT|test-results/src-test-features-journeys-a5248-igibility-Options-Example-3-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="5" failures="1" skipped="3" time="119.818" errors="0">
-<testcase name="Setup Checkins › Setup Online Checkins" classname="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" time="49.712">
-<system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.299ms
+<testsuite name="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="5" failures="1" skipped="4" time="33.843" errors="0">
+<testcase name="Setup Checkins › Setup Online Checkins" classname="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" time="33.843">
+<failure message="Sequential-Online-Checkins.feature.spec.js:7:3 Setup Online Checkins" type="FAILURE">
+<![CDATA[  [chromium] › src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js:7:3 › Setup Checkins › Setup Online Checkins @mode:serial @smoke @esupervision @sequential › And I have navigated to new offender 
 
-[[ATTACHMENT|test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/trace.zip]]
-]]>
-</system-out>
-</testcase>
-<testcase name="Setup Checkins › Make changes during setup" classname="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" time="70.106">
-<failure message="Sequential-Online-Checkins.feature.spec.js:15:3 Make changes during setup" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js:15:3 › Setup Checkins › Make changes during setup @mode:serial @smoke @esupervision @sequential › When I make the following changes 
-
-    Error: expect(locator).toBeVisible() failed
-
-    Locator: locator('[data-qa="checkInPreferredComs"]').getByRole('radio').nth(1)
-    Expected: visible
-    Timeout: 5000ms
-    Error: element(s) not found
-
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
     Call log:
-      - Expect "toBeVisible" with timeout 5000ms
-      - waiting for locator('[data-qa="checkInPreferredComs"]').getByRole('radio').nth(1)
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
 
 
-       at ../src/test/pageObjects/page.ts:71
+       at ../src/test/pageObjects/search.page.ts:27
 
-      69 |
-      70 |         // Ensure the radio button is visible
-    > 71 |         await expect(radio).toBeVisible();
-         |                             ^
-      72 |
-      73 |         // Use .check() for radio buttons (safer than click)
-      74 |         await radio.check();
-        at ContactPreferencePage.clickRadio (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/page.ts:71:29)
-        at ContactPreferencePage.changePage (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page.ts:41:24)
-        at makeChangesSetupCheckins (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/SetupOnlineCheckins.ts:117:9)
-        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:62:5)
-        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js:16:5
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at AppointmentsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/appointments.page.ts:60:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Setup-Online-Checkins.steps.ts:30:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js:11:5
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
-    ../test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/test-failed-1.png
+    ../test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/test-failed-1.png
     ────────────────────────────────────────────────────────────────────────────────────────────────
 
-    Error Context: ../test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/error-context.md
+    Error Context: ../test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/error-context.md
 
     attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
-    ../test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/trace.zip
+    ../test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/trace.zip
     Usage:
 
-        npx playwright show-trace ../test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/trace.zip
+        npx playwright show-trace ../test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/trace.zip
 
     ────────────────────────────────────────────────────────────────────────────────────────────────
 ]]>
 </failure>
 <system-out>
-<![CDATA[
-[[ATTACHMENT|test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/test-failed-1.png]]
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.586ms
 
-[[ATTACHMENT|test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/error-context.md]]
+[[ATTACHMENT|test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/test-failed-1.png]]
 
-[[ATTACHMENT|test-results/src-test-features-journeys-cf3cd-s-Make-changes-during-setup-chromium/trace.zip]]
+[[ATTACHMENT|test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/error-context.md]]
+
+[[ATTACHMENT|test-results/src-test-features-journeys-cddec-ckins-Setup-Online-Checkins-chromium/trace.zip]]
 ]]>
 </system-out>
+</testcase>
+<testcase name="Setup Checkins › Make changes during setup" classname="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" time="0">
+<skipped>
+</skipped>
 </testcase>
 <testcase name="Setup Checkins › Review checkIn" classname="src/test/features/journeys/Sequential-Online-Checkins.feature.spec.js" time="0">
 <skipped>
@@ -1058,25 +1109,31 @@ manageCreateOffender: 0.299ms
 </skipped>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/journeys/Update-Personal-Details.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="3" failures="3" skipped="0" time="16.445" errors="0">
-<testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;full address&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="5.223">
+<testsuite name="src/test/features/journeys/Update-Personal-Details.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="3" failures="3" skipped="0" time="100.596" errors="0">
+<testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;full address&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="33.589">
 <failure message="Update-Personal-Details.feature.spec.js:8:5 Update current details - &apos;full address&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:8:5 › Update personal details › Update current details - '<description>' › Update current details - 'full address' @smoke @personaldetails › And I make a note of possible address types and codes 
+<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:8:5 › Update personal details › Update current details - '<description>' › Update current details - 'full address' @smoke @personaldetails › And I navigate to personal details page 
 
-    Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
 
-       at ../src/test/util/API.ts:14
 
-      12 |
-      13 | export const getClientToken = async() : Promise<string> => {
-    > 14 |     const signin_context = await request.newContext({
-         |                            ^
-      15 |         baseURL: SIGN_IN_URL,
-      16 |         httpCredentials: {
-      17 |             username: process.env.API_USERNAME!,
-        at getClientToken (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/API.ts:14:28)
-        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Update-Personal-Details.steps.ts:23:19)
-        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Update-Personal-Details.feature.spec.js:13:7
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at PersonalDetailsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/personal-details.page.ts:23:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Update-Personal-Details.steps.ts:17:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Update-Personal-Details.feature.spec.js:12:7
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ../test-results/src-test-features-journeys-c2ace-ent-details---full-address--chromium/test-failed-1.png
@@ -1094,8 +1151,8 @@ manageCreateOffender: 0.299ms
 ]]>
 </failure>
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.261ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.481ms
 
 [[ATTACHMENT|test-results/src-test-features-journeys-c2ace-ent-details---full-address--chromium/test-failed-1.png]]
 
@@ -1105,24 +1162,30 @@ manageCreateOffender: 0.261ms
 ]]>
 </system-out>
 </testcase>
-<testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;no fixed address&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="5.71">
+<testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;no fixed address&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="33.617">
 <failure message="Update-Personal-Details.feature.spec.js:22:5 Update current details - &apos;no fixed address&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:22:5 › Update personal details › Update current details - '<description>' › Update current details - 'no fixed address' @smoke @personaldetails › And I make a note of possible address types and codes 
+<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:22:5 › Update personal details › Update current details - '<description>' › Update current details - 'no fixed address' @smoke @personaldetails › And I navigate to personal details page 
 
-    Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
 
-       at ../src/test/util/API.ts:14
 
-      12 |
-      13 | export const getClientToken = async() : Promise<string> => {
-    > 14 |     const signin_context = await request.newContext({
-         |                            ^
-      15 |         baseURL: SIGN_IN_URL,
-      16 |         httpCredentials: {
-      17 |             username: process.env.API_USERNAME!,
-        at getClientToken (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/API.ts:14:28)
-        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Update-Personal-Details.steps.ts:23:19)
-        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Update-Personal-Details.feature.spec.js:27:7
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at PersonalDetailsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/personal-details.page.ts:23:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Update-Personal-Details.steps.ts:17:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Update-Personal-Details.feature.spec.js:26:7
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ../test-results/src-test-features-journeys-dbc11-details---no-fixed-address--chromium/test-failed-1.png
@@ -1140,8 +1203,8 @@ manageCreateOffender: 0.261ms
 ]]>
 </failure>
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.527ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.23ms
 
 [[ATTACHMENT|test-results/src-test-features-journeys-dbc11-details---no-fixed-address--chromium/test-failed-1.png]]
 
@@ -1151,24 +1214,30 @@ manageCreateOffender: 0.527ms
 ]]>
 </system-out>
 </testcase>
-<testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;previous address only&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="5.512">
+<testcase name="Update personal details › Update current details - &apos;&lt;description&gt;&apos; › Update current details - &apos;previous address only&apos;" classname="src/test/features/journeys/Update-Personal-Details.feature.spec.js" time="33.39">
 <failure message="Update-Personal-Details.feature.spec.js:36:5 Update current details - &apos;previous address only&apos;" type="FAILURE">
-<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:36:5 › Update personal details › Update current details - '<description>' › Update current details - 'previous address only' @smoke @personaldetails › And I make a note of possible address types and codes 
+<![CDATA[  [chromium] › src/test/features/journeys/Update-Personal-Details.feature.spec.js:36:5 › Update personal details › Update current details - '<description>' › Update current details - 'previous address only' @smoke @personaldetails › And I navigate to personal details page 
 
-    Error: apiRequest.newContext: httpCredentials.username: expected string, got undefined
+    TimeoutError: locator.click: Timeout 30000ms exceeded.
+    Call log:
+      - waiting for getByRole('table').getByRole('row').nth(1).getByRole('link')
 
-       at ../src/test/util/API.ts:14
 
-      12 |
-      13 | export const getClientToken = async() : Promise<string> => {
-    > 14 |     const signin_context = await request.newContext({
-         |                            ^
-      15 |         baseURL: SIGN_IN_URL,
-      16 |         httpCredentials: {
-      17 |             username: process.env.API_USERNAME!,
-        at getClientToken (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/API.ts:14:28)
-        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Update-Personal-Details.steps.ts:23:19)
-        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Update-Personal-Details.feature.spec.js:41:7
+       at ../src/test/pageObjects/search.page.ts:27
+
+      25 |
+      26 |     async selectCaseByID(id: number){
+    > 27 |         await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
+         |                                                                                       ^
+      28 |     }
+      29 |
+      30 |     async navigateTo(page: Page) {
+        at SearchPage.selectCaseByID (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/search.page.ts:27:87)
+        at navigateToCase (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:22:22)
+        at caseNavigation (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/util/Navigation.ts:14:5)
+        at PersonalDetailsPage.navigateTo (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/personal-details.page.ts:23:9)
+        at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/journeys/Update-Personal-Details.steps.ts:17:5)
+        at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/journeys/Update-Personal-Details.feature.spec.js:40:7
 
     attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
     ../test-results/src-test-features-journeys-a8116-ls---previous-address-only--chromium/test-failed-1.png
@@ -1186,8 +1255,8 @@ manageCreateOffender: 0.527ms
 ]]>
 </failure>
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.501ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.305ms
 
 [[ATTACHMENT|test-results/src-test-features-journeys-a8116-ls---previous-address-only--chromium/test-failed-1.png]]
 
@@ -1198,54 +1267,54 @@ manageCreateOffender: 0.501ms
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Alerts.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="1" failures="0" skipped="0" time="49.054" errors="0">
-<testcase name="Alerts page › Verify alerts page functionality" classname="src/test/features/pages/Alerts.feature.spec.js" time="49.054">
+<testsuite name="src/test/features/pages/Alerts.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="1" failures="0" skipped="0" time="61.982" errors="0">
+<testcase name="Alerts page › Verify alerts page functionality" classname="src/test/features/pages/Alerts.feature.spec.js" time="61.982">
 <system-out>
-<![CDATA[READING CRN from existing file: X991728
-manageCreateOffender: 0.444ms
+<![CDATA[READING CRN from existing file: X991741
+manageCreateOffender: 0.766ms
 
 [[ATTACHMENT|test-results/src-test-features-pages-Al-65ebb-y-alerts-page-functionality-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Cases.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="6" failures="0" skipped="0" time="111.299" errors="0">
-<testcase name="As a practitioner › View my cases page" classname="src/test/features/pages/Cases.feature.spec.js" time="22.711">
+<testsuite name="src/test/features/pages/Cases.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="6" failures="0" skipped="0" time="112.613" errors="0">
+<testcase name="As a practitioner › View my cases page" classname="src/test/features/pages/Cases.feature.spec.js" time="23.817">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ca-c9529-titioner-View-my-cases-page-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;no filters&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="5.645">
+<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;no filters&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="6.08">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ca-fecb0-he-cases-page---no-filters--chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;CRN filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="35.63">
+<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;CRN filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="35.864">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ca-779f3-he-cases-page---CRN-filter--chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;sentence filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="6.109">
+<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;sentence filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="5.965">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ca-0b494-ses-page---sentence-filter--chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;type filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="5.489">
+<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;type filter&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="5.401">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ca-245be-e-cases-page---type-filter--chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;no cases&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="35.715">
+<testcase name="As a practitioner › Filter the cases page - &apos;&lt;description&gt;&apos; › Filter the cases page - &apos;no cases&apos;" classname="src/test/features/pages/Cases.feature.spec.js" time="35.486">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ca-43fd3--the-cases-page---no-cases--chromium/trace.zip]]
@@ -1253,50 +1322,50 @@ manageCreateOffender: 0.444ms
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Contacts.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="7" failures="0" skipped="0" time="55.053" errors="0">
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - date range" classname="src/test/features/pages/Contacts.feature.spec.js" time="7.51">
+<testsuite name="src/test/features/pages/Contacts.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="7" failures="0" skipped="0" time="63.39" errors="0">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - date range" classname="src/test/features/pages/Contacts.feature.spec.js" time="10.526">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-c0b45-acts-for-a-Pop---date-range-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - keyword" classname="src/test/features/pages/Contacts.feature.spec.js" time="7.794">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - keyword" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.164">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-3ee3a-ontacts-for-a-Pop---keyword-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - categories" classname="src/test/features/pages/Contacts.feature.spec.js" time="7.979">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - categories" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.891">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-28990-acts-for-a-Pop---categories-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - hide system gen" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.019">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - hide system gen" classname="src/test/features/pages/Contacts.feature.spec.js" time="9.741">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-17015-for-a-Pop---hide-system-gen-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - combined no results" classname="src/test/features/pages/Contacts.feature.spec.js" time="7.86">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - combined no results" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.96">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-5bc2f-a-Pop---combined-no-results-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - combined with results" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.139">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - combined with results" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.883">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-9a497-Pop---combined-with-results-chromium/trace.zip]]
 ]]>
 </system-out>
 </testcase>
-<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - validation error" classname="src/test/features/pages/Contacts.feature.spec.js" time="7.752">
+<testcase name="As a practitioner › View contacts for a Pop - &lt;description&gt; › View contacts for a Pop - validation error" classname="src/test/features/pages/Contacts.feature.spec.js" time="8.225">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Co-00651-or-a-Pop---validation-error-chromium/trace.zip]]
@@ -1304,8 +1373,8 @@ manageCreateOffender: 0.444ms
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Home.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="1" failures="0" skipped="0" time="11.934" errors="0">
-<testcase name="As a practitioner › View my home page" classname="src/test/features/pages/Home.feature.spec.js" time="11.934">
+<testsuite name="src/test/features/pages/Home.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="1" failures="0" skipped="0" time="12.232" errors="0">
+<testcase name="As a practitioner › View my home page" classname="src/test/features/pages/Home.feature.spec.js" time="12.232">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ho-e7e03-ctitioner-View-my-home-page-chromium/trace.zip]]
@@ -1313,8 +1382,8 @@ manageCreateOffender: 0.444ms
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Overview.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="1" failures="0" skipped="0" time="22.728" errors="0">
-<testcase name="As a practitioner › View overview for a case - &apos;&lt;case&gt;&apos; › View overview for a case - &apos;X793504&apos;" classname="src/test/features/pages/Overview.feature.spec.js" time="22.728">
+<testsuite name="src/test/features/pages/Overview.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="1" failures="0" skipped="0" time="24.406" errors="0">
+<testcase name="As a practitioner › View overview for a case - &apos;&lt;case&gt;&apos; › View overview for a case - &apos;X793504&apos;" classname="src/test/features/pages/Overview.feature.spec.js" time="24.406">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ov-7543e-rview-for-a-case---X793504--chromium/trace.zip]]
@@ -1322,8 +1391,8 @@ manageCreateOffender: 0.444ms
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Risk.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="1" failures="0" skipped="0" time="43.502" errors="0">
-<testcase name="As a practitioner › View overview for a case - &apos;&lt;case&gt;&apos; › View overview for a case - &apos;X793504&apos;" classname="src/test/features/pages/Risk.feature.spec.js" time="43.502">
+<testsuite name="src/test/features/pages/Risk.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="1" failures="0" skipped="0" time="45.658" errors="0">
+<testcase name="As a practitioner › View overview for a case - &apos;&lt;case&gt;&apos; › View overview for a case - &apos;X793504&apos;" classname="src/test/features/pages/Risk.feature.spec.js" time="45.658">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Ri-78125-rview-for-a-case---X793504--chromium/trace.zip]]
@@ -1331,8 +1400,8 @@ manageCreateOffender: 0.444ms
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="src/test/features/pages/Sentence.feature.spec.js" timestamp="2026-03-13T16:38:29.168Z" hostname="chromium" tests="1" failures="0" skipped="0" time="7.828" errors="0">
-<testcase name="As a practitioner › View sentence and probation history for a case - &apos;&lt;case&gt;&apos; › Example #1" classname="src/test/features/pages/Sentence.feature.spec.js" time="7.828">
+<testsuite name="src/test/features/pages/Sentence.feature.spec.js" timestamp="2026-03-16T07:52:01.924Z" hostname="chromium" tests="1" failures="0" skipped="0" time="8.461" errors="0">
+<testcase name="As a practitioner › View sentence and probation history for a case - &apos;&lt;case&gt;&apos; › Example #1" classname="src/test/features/pages/Sentence.feature.spec.js" time="8.461">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|test-results/src-test-features-pages-Se-a9690-for-a-case---case-Example-1-chromium/trace.zip]]
