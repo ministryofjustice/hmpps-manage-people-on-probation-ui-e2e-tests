@@ -1,5 +1,11 @@
 name: Create Expired CheckIns in advance
 on:
+  # Run manually via GitHub API
+  workflow_dispatch:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
   schedule:
     - cron: "0 16 * * SUN-THU"
 jobs:
