@@ -3,7 +3,7 @@ import {testContext} from "../../features/Fixtures";
 import ActivityLogPage from "../../pageObjects/Case/activity-log.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
 import { getClientToken, getContacts } from "../../util/API";
-import { contactDataTable } from "../../util/Contacts_log";
+import { contactDataTable } from "../../util/Contacts";
 import { expect } from "@playwright/test";
 
 const { Given, When, Then } = createBdd(testContext);
