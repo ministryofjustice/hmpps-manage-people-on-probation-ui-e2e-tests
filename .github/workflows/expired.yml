@@ -1,9 +1,7 @@
 name: Create Expired CheckIns in advance
 on:
-  # Run manually via GitHub API
-  workflow_dispatch:
-  push:
-    branches: [ expired-yml-investigation ]
+  schedule:
+    - cron: "0 13 * * SUN-THU"
 jobs:
   test:
     timeout-minutes: 60
