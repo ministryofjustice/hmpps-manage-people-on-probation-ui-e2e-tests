@@ -81,7 +81,7 @@ export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAp
     await addNotePage.completePage(appointment.sensitivity, appointment.note)//file
   } else {
     const textConfirmationPage = new TextConfirmationPage(page)
-    await textConfirmationPage.completePage(appointment.text, appointment.mobile)
+    await textConfirmationPage.completePage(appointment.text, appointment.mobile, appointment.dateTime.date, appointment.dateTime.startTime, appointment.locationId)
     const supportingInformationPage = new SupportingInformationPage(page)
     await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
   }
@@ -203,7 +203,7 @@ export const appointmentDataTable = (data: DataTable, full:boolean = false, chan
         }
         if (row.label === 'locationId'){
             if (row.value != ''){
-              locationId = row.value as unknown as number | "not needed" | "not in list" 
+              locationId = row.value as unknown as number | "not needed" | "not in list"
             }
             //not needed - last if an option
             //not in list - last otherwise (2nd last if not needed is option)
