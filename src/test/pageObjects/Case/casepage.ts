@@ -38,4 +38,9 @@ export default abstract class CasePage extends MPopPage {
     async checkCrn(crn?: string){
         await this.checkQA('crn', (crn ?? this.crn)!)
     }
+
+    async checkPopHeader(crn?: string){
+        const checkCrn = (crn ?? this.crn)!
+        await this.checkQA('crn', checkCrn)
+    }
 }
