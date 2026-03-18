@@ -11,7 +11,7 @@ const { Given, When, Then } = createBdd(testContext);
 When('I search for CRN', async({ctx})=>{
     const crn = ctx.case.crn
     const page = ctx.base.page
-    await caseNavigation(page, crn, "overview", false)
+    await caseNavigation(page, crn, "overviewTab", false)
 })
 
 Then('I can view the CRN', async({ctx})=>{
