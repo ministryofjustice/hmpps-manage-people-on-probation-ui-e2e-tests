@@ -9,9 +9,13 @@ export const baseNavigation = async(page: Page, target: string) => {
     await homePage.usePrimaryNavigation(target)
 }
 
-export const caseNavigation = async(page: Page, crn: string, target: string) => {
-    const overviewPage = new OverviewPage(page)
-    await navigateToCase(page, crn)
+export const caseNavigation = async(page: Page, crn: string, target: string, direct:boolean = true) => {
+    const overviewPage = new OverviewPage(page, crn)
+    if (direct){
+        await overviewPage.goTo(crn)
+    } else {
+        await navigateToCase(page, crn)
+    }
     await overviewPage.useSubNavigation(target)
 }
 
