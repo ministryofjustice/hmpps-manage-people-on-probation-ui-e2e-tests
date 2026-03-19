@@ -51,7 +51,7 @@ Then('the contact log contains {string} entries',async ({ctx}, count: string)=>{
     }
 })
 
-Then('there are {string}',async ({ctx}, error: string)=>{
+Then('there are {string} on contacts page',async ({ctx}, error: string)=>{
     const page = ctx.base.page
     const contactsPage = new ActivityLogPage(page)
     if (error === 'no errors'){
