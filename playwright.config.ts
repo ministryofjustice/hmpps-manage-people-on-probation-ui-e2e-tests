@@ -26,7 +26,6 @@ export default defineConfig({
         ['junit', { outputFile: 'junit.xml' }],
         ['json', { outputFile: 'results.json' }],
     ],
-  testDir,
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -51,10 +50,15 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: 'serial',
+      testDir: defineBddConfig({
+        outputDir: '.features-gen/one',
+        features: 'src/test/features/journeys',
+        steps: 'src/test/**/*.ts'
+      }),
+      retries: 0,
+      workers: 1,
       use: {
-          // permissions: ["camera"],
-          //...devices['Desktop Chrome'],
           launchOptions: {
               args: [
                 '--start-maximized', 
@@ -63,7 +67,20 @@ export default defineConfig({
                 '--use-file-for-fake-video-capture=/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests-1/src/test/fixtures/newfile.mjpeg'
               ],
           }
-
+      },
+    },
+    {
+      name: 'parallel',
+      testDir: defineBddConfig({
+        outputDir: '.features-gen/two',
+        features: 'src/test/features/pages',
+        steps: 'src/test/**/*.ts'
+      }),
+      retries: 0,
+      use: {
+          launchOptions: {
+              args: ['--start-maximized'],
+          }
       },
     },
   ],

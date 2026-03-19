@@ -20,7 +20,7 @@ Feature: Non serial checkIn journeys
             | cases   |
             | X989788,X989912,X989984,X989995,X990011,X990012,X990017,X990023,X990039,X990099,X990108,X990175,X989472,X989522,X989510,X989610,X989612,X989687,X989667,X989632,X989622,X976093,X976094,X976110,X976108,X976235,X976250,X976614,X976858,X976842,X977034,X977246,X977262,X978243,X978245 |
 
-    @esupervision @expired @review
+    @smoke @esupervision @expired @review
     Scenario: Review Expired Checkin
         Given Context has been created for "Esupervision" test
         And I am logged in
