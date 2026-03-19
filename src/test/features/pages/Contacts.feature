@@ -17,7 +17,7 @@ Feature: As a practitioner
       | compliance_filters | <compliance> |
       | category_filters   | <categories> |
     Then the contact log contains '<count>' entries
-    And there are '<errors>'
+    And there are '<errors>' on contacts page
     And I close the context
 
     Examples:

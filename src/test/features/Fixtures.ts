@@ -17,7 +17,11 @@ export interface Ctx {
   appointments: MpopArrangeAppointment[]
   details: Details
   addressTypes: AddressType[]
+  documents: Documents
 };
+export interface Documents{
+  count: number
+}
 export interface Contacts{
   contacts: Activity[]
   count: string
@@ -101,7 +105,8 @@ export const testContext = base.extend<{ ctx: Ctx }, { ctxMap: Record<string, Ct
       alerts: {},
       manage: {},
       appointments: [],
-      details: {}
+      details: {},
+      documents: {}
     }
     await use(ctxMap[testInfo.file])
   },
