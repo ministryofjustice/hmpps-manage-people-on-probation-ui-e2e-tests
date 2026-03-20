@@ -28,7 +28,7 @@ jobs:
       run: rm -rf .features-gen
     - name: Run Playwright tests
       id: tests
-      run: npx bddgen && npx playwright test -g "@smoke" --workers=5 --retries=1
+      run: npx bddgen && npx playwright test -g "@smoke" --workers=40 --retries=3
       env:
         TZ: Europe/London
         ENV: test
