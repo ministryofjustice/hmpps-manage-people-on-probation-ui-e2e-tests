@@ -6,7 +6,7 @@ Feature: Create Appointments
   @smoke @appointments @standalones
   Scenario Outline: Create Appointment for <ScenarioName>
     Given Context has been created for "Appointments" test
-    And A new offender has been created or existing made available
+    And A new offender has been created in Ndelius
     And I am logged in
     When I create an appointment
       | label      | value        |
@@ -29,7 +29,7 @@ Feature: Create Appointments
   @smoke @appointments @failures
   Scenario Outline: Create Appointment for <ScenarioName>
       Given Context has been created for "Appointments" test
-      And A new offender has been created or existing made available
+      And A new offender has been created in Ndelius
       And I am logged in
       When I create an appointment
         | label      | value        |
@@ -46,7 +46,7 @@ Feature: Create Appointments
   @smoke @appointments @standalones @changes
   Scenario Outline: Create Appointment and make changes for <ScenarioName>
     Given Context has been created for "Appointments" test
-    And A new offender has been created or existing made available
+    And A new offender has been created in Ndelius
     And I am logged in
     When I setup an appointment
       | label      | value    |
