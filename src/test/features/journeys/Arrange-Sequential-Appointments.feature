@@ -7,7 +7,7 @@ Feature: Create Appointments
     @smoke @appointments @sequential
     Scenario Outline: Create Future Appointment for <ScenarioName>
         Given Context has been created for "Sequential appointments" test
-        And A new offender has been created or existing made available
+        And A new offender has been created in Ndelius
         And I am logged in
         And I clear the contact details if set
         When I create an appointment

@@ -49,7 +49,7 @@ Feature: Non serial checkIn journeys
     @smoke @esupervision @eligibility
     Scenario: View Eligibility Options       
         Given Context has been created for "Esupervision" test
-        And A new offender has been created or existing made available
+        And A new offender has been created in Ndelius
         And I am logged in
         And I have navigated to new offender
         When I fill eligibility values with '<ids>'

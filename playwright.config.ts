@@ -40,7 +40,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     viewport: null,
-    actionTimeout: secondsToMilliseconds(30),
+    actionTimeout: secondsToMilliseconds(5),
     timezoneId: 'Europe/London',
     launchOptions: { slowMo: 150 },
     screenshot: 'only-on-failure',

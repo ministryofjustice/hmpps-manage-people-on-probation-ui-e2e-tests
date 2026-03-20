@@ -37,7 +37,7 @@ Then('the cases page contains {string} entries',async ({ctx}, count: string)=>{
     const casePage = new CasesPage(page)
     await casePage.assertOnPage()
     if (count === 'full'){
-        expect(await casePage.getCount()).toEqual(ctx.cases.count)
+        expect(await casePage.getCount()).toBeGreaterThanOrEqual(ctx.cases.count) //may increase during tests
     } else if (count === 'filtered') {
          expect(await casePage.getCount()).toBeLessThan(ctx.cases.count)
     } else if (count === '0'){
@@ -56,6 +56,6 @@ When('I clear filters on cases page', async ({ctx})=>{
 Then('all cases are present on cases page', async ({ctx})=>{
     const page = ctx.base.page
     const casePage = new CasesPage(page)
-    expect(await casePage.getCount()).toEqual(ctx.cases.count)
+    expect(await casePage.getCount()).toBeGreaterThanOrEqual(ctx.cases.count) //may increase during tests
 })
 
