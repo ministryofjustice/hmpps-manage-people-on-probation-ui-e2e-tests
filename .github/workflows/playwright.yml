@@ -57,11 +57,18 @@ jobs:
         report_paths: junit.xml
 
     - name: Create sanitised Playwright stats summary (overall + per file)
-      if: always() && github.ref == 'refs/heads/main'
+      if: always() && github.ref == 'refs/pull/67/merge'
       id: stats
       run: |
         node <<'EOF'
         const fs = require('fs');
+
+        fs.readdir(testFolder, (err, files) => {
+          files.forEach(file => {
+            // will also include directory names
+            console.log(file);
+          });
+        });
         
         const reportPath = 'results.json';
         if (!fs.existsSync(reportPath)) {
@@ -175,7 +182,7 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
          name: playwright-stats
-         path: videos/
+         path: ./videos/
          retention-days: 7
 
     - name: Notify Slack
