@@ -19,10 +19,7 @@ export const getClientToken = async() : Promise<string> => {
             send: "always"
         }
     });
-    console.log(process.env.API_USERNAME)
-    console.log(process.env.API_PASSWORD)
     const token = await signin_context.post('/auth/oauth/token?grant_type=client_credentials')
-    console.log(token)
     const body: any = await token.json()
     return await body.access_token
 }
@@ -117,7 +114,6 @@ export const createEsupervisionCheckin = async(practitioner: string, crn: string
     } else {
         body = await response.json()
     }
-    console.log(body)
     return body.uuid
 }
 

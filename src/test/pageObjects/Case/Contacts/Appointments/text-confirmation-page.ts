@@ -38,11 +38,6 @@ export default class TextConfirmationPage extends ContactPage {
         const formattedDate = date ? this.formatDateForSMS(date) : undefined;
         const formattedStartTime = startTime ? this.formatTimeForSMS(startTime) : undefined;
 
-        console.log("text:", text);
-        console.log("mobile:", mobile);
-        console.log("formattedDate:", formattedDate);
-        console.log("formattedStartTime:", formattedStartTime);
-
         switch (text) {
             case 'yes':
                 await this.page.locator('input[type="radio"][value="YES"]').check();
@@ -50,7 +45,6 @@ export default class TextConfirmationPage extends ContactPage {
                 // Wait for SMS preview to appear
                 await smsWrapper.waitFor({ state: 'visible', timeout: 15000 });
                 const smsTextYes = await smsWrapper.innerText();
-                console.log("SMS Text (YES):", smsTextYes);
 
                 if (formattedDate) expect(smsTextYes).toContain(formattedDate);
                 if (formattedStartTime) expect(smsTextYes).toContain(formattedStartTime);
@@ -59,11 +53,9 @@ export default class TextConfirmationPage extends ContactPage {
 
             case 'yes-add':
                 await this.page.locator('input[type="radio"][value="YES_ADD_MOBILE_NUMBER"]').check();
-                console.log("location Id :", locationId);
                 await smsWrapper.waitFor({ state: 'visible', timeout: 15000 });
 
                 const smsTextAdd = await smsWrapper.innerText();
-                console.log("SMS Text (YES_ADD):", smsTextAdd);
 
                 if (formattedDate) expect(smsTextAdd).toContain(formattedDate);
                 if (formattedStartTime) expect(smsTextAdd).toContain(formattedStartTime);
@@ -80,7 +72,6 @@ export default class TextConfirmationPage extends ContactPage {
 
                 await smsWrapper.waitFor({ state: 'visible', timeout: 15000 });
                 const smsTextUpdate = await smsWrapper.innerText();
-                console.log("SMS Text (YES_UPDATE):", smsTextUpdate);
 
                 if (formattedDate) expect(smsTextUpdate).toContain(formattedDate);
                 if (formattedStartTime) expect(smsTextUpdate).toContain(formattedStartTime);
@@ -97,7 +88,6 @@ export default class TextConfirmationPage extends ContactPage {
 
                 await smsWrapper.waitFor({ state: 'visible', timeout: 15000 });
                 const smsTextNo = await smsWrapper.innerText();
-                console.log("SMS Text (No):", smsTextNo);
 
                 if (formattedDate) expect(smsTextNo).toContain(formattedDate);
                 if (formattedStartTime) expect(smsTextNo).toContain(formattedStartTime);

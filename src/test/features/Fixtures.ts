@@ -10,7 +10,7 @@ export interface Ctx {
   contact: Contact
   contacts: Contacts
   base: Base,
-  case: Case
+  case: CaseType
   cases: Cases
   alerts: Alerts
   manage: Manage
@@ -47,7 +47,7 @@ export interface Base {
   browser: Browser,
   context: BrowserContext
 }
-export interface Case {
+export interface CaseType {
   crn: string
   person: Person
   created: boolean
