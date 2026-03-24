@@ -163,11 +163,19 @@ jobs:
         
 
     - name: Upload stats summary
-      if: always() && github.ref == 'refs/heads/main'
+      if: always() && github.ref == 'refs/heads/testing-artifacts'
       uses: actions/upload-artifact@v4
       with:
          name: playwright-stats
-         path: stats-summary.json
+         path: results.json
+         retention-days: 7
+
+    - name: Upload videos
+      if: always() && github.ref == 'refs/heads/testing-artifacts'
+      uses: actions/upload-artifact@v4
+      with:
+         name: playwright-stats
+         path: videos/
          retention-days: 7
 
     - name: Notify Slack
