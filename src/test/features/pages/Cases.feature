@@ -1,7 +1,7 @@
 Feature: As a practitioner
   I want to view my cases page
 
-  @smoke @cases
+  @full @cases
   Scenario Outline: View my cases page
     Given Context has been created for "Cases" test
     And I am logged in
@@ -9,7 +9,7 @@ Feature: As a practitioner
     Then the cases page is populated
     And the cases page links work correctly 
 
-@smoke @cases
+@full @cases
 Scenario Outline: Filter the cases page - '<description>'
     Given Context has been created for "Cases" test
     And I am logged in
