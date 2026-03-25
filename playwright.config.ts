@@ -44,6 +44,7 @@ export default defineConfig({
     timezoneId: 'Europe/London',
     launchOptions: { slowMo: 150 },
     screenshot: 'only-on-failure',
+    video: 'retain-on-failure',
     trace: process.env.CI ? 'off' : 'on',
     ...devices['Desktop Chrome'],
       headless: true,
