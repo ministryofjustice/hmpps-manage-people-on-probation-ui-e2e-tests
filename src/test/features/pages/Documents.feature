@@ -2,7 +2,7 @@ Feature: As a practitioner
   I want to add documents with a PoP
   and view them as per the filter criteria
 
-  @smoke @documents
+  @full @documents
   Scenario Outline: View documents for a Pop - <description>
     Given Context has been created for "Documents" test
     And I am logged in

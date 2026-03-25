@@ -13,7 +13,7 @@ export const getUrn = (page: Page, id: number=2) => {
 }
 
 export const getBrowserContext = (test: string) : BrowserContextOptions | undefined => {
-    return process.env.LOCAL ? { recordVideo: { dir: `videos/${test}`}} : undefined
+    return { recordVideo: { dir: `videos/${test}`}}
 }
 
 export const randomPicker = <T>(array: T[]): T => {
