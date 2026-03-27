@@ -57,7 +57,7 @@ jobs:
         report_paths: junit.xml
 
     - name: Create sanitised Playwright stats summary (overall + per file)
-      if: always() && github.ref == 'refs/head/main'
+      if: always() && github.ref == 'refs/heads/main'
       id: stats
       run: |
         node <<'EOF'
