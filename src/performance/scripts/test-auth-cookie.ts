@@ -7,7 +7,6 @@ async function main() {
     const page = await browser.newPage()
 
     try {
-        await loginAndGetCookies(page)
         const { cookieHeader } = await loginAndGetCookies(page)
 
         process.stdout.write(cookieHeader)
