@@ -7,7 +7,9 @@
     "bdd": "cucumber-js",
     "bdd:tags": "cucumber-js --tags",
     "bdd:headed": "HEADLESS=false cucumber-js",
-    "bdd:debug": "npx cucumber-js --profile debug"
+    "bdd:debug": "npx cucumber-js --profile debug",
+    "perf:run": "gatling run --typescript",
+    "perf:home": "gatling run --typescript --sources-folder src/performance --simulation mpop"
   },
   "keywords": [],
   "author": "",
@@ -16,6 +18,7 @@
   "description": "",
   "devDependencies": {
     "@faker-js/faker": "^9.7.0",
+    "@gatling.io/cli": "^3.15.1",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.132.0",
     "@playwright/test": "^1.51.1",
     "@types/luxon": "^3.7.1",
@@ -27,6 +30,8 @@
     "tsx": "^4.19.3"
   },
   "dependencies": {
+    "@gatling.io/core": "^3.15.1",
+    "@gatling.io/http": "^3.15.1",
     "op": "^0.0.6"
   }
 }
