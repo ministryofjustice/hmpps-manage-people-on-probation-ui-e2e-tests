@@ -8,5 +8,5 @@
     "declaration": true,
     "sourceMap": true
   },
-  "include": ["steps", "test-data", "src/test/delius"]
+  "include": ["steps", "test-data", "src/test/delius", "src/performance"]
 }
