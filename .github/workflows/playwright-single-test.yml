@@ -16,8 +16,8 @@ on:
         required: false
         type: string
   push:
-    branches:
-      - MAN-2411-create-single-test-pipeline
+    branches: [ MAN-2411-create-single-test-pipeline, master ]
+
 
 jobs:
   test:
