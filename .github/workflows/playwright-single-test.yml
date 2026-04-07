@@ -3,14 +3,21 @@ name: Playwright Single Test
 on:
   workflow_dispatch:
     inputs:
-      grep:
-        description: "Test name / scenario to run"
+      test:
+        description: "Select test tag to run"
+        type: choice
         required: true
-        type: string
+        options:
+          - "@sequential"
+          - "@reschedule"
+          - "@past"
       test_path:
         description: "Optional path to a specific test file"
         required: false
         type: string
+  push:
+    branches:
+      - MAN-2411-create-single-test-pipeline
 
 jobs:
   test:
@@ -39,18 +46,14 @@ jobs:
       - name: Run selected Playwright test
         id: tests
         shell: bash
-        run: |
-          npx bddgen
-
-          CMD="npx playwright test -g '${{ github.event.inputs.grep }}' --workers=1 --retries=0"
-
-          if [ -n "${{ github.event.inputs.test_path }}" ]; then
-            CMD="$CMD '${{ github.event.inputs.test_path }}'"
-          fi
-
-          echo "Running: $CMD"
-          eval "$CMD"
         env:
+          INPUT_TEST: ${{ inputs.test }}
+          INPUT_TEST_PATH: ${{ inputs.test_path }}
+
+          # Fallback values for push runs from your branch
+          PUSH_TEST: "@sequential"
+          PUSH_TEST_PATH: ""
+
           TZ: Europe/London
           ENV: test
 
@@ -67,6 +70,25 @@ jobs:
           DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
           API_USERNAME: ${{ secrets.API_USERNAME }}
           API_PASSWORD: ${{ secrets.API_PASSWORD }}
+        run: |
+          npx bddgen
+
+          TEST_VALUE="$INPUT_TEST"
+          TEST_PATH_VALUE="$INPUT_TEST_PATH"
+
+          if [ "${{ github.event_name }}" = "push" ]; then
+            TEST_VALUE="$PUSH_TEST"
+            TEST_PATH_VALUE="$PUSH_TEST_PATH"
+          fi
+
+          CMD="npx playwright test -g \"$TEST_VALUE\" --workers=1 --retries=0"
+
+          if [ -n "$TEST_PATH_VALUE" ]; then
+            CMD="$CMD \"$TEST_PATH_VALUE\""
+          fi
+
+          echo "Running: $CMD"
+          eval "$CMD"
 
       - name: Publish JUnit report
         if: always()
@@ -93,5 +115,5 @@ jobs:
           payload: |
             {
               "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
-              "text": "*Playwright single test:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`\n• Grep: `${{ github.event.inputs.grep }}`\n• Test path: `${{ github.event.inputs.test_path || 'not provided' }}`\n\n• Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              "text": "*Playwright single test:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`\n• Test: `${{ github.event_name == 'workflow_dispatch' && inputs.test || 'branch push default (@sequential)' }}`\n• Test path: `${{ github.event_name == 'workflow_dispatch' && inputs.test_path || 'not provided' }}`\n\n• Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
             }
