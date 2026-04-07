@@ -16,11 +16,11 @@ on:
         required: false
         type: string
   push:
-    branches: [ MAN-2411-create-single-test-pipeline, master ]
+    branches: [ MAN-2411-create-single-test-pipeline ]
 
 
 jobs:
-  test:
+  test-single:
     timeout-minutes: 60
     runs-on: moj-cloud-platform
 
