@@ -1,21 +1,17 @@
 import 'dotenv/config'
 import { chromium } from 'playwright'
-import { loginAndGetCookies } from './login' // adjust path
+import { loginAndGetCookies } from './login'
 
-async function main() {
-    const browser = await chromium.launch({ headless: false })
-    const page = await browser.newPage()
+const browser = await chromium.launch({ headless: false })
+const page = await browser.newPage()
 
-    try {
-        const { cookieHeader } = await loginAndGetCookies(page)
+try {
+    const { cookieHeader } = await loginAndGetCookies(page)
 
-        process.stdout.write(cookieHeader)
-    } finally {
-        await browser.close()
-    }
-}
-
-main().catch((err) => {
+    process.stdout.write(cookieHeader)
+} catch (err) {
     console.error(err)
-    process.exit(1)
-})
+    process.exitCode = 1
+} finally {
+    await browser.close()
+}
