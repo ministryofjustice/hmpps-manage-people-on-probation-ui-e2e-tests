@@ -43,4 +43,13 @@ npx playwright show-report
 - Use pageObjects folder / .page.ts files to build page objects 
 - Use util folder for additional util functions
 
+## Performance tests
+- performance tests are located in the performance folder
+
+Run the tests 
+```shell
+PERF_COOKIE_HEADER=$(npx tsx src/performance/scripts/test-auth-cookie.ts) npm run perf:home
+```
+
+
 
