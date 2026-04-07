@@ -1,0 +1,97 @@
+name: Playwright Single Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      grep:
+        description: "Test name / scenario to run"
+        required: true
+        type: string
+      test_path:
+        description: "Optional path to a specific test file"
+        required: false
+        type: string
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: moj-cloud-platform
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      - name: Remove Stale Features-gen files
+        run: rm -rf .features-gen
+
+      - name: Run selected Playwright test
+        id: tests
+        shell: bash
+        run: |
+          npx bddgen
+
+          CMD="npx playwright test -g '${{ github.event.inputs.grep }}' --workers=1 --retries=0"
+
+          if [ -n "${{ github.event.inputs.test_path }}" ]; then
+            CMD="$CMD '${{ github.event.inputs.test_path }}'"
+          fi
+
+          echo "Running: $CMD"
+          eval "$CMD"
+        env:
+          TZ: Europe/London
+          ENV: test
+
+          # URLs
+          DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
+          MANAGE_PEOPLE_ON_PROBATION_URL: https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk
+          MAS_API_URL: https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk
+          E_SUPERVISION_API_URL: https://esupervision-api-dev.hmpps.service.justice.gov.uk
+          SIGN_IN_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
+          OUTLOOK_API_URL: https://probation-supervision-appointments-api-dev.hmpps.service.justice.gov.uk
+
+          # Credentials
+          DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
+          DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+          API_USERNAME: ${{ secrets.API_USERNAME }}
+          API_PASSWORD: ${{ secrets.API_PASSWORD }}
+
+      - name: Publish JUnit report
+        if: always()
+        uses: mikepenz/action-junit-report@cf701569b05ccdd861a76b8607a66d76f6fd4857 # v5.5.1
+        id: junit
+        with:
+          check_name: Single test results
+          report_paths: junit.xml
+
+      - name: Upload videos
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-single-test-videos
+          path: ./videos/
+          retention-days: 7
+
+      - name: Notify Slack
+        if: always()
+        uses: slackapi/slack-github-action@v2.1.1
+        with:
+          method: chat.postMessage
+          token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
+          payload: |
+            {
+              "channel": "${{ secrets.SLACK_CHANNEL_ID }}",
+              "text": "*Playwright single test:* `${{ job.status }}` — `${{ github.repository }}` on `${{ github.ref_name }}`\n• Grep: `${{ github.event.inputs.grep }}`\n• Test path: `${{ github.event.inputs.test_path || 'not provided' }}`\n\n• Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+            }
