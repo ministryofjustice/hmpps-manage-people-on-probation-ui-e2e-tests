@@ -5,8 +5,18 @@ export const loginAndGetCookies = async (page: Page) => {
     await page.goto(baseUrl)
     if (await page.title() !== 'Manage people on probation') {
         await expect(page).toHaveTitle(/HMPPS Digital Services - Sign in/)
-        await page.fill('#username', process.env.DELIUS_USERNAME)
-        await page.fill('#password', process.env.DELIUS_PASSWORD)
+
+        const username = process.env.DELIUS_USERNAME
+        const password = process.env.DELIUS_PASSWORD
+
+        if (!username || !password) {
+            throw new Error(
+                'Missing required environment variables: DELIUS_USERNAME and/or DELIUS_PASSWORD'
+            )
+        }
+
+        await page.fill('#username', username)
+        await page.fill('#password', password)
         await page.click('#submit')
     }
     await expect(page.locator('[data-qa="pageHeading"]')).toContainText('Manage people on probation')
