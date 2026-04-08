@@ -8,7 +8,7 @@ import {
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender";
 
 
-const { Given, When, Then } = createBdd(testContext);
+const { When } = createBdd(testContext);
 
 When('I delete offender with CRNs', async ({ page }) => {
    const crns = process.env.CRNS
