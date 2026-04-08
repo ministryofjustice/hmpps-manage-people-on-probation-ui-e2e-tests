@@ -4,18 +4,21 @@ import { execSync } from 'child_process'
 
 async function main() {
     const browser = await chromium.launch()
-    const page = await browser.newPage()
 
-    const cookies = await loginAndGetCookies(page)
+    try {
+        const page = await browser.newPage()
 
-    await browser.close()
+        const cookie = await loginAndGetCookies(page)
 
-    console.log('Got session cookie')
+        console.log('Got session cookie')
 
-    execSync(
-        `PERF_SESSION_COOKIE=${cookies.cookieHeader} npm run perf:home`,
-        { stdio: 'inherit' }
-    )
+        execSync(
+            `PERF_SESSION_COOKIE=${cookie} npm run perf:home`,
+            { stdio: 'inherit' }
+        )
+    } finally {
+        await browser.close()
+    }
 }
 
 main()
