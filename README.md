@@ -44,7 +44,7 @@ npx playwright show-report
 - Use util folder for additional util functions
 
 ## Performance tests
-- performance tests are located in the performance folder
+- performance tests are located in the `src/performance` folder
 
 Run the tests 
 
