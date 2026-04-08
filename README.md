@@ -53,7 +53,7 @@ npx tsx src/performance/scripts/run-performance-test.ts
 
 or the below command to see login
 ```shell
-PERF_COOKIE_HEADER=$(npx tsx src/performance/scripts/test-auth-cookie.ts) npm run perf:home
+PERF_COOKIE_HEADER="$(npx tsx src/performance/scripts/test-auth-cookie.ts)" npm run perf:home
 ```
 
 
