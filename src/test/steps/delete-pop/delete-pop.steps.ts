@@ -11,10 +11,22 @@ import {
 const { When } = createBdd(testContext);
 
 When('I delete offender with CRNs', async ({ page }) => {
-   const crns = process.env.CRNS
+   const crnsEnv = process.env.CRNS
+   if (!crnsEnv || !crnsEnv.trim()) {
+       throw new Error('CRNS environment variable must be set to a comma-separated list of CRNs')
+   }
+
+   const crns = crnsEnv
+       .split(',')
+       .map((crn) => crn.trim())
+       .filter((crn) => crn.length > 0)
+
+   if (crns.length === 0) {
+       throw new Error('CRNS environment variable must contain at least one non-empty CRN')
+   }
 
     await login(page)
-    for (const [index, crn] of crns.split(',').entries()) {
+    for (const [index, crn] of crns.entries()) {
         console.log(`Deleting offender with CRN: ${crn}`)
         if (index === 0) {
             await findOffenderByCRN(page, crn)
