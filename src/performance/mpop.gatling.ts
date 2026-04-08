@@ -9,8 +9,11 @@ import {
 import { http, status } from "@gatling.io/http";
 
 const baseUrl = getEnvironmentVariable("PERF_BASE_URL", "http://localhost:3000");
-const cookieHeader = getEnvironmentVariable("PERF_COOKIE_HEADER", "");
+const cookieHeader = getEnvironmentVariable("PERF_COOKIE_HEADER", "").trim();
 
+if (!cookieHeader) {
+    throw new Error("PERF_COOKIE_HEADER must be set to a non-blank Cookie header value before running the performance simulation.");
+}
 const httpProtocol = http
     .baseUrl(baseUrl)
     .header("Cookie", cookieHeader);
