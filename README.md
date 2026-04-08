@@ -47,11 +47,16 @@ npx playwright show-report
 - performance tests are located in the performance folder
 
 Run the tests 
+
+to run in local environment
 ```shell
 npx tsx src/performance/scripts/run-performance-test.ts
 ```
-
-or the below command to see login
+or to run in dev environment
+```shell
+PERF_BASE_URL=https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk  npx tsx src/performance/scripts/run-performance-test.ts
+```
+or the below command to see login page
 ```shell
 PERF_COOKIE_HEADER="$(npx tsx src/performance/scripts/test-auth-cookie.ts)" npm run perf:home
 ```
