@@ -13,6 +13,10 @@
     "perf:run": "gatling run --typescript",
     "perf:home": "gatling run --typescript --sources-folder src/performance --simulation mpop"
   },
+  "engines": {
+    "node": "^24",
+    "npm": "^11"
+  },
   "keywords": [],
   "author": "",
   "type": "module",
