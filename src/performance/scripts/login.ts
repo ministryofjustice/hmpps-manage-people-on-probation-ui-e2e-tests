@@ -1,7 +1,8 @@
 import { expect, type Page } from '@playwright/test'
 
 export const loginAndGetCookies = async (page: Page) => {
-    await page.goto("http://localhost:3000")
+    const baseUrl = process.env.PERF_BASE_URL ?? 'http://localhost:3000'
+    await page.goto(baseUrl)
     if (await page.title() !== 'Manage people on probation') {
         await expect(page).toHaveTitle(/HMPPS Digital Services - Sign in/)
         await page.fill('#username', process.env.DELIUS_USERNAME)
