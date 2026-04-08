@@ -27,7 +27,7 @@ When('I delete offender with CRNs', async ({ page }) => {
 
     await login(page)
     for (const [index, crn] of crns.entries()) {
-        console.log(`Deleting offender with CRN: ${crn}`)
+        console.log(`Deleting offender ${index + 1} of ${crns.length}`)
         if (index === 0) {
             await findOffenderByCRN(page, crn)
             await deleteOffender(page)
