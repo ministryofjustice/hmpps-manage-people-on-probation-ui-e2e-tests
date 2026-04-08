@@ -1,18 +1,18 @@
-import { login } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login'
+import { login } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login.mjs'
 import {createBdd} from "playwright-bdd";
 import {testContext} from "../../features/Fixtures";
 import {expect, Page} from "@playwright/test";
 import {
     dismissModals,
     findOffenderByCRN
-} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender";
+} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs";
 
 
 const { When } = createBdd(testContext);
 
 When('I delete offender with CRNs', async ({ page }) => {
    const crnsEnv = process.env.CRNS
-   if (!crnsEnv || !crnsEnv.trim()) {
+   if (!crnsEnv?.trim()) {
        throw new Error('CRNS environment variable must be set to a comma-separated list of CRNs')
    }
 
@@ -30,7 +30,7 @@ When('I delete offender with CRNs', async ({ page }) => {
         console.log(`Deleting offender with CRN: ${crn}`)
         if (index === 0) {
             await findOffenderByCRN(page, crn)
-            await deleteOffender(page, crn)
+            await deleteOffender(page)
         } else {
             await expect(page).toHaveTitle(/National Search/)
             await page.getByRole('button', { name: 'Clear Search Fields' }).click()
@@ -42,12 +42,12 @@ When('I delete offender with CRNs', async ({ page }) => {
             await expect(page.getByText('Showing 1 to 1 of 1 records ')).toBeVisible()
             await page.locator('tr', { hasText: crn }).locator('a', { hasText: 'View' }).click()
             await dismissModals(page)
-            await deleteOffender(page, crn)
+            await deleteOffender(page)
         }
     }
 })
 
-export async function deleteOffender(page: Page, crn: string) {
+export async function deleteOffender(page: Page) {
     await page.getByRole('link', { name: 'Event List' }).click()
     await page.getByRole('link', { name: 'delete' }).click()
     await page.getByRole('button', { name: 'Confirm' }).click()
