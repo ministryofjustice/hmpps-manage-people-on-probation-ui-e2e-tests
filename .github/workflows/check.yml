@@ -23,4 +23,4 @@ jobs:
       - name: Remove Stale Features-gen files
         run: rm -rf .features-gen
       - name: Run Playwright tests
-        run: npx playwright test example
+        run: npx playwright test src/test/example.spec.ts
