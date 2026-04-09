@@ -3,7 +3,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-  @smoke @appointments @standalones
+  @full @appointments @standalones
   Scenario Outline: Create Appointment for <ScenarioName>
     Given Context has been created for "Appointments" test
     And A new offender has been created or existing made available
@@ -26,7 +26,7 @@ Feature: Create Appointments
       | Past                 | 0          | 0      | LASTWEEK    | 0           |      |        | Test note1 | NO        |
       | Location-not-needed  | 0          | 1      | PLUS6MONTHS | not needed  | No   |        | Test note2 | NO        |
 
-  @smoke @appointments @failures
+  @full @appointments @failures
   Scenario Outline: Create Appointment for <ScenarioName>
       Given Context has been created for "Appointments" test
       And A new offender has been created or existing made available
@@ -43,7 +43,7 @@ Feature: Create Appointments
         | ScenarioName         | sentenceId | typeId | locationId  |
         | Location-not-in-list | 0          | 0      | not in list |
 
-  @smoke @appointments @standalones @changes
+  @full @appointments @standalones @changes
   Scenario Outline: Create Appointment and make changes for <ScenarioName>
     Given Context has been created for "Appointments" test
     And A new offender has been created or existing made available

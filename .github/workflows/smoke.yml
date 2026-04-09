@@ -1,7 +1,6 @@
-name: Create Expired CheckIns in advance
-on:
-  schedule:
-    - cron: "0 13 * * SUN-THU"
+name: Quick Smoke Tests
+on: 
+    workflow_dispatch
 jobs:
   test:
     timeout-minutes: 60
@@ -17,9 +16,11 @@ jobs:
       run: npm ci
     - name: Install Playwright Browsers
       run: npx playwright install
+    - name: Remove Stale Features-gen files
+      run: rm -rf .features-gen
     - name: Run Playwright tests
       id: tests
-      run: npx bddgen && npx playwright test -g "@expired @create"  --workers=1 --retries=0
+      run: npx bddgen && npx playwright test -g "@smoke"  --workers=1 --retries=0
       env:
         TZ: Europe/London
         ENV: test

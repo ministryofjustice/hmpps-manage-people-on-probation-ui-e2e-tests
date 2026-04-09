@@ -4,7 +4,7 @@ Feature: Setup Checkins
     I want to setup online checkins
     So they can be used by an offender
 
-    @smoke @esupervision @sequential
+    @smoke @full @esupervision @sequential
     Scenario: Setup Online Checkins        
         Given Context has been created for "Esupervision" test
         And A new offender has been created or existing made available
@@ -18,7 +18,7 @@ Feature: Setup Checkins
             | preference | TEXT            |
             | photo      | UPLOAD          |
 
-    @smoke @esupervision @sequential
+    @smoke @full @esupervision @sequential
     Scenario: Make changes during setup
         When I make the following changes
             | label      | value            |
@@ -29,7 +29,7 @@ Feature: Setup Checkins
         And I submit the checkin
         Then Checkins should be setup
 
-    @smoke @esupervision @sequential
+    @smoke @full @esupervision @sequential
     Scenario: Review checkIn    
         When I mock the completion of a completed checkin
             | label               | value           |
@@ -42,7 +42,7 @@ Feature: Setup Checkins
         When I review the completed checkIn
         Then I can view the reviewed checkIn
 
-    @smoke @esupervision @sequential
+    @smoke @full @esupervision @sequential
     Scenario: Stop CheckIns 
         When I navigate to checkIn details
         And I stop checkIns with '<reason>'
@@ -52,7 +52,7 @@ Feature: Setup Checkins
             | reason       |
             | just because |
 
-    @smoke @esupervision @sequential
+    @smoke @full @esupervision @sequential
     Scenario: Restart CheckIns   
         When I restart checkIns with values
             | label      | value           |

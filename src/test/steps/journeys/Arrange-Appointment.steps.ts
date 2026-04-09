@@ -123,7 +123,7 @@ Then('I can check appointment details with the manage page', async ({ ctx }) => 
         await appointmentsPage.manageAppointment(appointment)
         const managePage = new ManageAppointmentsPage(page)
         await managePage.assertOnPage()
-        await checkOutlook(page, ctx.case.crn, token, past)
+        await checkOutlook(page, ctx.case, token, past)
         await managePage.clickBackLink()
     }
 });

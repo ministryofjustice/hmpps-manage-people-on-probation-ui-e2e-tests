@@ -46,7 +46,7 @@ Feature: Non serial checkIn journeys
         Then Checkins should be setup
         And I close the context
 
-    @smoke @esupervision @eligibility
+    @full @esupervision @eligibility
     Scenario: View Eligibility Options       
         Given Context has been created for "Esupervision" test
         And A new offender has been created or existing made available
