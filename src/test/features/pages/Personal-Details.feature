@@ -1,7 +1,7 @@
 Feature: As a practitioner
   I want to view the overview details for a Pop
 
-  @personalDetails  @smoke @raj
+  @personalDetails  @smoke @full
   Scenario Outline: View personal details page and assert sections on the page
     Given Context has been created for "Personal details" test
     And I am logged in
