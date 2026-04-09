@@ -6,6 +6,7 @@ node_modules/
 /dist/
 *.tgz
 .features-gen/
+/target
 
 ### playwright report ###
 junit.xml

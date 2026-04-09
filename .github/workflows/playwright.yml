@@ -2,11 +2,7 @@ name: Playwright Tests
 on:
   # Run manually via GitHub API
   workflow_dispatch:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
-    # Every weekday at 09:00 UTC
+  # Every weekday at 09:00 UTC
   schedule:
     - cron: "0 9 * * MON-FRI"
 jobs:
@@ -14,10 +10,10 @@ jobs:
     timeout-minutes: 60
     runs-on: moj-cloud-platform
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
+    - uses: actions/checkout@v6
+    - uses: actions/setup-node@v6
       with:
-        node-version: lts/*
+        node-version-file: .nvmrc
     - name: Clean npm cache
       run: npm cache clean --force
     - name: Install dependencies
@@ -162,7 +158,7 @@ jobs:
 
     - name: Upload stats summary
       if: always() && github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
          name: playwright-stats
          path: stats-summary.json
@@ -170,7 +166,7 @@ jobs:
 
     - name: Upload videos
       if: always() && github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v6
       with:
          name: playwright-videos
          path: ./videos/

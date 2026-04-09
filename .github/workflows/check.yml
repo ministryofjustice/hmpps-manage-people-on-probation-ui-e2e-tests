@@ -1,0 +1,23 @@
+name: Check
+
+on: push
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version-file: .nvmrc
+      - name: Clean npm cache
+        run: npm cache clean --force
+      - name: Install dependencies
+        run: npm ci
+      - name: Install Playwright Browsers
+        run: npx playwright install
+      - name: Remove Stale Features-gen files
+        run: rm -rf .features-gen
+      - name: Run Playwright tests
+        run: npx bddgen && npx playwright test -g "@pr-check"
