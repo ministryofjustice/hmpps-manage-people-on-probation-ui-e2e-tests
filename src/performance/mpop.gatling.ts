@@ -10,10 +10,16 @@ import { http, status } from "@gatling.io/http";
 
 const baseUrl = getEnvironmentVariable("PERF_BASE_URL", "http://localhost:3000");
 const cookieHeader = getEnvironmentVariable("PERF_COOKIE_HEADER", "").trim();
+const CRN = getEnvironmentVariable("CRN", "").trim();
 
 if (!cookieHeader) {
     throw new Error("PERF_COOKIE_HEADER must be set to a non-blank Cookie header value before running the performance simulation.");
 }
+
+if (!CRN) {
+    throw new Error("CRN is not set");
+}
+
 const httpProtocol = http
     .baseUrl(baseUrl)
     .header("Cookie", cookieHeader);
@@ -26,7 +32,7 @@ export const mpopJourney = group("mpop").on(
     pause(1), // 1 second think time
 
     http("GET overview")
-        .get("/case/X756510")
+        .get(`/case/${CRN}`)
         .check(status().is(200))
 );
 
