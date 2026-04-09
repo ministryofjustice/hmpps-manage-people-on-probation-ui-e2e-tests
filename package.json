@@ -23,7 +23,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@faker-js/faker": "^9.7.0",
+    "@faker-js/faker": "^10.4.0",
     "@gatling.io/cli": "^3.15.1",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.132.0",
     "@playwright/test": "^1.51.1",
