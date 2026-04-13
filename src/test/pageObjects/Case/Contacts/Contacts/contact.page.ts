@@ -20,10 +20,7 @@ export default class ContactPage extends CasePage {
 
 
     private get createContactButton(): Locator {
-        return this.page.locator("main").getByRole("button", {
-            name: "Create contact",
-            exact: true,
-        });
+        return this.getQA("create-contact-button")
     }
 
     async contactDetails(): Promise<void> {
@@ -36,6 +33,9 @@ export default class ContactPage extends CasePage {
         await expect(this.createContactButton).toBeEnabled();
         await this.createContactButton.scrollIntoViewIfNeeded();
         await this.createContactButton.click();
+        if(await this.createContactButton.isVisible()){
+            await this.createContactButton.click();
+        }
     }
     // async contactDetails(): Promise<void> {
     //     await this.page.waitForLoadState('networkidle');

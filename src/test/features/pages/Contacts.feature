@@ -2,7 +2,7 @@ Feature: As a practitioner
   I want to add contacts with a PoP
   and view them as per the filter criteria
 
-#  @full @contacts
+#  @full @contacts @full
 #  Scenario Outline: View contacts for a Pop - <description>
 #    Given Context has been created for "Contacts" test
 #    And I am logged in
@@ -31,13 +31,12 @@ Feature: As a practitioner
 #      | validation error      | X793504 | 11/2/2026 |           |          |      |                        |                                            | full     | a missing date to error |
 #
 
-  @smoke @contacts
+  @smoke @contacts @full
   Scenario Outline: Add new contacts for a Pop - <description>
     Given Context has been created for "Contacts" test
     And I am logged in
     And I navigate to '<case>'
     And I navigate to contact log
-#    And there are no accessibility issues
     When I click on add contact
     And I provide Contact details
       |label|value|
