@@ -1,0 +1,239 @@
+{
+  "config": {
+    "configFile": "/Users/shilpa.basu/Projects/MPOP_Automation/playwright.config.ts",
+    "rootDir": "/Users/shilpa.basu/Projects/MPOP_Automation/.features-gen",
+    "forbidOnly": false,
+    "fullyParallel": true,
+    "globalSetup": null,
+    "globalTeardown": "/Users/shilpa.basu/Projects/MPOP_Automation/global-teardown.ts",
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "reporter": [
+      [
+        "github",
+        null
+      ],
+      [
+        "line",
+        null
+      ],
+      [
+        "html",
+        {
+          "open": "never"
+        }
+      ],
+      [
+        "junit",
+        {
+          "outputFile": "junit.xml"
+        }
+      ],
+      [
+        "json",
+        {
+          "outputFile": "results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "quiet": false,
+    "projects": [
+      {
+        "outputDir": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/Users/shilpa.basu/Projects/MPOP_Automation/.features-gen",
+        "testIgnore": [],
+        "testMatch": [
+          "**/*.@(spec|test).?(c|m)[jt]s?(x)"
+        ],
+        "timeout": 600000
+      }
+    ],
+    "shard": null,
+    "updateSnapshots": "missing",
+    "updateSourceMethod": "patch",
+    "version": "1.56.1",
+    "workers": 7,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "src/test/features/pages/Contacts.feature.spec.js",
+      "file": "src/test/features/pages/Contacts.feature.spec.js",
+      "column": 0,
+      "line": 0,
+      "specs": [],
+      "suites": [
+        {
+          "title": "As a practitioner",
+          "file": "src/test/features/pages/Contacts.feature.spec.js",
+          "line": 3,
+          "column": 6,
+          "specs": [],
+          "suites": [
+            {
+              "title": "Add new contacts for a Pop - <description>",
+              "file": "src/test/features/pages/Contacts.feature.spec.js",
+              "line": 4,
+              "column": 8,
+              "specs": [
+                {
+                  "title": "Add new contacts for a Pop - Telephone contact to person on probation",
+                  "ok": false,
+                  "tags": [
+                    "smoke",
+                    "contacts"
+                  ],
+                  "tests": [
+                    {
+                      "timeout": 600000,
+                      "annotations": [],
+                      "expectedStatus": "passed",
+                      "projectId": "chromium",
+                      "projectName": "chromium",
+                      "results": [
+                        {
+                          "workerIndex": 0,
+                          "parallelIndex": 0,
+                          "status": "failed",
+                          "duration": 58954,
+                          "error": {
+                            "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main').getByRole('button', { name: 'Create contact', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').getByRole('button', { name: 'Create contact', exact: true })\u001b[22m\n",
+                            "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main').getByRole('button', { name: 'Create contact', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').getByRole('button', { name: 'Create contact', exact: true })\u001b[22m\n\n    at AddContactPage.saveContactDetails (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts:35:48)\n    at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:85:24)\n    at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:15:7",
+                            "location": {
+                              "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts",
+                              "column": 48,
+                              "line": 35
+                            },
+                            "snippet": "\u001b[90m   at \u001b[39m../src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts:35\n\n\u001b[0m \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[36masync\u001b[39m saveContactDetails()\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[36mvoid\u001b[39m\u001b[33m>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton)\u001b[33m.\u001b[39mtoBeEnabled()\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m"
+                          },
+                          "errors": [
+                            {
+                              "location": {
+                                "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts",
+                                "column": 48,
+                                "line": 35
+                              },
+                              "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main').getByRole('button', { name: 'Create contact', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').getByRole('button', { name: 'Create contact', exact: true })\u001b[22m\n\n\n\u001b[90m   at \u001b[39m../src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts:35\n\n\u001b[0m \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[36masync\u001b[39m saveContactDetails()\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[36mvoid\u001b[39m\u001b[33m>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton)\u001b[33m.\u001b[39mtoBeEnabled()\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m\n\u001b[2m    at AddContactPage.saveContactDetails (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts:35:48)\u001b[22m\n\u001b[2m    at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:85:24)\u001b[22m\n\u001b[2m    at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:15:7\u001b[22m"
+                            }
+                          ],
+                          "stdout": [],
+                          "stderr": [],
+                          "retry": 0,
+                          "steps": [
+                            {
+                              "title": "Given Context has been created for \"Contacts\" test",
+                              "duration": 457
+                            },
+                            {
+                              "title": "And I am logged in",
+                              "duration": 19511
+                            },
+                            {
+                              "title": "And I navigate to '<case>'",
+                              "duration": 19386
+                            },
+                            {
+                              "title": "And I navigate to contact log",
+                              "duration": 1967
+                            },
+                            {
+                              "title": "When I click on add contact",
+                              "duration": 3363
+                            },
+                            {
+                              "title": "And I provide Contact details",
+                              "duration": 2010
+                            },
+                            {
+                              "title": "And I save the contact details",
+                              "duration": 10009,
+                              "error": {
+                                "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main').getByRole('button', { name: 'Create contact', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').getByRole('button', { name: 'Create contact', exact: true })\u001b[22m\n",
+                                "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('main').getByRole('button', { name: 'Create contact', exact: true })\nExpected: visible\nTimeout: 10000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" with timeout 10000ms\u001b[22m\n\u001b[2m  - waiting for locator('main').getByRole('button', { name: 'Create contact', exact: true })\u001b[22m\n\n    at AddContactPage.saveContactDetails (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts:35:48)\n    at Object.<anonymous> (/Users/shilpa.basu/Projects/MPOP_Automation/src/test/steps/pages/Contact-log.steps.ts:85:24)\n    at /Users/shilpa.basu/Projects/MPOP_Automation/.features-gen/src/test/features/pages/Contacts.feature.spec.js:15:7",
+                                "location": {
+                                  "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts",
+                                  "column": 48,
+                                  "line": 35
+                                },
+                                "snippet": "\u001b[90m   at \u001b[39m../src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts:35\n\n\u001b[0m \u001b[90m 33 |\u001b[39m\n \u001b[90m 34 |\u001b[39m     \u001b[36masync\u001b[39m saveContactDetails()\u001b[33m:\u001b[39m \u001b[33mPromise\u001b[39m\u001b[33m<\u001b[39m\u001b[36mvoid\u001b[39m\u001b[33m>\u001b[39m {\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 35 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton)\u001b[33m.\u001b[39mtoBeVisible({ timeout\u001b[33m:\u001b[39m \u001b[35m10000\u001b[39m })\u001b[33m;\u001b[39m\n \u001b[90m    |\u001b[39m                                                \u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 36 |\u001b[39m         \u001b[36mawait\u001b[39m expect(\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton)\u001b[33m.\u001b[39mtoBeEnabled()\u001b[33m;\u001b[39m\n \u001b[90m 37 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton\u001b[33m.\u001b[39mscrollIntoViewIfNeeded()\u001b[33m;\u001b[39m\n \u001b[90m 38 |\u001b[39m         \u001b[36mawait\u001b[39m \u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mcreateContactButton\u001b[33m.\u001b[39mclick()\u001b[33m;\u001b[39m\u001b[0m"
+                              }
+                            }
+                          ],
+                          "startTime": "2026-04-13T08:43:10.161Z",
+                          "annotations": [],
+                          "attachments": [
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-0c56f-tact-to-person-on-probation-chromium/test-failed-1.png"
+                            },
+                            {
+                              "name": "screenshot",
+                              "contentType": "image/png",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-0c56f-tact-to-person-on-probation-chromium/test-failed-2.png"
+                            },
+                            {
+                              "name": "video",
+                              "contentType": "video/webm",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-0c56f-tact-to-person-on-probation-chromium/video.webm"
+                            },
+                            {
+                              "name": "error-context",
+                              "contentType": "text/markdown",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-0c56f-tact-to-person-on-probation-chromium/error-context.md"
+                            },
+                            {
+                              "name": "trace",
+                              "contentType": "application/zip",
+                              "path": "/Users/shilpa.basu/Projects/MPOP_Automation/test-results/src-test-features-pages-Co-0c56f-tact-to-person-on-probation-chromium/trace.zip"
+                            }
+                          ],
+                          "errorLocation": {
+                            "file": "/Users/shilpa.basu/Projects/MPOP_Automation/src/test/pageObjects/Case/Contacts/Contacts/contact.page.ts",
+                            "column": 48,
+                            "line": 35
+                          }
+                        }
+                      ],
+                      "status": "unexpected"
+                    }
+                  ],
+                  "id": "527351177a9bfc6dae33-55e85910f9cc076da2e7",
+                  "file": "src/test/features/pages/Contacts.feature.spec.js",
+                  "line": 5,
+                  "column": 5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-04-13T08:43:09.812Z",
+    "duration": 61457.706999999995,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

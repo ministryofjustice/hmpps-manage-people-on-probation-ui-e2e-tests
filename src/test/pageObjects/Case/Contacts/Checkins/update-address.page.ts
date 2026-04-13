@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import CasePage from "../../casepage";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { Address } from "../../../../util/PersonalDetails";
 
 export const addressFields = [

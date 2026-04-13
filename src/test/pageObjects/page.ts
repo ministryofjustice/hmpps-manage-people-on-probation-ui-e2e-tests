@@ -81,8 +81,12 @@ export default abstract class MPopPage {
     async submit(){
         await this.getQA("submit-btn").click()
     }
+
     async continueButton(){
-        await this.getQA("submitBtn").click()
+        const submitButton = this.getQA("continue-button");
+        await expect(submitButton).toBeVisible();
+        await expect(submitButton).toBeEnabled();
+        await submitButton.click();
     }
 
     getLink(name: string | RegExp, locator: Locator|Page=this.page){

@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 import { photo_1_path } from "../../../../../util/Data";
 
 export default class UploadPhotoPage extends ContactPage {

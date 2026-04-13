@@ -5,7 +5,7 @@ import ReviewExpiredPage from "../pageObjects/Case/Contacts/Checkins/Review/revi
 import CasePage from "../pageObjects/Case/casepage"
 import OverviewPage from "../pageObjects/Case/overview.page"
 import SearchPage from "../pageObjects/search.page"
-import ContactPage from "../pageObjects/Case/Contacts/contactpage"
+import ContactPage from "../pageObjects/Case/Contacts/Contacts/contact.page"
 import ActivityLogPage from "../pageObjects/Case/activity-log.page"
 import PersonalDetailsPage from "../pageObjects/Case/personal-details.page"
 import { DataTable } from "playwright-bdd"

@@ -1,4 +1,4 @@
-import { Browser, BrowserContext, Page } from '@playwright/test'
+import {Browser, BrowserContext, expect, Page} from '@playwright/test'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createBdd } from 'playwright-bdd';
@@ -9,6 +9,7 @@ import { getBrowserContext } from '../util/Common';
 import { Ctx, testContext } from '../features/Fixtures';
 import OverviewPage from '../pageObjects/Case/overview.page';
 import PersonalDetailsPage from '../pageObjects/Case/personal-details.page';
+import ActivityLogPage from "../pageObjects/Case/activity-log.page";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -73,3 +74,7 @@ Given('I navigate to {string}',async ({ctx}, crn)=>{
     await overviewPage.navigateTo(crn)
     ctx.case.crn = crn
 })
+
+Then('I receive success message {string}', async ({ ctx}, message:string ) => {
+    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText(message)
+});
