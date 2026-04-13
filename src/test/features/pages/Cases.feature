@@ -2,7 +2,7 @@ Feature: As a practitioner
   I want to view my cases page
 
   @full @cases
-  Scenario Outline: View my cases page
+  Scenario: View my cases page
     Given Context has been created for "Cases" test
     And I am logged in
     And I navigate to cases page
