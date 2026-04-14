@@ -1,6 +1,5 @@
-import { expect, Locator, Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import ContactPage from "./contact.page";
-import ActivityLogPage from "../../activity-log.page";
 
 export type AddContactDetails = {
     contact: string;
@@ -24,7 +23,6 @@ export default class AddContactPage extends ContactPage {
     }
 
     async selectFrequentContact(contact: string): Promise<void> {
-        await this.page.waitForLoadState('networkidle');
         const frequentContact = this.page.getByRole("radio", {
             name: contact,
             exact: true,
@@ -32,6 +30,7 @@ export default class AddContactPage extends ContactPage {
 
         await expect(frequentContact).toBeVisible();
         await frequentContact.check();
+        await expect(frequentContact).toBeChecked();
     }
 
     async selectContactRelatedTo(contactType: string): Promise<string> {
@@ -45,115 +44,105 @@ export default class AddContactPage extends ContactPage {
         const count = await radios.count();
 
         if (count < 2) {
-            throw new Error(`Expected at least 2 options, but found ${count}`);
+            throw new Error(`Expected at least 2 contact related to options, but found ${count}`);
         }
 
-        let index: number;
-
-        if (contactType.trim().toUpperCase() === "MPOP") {
-            index = 0; // first radio
-        } else {
-            index =  0; // second radio
-        }
-
+        const index = contactType.trim().toUpperCase() === "MPOP" ? 0 : 1;
         const selectedRadio = radios.nth(index);
 
         await expect(selectedRadio).toBeVisible();
         await selectedRadio.check();
+        await expect(selectedRadio).toBeChecked();
 
-        return await selectedRadio.textContent() ?? `option-${index}`;
+        return `option-${index}`;
     }
 
-    async enterTitle(title: string): Promise<void> {
-        const titleInput = this.page
-            .locator("label")
-            .filter({ hasText: "Give the contact a different title" })
-            .locator("..")
-            .locator("input");
+    async enterTitle(title?: string): Promise<void> {
+        if (!title || title.trim() === "") return;
+
+        const titleInput = this.page.getByLabel("Give the contact a different title (optional)", {
+            exact: true,
+        });
 
         await expect(titleInput).toBeVisible();
         await titleInput.fill(title);
     }
 
-    async enterDate(date: string): Promise<void> {
+    async enterDate(date?: string): Promise<void> {
+        if (!date || date.trim() === "") return;
+
         const dateInput = this.page.getByLabel("Date", { exact: true });
         await expect(dateInput).toBeVisible();
         await dateInput.fill(date);
     }
 
-    async enterTime(time: string): Promise<void> {
+    async enterTime(time?: string): Promise<void> {
+        if (!time || time.trim() === "") return;
+
         const timeInput = this.page.getByLabel("Time", { exact: true });
         await expect(timeInput).toBeVisible();
         await timeInput.fill(time);
     }
 
-    async enterContactDetails(details: string): Promise<void> {
-        const detailsTextArea = this.page.locator("textarea");
+    async enterContactDetails(details?: string): Promise<void> {
+        if (!details || details.trim() === "") return;
+
+        const detailsTextArea = this.page.getByLabel("Add details of the contact", {
+            exact: true,
+        });
+
         await expect(detailsTextArea).toBeVisible();
         await detailsTextArea.fill(details);
     }
 
     private async selectOptionalBinaryQuestion(
-        questionText: string | RegExp,
+        groupName: string | RegExp,
         value?: string,
         labels?: { yesLabel?: string; noLabel?: string }
     ): Promise<void> {
-        if (value === undefined || value.trim() === "") {
-            return;
-        }
+        if (!value || value.trim() === "") return;
 
-        const fieldset =
-            typeof questionText === "string"
-                ? this.page.locator("fieldset").filter({ hasText: questionText })
-                : this.page.locator("fieldset").filter({ hasText: questionText });
+        const fieldset = this.page.getByRole("group", {
+            name: groupName,
+        });
 
         if ((await fieldset.count()) === 0) {
             return;
         }
 
-        if (!(await fieldset.first().isVisible())) {
-            return;
-        }
+        await expect(fieldset.first()).toBeVisible();
 
         const isYes = this.toBoolean(value);
         const optionLabel = isYes
             ? labels?.yesLabel ?? "Yes"
             : labels?.noLabel ?? "No";
 
-        await fieldset.getByRole("radio", { name: optionLabel, exact: true }).check();
-    }
-
-
-    async selectVisorInformation(value: string): Promise<void> {
-        const fieldset = this.page.locator('fieldset').filter({
-            hasText: 'Include contact in ViSOR report?',
+        const option = fieldset.first().getByRole("radio", {
+            name: optionLabel,
+            exact: true,
         });
 
-        // Check if it exists in DOM
-        if (await fieldset.count() === 0) {
-            console.log('ViSOR section not present - skipping');
-            return;
-        }
-
-        // Optional: ensure visible before interacting
-        if (!(await fieldset.isVisible())) {
-            console.log('ViSOR section not visible - skipping');
-            return;
-        }
-
-        if (value === undefined || value.trim() === '') {
-            console.log('No value provided for ViSOR - skipping');
-            return;
-        }
-
-        const isYes = this.toBoolean(value);
-        const optionLabel = isYes ? 'Yes' : 'No';
-
-        await fieldset.getByRole('radio', { name: optionLabel }).check();
+        await expect(option).toBeVisible();
+        await option.check();
+        await expect(option).toBeChecked();
     }
 
     async selectVisorReport(value?: string): Promise<void> {
-        await this.selectOptionalBinaryQuestion("Include contact in ViSOR report?", value);
+        await this.selectOptionalBinaryQuestion(
+            "Include contact in ViSOR report?",
+            value
+        );
+    }
+
+    async selectSensitiveInformation(value?: string): Promise<void> {
+        await this.selectOptionalBinaryQuestion(
+            "Does this contact include sensitive information?",
+            value,
+            {
+                yesLabel: "Yes, it includes sensitive information",
+                noLabel: "No, it is not sensitive",
+            }
+        );
     }
 
     async selectAlertPractitioner(value?: string): Promise<void> {
@@ -163,98 +152,27 @@ export default class AddContactPage extends ContactPage {
         );
     }
 
-
     async provideContactDetails(data: AddContactDetails): Promise<void> {
         await this.selectContactRelatedTo(data.relationTo);
-
-        if (data.title?.trim()) {
-            await this.enterTitle(data.title);
-        }
-
-        if (data.date?.trim()) {
-            await this.enterDate(data.date);
-        }
-
-        if (data.time?.trim()) {
-            await this.enterTime(data.time);
-        }
-
-        if (data.contactDetails?.trim()) {
-            await this.enterContactDetails(data.contactDetails);
-        }
-
-        if (data.visorReport !== undefined) {
-            await this.selectVisorReport(data.visorReport);
-        }
-
-        if (data.sensitiveInfo !== undefined) {
-            await this.selectSensitiveInformation(data.sensitiveInfo);
-        }
-
-        if (data.alertPractitioner !== undefined) {
-            await this.selectAlertPractitioner(data.alertPractitioner);
-        }
-    }
-
-    private getContactRelatedToFieldset(): Locator {
-        return this.page.locator("fieldset").filter({
-            hasText: "What is the contact related to?",
-        });
-    }
-
-    private async selectBinaryQuestion(
-        questionText: string,
-        value: string,
-        labels?: { yesLabel?: string; noLabel?: string }
-    ): Promise<void> {
-        const fieldset = this.page.locator("fieldset").filter({
-            hasText: questionText,
-        });
-
-        await expect(fieldset).toBeVisible();
-
-        const isYes = this.toBoolean(value);
-        const optionLabel = isYes
-            ? labels?.yesLabel ?? "Yes"
-            : labels?.noLabel ?? "No";
-
-        await fieldset.getByRole("radio", { name: optionLabel, exact: true }).check();
+        await this.enterTitle(data.title);
+        await this.enterDate(data.date);
+        await this.enterTime(data.time);
+        await this.enterContactDetails(data.contactDetails);
+        await this.selectVisorReport(data.visorReport);
+        await this.selectSensitiveInformation(data.sensitiveInfo);
+        await this.selectAlertPractitioner(data.alertPractitioner);
     }
 
     private toBoolean(value: string): boolean {
         return value.trim().toLowerCase() === "true";
     }
 
-    async checkOnPage(): Promise<boolean>{
+    async checkOnPage(): Promise<boolean> {
         try {
-            await this.checkQA("pageHeading", "Contacts")
-            return true
+            await this.checkQA("pageHeading", "Contacts");
+            return true;
         } catch {
-            return false
+            return false;
         }
     }
-
-
-async selectSensitiveInformation(value?: string): Promise<void> {
-    if (!value || value.trim() === "") return;
-
-const fieldset = this.page.getByRole("group", {
-    name: "Does this contact include sensitive information?",
-});
-
-await expect(fieldset).toBeVisible();
-
-const isYes = value.trim().toLowerCase() === "true";
-const optionLabel = isYes
-    ? "Yes, it includes sensitive information"
-    : "No, it is not sensitive";
-
-const option = fieldset.getByRole("radio", {
-    name: optionLabel,
-    exact: true,
-});
-
-await expect(option).toBeVisible();
-await option.check();
-}
 }
