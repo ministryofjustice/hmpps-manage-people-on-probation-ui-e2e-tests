@@ -43,7 +43,7 @@ Feature: Setup Checkins
         Then I can view the reviewed checkIn
 
     @smoke @full @esupervision @sequential
-    Scenario: Stop CheckIns 
+    Scenario: Stop CheckIns
         When I navigate to checkIn details
         And I stop checkIns with '<reason>'
         Then checkIns are labelled as stopped
@@ -53,7 +53,7 @@ Feature: Setup Checkins
             | just because |
 
     @smoke @full @esupervision @sequential
-    Scenario: Restart CheckIns   
+    Scenario: Restart CheckIns
         When I restart checkIns with values
             | label      | value           |
             | date       | nextweek        |
