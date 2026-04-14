@@ -73,9 +73,12 @@ When('I provide Contact details', async({ctx}, dataTable:DataTable)=>{
             break;
     }
 })
-When("I save the contact details", async ({ page }) => {
-    const addContactPage = new AddContactPage(page);
-    await addContactPage.saveContactDetails();
+When("I save the contact details", async ({ ctx })  => {
+    const page = ctx.base.page
+    const button = page.getByRole('button', { name: 'Create contact' });
+
+    await button.waitFor({ state: 'visible' });
+    await button.click();
 });
 
 

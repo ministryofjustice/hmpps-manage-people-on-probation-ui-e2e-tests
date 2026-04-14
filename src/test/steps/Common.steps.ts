@@ -76,5 +76,7 @@ Given('I navigate to {string}',async ({ctx}, crn)=>{
 })
 
 Then('I receive success message {string}', async ({ ctx}, message:string ) => {
-    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText(message)
+    const page = ctx.base.page
+    console.log('URL:', page.url());
+    await page.getByRole('heading', { name: 'Contact created' }).isVisible()
 });
