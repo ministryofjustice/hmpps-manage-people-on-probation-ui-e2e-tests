@@ -54,14 +54,14 @@ Feature: As a practitioner
 
 
     Examples:
-      | description                                | frequent_contact                           | contact_related_to | contact_title | date  | time  | contact_details      | visor_report | sensitive_info | alert_practitioner |
-      | Text or Email from other                   | Email or text from other                   | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Telephone contact to person on probation   | Telephone contact to person on probation   | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Email or text to other                     | Email or text to other                     | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Email or text from person on probation     | Email or text from person on probation     | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Email or text to person on probation       | Email or text to person on probation       | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Internal communications                    | Internal communications                    | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Police liaison                             | Police liaison                             | Sentence           |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Telephone contact from other               | Telephone contact from other               | Sentence           |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Telephone contact to other                 | Telephone contact to other                 | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
-      | Telephone contact from person on probation | Telephone contact from person on probation | MPoP               |               | TODAY | 10:01 | This is test message | true         | true           | true               |
+      | description                                | frequent_contact                           | contact_related_to | contact_title | date     | time  | contact_details      | visor_report | sensitive_info | alert_practitioner |
+      | Text or Email from other                   | Email or text from other                   | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Telephone contact to person on probation   | Telephone contact to person on probation   | MPoP               |               | TOMORROW | 10:01 | This is test message | true         | true           | false              |
+      | Email or text to other                     | Email or text to other                     | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Email or text from person on probation     | Email or text from person on probation     | MPoP               |               | TODAY    | 10:01 | This is test message | false        | true           | true               |
+      | Email or text to person on probation       | Email or text to person on probation       | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Internal communications                    | Internal communications                    | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | false              |
+      | Police liaison                             | Police liaison                             | Sentence           |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Telephone contact from other               | Telephone contact from other               | Sentence           |               | TODAY    | 10:01 | This is test message | true         | false          | true               |
+      | Telephone contact to other                 | Telephone contact to other                 | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Telephone contact from person on probation | Telephone contact from person on probation | MPoP               |               | TODAY    | 10:01 | This is test message | false        | false          | false              |
