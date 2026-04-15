@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 
 export enum NextAction {
   Similar = 0,

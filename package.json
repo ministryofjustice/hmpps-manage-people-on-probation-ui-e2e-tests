@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf node_modules .features-gen",
+    "clean:feature": "rm -rf .features-gen",
     "rebuild": "npm run clean && npm ci && npx playwright install && npx bddgen",
-    "test": "cucumber-js test",
+    "test": "npm run clean:feature  && npx bddgen && npx playwright test",
     "bdd": "cucumber-js",
     "bdd:tags": "cucumber-js --tags",
     "bdd:headed": "HEADLESS=false cucumber-js",

@@ -1,8 +1,6 @@
 import {createBdd, DataTable} from "playwright-bdd";
 import {ContactDetails, testContext} from "../../features/Fixtures";
-import ActivityLogPage from "../../pageObjects/Case/activity-log.page";
-import OverviewPage from "../../pageObjects/Case/overview.page";
-import { getClientToken, getContacts, getPersonalDetails } from "../../util/API";
+import { getClientToken, getPersonalDetails } from "../../util/API";
 import { expect } from "@playwright/test";
 import PersonalDetailsPage from "../../pageObjects/Case/personal-details.page";
 import { Address, addressDataTable, contactDetailsDataTable, getUpdatedAddressDetails, getUpdatedContactDetails } from "../../util/PersonalDetails";

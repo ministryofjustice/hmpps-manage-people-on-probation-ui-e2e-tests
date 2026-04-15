@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { MPOP_URL } from "../../../../util/Data";
 import { MpopArrangeAppointment } from "../../../../util/ArrangeAppointment";
 

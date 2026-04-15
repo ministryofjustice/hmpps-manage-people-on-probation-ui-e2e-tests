@@ -1,5 +1,5 @@
 import {expect, Locator, Page} from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 import ContactDetailsPage from "./update-contact-details.page";
 import { ContactDetails } from "../../../../../features/Fixtures";
 

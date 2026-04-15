@@ -8,7 +8,7 @@ import { DateTime } from "luxon";
 import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
 import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";
 import AppointmentsPage from "./appointments.page";
-import ContactPage from "./Contacts/contactpage";
+import ContactPage from "./Contacts/Contacts/contact.page";
 import InstructionsPage from "./Contacts/Checkins/SetUp/instructions.page";
 import ManageCheckInsPage from "./Contacts/Checkins/manage.page";
 import PersonalDetailsPage from "./personal-details.page";

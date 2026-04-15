@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import TypeAttendancePage from "./type-attendance.page";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { MpopDateTime, updateDateTime } from "../../../../util/DateTime"
 
 export default class LocationDateTimePage extends ContactPage {

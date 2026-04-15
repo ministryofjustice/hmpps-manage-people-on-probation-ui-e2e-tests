@@ -12,7 +12,11 @@ export default class ActivityLogPage extends CasePage {
     constructor(page: Page, crn?: string) {
         super(page, "Contacts", crn)
     }
-
+    async continueButtonVisible() {
+        await this.page.waitForLoadState('networkidle');
+        const submitButton = this.getQA("continue-button");
+        await expect(submitButton).toBeVisible();
+    }
     async applyFilters(filters: ContactFilters){
         const complianceGroup = this.page.getByRole('group', { name: 'Compliance filters' })
         const categoryGroup = this.page.getByRole('group', { name: 'Category filters' })

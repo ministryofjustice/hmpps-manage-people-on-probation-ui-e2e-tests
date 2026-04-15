@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 
 export default class ConfirmationPage extends ContactPage {
     constructor(page: Page, restart: boolean = false, crn?: string, uuid?: string) {
