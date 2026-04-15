@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 
 export default class IneligiblePage extends ContactPage {
     constructor(page: Page, crn?: string, uuid?: string) {

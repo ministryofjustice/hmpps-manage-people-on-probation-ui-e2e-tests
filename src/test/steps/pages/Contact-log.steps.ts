@@ -3,8 +3,10 @@ import {testContext} from "../../features/Fixtures";
 import ActivityLogPage from "../../pageObjects/Case/activity-log.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
 import { getClientToken, getContacts } from "../../util/API";
-import { contactDataTable } from "../../util/Contacts";
+import {addContactDataTable, contactDataTable} from "../../util/Contacts";
 import { expect } from "@playwright/test";
+import ContactPage from "../../pageObjects/Case/Contacts/Contacts/contact.page";
+import AddContactPage from "../../pageObjects/Case/Contacts/Contacts/add-contact.page";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -30,6 +32,55 @@ When('I filter the contact log with values',async ({ctx}, data:DataTable)=>{
     const contactsPage = new ActivityLogPage(page)
     await contactsPage.applyFilters(contactFilters)
 })
+
+
+When('I click on add contact',async ({ctx})=>{
+    const page = ctx.base.page
+    const contactPage = new ContactPage(page)
+    await contactPage.getQA('headerActionButton').isEnabled()
+    await contactPage.getQA('headerActionButton').click()
+})
+
+When('I provide Contact details', async({ctx}, dataTable:DataTable)=>{
+    const page = ctx.base.page
+    const contactDetails = addContactDataTable(dataTable)
+    const contactsPage = new ActivityLogPage(page)
+    const addContact = new AddContactPage(page)
+    // await contactsPage.assertOnPage()
+    await addContact.selectFrequentContact(contactDetails.contact)
+    await addContact.continueButton()
+    await addContact.contactDetails();
+    switch(contactDetails.contact.trim()){
+        case "An appointment":
+
+            break;
+        case "I want to add a different contact":
+
+            break;
+        default:
+            const data = dataTable.rowsHash();
+            await addContact.provideContactDetails({
+                contact: data.contact,
+                relationTo: data.relation_to,
+                title: data.title,
+                date: data.date,
+                time: data.time,
+                contactDetails: data.contact_details,
+                visorReport: data.visor_report,
+                sensitiveInfo: data.sensitive_info,
+                alertPractitioner: data.alert_practitioner,
+            });
+            break;
+    }
+})
+When("I save the contact details", async ({ ctx })  => {
+    const page = ctx.base.page
+    const button = page.getByRole('button', { name: 'Create contact' });
+
+    await button.waitFor({ state: 'visible' });
+    await button.click();
+});
+
 
 Then('the contact log contains the correct info',async ({ctx})=>{
     const page = ctx.base.page
@@ -61,5 +112,16 @@ Then('there are {string} on contacts page',async ({ctx}, error: string)=>{
     }
 })
 
+type ContactDetails = {
+    contact: string;
+    relation_to: string;
+    title: string;
+    date: string;
+    time: string;
+    contact_details: string;
+    visor_report: string;
+    sensitive_info: string;
+    alert_practitioner: string;
+};
 
 

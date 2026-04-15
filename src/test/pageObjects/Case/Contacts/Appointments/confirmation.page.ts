@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import NextAppointmentPage from "./next-appointment.page";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 
 export default class ConfirmationPage extends ContactPage {
     constructor(page: Page, past: boolean = false, crn?: string, uuid?: string) {

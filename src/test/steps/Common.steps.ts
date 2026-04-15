@@ -1,4 +1,3 @@
-import { Browser, BrowserContext, Page } from '@playwright/test'
 import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
 import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
 import { createBdd } from 'playwright-bdd';
@@ -6,7 +5,7 @@ import { testUser } from '../util/Data'
 import { login } from '../util/Login';
 import { loginDeliusAndCreateOffender } from '../util/Delius';
 import { getBrowserContext } from '../util/Common';
-import { Ctx, testContext } from '../features/Fixtures';
+import { testContext } from '../features/Fixtures';
 import OverviewPage from '../pageObjects/Case/overview.page';
 import PersonalDetailsPage from '../pageObjects/Case/personal-details.page';
 
@@ -73,3 +72,8 @@ Given('I navigate to {string}',async ({ctx}, crn)=>{
     await overviewPage.navigateTo(crn)
     ctx.case.crn = crn
 })
+
+Then('I receive success message {string}', async ({ ctx}, message:string ) => {
+    const page = ctx.base.page
+    await page.getByRole('heading', { name: 'Contact created' }).isVisible()
+});

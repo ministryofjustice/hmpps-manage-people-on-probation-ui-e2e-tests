@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf node_modules .features-gen",
+    "clean:feature": "rm -rf .features-gen",
     "rebuild": "npm run clean && npm ci && npx playwright install && npx bddgen",
-    "test": "cucumber-js test",
+    "test": "npm run clean:feature  && npx bddgen && npx playwright test",
     "bdd": "cucumber-js",
     "bdd:tags": "cucumber-js --tags",
     "bdd:headed": "HEADLESS=false cucumber-js",
@@ -25,7 +26,7 @@
   "devDependencies": {
     "@faker-js/faker": "^10.4.0",
     "@gatling.io/cli": "^3.15.2",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.192.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.194.0",
     "@playwright/test": "^1.59.1",
     "@types/luxon": "^3.7.1",
     "@types/node": "^22.19.17",

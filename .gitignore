@@ -2,6 +2,7 @@ node_modules/
 /test-results/
 /playwright-report/
 /playwright/.cache/
+/.features-gen/
 /downloads/
 /dist/
 *.tgz
@@ -49,3 +50,4 @@ authorized_keys
 .DS_Store
 junit.xml
 results.json
+

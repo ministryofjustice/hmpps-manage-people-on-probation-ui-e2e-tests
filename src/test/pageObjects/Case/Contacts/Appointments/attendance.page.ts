@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
 import TypeAttendancePage from "./type-attendance.page";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { MpopAttendee } from "../../../../util/ArrangeAppointment";
 
 export default class AttendancePage extends ContactPage {
