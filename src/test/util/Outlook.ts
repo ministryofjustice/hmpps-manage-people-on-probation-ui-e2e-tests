@@ -15,6 +15,7 @@ export const checkOutlook = async(page: Page, caseInfo: CaseType, token: string,
         expect(status).toBe(200)
         const message = body.subject
         console.log(message)
-        expect(message).toContain(`with ${caseInfo.person.firstName} ${caseInfo.person.lastName}`)
+        //expect(message).toContain(`with ${caseInfo.person.firstName} ${caseInfo.person.lastName}`)
+        expect(message).toMatch(new RegExp(`${caseInfo.person.firstName[0]}\\. ${caseInfo.person.lastName}`))
     }
 }

@@ -12,11 +12,12 @@ Feature: Manage Appointments
         Then I can see the new note on the appointment
         And I close the context
 
-    @smoke @full @manage @attended
-    Scenario: Add Attended Complied Outcome
-        Given Context has been created for "Manage" test
-        And I am logged in
-        When I navigate to latest appointment requiring an outcome
-        And I mark the attended complied outcome
-        Then I can see the attended and complied status
-        And I close the context
+#    @smoke @full @manage @attended
+#    Scenario: Add Attended Complied Outcome
+#        Given Context has been created for "Manage" test
+#        And I am logged in
+#        When I navigate to latest appointment requiring an outcome
+#        And I mark the attended complied outcome
+#        Then I can see the attended and complied status
+#        And I close the context
+ # TODO - Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.
