@@ -23,9 +23,10 @@ export default class ContactDetailsPage extends ContactPage {
             }
         }
         try {
-            await this.continueButton();
+            await this.getQA('submitBtn').click()
         } catch {
             await this.submit()
         }
+       
     }
 }

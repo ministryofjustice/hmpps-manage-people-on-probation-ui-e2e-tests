@@ -8,7 +8,7 @@ const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
 
 export default class CompliancePage extends CasePage {
     constructor(page: Page, crn?: string) {
-        super(page, "Sorry, the Compliance page is unavailable", crn)
+        super(page, "Compliance", crn)
     }
 
     async goTo(crn?: string){

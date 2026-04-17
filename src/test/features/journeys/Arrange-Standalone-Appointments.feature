@@ -23,9 +23,10 @@ Feature: Create Appointments
     And I close the context
     Examples:
       | ScenarioName         | sentenceId | typeId | date        | locationId  | text | mobile | note       | sensitive |
- #     | Past                 | 0          | 0      | LASTWEEK    | 0           |      |        | Test note1 | NO        |
+      | Past                 | 0          | 0      | LASTWEEK    | 0           |      |        | Test note1 | NO        |
       | Location-not-needed  | 0          | 1      | PLUS6MONTHS | not needed  | No   |        | Test note2 | NO        |
-  # TODO - Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.
+  
+  # Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.
 
   @full @appointments @failures
   Scenario Outline: Create Appointment for <ScenarioName>
@@ -78,6 +79,6 @@ Feature: Create Appointments
     And I close the context
     Examples:
       | ScenarioName         | sentenceId | typeId | date        | start | end   | locationId  | text | mobile | note       | sensitive |
- #     | ChangeToPast         |            |        | LASTWEEK    | 09:15 | 10:15 |             |      |        | past       | YES       |
-
-  # TODO - Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.
+      | ChangeToPast         |            |        | LASTWEEK    | 09:15 | 10:15 |             |      |        | past       | YES       |
+  
+  # Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.

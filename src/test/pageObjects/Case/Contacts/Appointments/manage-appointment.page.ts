@@ -23,7 +23,7 @@ export default class ManageAppointmentsPage extends ContactPage {
     }
 
     async clickAttendedAndCompliedLink(){
-        await this.clickLink("Log attended and complied appointment")
+        await this.clickLink("Log appointment outcome")
     }
 
     async clickAddNotesLink(){
