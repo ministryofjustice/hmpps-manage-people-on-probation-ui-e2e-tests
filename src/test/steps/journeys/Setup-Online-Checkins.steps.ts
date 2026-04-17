@@ -138,7 +138,7 @@ When('I mock the completion of a completed checkin', async ({ctx}, data: DataTab
 Then('I can access the new checkIn in the contact log', async ({ctx}) => {
     const page = ctx.base.page
     const crn = ctx.case.crn
-    await page.waitForTimeout(5000)
+    await page.waitForTimeout(10000)
     const contactLog = new ActivityLogPage(page, crn)
     await contactLog.navigateTo()
     await contactLog.assertOnPage()

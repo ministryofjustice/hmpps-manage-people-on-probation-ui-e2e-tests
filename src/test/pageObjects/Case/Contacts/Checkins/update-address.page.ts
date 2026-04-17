@@ -38,8 +38,8 @@ export default class UpdateAddressPage extends ContactPage {
             await this.fillText('notes', address.note)
         }
         if (address.end){
-            await this.continueButton() //valiadtion warning
+            await this.getQA('submitBtn').click() //valiadtion warning
         }
-        await this.continueButton()
+        await this.getQA('submitBtn').click()
     }
 }

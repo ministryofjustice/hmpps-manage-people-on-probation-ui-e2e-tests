@@ -22,6 +22,10 @@ export default class ManageAppointmentsPage extends ContactPage {
         await this.clickLink("use NDelius to log non-attendance or non-compliance (opens in new tab)")
     }
 
+    async clickNewAttendedAndCompliedLink(){
+        await this.clickLink("Log appointment outcome")
+    }
+
     async clickAttendedAndCompliedLink(){
         await this.clickLink("Log attended and complied appointment")
     }

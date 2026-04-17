@@ -148,7 +148,7 @@ When('I reschedule it with the following information', async ({ ctx }, data:Data
     await rescheduleAppointmentMPop(page, rescheduleDetails, changes)
 });
 
-When('I setup an appointment', async ({ ctx }, data: DataTable) => {
+When('I setup an appointment', async ({ctx }, data: DataTable) => {
     const page = ctx.base.page
     const crn = ctx.case.crn
     const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
