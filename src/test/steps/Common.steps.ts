@@ -8,8 +8,10 @@ import { getBrowserContext } from '../util/Common';
 import { testContext } from '../features/Fixtures';
 import OverviewPage from '../pageObjects/Case/overview.page';
 import PersonalDetailsPage from '../pageObjects/Case/personal-details.page';
+import AxeBuilder from "@axe-core/playwright";
+import {expect} from "@playwright/test";
 
-const { Given, When, Then } = createBdd(testContext);
+const { Given, When, Then,After } = createBdd(testContext);
 
 Given(`Context has been created for {string} test`, async ({browser: b, ctx}, name) => {
     const browser = b
@@ -76,4 +78,20 @@ Given('I navigate to {string}',async ({ctx}, crn)=>{
 Then('I receive success message {string}', async ({ ctx}, message:string ) => {
     const page = ctx.base.page
     await page.getByRole('heading', { name: 'Contact created' }).isVisible()
+});
+
+After(async function ({ ctx }) {
+    const page = ctx.base.page
+    if (!page || page.isClosed()) {
+        return; // ✅ skip if already closed
+    }
+    // ensure page is stable
+    await page.waitForLoadState('domcontentloaded');
+
+    const results = await new AxeBuilder({ page })
+        .exclude('iframe')
+        .withTags(['wcag22aa'])
+        .analyze();
+
+    expect(results.violations).toEqual([]);
 });
