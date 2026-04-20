@@ -33,7 +33,7 @@ Feature: As a practitioner
       | validation error      | X793504 | 11/2/2026 |           |          |      |                        |                                            | full     | a missing date to error |
 
 
-  @smoke @contacts @full @add_contact
+  @full @contacts @add_contact
   Scenario Outline: Add new contacts for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log

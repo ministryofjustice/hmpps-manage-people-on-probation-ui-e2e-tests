@@ -20,7 +20,8 @@ Given('I have noted the alerts count', async ({ ctx }) => {
 
 Given('The offender has been given an alert', async ({ ctx }) => {
     await loginToDelius(ctx.base.page);
-    await createContact(ctx.base.page, ctx.case.crn, deliusAlert)
+    await createContact(ctx.base.page, ctx.case.crn, deliusAlert) 
+    //Currently fails due to issues with dependency
 });
 
 Given('I have navigated to alerts', async ({ ctx }) => {
@@ -145,3 +146,31 @@ Then('the alert should be cleared', async ({ ctx }) => {
     const finalCount = await alerts.getAlertsCount()
     expect(finalCount).toBe(ctx.alerts.alertCount)
 });
+
+When('I select and clear all alerts over 90', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    const page = ctx.base.page
+    await alerts.navigateTo(page)
+    const fullCount = await alerts.getAlertsCount(true)
+    if (fullCount > 90){
+        let diff = fullCount - 90
+        while (diff > 10){
+            await alerts.getQA("selectAllAlertsBtn").click()
+            await alerts.getQA("clearSelectedAlerts").click()
+            await alerts.page.waitForTimeout(1000)
+            diff -= 20
+        }
+        for (let i=0; i<diff; i++){
+            await alerts.page.getByRole('checkbox').nth(i).click()
+        }
+        await alerts.getQA("clearSelectedAlerts").click()
+    }
+});
+
+Then('the alert count should be 90', async ({ ctx }) => {
+    const alerts = ctx.alerts.alertsPage
+    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
+    const finalCount = await alerts.getAlertsCount()
+    expect(finalCount).toBe(90)
+});
+

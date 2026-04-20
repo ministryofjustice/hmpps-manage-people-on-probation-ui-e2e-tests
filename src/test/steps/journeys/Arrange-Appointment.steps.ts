@@ -13,6 +13,7 @@ import { DateTime } from 'luxon';
 import { today } from '../../util/DateTime';
 import { checkOutlook } from '../../util/Outlook';
 import CYAPage from '../../pageObjects/Case/Contacts/Appointments/CYA.page';
+import RemindersPage from '../../pageObjects/Reminders/reminders';
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -183,4 +184,17 @@ When('I complete the submission', async({ ctx }) => {
     await cyaPage.completePage(appointment.isVisor, past)
     const confirmationPage = new ConfirmationPage(page, past)
     await confirmationPage.assertOnPage()
+})
+
+When('I navigate to the reminders service', async({ ctx }) => {
+    const page = ctx.base.page
+    const remindersPage = new RemindersPage(page)
+    await remindersPage.goTo()
+    await remindersPage.checkOnPage()
+})
+
+Then('I can see the appointment text message details', async({ ctx }) => {
+    const remindersPage = new RemindersPage(ctx.base.page)
+    const appointment = ctx.appointments[ctx.appointments.length-1]
+    await remindersPage.checkForMessage(appointment, ctx.case.person)
 })

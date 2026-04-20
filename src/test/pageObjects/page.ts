@@ -2,7 +2,6 @@ import { expect, Locator, Page } from "@playwright/test"
 
 export default abstract class MPopPage {
     readonly page: Page
-    readonly confirmationText;
     readonly title?: string | RegExp
 
     protected constructor(page: Page, title?: string | RegExp) {
@@ -83,7 +82,7 @@ export default abstract class MPopPage {
     }
 
     async continueButton(){
-        const submitButton = this.getQA("continue-button");
+        const submitButton = this.getQA("submitBtn");
         await expect(submitButton).toBeVisible();
         await expect(submitButton).toBeEnabled();
         await submitButton.click();
@@ -242,8 +241,14 @@ export default abstract class MPopPage {
         await this.page.locator('[class="moj-primary-navigation"]').getByRole('link', {name: tab}).click()
     }
 
-    async getAlertsCount() : Promise<number> {
-        return parseInt((await (this.getClass("moj-notification-badge", this.getLink("Alerts"))).allTextContents())[0])
+    async getAlertsCount(full: boolean = false) : Promise<number> {
+        if (full) {
+            const text = await this.getQA('alertsCount').textContent()
+            const count = text?.match(/\d+(,\d+)*/g) as unknown as number[]
+            return parseInt(count[2].toString().replace(/\,/g,''),10)
+        } else {
+            return parseInt((await (this.getClass("moj-notification-badge", this.getLink("Alerts"))).allTextContents())[0])
+        }
     }
 
     async logout() {

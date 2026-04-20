@@ -25,8 +25,10 @@ Feature: Create Appointments
       | ScenarioName         | sentenceId | typeId | date        | locationId  | text | mobile | note       | sensitive |
       | Past                 | 0          | 0      | LASTWEEK    | 0           |      |        | Test note1 | NO        |
       | Location-not-needed  | 0          | 1      | PLUS6MONTHS | not needed  | No   |        | Test note2 | NO        |
+      | Person-level         | person     | 1      | PLUS3MONTHS | 0           | No   |        | Test note3 | NO        |
   
   # Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.
+  # Person level appointments likely to no longer be supported so will need to be removed from the tests.
 
   @full @appointments @failures
   Scenario Outline: Create Appointment for <ScenarioName>
@@ -82,3 +84,28 @@ Feature: Create Appointments
       | ChangeToPast         |            |        | LASTWEEK    | 09:15 | 10:15 |             |      |        | past       | YES       |
   
   # Past Appointments flow for Log an Outcome is being changed to new journey so the existing journey will not work.
+
+
+@full @appointments @standalones @textmessage
+  Scenario Outline: Create Appointment and check text message sent
+    Given Context has been created for "Appointments" test
+    And A new offender has been created or existing made available
+    And I am logged in
+    When I create an appointment
+      | label      | value        |
+      | sentenceId | <sentenceId> |
+      | typeId     | <typeId>     |
+      | locationId | <locationId> |
+      | date       | <date>       |
+      | text       | <text>       |
+      | mobile     | <mobile>     |
+      | note       | <note>       |
+      | sensitive  | <sensitive>  |
+    Then the appointment should be created successfully
+    And I can check appointment details with the manage page
+    When I navigate to the reminders service
+    Then I can see the appointment text message details
+    And I close the context
+    Examples:
+      | ScenarioName         | sentenceId | typeId | date        | locationId  | text                            | mobile            | note       | sensitive |
+      | Text                 | 0          | 0      | NEXTWEEKEND | 0           | Yes, update their mobile number | 07771 900 900     | Text note  | NO        |
