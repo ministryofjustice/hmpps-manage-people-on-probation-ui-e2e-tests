@@ -39,3 +39,4 @@ export const photo_1_path = path.join(process.cwd(), 'src/test/fixtures/Photo1.p
 export const video_1_path = path.join(process.cwd(), 'src/test/fixtures/Video1.mp4');
 
 export const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
+export const REMINDERS_URL = process.env.REMINDERS_UI_URL

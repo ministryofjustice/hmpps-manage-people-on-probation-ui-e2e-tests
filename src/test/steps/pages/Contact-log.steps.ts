@@ -48,7 +48,6 @@ When('I provide Contact details', async({ctx}, dataTable:DataTable)=>{
     const addContact = new AddContactPage(page)
     // await contactsPage.assertOnPage()
     await addContact.selectFrequentContact(contactDetails.contact)
-    await addContact.continueButton()
     await addContact.contactDetails();
     switch(contactDetails.contact.trim()){
         case "An appointment":
