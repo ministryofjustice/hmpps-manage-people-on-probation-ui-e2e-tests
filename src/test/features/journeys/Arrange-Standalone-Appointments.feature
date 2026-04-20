@@ -108,4 +108,4 @@ Feature: Create Appointments
     And I close the context
     Examples:
       | ScenarioName         | sentenceId | typeId | date        | locationId  | text                            | mobile            | note       | sensitive |
-      | Text                 | 0          | 0      | NEXTWEEKEND | 0           | Yes, update their mobile number | 07771 900 900     | Text note  | NO        |
+      | Text                 | 0          | 0      | NEXTWEEKEND | 0           | Yes, add a mobile number | 07771 900 900     | Text note  | NO        |

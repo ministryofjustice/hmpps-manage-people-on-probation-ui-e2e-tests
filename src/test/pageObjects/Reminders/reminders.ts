@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 import { REMINDERS_URL } from "../../util/Data";
 import { MpopArrangeAppointment } from "../../util/ArrangeAppointment";
@@ -42,7 +42,7 @@ export default class RemindersPage extends MPopPage {
     async checkForMessage(appointment: MpopArrangeAppointment, person: Person){
         const message = `[DEV]Dear ${person.firstName}, You have an appointment at`
         const message2 = `on ${this.formatDateForSMS(appointment.dateTime.date)} at ${this.formatTimeForSMS(appointment.dateTime.startTime)}. This is an automated message. Do not reply.`
-        await this.getQA('reminders-table').getByRole('cell', {name: message}).isVisible()
-        await this.getQA('reminders-table').getByRole('cell', {name: message2}).isVisible()
+        await expect(this.getQA('reminders-table')).toContainText(message)
+        await expect(this.getQA('reminders-table')).toContainText(message2)
     }
 }
