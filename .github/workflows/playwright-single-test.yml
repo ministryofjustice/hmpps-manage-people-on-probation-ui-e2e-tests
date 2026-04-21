@@ -15,9 +15,6 @@ on:
         description: "Optional path to a specific test file"
         required: false
         type: string
-  push:
-    branches: [ MAN-2411-create-single-test-pipeline ]
-
 
 jobs:
   test-single:
