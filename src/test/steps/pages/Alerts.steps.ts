@@ -49,7 +49,7 @@ When('I click the person link', async ({ ctx }) => {
     const crn = ctx.case.crn
     await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-    await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person!.lastName}, ${person.firstName}`}).click()
+    await alerts.getQA('alertPerson', row).getByRole('link', {name: `${person!.lastName}, ${person.firstName}`}).first().click()
 });
 
 Then('I should be taken to the overview page', async ({ ctx }) => {
@@ -64,7 +64,7 @@ When('I click the activity link', async ({ ctx }) => {
     const crn = ctx.case.crn
     await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-    await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).click()
+    await alerts.getQA('alertActivity', row).getByRole('link', {name: "3 Way Meeting (Non NS)"}).first().click()
 });
 
 Then('I should be taken to the manage appointments page', async ({ ctx }) => {
@@ -81,7 +81,7 @@ When('I view the activity note', async ({ ctx }) => {
     const crn = ctx.case.crn
     await alerts.navigateTo(page)
     const row = alerts.getClass('govuk-table__row').filter({has: page.getByRole('cell', {name: `${person.lastName}, ${person.firstName} ${crn}`})})
-    await alerts.getQA('alertActivity', row).getByText('More information').click()
+    await alerts.getQA('alertActivity', row).getByText('More information').first().click()
     await alerts.getQA('alertActivity', row).getByRole('link', {name: "View full note"}).click()
 });
 
@@ -147,30 +147,31 @@ Then('the alert should be cleared', async ({ ctx }) => {
     expect(finalCount).toBe(ctx.alerts.alertCount)
 });
 
-When('I select and clear all alerts over 90', async ({ ctx }) => {
+When('I select and clear all alerts over 80', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
     const page = ctx.base.page
     await alerts.navigateTo(page)
     const fullCount = await alerts.getAlertsCount(true)
-    if (fullCount > 90){
-        let diff = fullCount - 90
+    if (fullCount > 80){
+        let diff = fullCount - 80
         while (diff > 10){
             await alerts.getQA("selectAllAlertsBtn").click()
             await alerts.getQA("clearSelectedAlerts").click()
             await alerts.page.waitForTimeout(1000)
-            diff -= 20
+            await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 10 alerts.')
+            diff -= 10
         }
         for (let i=0; i<diff; i++){
             await alerts.page.getByRole('checkbox').nth(i).click()
         }
         await alerts.getQA("clearSelectedAlerts").click()
+        await alerts.page.waitForTimeout(1000)
     }
 });
 
-Then('the alert count should be 90', async ({ ctx }) => {
+Then('the alert count should be 80', async ({ ctx }) => {
     const alerts = ctx.alerts.alertsPage
-    await expect(alerts.getClass('moj-alert moj-alert--success')).toContainText('You\'ve cleared 1 alert.')
     const finalCount = await alerts.getAlertsCount()
-    expect(finalCount).toBe(90)
+    expect(finalCount).toBe(80)
 });
 
