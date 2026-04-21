@@ -9,13 +9,13 @@ export default class ContactDetailsPage extends ContactPage {
     }
 
     async completePage(contacts: ContactDetails){
-        if (contacts.phone){
+        if (contacts.phone != undefined){
             await this.fillText('phoneNumber', contacts.phone)
         }
-        if (contacts.mobile){
+        if (contacts.mobile != undefined){
             await this.fillText('mobileNumber', contacts.mobile)
         }
-        if (contacts.email){
+        if (contacts.email != undefined){
             try {
                 await this.fillText('emailAddress', contacts.email)
             } catch {
