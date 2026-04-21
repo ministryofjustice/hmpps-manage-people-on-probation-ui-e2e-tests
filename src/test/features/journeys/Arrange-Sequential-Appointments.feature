@@ -4,7 +4,7 @@ Feature: Create Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    @smoke @full @appointments @sequential
+    @full @appointments @sequential @smoke
     Scenario Outline: Create Future Appointment for <ScenarioName>
         Given Context has been created for "Sequential appointments" test
         And A new offender has been created or existing made available
@@ -26,7 +26,7 @@ Feature: Create Appointments
         | ScenarioName | sentenceId | typeId | locationId | text                     | mobile        | note       | sensitive |
         | Sequential   | 0          | 0      | 0          | Yes, add a mobile number | 07771 900 900 | Test note1 | No        |
 
-    @smoke @full @appointments @sequential
+    @full @appointments @sequential
     Scenario Outline: Create Similar Appointment for <ScenarioName>
         When I create a similar appointment
           | label     | value       |
@@ -56,7 +56,7 @@ Feature: Create Appointments
         
         Examples:
             | ScenarioName | sentenceId | typeId | date        | locationId |
-            | Sequential   | person     | 0      | PLUS3MONTHS | 0          |
+            | Sequential   | 0          | 0      | PLUS3MONTHS | 0          |
 
     @full @appointments @sequential @reschedule
     Scenario Outline:Reschedule an appointment for <ScenarioName>
@@ -75,7 +75,7 @@ Feature: Create Appointments
             | ScenarioName | date        | sensitive | who    | reason   |
             | Sequential   | PLUS6MONTHS | YES       | person | just cos |
 
-    @smoke @full @appointments @sequential @reschedule @past
+    @full @appointments @sequential @reschedule @past
     Scenario Outline:Reschedule an appointment in past for <ScenarioName>
         When I access an existing future appointment
         And I reschedule it with the following information

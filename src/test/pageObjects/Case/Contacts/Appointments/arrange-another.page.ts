@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
 import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { MpopDateTime, today } from "../../../../util/DateTime";
 import TextConfirmationPage from "./text-confirmation-page";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";

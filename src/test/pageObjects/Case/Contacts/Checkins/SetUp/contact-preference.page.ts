@@ -1,5 +1,5 @@
 import {expect, Locator, Page} from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 import ContactDetailsPage from "./update-contact-details.page";
 import { ContactDetails } from "../../../../../features/Fixtures";
 
@@ -40,7 +40,7 @@ export default class ContactPreferencePage extends ContactPage {
         if (preference !== undefined){
             await this.clickRadio("checkInPreferredComs", preference)
         }
-        await this.continueButton()        
+        await this.getQA('submitBtn').click()   
     }
 
     async enterContactPreferenceIfDoesNotExists(

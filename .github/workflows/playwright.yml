@@ -46,7 +46,7 @@ jobs:
 
     - name: Publish JUnit report
       if: always()
-      uses: mikepenz/action-junit-report@cf701569b05ccdd861a76b8607a66d76f6fd4857 # v5.5.1
+      uses: mikepenz/action-junit-report@bccf2e31636835cf0874589931c4116687171386 # v6.4.0
       id: junit
       with:
         check_name: End-to-end test results
@@ -158,7 +158,7 @@ jobs:
 
     - name: Upload stats summary
       if: always() && github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
          name: playwright-stats
          path: stats-summary.json
@@ -166,7 +166,7 @@ jobs:
 
     - name: Upload videos
       if: always() && github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v6
+      uses: actions/upload-artifact@v7
       with:
          name: playwright-videos
          path: ./videos/
@@ -174,7 +174,7 @@ jobs:
 
     - name: Notify Slack
       if: always() && github.ref == 'refs/heads/main'
-      uses: slackapi/slack-github-action@v2.1.1
+      uses: slackapi/slack-github-action@v3.0.1
       with:
         method: chat.postMessage
         token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}

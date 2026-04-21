@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { MPOP_URL } from "../../../../util/Data";
 import { MpopArrangeAppointment } from "../../../../util/ArrangeAppointment";
 
@@ -20,6 +20,10 @@ export default class ManageAppointmentsPage extends ContactPage {
 
     async clickNdeliusLink(){
         await this.clickLink("use NDelius to log non-attendance or non-compliance (opens in new tab)")
+    }
+
+    async clickNewAttendedAndCompliedLink(){
+        await this.clickLink("Log appointment outcome")
     }
 
     async clickAttendedAndCompliedLink(){

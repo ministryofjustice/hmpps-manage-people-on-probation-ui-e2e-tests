@@ -1,5 +1,5 @@
 import { expect, Page } from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 import { YesNoCheck } from "../../../../../util/ReviewCheckins";
 
 export default class ReviewNotesPage extends ContactPage {

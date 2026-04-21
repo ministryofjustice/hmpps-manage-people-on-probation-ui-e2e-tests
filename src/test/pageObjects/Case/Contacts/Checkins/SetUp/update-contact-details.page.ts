@@ -1,5 +1,5 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../../contactpage";
+import ContactPage from "../../Contacts/contact.page";
 import { ContactDetails } from "../../../../../features/Fixtures";
 
 export default class ContactDetailsPage extends ContactPage {
@@ -23,9 +23,10 @@ export default class ContactDetailsPage extends ContactPage {
             }
         }
         try {
-            await this.continueButton();
+            await this.getQA('submitBtn').click()
         } catch {
             await this.submit()
         }
+       
     }
 }

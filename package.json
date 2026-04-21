@@ -4,8 +4,9 @@
   "main": "index.js",
   "scripts": {
     "clean": "rm -rf node_modules .features-gen",
+    "clean:feature": "rm -rf .features-gen",
     "rebuild": "npm run clean && npm ci && npx playwright install && npx bddgen",
-    "test": "cucumber-js test",
+    "test": "npm run clean:feature  && npx bddgen && npx playwright test",
     "bdd": "cucumber-js",
     "bdd:tags": "cucumber-js --tags",
     "bdd:headed": "HEADLESS=false cucumber-js",
@@ -23,21 +24,22 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "@faker-js/faker": "^9.7.0",
-    "@gatling.io/cli": "^3.15.1",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.132.0",
-    "@playwright/test": "^1.51.1",
+    "@axe-core/playwright": "^4.11.1",
+    "@faker-js/faker": "^10.4.0",
+    "@gatling.io/cli": "^3.15.2",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.197.0",
+    "@playwright/test": "^1.59.1",
     "@types/luxon": "^3.7.1",
-    "@types/node": "^22.14.1",
-    "dotenv": "^16.5.0",
-    "eslint": "^10.0.2",
-    "luxon": "^3.6.1",
-    "playwright-bdd": "^8.4.2",
-    "tsx": "^4.19.3"
+    "@types/node": "^22.19.17",
+    "dotenv": "^17.4.1",
+    "eslint": "^10.2.0",
+    "luxon": "^3.7.2",
+    "playwright-bdd": "^8.5.0",
+    "tsx": "^4.21.0"
   },
   "dependencies": {
-    "@gatling.io/core": "^3.15.1",
-    "@gatling.io/http": "^3.15.1",
+    "@gatling.io/core": "^3.15.2",
+    "@gatling.io/http": "^3.15.2",
     "op": "^0.0.6"
   }
 }

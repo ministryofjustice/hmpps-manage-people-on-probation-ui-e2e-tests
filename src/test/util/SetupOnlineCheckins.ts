@@ -13,6 +13,7 @@ import { chance, randomEnum, randomPicker } from "./Common"
 import { ContactDetails } from "../features/Fixtures"
 import EligibilityPage from "../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page"
 import EligiblePage from "../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page"
+import SPOApprovalPage from "../pageObjects/Case/Contacts/Checkins/SetUp/spo-approval.page"
 
 export interface MpopSetupCheckin {
     date: string
@@ -52,6 +53,10 @@ export const setupCheckinsMPop = async(page: Page, setup: MpopSetupCheckin) => {
     const eligiblePage = new EligiblePage(page)
     await eligiblePage.assertOnPage()
     await eligiblePage.completePage(0)
+
+    const spoApprovalPage = new SPOApprovalPage(page)
+    await spoApprovalPage.assertOnPage()
+    await spoApprovalPage.completePage()
 
      // Navigate to Date frequency page, verify page header and complete the page
     const dateFrequencyPage = new DateFrequencyPage(page)

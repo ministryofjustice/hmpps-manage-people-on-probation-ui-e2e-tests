@@ -4,7 +4,7 @@ import SentencePage from "./sentence.page";
 import TypeAttendancePage from "./type-attendance.page";
 import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
-import ContactPage from "../contactpage";
+import ContactPage from "../Contacts/contact.page";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
 import TextConfirmationPage from "./text-confirmation-page";
 import AttendedCompliedPage from "./attended-complied.page";

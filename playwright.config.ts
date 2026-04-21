@@ -42,7 +42,7 @@ export default defineConfig({
     viewport: null,
     actionTimeout: secondsToMilliseconds(30),
     timezoneId: 'Europe/London',
-    launchOptions: { slowMo: 150 },
+    launchOptions: { slowMo: 500 },
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: process.env.CI ? 'off' : 'on',
@@ -54,8 +54,6 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
-          // permissions: ["camera"],
-          //...devices['Desktop Chrome'],
           launchOptions: {
               args: [
                 '--start-maximized', 
