@@ -91,6 +91,7 @@ Feature: Create Appointments
     Given Context has been created for "Appointments" test
     And A new offender has been created or existing made available
     And I am logged in
+    And I clear the contact details if set
     When I create an appointment
       | label      | value        |
       | sentenceId | <sentenceId> |
