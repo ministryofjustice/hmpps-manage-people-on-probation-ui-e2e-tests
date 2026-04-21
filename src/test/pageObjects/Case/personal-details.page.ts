@@ -25,11 +25,11 @@ export default class PersonalDetailsPage extends CasePage {
     }
 
     async updateContactDetails(details: ContactDetails) {
-        if (details.phone) {
+        if (details.phone != undefined) {
             await this.getQA('telephoneNumberAction').click()
-        } else if (details.mobile) {
+        } else if (details.mobile != undefined) {
             await this.getQA('mobileNumberAction').click()
-        } else if (details.email) {
+        } else if (details.email != undefined) {
             await this.getQA('emailAddressAction').click()
         } else {
             console.log('no details')
