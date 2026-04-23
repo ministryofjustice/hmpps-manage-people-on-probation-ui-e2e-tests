@@ -293,7 +293,8 @@ Then("Checkins should be setup", async ({ ctx }) => {
 
 Then(
   "I mock the completion of an expired checkin for {string}",
-  async (_, cases) => {
+  //eslint-disable-next-line no-empty-pattern
+  async ({}, cases) => {
     const caseList = cases.split(",");
     for (let i = 0; i < caseList.length; i++) {
       const crn = caseList[i];

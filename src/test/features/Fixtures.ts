@@ -118,7 +118,8 @@ export const testContext = base.extend<
     await use(ctxMap[testInfo.file]);
   },
   ctxMap: [
-    async (_, use) => {
+    // eslint-disable-next-line no-empty-pattern
+    async ({}, use) => {
       const ctxMap: Record<string, Ctx> = {};
       await use(ctxMap);
       for (const ctx of Object.values(ctxMap)) await ctx.base?.page?.close();
