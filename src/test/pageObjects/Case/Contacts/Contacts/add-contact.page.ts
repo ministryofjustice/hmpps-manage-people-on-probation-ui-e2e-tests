@@ -30,6 +30,7 @@ export default class AddContactPage extends ContactPage {
 
         await expect(frequentContact).toBeVisible();
         await frequentContact.click()
+        await this.getQA('continue-button').click()
     }
 
     async selectContactRelatedTo(contactType: string): Promise<string> {
