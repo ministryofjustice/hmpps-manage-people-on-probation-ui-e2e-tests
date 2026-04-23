@@ -105,7 +105,7 @@ jobs:
 
       - name: Notify Slack
         if: always()
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@v3.0.2
         with:
           method: chat.postMessage
           token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
