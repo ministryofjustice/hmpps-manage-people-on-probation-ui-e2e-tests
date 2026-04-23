@@ -1,200 +1,272 @@
-import { expect, Page } from '@playwright/test'
-import { createBdd, DataTable } from 'playwright-bdd';
-import AppointmentsPage from '../../pageObjects/Case/appointments.page'
-import { appointmentDataTable, createAnotherAppointmentMPop, createAppointmentMPop, createSimilarAppointmentMPop, fullDetailsFromChanges, MpopAppointmentChanges, MpopArrangeAppointment, rescheduleAppointmentMPop, rescheduleDataTable, RescheduleDetails, setupAppointmentMPop } from '../../util/ArrangeAppointment'
-import { testContext } from '../../features/Fixtures';
-import LocationNotInListPage from '../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page';
-import ConfirmationPage from '../../pageObjects/Case/Contacts/Appointments/confirmation.page';
-import OverviewPage from '../../pageObjects/Case/overview.page';
-import ManageAppointmentsPage from '../../pageObjects/Case/Contacts/Appointments/manage-appointment.page';
-import { getCalenderEvent, getClientToken, getExternalReference } from '../../util/API';
-import { getUrn, getUuid } from '../../util/Common';
-import { DateTime } from 'luxon';
-import { today } from '../../util/DateTime';
-import { checkOutlook } from '../../util/Outlook';
-import CYAPage from '../../pageObjects/Case/Contacts/Appointments/CYA.page';
-import RemindersPage from '../../pageObjects/Reminders/reminders';
+import { expect, Page } from "@playwright/test";
+import { createBdd, DataTable } from "playwright-bdd";
+import AppointmentsPage from "../../pageObjects/Case/appointments.page";
+import {
+  appointmentDataTable,
+  createAnotherAppointmentMPop,
+  createAppointmentMPop,
+  createSimilarAppointmentMPop,
+  fullDetailsFromChanges,
+  MpopAppointmentChanges,
+  MpopArrangeAppointment,
+  rescheduleAppointmentMPop,
+  rescheduleDataTable,
+  RescheduleDetails,
+  setupAppointmentMPop,
+} from "../../util/ArrangeAppointment";
+import { testContext } from "../../features/Fixtures";
+import LocationNotInListPage from "../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page";
+import ConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/confirmation.page";
+import OverviewPage from "../../pageObjects/Case/overview.page";
+import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import {
+  getCalenderEvent,
+  getClientToken,
+  getExternalReference,
+} from "../../util/API";
+import { getUrn, getUuid } from "../../util/Common";
+import { DateTime } from "luxon";
+import { today } from "../../util/DateTime";
+import { checkOutlook } from "../../util/Outlook";
+import CYAPage from "../../pageObjects/Case/Contacts/Appointments/CYA.page";
+import RemindersPage from "../../pageObjects/Reminders/reminders";
 
 const { Given, When, Then } = createBdd(testContext);
 
-When('I create an appointment', async ({ ctx }, data: DataTable) => {
-    const page = ctx.base.page
-    const crn = ctx.case.crn
-    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
-    await appointments.navigateTo()
-    await appointments.assertOnPage()
-    await appointments.startArrangeAppointment()
+When("I create an appointment", async ({ ctx }, data: DataTable) => {
+  const page = ctx.base.page;
+  const crn = ctx.case.crn;
+  const appointments: AppointmentsPage = new AppointmentsPage(page, crn);
+  await appointments.navigateTo();
+  await appointments.assertOnPage();
+  await appointments.startArrangeAppointment();
 
-    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    ctx.appointments.push(appointment)
-    await createAppointmentMPop(page, appointment)
+  const appointment: MpopArrangeAppointment = appointmentDataTable(
+    data,
+    true,
+  ) as MpopArrangeAppointment;
+  ctx.appointments.push(appointment);
+  await createAppointmentMPop(page, appointment);
 });
 
-When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
-    const page = ctx.base.page
-    const crn = ctx.case.crn
-    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
-    await appointments.navigateTo()
-    await appointments.assertOnPage()
-    await appointments.startArrangeAppointment()
+When("I confirm the appointment", async ({ ctx }, data: DataTable) => {
+  const page = ctx.base.page;
+  const crn = ctx.case.crn;
+  const appointments: AppointmentsPage = new AppointmentsPage(page, crn);
+  await appointments.navigateTo();
+  await appointments.assertOnPage();
+  await appointments.startArrangeAppointment();
 
-    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    ctx.appointments.push(appointment)
-    await createAppointmentMPop(page, appointment)
+  const appointment: MpopArrangeAppointment = appointmentDataTable(
+    data,
+    true,
+  ) as MpopArrangeAppointment;
+  ctx.appointments.push(appointment);
+  await createAppointmentMPop(page, appointment);
 });
 
-When('I confirm the appointment', async ({ ctx }, data: DataTable) => {
-    const page = ctx.base.page
-    const crn = ctx.case.crn
-    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
-    await appointments.navigateTo()
-    await appointments.assertOnPage()
-    await appointments.startArrangeAppointment()
+When("I confirm the appointment", async ({ ctx }, data: DataTable) => {
+  const page = ctx.base.page;
+  const crn = ctx.case.crn;
+  const appointments: AppointmentsPage = new AppointmentsPage(page, crn);
+  await appointments.navigateTo();
+  await appointments.assertOnPage();
+  await appointments.startArrangeAppointment();
 
-    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    ctx.appointments.push(appointment)
-    await createAppointmentMPop(page, appointment)
+  const appointment: MpopArrangeAppointment = appointmentDataTable(
+    data,
+    true,
+  ) as MpopArrangeAppointment;
+  ctx.appointments.push(appointment);
+  await createAppointmentMPop(page, appointment);
 });
 
-When('I create a similar appointment', async ({ ctx }, data: DataTable) => {
-    const changes: MpopAppointmentChanges = appointmentDataTable(data)
-    const appointment = fullDetailsFromChanges(changes, ctx.appointments[ctx.appointments.length-1])
-    ctx.appointments.push(appointment)
-    await createSimilarAppointmentMPop(ctx.base.page, changes)
+When("I create a similar appointment", async ({ ctx }, data: DataTable) => {
+  const changes: MpopAppointmentChanges = appointmentDataTable(data);
+  const appointment = fullDetailsFromChanges(
+    changes,
+    ctx.appointments[ctx.appointments.length - 1],
+  );
+  ctx.appointments.push(appointment);
+  await createSimilarAppointmentMPop(ctx.base.page, changes);
 });
 
-When('I create another appointment', async ({ ctx }, data:DataTable) => {
-    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    ctx.appointments.push(appointment)
-    await createAnotherAppointmentMPop(ctx.base.page, appointment)
+When("I create another appointment", async ({ ctx }, data: DataTable) => {
+  const appointment: MpopArrangeAppointment = appointmentDataTable(
+    data,
+    true,
+  ) as MpopArrangeAppointment;
+  ctx.appointments.push(appointment);
+  await createAnotherAppointmentMPop(ctx.base.page, appointment);
 });
 
-Then('the appointment should be created successfully', async ({ ctx }) => {
-    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("arranged")
+Then("the appointment should be created successfully", async ({ ctx }) => {
+  await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText(
+    "arranged",
+  );
 });
 
-Then('the sms text message confirmation and appointment added to your calendar text is displayed', async ({ ctx }) => {
+Then(
+  "the sms text message confirmation and appointment added to your calendar text is displayed",
+  async ({ ctx }) => {
     await expect(
-        ctx.base.page.locator('p') // selects all <p> elements
-            .filter({ hasText: 'will receive a confirmation text message with the appointment details. This will also be logged as a contact on NDelius.' }) // narrows down to the one containing your text
+      ctx.base.page
+        .locator("p") // selects all <p> elements
+        .filter({
+          hasText:
+            "will receive a confirmation text message with the appointment details. This will also be logged as a contact on NDelius.",
+        }), // narrows down to the one containing your text
     ).toBeVisible();
     await expect(
-        ctx.base.page.locator('ul[data-qa="outlook-msg"] li')
+      ctx.base.page.locator('ul[data-qa="outlook-msg"] li'),
     ).toContainText([
-        'your calendar',
-        'the NDelius contact log and officer diary, along with any supporting information'
+      "your calendar",
+      "the NDelius contact log and officer diary, along with any supporting information",
     ]);
-});
+  },
+);
 
-Then('give the appointment details and your calendar text is displayed', async ({ ctx }) => {
+Then(
+  "give the appointment details and your calendar text is displayed",
+  async ({ ctx }) => {
     await expect(
-        ctx.base.page.locator('p') // selects all <p> elements
-            .filter({ hasText: 'You need to give' }) // narrows down to the one containing your text
+      ctx.base.page
+        .locator("p") // selects all <p> elements
+        .filter({ hasText: "You need to give" }), // narrows down to the one containing your text
     ).toBeVisible();
     await expect(
-        ctx.base.page.locator('ul[data-qa="outlook-msg"] li')
+      ctx.base.page.locator('ul[data-qa="outlook-msg"] li'),
     ).toContainText([
-        'your calendar',
-        'the NDelius contact log and officer diary, along with any supporting information'
+      "your calendar",
+      "the NDelius contact log and officer diary, along with any supporting information",
     ]);
+  },
+);
+
+Then("the appointment should be rescheduled successfully", async ({ ctx }) => {
+  await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText(
+    "rescheduled",
+  );
 });
 
-Then('the appointment should be rescheduled successfully', async ({ ctx }) => {
-    await expect(ctx.base.page.locator('[data-qa="pageHeading"]')).toContainText("rescheduled")
+Then("I end up on the location-not-in-list page", async ({ ctx }) => {
+  const locationNotInListPage = new LocationNotInListPage(ctx.base.page);
+  await locationNotInListPage.assertOnPage();
 });
 
-Then('I end up on the location-not-in-list page', async ({ ctx }) => {
-    const locationNotInListPage = new LocationNotInListPage(ctx.base.page)
-    await locationNotInListPage.assertOnPage()
-});
-
-Then('I can check appointment details with the manage page', async ({ ctx }) => {
-    const page = ctx.base.page
-    const token = await getClientToken()
-    const confirmationPage = new ConfirmationPage(page)
-    await confirmationPage.completePage("overview")
-    const overviewPage = new OverviewPage(page)
-    await overviewPage.assertOnPage()
-    await overviewPage.useSubNavigation("appointmentsTab")
-    for (let a = 0; a < ctx.appointments.length; a++){
-        const appointment : MpopArrangeAppointment = ctx.appointments[a]
-        const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-        const appointmentsPage = new AppointmentsPage(page)
-        await appointmentsPage.assertOnPage()
-        await appointmentsPage.manageAppointment(appointment)
-        const managePage = new ManageAppointmentsPage(page)
-        await managePage.assertOnPage()
-        await checkOutlook(page, ctx.case, token, past, appointment.dateTime)
-        await managePage.clickBackLink()
+Then(
+  "I can check appointment details with the manage page",
+  async ({ ctx }) => {
+    const page = ctx.base.page;
+    const token = await getClientToken();
+    const confirmationPage = new ConfirmationPage(page);
+    await confirmationPage.completePage("overview");
+    const overviewPage = new OverviewPage(page);
+    await overviewPage.assertOnPage();
+    await overviewPage.useSubNavigation("appointmentsTab");
+    for (let a = 0; a < ctx.appointments.length; a++) {
+      const appointment: MpopArrangeAppointment = ctx.appointments[a];
+      const past =
+        DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+      const appointmentsPage = new AppointmentsPage(page);
+      await appointmentsPage.assertOnPage();
+      await appointmentsPage.manageAppointment(appointment);
+      const managePage = new ManageAppointmentsPage(page);
+      await managePage.assertOnPage();
+      await checkOutlook(page, ctx.case, token, past, appointment.dateTime);
+      await managePage.clickBackLink();
     }
+  },
+);
+
+When("I access an existing future appointment", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const appointment: MpopArrangeAppointment = ctx.appointments[0];
+  const appointmentsPage = new AppointmentsPage(page);
+  await appointmentsPage.assertOnPage();
+  await appointmentsPage.manageAppointment(appointment);
+  const managePage = new ManageAppointmentsPage(page);
+  await managePage.assertOnPage();
+  await managePage.page.getByRole("link", { name: "Reschedule" }).click();
 });
 
-When('I access an existing future appointment', async ({ ctx }) => {
-    const page = ctx.base.page
-    const appointment : MpopArrangeAppointment = ctx.appointments[0]
-    const appointmentsPage = new AppointmentsPage(page)
-    await appointmentsPage.assertOnPage()
-    await appointmentsPage.manageAppointment(appointment)
-    const managePage = new ManageAppointmentsPage(page)
-    await managePage.assertOnPage()
-    await managePage.page.getByRole('link', {name: "Reschedule"}).click()
+When(
+  "I reschedule it with the following information",
+  async ({ ctx }, data: DataTable) => {
+    const page = ctx.base.page;
+    const changes: MpopAppointmentChanges = appointmentDataTable(data);
+    const appointment = fullDetailsFromChanges(changes, ctx.appointments[0]);
+    ctx.appointments[0] = appointment;
+    const rescheduleDetails: RescheduleDetails = rescheduleDataTable(data);
+    await rescheduleAppointmentMPop(page, rescheduleDetails, changes);
+  },
+);
+
+When("I setup an appointment", async ({ ctx }, data: DataTable) => {
+  const page = ctx.base.page;
+  const crn = ctx.case.crn;
+  const appointments: AppointmentsPage = new AppointmentsPage(page, crn);
+  await appointments.navigateTo();
+  await appointments.assertOnPage();
+  await appointments.startArrangeAppointment();
+
+  const appointment: MpopArrangeAppointment = appointmentDataTable(
+    data,
+    true,
+  ) as MpopArrangeAppointment;
+  ctx.appointments.push(appointment);
+  const past =
+    DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+  await setupAppointmentMPop(page, appointment, past);
 });
 
-When('I reschedule it with the following information', async ({ ctx }, data:DataTable) => {
-    const page = ctx.base.page
-    const changes: MpopAppointmentChanges = appointmentDataTable(data)
-    const appointment = fullDetailsFromChanges(changes, ctx.appointments[0])
-    ctx.appointments[0] = appointment
-    const rescheduleDetails: RescheduleDetails = rescheduleDataTable(data)
-    await rescheduleAppointmentMPop(page, rescheduleDetails, changes)
+When(
+  "I make the following changes to appointment",
+  async ({ ctx }, data: DataTable) => {
+    const page = ctx.base.page;
+    const changes: MpopAppointmentChanges = appointmentDataTable(
+      data,
+      false,
+      true,
+    );
+    let appointment = ctx.appointments[ctx.appointments.length - 1];
+    const currentPast =
+      DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+    appointment = fullDetailsFromChanges(changes, appointment);
+    ctx.appointments[ctx.appointments.length - 1] = appointment;
+    const cyaPage = new CYAPage(page);
+    await cyaPage.assertOnPage();
+    const newPast =
+      DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+    await cyaPage.makeChanges(
+      changes,
+      appointment.typeId,
+      currentPast,
+      newPast,
+    );
+  },
+);
+
+When("I complete the submission", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const appointment = ctx.appointments[ctx.appointments.length - 1];
+  const past =
+    DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+  const cyaPage = new CYAPage(page);
+  await cyaPage.completePage(appointment.isVisor, past);
+  const confirmationPage = new ConfirmationPage(page, past);
+  await confirmationPage.assertOnPage();
 });
 
-When('I setup an appointment', async ({ctx }, data: DataTable) => {
-    const page = ctx.base.page
-    const crn = ctx.case.crn
-    const appointments: AppointmentsPage = new AppointmentsPage(page, crn)
-    await appointments.navigateTo()
-    await appointments.assertOnPage()
-    await appointments.startArrangeAppointment()
-
-    const appointment: MpopArrangeAppointment = appointmentDataTable(data, true) as MpopArrangeAppointment
-    ctx.appointments.push(appointment)
-    const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-    await setupAppointmentMPop(page, appointment, past)
+When("I navigate to the reminders service", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const remindersPage = new RemindersPage(page);
+  await remindersPage.goTo();
+  await remindersPage.checkOnPage();
 });
 
-When('I make the following changes to appointment', async({ ctx }, data:DataTable) => {
-    const page = ctx.base.page
-    const changes: MpopAppointmentChanges = appointmentDataTable(data, false, true)
-    let appointment = ctx.appointments[ctx.appointments.length-1]
-    const currentPast = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-    appointment = fullDetailsFromChanges(changes, appointment)
-    ctx.appointments[ctx.appointments.length-1] = appointment
-    const cyaPage = new CYAPage(page)
-    await cyaPage.assertOnPage()
-    const newPast = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-    await cyaPage.makeChanges(changes, appointment.typeId, currentPast, newPast)
-})
-
-When('I complete the submission', async({ ctx }) => {
-    const page = ctx.base.page
-    const appointment = ctx.appointments[ctx.appointments.length-1]
-    const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-    const cyaPage = new CYAPage(page)
-    await cyaPage.completePage(appointment.isVisor, past)
-    const confirmationPage = new ConfirmationPage(page, past)
-    await confirmationPage.assertOnPage()
-})
-
-When('I navigate to the reminders service', async({ ctx }) => {
-    const page = ctx.base.page
-    const remindersPage = new RemindersPage(page)
-    await remindersPage.goTo()
-    await remindersPage.checkOnPage()
-})
-
-Then('I can see the appointment text message details', async({ ctx }) => {
-    const remindersPage = new RemindersPage(ctx.base.page)
-    const appointment = ctx.appointments[ctx.appointments.length-1]
-    await remindersPage.checkForMessage(appointment, ctx.case.person)
-})
+Then("I can see the appointment text message details", async ({ ctx }) => {
+  const remindersPage = new RemindersPage(ctx.base.page);
+  const appointment = ctx.appointments[ctx.appointments.length - 1];
+  await remindersPage.checkForMessage(appointment, ctx.case.person);
+});

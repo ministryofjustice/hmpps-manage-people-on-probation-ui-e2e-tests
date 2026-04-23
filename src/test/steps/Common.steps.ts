@@ -1,97 +1,120 @@
-import { data } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs'
-import { createCustodialEvent } from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs'
-import { createBdd } from 'playwright-bdd';
-import { testUser } from '../util/Data'
-import { login } from '../util/Login';
-import { loginDeliusAndCreateOffender } from '../util/Delius';
-import { getBrowserContext } from '../util/Common';
-import { testContext } from '../features/Fixtures';
-import OverviewPage from '../pageObjects/Case/overview.page';
-import PersonalDetailsPage from '../pageObjects/Case/personal-details.page';
+import { data } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
+import { createCustodialEvent } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/event/create-event.mjs";
+import { createBdd } from "playwright-bdd";
+import { testUser } from "../util/Data";
+import { login } from "../util/Login";
+import { loginDeliusAndCreateOffender } from "../util/Delius";
+import { getBrowserContext } from "../util/Common";
+import { testContext } from "../features/Fixtures";
+import OverviewPage from "../pageObjects/Case/overview.page";
+import PersonalDetailsPage from "../pageObjects/Case/personal-details.page";
 import AxeBuilder from "@axe-core/playwright";
-import {expect} from "@playwright/test";
+import { expect } from "@playwright/test";
 
-const { Given, When, Then,After } = createBdd(testContext);
+const { Given, When, Then, After } = createBdd(testContext);
 
-Given(`Context has been created for {string} test`, async ({browser: b, ctx}, name) => {
-    const browser = b
-    const context = await browser.newContext(getBrowserContext(name))
-    const page = await context.newPage()
+Given(
+  `Context has been created for {string} test`,
+  async ({ browser: b, ctx }, name) => {
+    const browser = b;
+    const context = await browser.newContext(getBrowserContext(name));
+    const page = await context.newPage();
     ctx.base = {
-        browser: browser,
-        context: context,
-        page: page   
+      browser: browser,
+      context: context,
+      page: page,
+    };
+  },
+);
+
+Given("A new offender has been created in Ndelius", async ({ ctx }) => {
+  const [person, crn, created] = await loginDeliusAndCreateOffender(
+    ctx.base.page,
+    "Wales",
+    testUser,
+    data.teams.allocationsTestTeam,
+    true,
+  );
+  await createCustodialEvent(ctx.base.page, {
+    crn,
+    allocation: { team: data.teams.approvedPremisesTestTeam },
+  });
+  ctx.case.crn = crn;
+  ctx.case.person = person;
+  ctx.case.created = true;
+});
+
+Given(
+  "A new offender has been created or existing made available",
+  async ({ ctx }) => {
+    const [person, crn, created] = await loginDeliusAndCreateOffender(
+      ctx.base.page,
+      "Wales",
+      testUser,
+      data.teams.allocationsTestTeam,
+    );
+    if (created) {
+      await createCustodialEvent(ctx.base.page, {
+        crn,
+        allocation: { team: data.teams.approvedPremisesTestTeam },
+      });
     }
-})
+    ctx.case.crn = crn;
+    ctx.case.person = person;
+    ctx.case.created = created;
+  },
+);
 
-Given('A new offender has been created in Ndelius', async ({ ctx }) => {
-    const [person, crn, created] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam, true))
-    await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-    ctx.case.crn = crn
-    ctx.case.person = person
-    ctx.case.created = true
+Given("I clear the contact details if set", async ({ ctx }) => {
+  const created = ctx.case.created;
+  const page = ctx.base.page;
+  const crn = ctx.case.crn;
+  if (!created) {
+    const personalDetailsPage = new PersonalDetailsPage(page, crn);
+    await personalDetailsPage.navigateTo();
+    await personalDetailsPage.assertOnPage();
+    await personalDetailsPage.updateContactDetails({
+      phone: "",
+      mobile: "",
+      email: "",
+    });
+    await personalDetailsPage.usePrimaryNavigation("Home");
+  }
 });
 
-Given('A new offender has been created or existing made available', async ({ ctx }) => {
-    const [person, crn, created] = (await loginDeliusAndCreateOffender(ctx.base.page, 'Wales', testUser, data.teams.allocationsTestTeam))
-    if (created){
-        await createCustodialEvent(ctx.base.page, { crn, allocation: { team: data.teams.approvedPremisesTestTeam } })
-    }
-    ctx.case.crn = crn
-    ctx.case.person = person
-    ctx.case.created = created
+Given("I am logged in", async ({ ctx }) => {
+  await login(ctx.base.page);
 });
 
-Given('I clear the contact details if set', async ({ ctx }) => {
-    const created = ctx.case.created
-    const page = ctx.base.page
-    const crn = ctx.case.crn
-    if (!created){
-        const personalDetailsPage = new PersonalDetailsPage(page, crn)
-        await personalDetailsPage.navigateTo()
-        await personalDetailsPage.assertOnPage()
-        await personalDetailsPage.updateContactDetails({
-            phone: '',
-            mobile: '',
-            email: ''
-        })
-        await personalDetailsPage.usePrimaryNavigation('Home')
-    }
+Then("I close the context", async ({ ctx }) => {
+  const context = ctx.base.context;
+  ctx.appointments = [];
+  await context.close();
 });
 
-Given('I am logged in', async ({ ctx }) => {
-    await login(ctx.base.page)
+Given("I navigate to {string}", async ({ ctx }, crn) => {
+  const overviewPage = new OverviewPage(ctx.base.page, crn);
+  await overviewPage.navigateTo(crn);
+  ctx.case.crn = crn;
 });
 
-Then('I close the context', async ({ ctx }) => {
-    const context = ctx.base.context
-    ctx.appointments = []
-    await context.close()
-});
-
-Given('I navigate to {string}',async ({ctx}, crn)=>{
-    const overviewPage = new OverviewPage(ctx.base.page, crn)
-    await overviewPage.navigateTo(crn)
-    ctx.case.crn = crn
-})
-
-Then('I receive success message {string}', async ({ ctx}, message:string ) => {
-    const page = ctx.base.page
-    await page.getByRole('heading', { name: 'Contact created' }).isVisible()
+Then("I receive success message {string}", async ({ ctx }, message: string) => {
+  const page = ctx.base.page;
+  await page.getByRole("heading", { name: "Contact created" }).isVisible();
 });
 
 After(async function ({ ctx }) {
-    const page = ctx.base.page
-    if (!page || page.isClosed()) {
-        return; // ✅ skip if already closed
-    }
-    // ensure page is stable
-    await page.waitForLoadState('domcontentloaded');
+  const page = ctx.base.page;
+  if (!page || page.isClosed()) {
+    return; // ✅ skip if already closed
+  }
+  // ensure page is stable
+  await page.waitForLoadState("domcontentloaded");
 
-    const results = await new AxeBuilder({ page })
-        .exclude('iframe')
-        .withTags(['wcag22aa'])
-        .analyze();
+  const results = await new AxeBuilder({ page })
+    .exclude("iframe")
+    .withTags(["wcag22aa"])
+    .analyze();
 
-    expect(results.violations).toEqual([]);
+  expect(results.violations).toEqual([]);
 });

@@ -6,22 +6,22 @@ import { MpopDateTime } from "../../../../util/DateTime";
 import TextConfirmationPage from "./text-confirmation-page";
 
 export default class AddNotePage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Add a note", crn, uuid)
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Add a note", crn, uuid);
+  }
 
-    async changePage(sensitivity?: boolean, note?: string, file?: string) {
-        if (note){
-            await this.fillText("notes", note)
-        }
-        //file
-        if (sensitivity != undefined){
-            await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1)
-        }
-        await this.submit()
+  async changePage(sensitivity?: boolean, note?: string, file?: string) {
+    if (note) {
+      await this.fillText("notes", note);
     }
+    //file
+    if (sensitivity != undefined) {
+      await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1);
+    }
+    await this.submit();
+  }
 
-    async completePage(sensitivity: boolean, note?: string, file?: string) {
-        await this.changePage(sensitivity, note, file)
-    }
+  async completePage(sensitivity: boolean, note?: string, file?: string) {
+    await this.changePage(sensitivity, note, file);
+  }
 }

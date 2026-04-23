@@ -1,32 +1,34 @@
-import { BrowserContext, BrowserContextOptions, Page } from '@playwright/test'
+import { BrowserContext, BrowserContextOptions, Page } from "@playwright/test";
 
-export const getUuid = (page: Page, id: number=3) => {
-    const url = page.url()
-    const split = url.split('?')[0].split('/')
-    return split[split.length - id]
-}
+export const getUuid = (page: Page, id: number = 3) => {
+  const url = page.url();
+  const split = url.split("?")[0].split("/");
+  return split[split.length - id];
+};
 
-export const getUrn = (page: Page, id: number=2) => {
-    const url = page.url()
-    const split = url.split('?')[0].split('/')
-    return split[split.length - id]
-}
+export const getUrn = (page: Page, id: number = 2) => {
+  const url = page.url();
+  const split = url.split("?")[0].split("/");
+  return split[split.length - id];
+};
 
-export const getBrowserContext = (test: string) : BrowserContextOptions | undefined => {
-    return { recordVideo: { dir: `videos/${test}`}}
-}
+export const getBrowserContext = (
+  test: string,
+): BrowserContextOptions | undefined => {
+  return { recordVideo: { dir: `videos/${test}` } };
+};
 
 export const randomPicker = <T>(array: T[]): T => {
-    return array[Math.floor(Math.random()*array.length)]
-}
+  return array[Math.floor(Math.random() * array.length)];
+};
 
 export const chance = () => {
- return Math.random() < 0.5
-}
+  return Math.random() < 0.5;
+};
 
 export const randomEnum = <T>(anEnum: any): T[keyof T] => {
   const enumValues = Object.keys(anEnum)
-    .map(n => Number.parseInt(n))
-    .filter(n => !Number.isNaN(n)) as unknown as T[keyof T][]
-  return randomPicker(enumValues)
-}
+    .map((n) => Number.parseInt(n))
+    .filter((n) => !Number.isNaN(n)) as unknown as T[keyof T][];
+  return randomPicker(enumValues);
+};

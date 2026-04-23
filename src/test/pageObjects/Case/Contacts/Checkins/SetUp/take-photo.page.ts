@@ -3,20 +3,20 @@ import ContactPage from "../../Contacts/contact.page";
 import { photo_1_path } from "../../../../../util/Data";
 
 export default class TakePhotoPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Take a photo of", crn, uuid);
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Take a photo of", crn, uuid);
+  }
 
-    async completePage() {
-        await this.takePhoto()
-        await this.submit()
-    }
+  async completePage() {
+    await this.takePhoto();
+    await this.submit();
+  }
 
-    async takePhoto() {
-        await this.page.evaluate(async() => {
-            const takePhotoButton = document.getElementById('take-photo')
-            takePhotoButton?.removeAttribute('disabled')
-            takePhotoButton?.removeAttribute('aria-disabled')
-        })
-    }
+  async takePhoto() {
+    await this.page.evaluate(async () => {
+      const takePhotoButton = document.getElementById("take-photo");
+      takePhotoButton?.removeAttribute("disabled");
+      takePhotoButton?.removeAttribute("aria-disabled");
+    });
+  }
 }

@@ -1,275 +1,340 @@
-import { Page } from "@playwright/test"
-import { dateTimeMapping, luxonString, MpopDateTime, nextWeek, plus3Months, today, tomorrow, yesterday } from "../util/DateTime"
-import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page"
-import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page"
-import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page"
-import SupportingInformationPage from "../pageObjects/Case/Contacts/Appointments/supporting-information.page"
-import ConfirmationPage from "../pageObjects/Case/Contacts/Appointments/confirmation.page"
-import NextAppointmentPage, { NextAction } from "../pageObjects/Case/Contacts/Appointments/next-appointment.page"
-import TextConfirmationPage from "../pageObjects/Case/Contacts/Appointments/text-confirmation-page"
-import CYAPage from "../pageObjects/Case/Contacts/Appointments/CYA.page"
-import ArrangeAnotherPage from "../pageObjects/Case/Contacts/Appointments/arrange-another.page"
-import { DataTable } from "playwright-bdd"
-import { dateTime as defaultTime, attendee as self } from "./Data"
-import { YesNoCheck } from "./ReviewCheckins"
-import { DateTime } from "luxon"
-import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page"
-import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page"
-import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page"
-import ReschedulePage from "../pageObjects/Case/Contacts/Appointments/reschedule.page"
-import RescheduleDetailsPage from "../pageObjects/Case/Contacts/Appointments/reschedule-details"
-
-
+import { Page } from "@playwright/test";
+import {
+  dateTimeMapping,
+  luxonString,
+  MpopDateTime,
+  nextWeek,
+  plus3Months,
+  today,
+  tomorrow,
+  yesterday,
+} from "../util/DateTime";
+import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page";
+import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page";
+import LocationDateTimePage from "../pageObjects/Case/Contacts/Appointments/location-datetime.page";
+import SupportingInformationPage from "../pageObjects/Case/Contacts/Appointments/supporting-information.page";
+import ConfirmationPage from "../pageObjects/Case/Contacts/Appointments/confirmation.page";
+import NextAppointmentPage, {
+  NextAction,
+} from "../pageObjects/Case/Contacts/Appointments/next-appointment.page";
+import TextConfirmationPage from "../pageObjects/Case/Contacts/Appointments/text-confirmation-page";
+import CYAPage from "../pageObjects/Case/Contacts/Appointments/CYA.page";
+import ArrangeAnotherPage from "../pageObjects/Case/Contacts/Appointments/arrange-another.page";
+import { DataTable } from "playwright-bdd";
+import { dateTime as defaultTime, attendee as self } from "./Data";
+import { YesNoCheck } from "./ReviewCheckins";
+import { DateTime } from "luxon";
+import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page";
+import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page";
+import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page";
+import ReschedulePage from "../pageObjects/Case/Contacts/Appointments/reschedule.page";
+import RescheduleDetailsPage from "../pageObjects/Case/Contacts/Appointments/reschedule-details";
 
 export interface MpopArrangeAppointment {
-  sentenceId: number | "person"
-  typeId: number
-  attendee?: MpopAttendee
-  isVisor?: boolean
-  dateTime: MpopDateTime
-  locationId: number | "not needed" | "not in list"
-  text: TextMessageOption,
-  mobile?: string
-  note?: string
-  sensitivity: boolean
+  sentenceId: number | "person";
+  typeId: number;
+  attendee?: MpopAttendee;
+  isVisor?: boolean;
+  dateTime: MpopDateTime;
+  locationId: number | "not needed" | "not in list";
+  text: TextMessageOption;
+  mobile?: string;
+  note?: string;
+  sensitivity: boolean;
 }
 
 export interface MpopAppointmentChanges {
-  sentenceId?: number | "person"
-  typeId?: number
-  attendee?: MpopAttendee
-  isVisor?: boolean
-  dateTime?: MpopDateTime
-  locationId?: number | "not needed" | "not in list"
-  text?: TextMessageOption,
-  mobile?: string
-  note?: string
-  sensitivity?: boolean
+  sentenceId?: number | "person";
+  typeId?: number;
+  attendee?: MpopAttendee;
+  isVisor?: boolean;
+  dateTime?: MpopDateTime;
+  locationId?: number | "not needed" | "not in list";
+  text?: TextMessageOption;
+  mobile?: string;
+  note?: string;
+  sensitivity?: boolean;
 }
 
 export interface MpopAttendee {
-  provider?: string
-  team?: string
-  user?: string
+  provider?: string;
+  team?: string;
+  user?: string;
 }
 
 export interface RescheduleDetails {
-  user: number,
-  reason: string,
-  sensitivity: boolean
+  user: number;
+  reason: string;
+  sensitivity: boolean;
 }
 
-export const setupAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment, past:boolean = false) => {
-  const sentencePage = new SentencePage(page)
-  await sentencePage.completePage(appointment.sentenceId)
-  const typeAttendancePage = new TypeAttendancePage(page)
-  await typeAttendancePage.completePage(appointment.typeId, appointment.attendee, appointment.isVisor)
-  const locationDateTimePage = new LocationDateTimePage(page)
-  const locationId = await locationDateTimePage.findLocationId(appointment.typeId, appointment.locationId)
-  await locationDateTimePage.completePage(appointment.dateTime, locationId)
-  if (appointment.locationId === 'not in list'){
-    console.log('location not in list')
-    return
+export const setupAppointmentMPop = async (
+  page: Page,
+  appointment: MpopArrangeAppointment,
+  past: boolean = false,
+) => {
+  const sentencePage = new SentencePage(page);
+  await sentencePage.completePage(appointment.sentenceId);
+  const typeAttendancePage = new TypeAttendancePage(page);
+  await typeAttendancePage.completePage(
+    appointment.typeId,
+    appointment.attendee,
+    appointment.isVisor,
+  );
+  const locationDateTimePage = new LocationDateTimePage(page);
+  const locationId = await locationDateTimePage.findLocationId(
+    appointment.typeId,
+    appointment.locationId,
+  );
+  await locationDateTimePage.completePage(appointment.dateTime, locationId);
+  if (appointment.locationId === "not in list") {
+    console.log("location not in list");
+    return;
   }
-  if (past){
-    console.log('past appointment')
-    const attendedCompliedPage = new AttendedCompliedPage(page)
-    await attendedCompliedPage.assertOnPage()
-    await attendedCompliedPage.completePage()
-    const addNotePage = new AddNotePage(page)
-    await addNotePage.assertOnPage()
-    await addNotePage.completePage(appointment.sensitivity, appointment.note)//file
+  if (past) {
+    console.log("past appointment");
+    const attendedCompliedPage = new AttendedCompliedPage(page);
+    await attendedCompliedPage.assertOnPage();
+    await attendedCompliedPage.completePage();
+    const addNotePage = new AddNotePage(page);
+    await addNotePage.assertOnPage();
+    await addNotePage.completePage(appointment.sensitivity, appointment.note); //file
   } else {
-    const textConfirmationPage = new TextConfirmationPage(page)
-    await textConfirmationPage.completePage(appointment.text, appointment.mobile, appointment.dateTime.date, appointment.dateTime.startTime, appointment.locationId)
-    const supportingInformationPage = new SupportingInformationPage(page)
-    await supportingInformationPage.completePage(appointment.sensitivity, appointment.note)
+    const textConfirmationPage = new TextConfirmationPage(page);
+    await textConfirmationPage.completePage(
+      appointment.text,
+      appointment.mobile,
+      appointment.dateTime.date,
+      appointment.dateTime.startTime,
+      appointment.locationId,
+    );
+    const supportingInformationPage = new SupportingInformationPage(page);
+    await supportingInformationPage.completePage(
+      appointment.sensitivity,
+      appointment.note,
+    );
   }
-  const cyaPage = new CYAPage(page)
-  await cyaPage.assertOnPage()
-}
+  const cyaPage = new CYAPage(page);
+  await cyaPage.assertOnPage();
+};
 
-export const createAppointmentMPop = async(page: Page, appointment: MpopArrangeAppointment) => {
-  const past = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy")  < today
-  await setupAppointmentMPop(page, appointment, past)
-  if (appointment.locationId === 'not in list'){
-    return
+export const createAppointmentMPop = async (
+  page: Page,
+  appointment: MpopArrangeAppointment,
+) => {
+  const past =
+    DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+  await setupAppointmentMPop(page, appointment, past);
+  if (appointment.locationId === "not in list") {
+    return;
   }
-  const cyaPage = new CYAPage(page)
-  await cyaPage.completePage(appointment.isVisor, past)
-  const confirmationPage = new ConfirmationPage(page, past)
-  await confirmationPage.assertOnPage()
-}
+  const cyaPage = new CYAPage(page);
+  await cyaPage.completePage(appointment.isVisor, past);
+  const confirmationPage = new ConfirmationPage(page, past);
+  await confirmationPage.assertOnPage();
+};
 
-export const createSimilarAppointmentMPop = async(page:Page, changes: MpopAppointmentChanges) => {
-  const confirmationPage = new ConfirmationPage(page)
-  await confirmationPage.completePage("createAnother")
-  const nextAppointmentPage = new NextAppointmentPage(page)
-  await nextAppointmentPage.completePage(NextAction.Similar)
-  const arrangeAnotherPage = new ArrangeAnotherPage(page)
-  await arrangeAnotherPage.completePage(changes)
-}
+export const createSimilarAppointmentMPop = async (
+  page: Page,
+  changes: MpopAppointmentChanges,
+) => {
+  const confirmationPage = new ConfirmationPage(page);
+  await confirmationPage.completePage("createAnother");
+  const nextAppointmentPage = new NextAppointmentPage(page);
+  await nextAppointmentPage.completePage(NextAction.Similar);
+  const arrangeAnotherPage = new ArrangeAnotherPage(page);
+  await arrangeAnotherPage.completePage(changes);
+};
 
-export const createAnotherAppointmentMPop = async(page:Page, appointment: MpopArrangeAppointment) => {
-  const confirmationPage = new ConfirmationPage(page)
-  await confirmationPage.completePage("createAnother")
-  const nextAppointmentPage = new NextAppointmentPage(page)
-  await nextAppointmentPage.completePage(NextAction.New)
-  await createAppointmentMPop(page, appointment)
-}
+export const createAnotherAppointmentMPop = async (
+  page: Page,
+  appointment: MpopArrangeAppointment,
+) => {
+  const confirmationPage = new ConfirmationPage(page);
+  await confirmationPage.completePage("createAnother");
+  const nextAppointmentPage = new NextAppointmentPage(page);
+  await nextAppointmentPage.completePage(NextAction.New);
+  await createAppointmentMPop(page, appointment);
+};
 
-export const rescheduleAppointmentMPop = async(page:Page, rescheduleDetails: RescheduleDetails, changes: MpopAppointmentChanges) => {
-  const reschedulePage = new ReschedulePage(page)
-  await reschedulePage.completePage(rescheduleDetails.user, rescheduleDetails.reason, rescheduleDetails.sensitivity)
-  const rescheduleDetailsPage = new RescheduleDetailsPage(page)
-  await rescheduleDetailsPage.completePage(changes)
-}
+export const rescheduleAppointmentMPop = async (
+  page: Page,
+  rescheduleDetails: RescheduleDetails,
+  changes: MpopAppointmentChanges,
+) => {
+  const reschedulePage = new ReschedulePage(page);
+  await reschedulePage.completePage(
+    rescheduleDetails.user,
+    rescheduleDetails.reason,
+    rescheduleDetails.sensitivity,
+  );
+  const rescheduleDetailsPage = new RescheduleDetailsPage(page);
+  await rescheduleDetailsPage.completePage(changes);
+};
 
 // SMS messages options
 export const textMap = {
-    'Yes': 'yes',
-    'Yes, add a mobile number' : 'yes-add',
-    'Yes, update their mobile number': 'yes-update',
-    'No': 'no'
-} as const
+  Yes: "yes",
+  "Yes, add a mobile number": "yes-add",
+  "Yes, update their mobile number": "yes-update",
+  No: "no",
+} as const;
 
-type TextMapKey = keyof typeof textMap
-export type TextMessageOption = typeof textMap[TextMapKey]
+type TextMapKey = keyof typeof textMap;
+export type TextMessageOption = (typeof textMap)[TextMapKey];
 
-export const appointmentDataTable = (data: DataTable, full:boolean = false, changes:boolean=false) : MpopAppointmentChanges => {
-    let sentenceId: number | 'person' | undefined = full ? 0 : undefined
-    let typeId: number | undefined = full ? 0 : undefined
-    let attendee: MpopAttendee | undefined = full ? self : undefined
-    let isVisor: boolean 
-    let date: string | undefined = changes ? undefined : luxonString(tomorrow)
-    let startTime: string | undefined = changes ? undefined : "15:15"
-    let endTime: string | undefined = changes ? undefined : "16:15"
-    let locationId: number | "not needed" | "not in list" | undefined = full ? 0 : undefined
-    let text: TextMessageOption | undefined = changes ? undefined : 'no'
-    let mobile: string
-    let note: string
-    let sensitivity: boolean = false
-    let noDate = false
-    for (const row of data.hashes()){
-        if (row.label === 'sentenceId'){
-            if (row.value != ''){
-              sentenceId = row.value as unknown as number | 'person'
-            }
-            //0 - X are sentences
-            //last entry is person (use text 'person')
-        }
-        if (row.label === 'typeId'){
-            if (row.value != ''){
-              typeId = row.value as unknown as number
-            }
-            //0 - 8 options for sentence (1 requires no location)
-            //0 only option for person
-        }
-        if (row.label === 'attendeeProvider'){
-            if (!attendee){
-              attendee = {}
-            }
-            attendee.provider = row.value
-        }
-        if (row.label === 'attendeeTeam'){
-            if (!attendee){
-              attendee = {}
-            }
-            attendee.team = row.value
-        }
-        if (row.label === 'attendeeName'){
-            if (!attendee){
-              attendee = {}
-            }
-            attendee.user = row.value
-        }
-        if (row.label === 'isVisor'){
-            isVisor = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
-        }
-        if (row.label === 'date'){
-            if (row.value != ''){
-              date = luxonString(dateTimeMapping[row.value])
-            }
-        }
-        if (row.label === 'startTime'){
-            if (row.value != ''){
-              startTime = row.value
-            }
-        }
-        if (row.label === 'endTime'){
-            if (row.value != ''){
-              endTime = row.value
-            }
-        }
-        if (row.label === 'locationId'){
-            if (row.value != ''){
-              locationId = row.value as unknown as number | "not needed" | "not in list"
-            }
-            //not needed - last if an option
-            //not in list - last otherwise (2nd last if not needed is option)
-        }
-        if (row.label === 'text'){
-            if (row.value != ''){
-              text = textMap[row.value as TextMapKey]
-            }
-        }
-        if (row.label === 'mobile'){
-            mobile = row.value
-        }
-        if (row.label === 'note'){
-            note = row.value
-        }
-        if (row.label === 'sensitive'){
-            sensitivity = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
-        }
+export const appointmentDataTable = (
+  data: DataTable,
+  full: boolean = false,
+  changes: boolean = false,
+): MpopAppointmentChanges => {
+  let sentenceId: number | "person" | undefined = full ? 0 : undefined;
+  let typeId: number | undefined = full ? 0 : undefined;
+  let attendee: MpopAttendee | undefined = full ? self : undefined;
+  let isVisor: boolean;
+  let date: string | undefined = changes ? undefined : luxonString(tomorrow);
+  let startTime: string | undefined = changes ? undefined : "15:15";
+  let endTime: string | undefined = changes ? undefined : "16:15";
+  let locationId: number | "not needed" | "not in list" | undefined = full
+    ? 0
+    : undefined;
+  let text: TextMessageOption | undefined = changes ? undefined : "no";
+  let mobile: string;
+  let note: string;
+  let sensitivity: boolean = false;
+  const noDate = false;
+  for (const row of data.hashes()) {
+    if (row.label === "sentenceId") {
+      if (row.value != "") {
+        sentenceId = row.value as unknown as number | "person";
+      }
+      //0 - X are sentences
+      //last entry is person (use text 'person')
     }
-
-    const appointment : MpopAppointmentChanges = {
-      sentenceId: sentenceId,
-      typeId: typeId,
-      attendee: attendee,
-      isVisor: isVisor!,
-      dateTime: date === undefined && startTime === undefined && endTime === undefined ? undefined : {
-        date: date!,
-        startTime: startTime!,
-        endTime: endTime!
-      } ,
-      locationId: locationId,
-      text: text,
-      mobile: mobile!,
-      note: note!,
-      sensitivity: sensitivity
+    if (row.label === "typeId") {
+      if (row.value != "") {
+        typeId = row.value as unknown as number;
+      }
+      //0 - 8 options for sentence (1 requires no location)
+      //0 only option for person
     }
-
-    return appointment
-}
-
-export const rescheduleDataTable = (data: DataTable) : RescheduleDetails => {
-    let who: "person" | "system"
-    let reason: string
-    let sensitivity: boolean = false
-    for (const row of data.hashes()){
-        if (row.label === 'who'){
-            who = row.value as "person" | "system"
-        }
-        if (row.label === 'reason'){
-            reason = row.value
-        }
-        if (row.label === 'sensitive'){
-            sensitivity = YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false
-        }
+    if (row.label === "attendeeProvider") {
+      if (!attendee) {
+        attendee = {};
+      }
+      attendee.provider = row.value;
     }
-    const reschedule : RescheduleDetails = {
-      user: who! === 'person' ? 0 : 1,
-      reason: reason!,
-      sensitivity: sensitivity
+    if (row.label === "attendeeTeam") {
+      if (!attendee) {
+        attendee = {};
+      }
+      attendee.team = row.value;
     }
+    if (row.label === "attendeeName") {
+      if (!attendee) {
+        attendee = {};
+      }
+      attendee.user = row.value;
+    }
+    if (row.label === "isVisor") {
+      isVisor =
+        YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false;
+    }
+    if (row.label === "date") {
+      if (row.value != "") {
+        date = luxonString(dateTimeMapping[row.value]);
+      }
+    }
+    if (row.label === "startTime") {
+      if (row.value != "") {
+        startTime = row.value;
+      }
+    }
+    if (row.label === "endTime") {
+      if (row.value != "") {
+        endTime = row.value;
+      }
+    }
+    if (row.label === "locationId") {
+      if (row.value != "") {
+        locationId = row.value as unknown as
+          | number
+          | "not needed"
+          | "not in list";
+      }
+      //not needed - last if an option
+      //not in list - last otherwise (2nd last if not needed is option)
+    }
+    if (row.label === "text") {
+      if (row.value != "") {
+        text = textMap[row.value as TextMapKey];
+      }
+    }
+    if (row.label === "mobile") {
+      mobile = row.value;
+    }
+    if (row.label === "note") {
+      note = row.value;
+    }
+    if (row.label === "sensitive") {
+      sensitivity =
+        YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false;
+    }
+  }
 
-    return reschedule
-}
+  const appointment: MpopAppointmentChanges = {
+    sentenceId: sentenceId,
+    typeId: typeId,
+    attendee: attendee,
+    isVisor: isVisor!,
+    dateTime:
+      date === undefined && startTime === undefined && endTime === undefined
+        ? undefined
+        : {
+            date: date!,
+            startTime: startTime!,
+            endTime: endTime!,
+          },
+    locationId: locationId,
+    text: text,
+    mobile: mobile!,
+    note: note!,
+    sensitivity: sensitivity,
+  };
 
-export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: MpopArrangeAppointment) : MpopArrangeAppointment => {
-  const appointment : MpopArrangeAppointment = {
+  return appointment;
+};
+
+export const rescheduleDataTable = (data: DataTable): RescheduleDetails => {
+  let who: "person" | "system";
+  let reason: string;
+  let sensitivity: boolean = false;
+  for (const row of data.hashes()) {
+    if (row.label === "who") {
+      who = row.value as "person" | "system";
+    }
+    if (row.label === "reason") {
+      reason = row.value;
+    }
+    if (row.label === "sensitive") {
+      sensitivity =
+        YesNoCheck[row.value as keyof typeof YesNoCheck] === 0 ? true : false;
+    }
+  }
+  const reschedule: RescheduleDetails = {
+    user: who! === "person" ? 0 : 1,
+    reason: reason!,
+    sensitivity: sensitivity,
+  };
+
+  return reschedule;
+};
+
+export const fullDetailsFromChanges = (
+  changes: MpopAppointmentChanges,
+  base: MpopArrangeAppointment,
+): MpopArrangeAppointment => {
+  const appointment: MpopArrangeAppointment = {
     sentenceId: changes.sentenceId ?? base.sentenceId!,
     typeId: changes.typeId ?? base.typeId!,
     attendee: changes.attendee ?? base.attendee!,
@@ -277,13 +342,13 @@ export const fullDetailsFromChanges = (changes: MpopAppointmentChanges, base: Mp
     dateTime: {
       date: changes.dateTime?.date ?? base.dateTime.date,
       startTime: changes.dateTime?.startTime ?? base.dateTime.startTime,
-      endTime: changes.dateTime?.endTime ?? base.dateTime.endTime
+      endTime: changes.dateTime?.endTime ?? base.dateTime.endTime,
     },
     locationId: changes.locationId ?? base.locationId!,
     text: changes.text ?? base.text!,
     mobile: changes.mobile ?? base.mobile,
     note: changes.note ?? base.note,
-    sensitivity: changes.sensitivity ?? base.sensitivity!
-  }
-  return appointment
-}
+    sensitivity: changes.sensitivity ?? base.sensitivity!,
+  };
+  return appointment;
+};

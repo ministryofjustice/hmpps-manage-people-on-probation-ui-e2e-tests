@@ -3,12 +3,12 @@ import ContactPage from "../../Contacts/contact.page";
 import { YesNoCheck } from "../../../../../util/ReviewCheckins";
 
 export default class ReviewIdentityPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Online check in submitted", crn, uuid);
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Online check in submitted", crn, uuid);
+  }
 
-    async completePage(id: YesNoCheck) {
-        await this.clickRadio("confirmIdentity", id)
-        await this.submit()
-    }
+  async completePage(id: YesNoCheck) {
+    await this.clickRadio("confirmIdentity", id);
+    await this.submit();
+  }
 }
