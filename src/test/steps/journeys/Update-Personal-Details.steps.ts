@@ -42,16 +42,22 @@ When("I can note the current details", async ({ ctx }) => {
   ctx.details = await personalDetails.noteDetails();
 });
 
-When('I change the contact details',async ({ctx}, data:DataTable)=>{
-    const contactDetails : ContactDetails = contactDetailsDataTable(data)
-    console.log(contactDetails)
-    ctx.details.contactDetails = getUpdatedContactDetails(ctx.details.contactDetails!, contactDetails)
-    const page = ctx.base.page
-    const crn = ctx.case.crn
-    const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(page, crn)
-    await personalDetails.assertOnPage()
-    await personalDetails.updateContactDetails(contactDetails)
-})
+When("I change the contact details", async ({ ctx }, data: DataTable) => {
+  const contactDetails: ContactDetails = contactDetailsDataTable(data);
+  console.log(contactDetails);
+  ctx.details.contactDetails = getUpdatedContactDetails(
+    ctx.details.contactDetails!,
+    contactDetails,
+  );
+  const page = ctx.base.page;
+  const crn = ctx.case.crn;
+  const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(
+    page,
+    crn,
+  );
+  await personalDetails.assertOnPage();
+  await personalDetails.updateContactDetails(contactDetails);
+});
 
 When("I update the main address", async ({ ctx }, data: DataTable) => {
   const address: Address = addressDataTable(data);

@@ -22,16 +22,6 @@ export default class AddContactPage extends ContactPage {
     await this.clickLink("Add a contact");
   }
 
-  async selectFrequentContact(contact: string): Promise<void> {
-    const frequentContact = this.page.getByRole("link", {
-      name: contact,
-      exact: true,
-    });
-
-    await expect(frequentContact).toBeVisible();
-    await frequentContact.click();
-  }
-
   async selectContactRelatedTo(contactType: string): Promise<string> {
     const fieldset = this.page.getByRole("group", {
       name: "What is the contact related to?",
@@ -58,46 +48,16 @@ export default class AddContactPage extends ContactPage {
     return `option-${index}`;
   }
 
-    async clickAddContactButton(): Promise<void> {
-        await this.clickLink("Add a contact");
-    }
+  async selectFrequentContact(contact: string): Promise<void> {
+    const frequentContact = this.page.getByRole("radio", {
+      name: contact,
+      exact: true,
+    });
 
-    async selectFrequentContact(contact: string): Promise<void> {
-        const frequentContact = this.page.getByRole("radio", {
-            name: contact,
-            exact: true,
-        });
-
-        await expect(frequentContact).toBeVisible();
-        await frequentContact.click()
-        await this.getQA('continue-button').click()
-    }
-
-    async selectContactRelatedTo(contactType: string): Promise<string> {
-        const fieldset = this.page.getByRole("group", {
-            name: "What is the contact related to?",
-        });
-
-        await expect(fieldset).toBeVisible();
-
-        const radios = fieldset.getByRole("radio");
-        const count = await radios.count();
-
-        if (count < 2) {
-            throw new Error(`Expected at least 2 contact related to options, but found ${count}`);
-        }
-
-        const index = contactType.trim().toUpperCase() === "MPOP" ? 0 : 1;
-        const selectedRadio = radios.nth(index);
-
-        await expect(selectedRadio).toBeVisible();
-        await selectedRadio.check();
-        await expect(selectedRadio).toBeChecked();
-
-        return `option-${index}`;
-    }
-
-
+    await expect(frequentContact).toBeVisible();
+    await frequentContact.click();
+    await this.getQA("continue-button").click();
+  }
 
   async enterTitle(title?: string): Promise<void> {
     if (!title || title.trim() === "") return;
