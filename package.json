@@ -16,7 +16,8 @@
     "bdd:debug": "npx cucumber-js --profile debug",
     "perf:run": "gatling run --typescript",
     "perf:home": "gatling run --typescript --sources-folder src/performance --simulation mpop",
-    "prepare": "husky"
+    "prepare": "husky",
+    "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
     "node": "^24",
@@ -33,6 +34,7 @@
     "@eslint/js": "^10.0.1",
     "@faker-js/faker": "^10.4.0",
     "@gatling.io/cli": "^3.15.2",
+    "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.4",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "^1.197.0",
     "@playwright/test": "^1.59.1",
     "@types/luxon": "^3.7.1",
