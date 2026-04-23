@@ -20,59 +20,71 @@ export default class PersonalDetailsPage extends CasePage {
     super(page, "Personal details", crn);
   }
 
-  async goTo(crn?: string) {
-    await this.page.goto(
-      `${MPOP_URL}/case/${(crn ?? this.crn)!}/personal-details/`,
-    );
-  }
-
-  async navigateTo(crn?: string) {
-    await caseNavigation(this.page, (crn ?? this.crn)!, "personalDetailsTab");
-  }
-
-  async updateContactDetails(details: ContactDetails) {
-    if (details.phone) {
-      await this.getQA("telephoneNumberAction").click();
-    } else if (details.mobile) {
-      await this.getQA("mobileNumberAction").click();
-    } else if (details.email) {
-      await this.getQA("emailAddressAction").click();
-    } else {
-      console.log("no details");
-      return;
+    async goTo(crn?: string) {
+        await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/personal-details/`)
     }
-    const contactDetailsPage = new ContactDetailsPage(this.page);
-    await contactDetailsPage.assertOnPage();
-    await contactDetailsPage.completePage(details);
-  }
 
-  async updateMainAddress(details: Address) {
-    await this.getQA("mainAddressAction").click();
-    const updateAddressPage = new UpdateAddressPage(this.page);
-    await updateAddressPage.assertOnPage();
-    await updateAddressPage.completePage(details);
-  }
+    async navigateTo(crn?: string) {
+        await caseNavigation(this.page, (crn ?? this.crn)!, "personalDetailsTab")
+    }
 
-  async getContactDetails(): Promise<ContactDetails> {
-    const phone = await this.getQA("telephoneNumberValue").textContent();
-    const mobile = await this.getQA("mobileNumberValue").textContent();
-    const email = await this.getQA("emailAddressValue").textContent();
-    return {
-      phone: phone ? phone : undefined,
-      mobile: mobile ? mobile : undefined,
-      email: email ? email : undefined,
-    };
-  }
+    async updateContactDetails(details: ContactDetails) {
+        if (details.phone != undefined) {
+            await this.getQA('telephoneNumberAction').click()
+        } else if (details.mobile != undefined) {
+            await this.getQA('mobileNumberAction').click()
+        } else if (details.email != undefined) {
+            await this.getQA('emailAddressAction').click()
+        } else {
+            console.log('no details')
+            return
+        }
+        const contactDetailsPage = new ContactDetailsPage(this.page)
+        await contactDetailsPage.assertOnPage()
+        await contactDetailsPage.completePage(details)
+    }
 
-  async getAddressDetails(): Promise<AddressDetails> {
-    const address = await this.getQA("mainAddressValue").textContent();
-    if (address?.trim() === "No main address") {
-      return {
-        address: address.trim(),
-        type: "",
-        startDate: "",
-        note: "No notes",
-      };
+    async updateMainAddress(details: Address) {
+        await this.getQA('mainAddressAction').click()
+        const updateAddressPage = new UpdateAddressPage(this.page)
+        await updateAddressPage.assertOnPage()
+        await updateAddressPage.completePage(details)
+    }
+
+    async getContactDetails(): Promise<ContactDetails> {
+        const phone = await this.getQA('telephoneNumberValue').textContent()
+        const mobile = await this.getQA('mobileNumberValue').textContent()
+        const email = await this.getQA('emailAddressValue').textContent()
+        return {
+            phone: phone ? phone : undefined,
+            mobile: mobile ? mobile : undefined,
+            email: email ? email : undefined,
+        }
+    }
+
+    async getAddressDetails(): Promise<AddressDetails> {
+        const address = await this.getQA('mainAddressValue').textContent()
+        if (address?.trim() === 'No main address') {
+            return {
+                address: address.trim(),
+                type: '',
+                startDate: '',
+                note: 'No notes'
+            }
+        }
+        const type = await this.getQA('addressTypeValue').textContent()
+        const start = await this.getQA('mainAddressStartDateValue').textContent()
+        let note = await this.getQA('mainAddressNotesValue').textContent()
+        if (note?.trim() === '') {
+            note = await this.getClass('app-note text-break', this.getQA('mainAddressValue')).textContent()
+        }
+        return {
+            address: address ? address.trim().split('\n')[0] : undefined,
+            type: type ? type.trim() : undefined,
+            startDate: start ? start.trim() : undefined,
+            note: note ? note.trim().split('\n')[0] : undefined
+
+        }
     }
     const type = await this.getQA("addressTypeValue").textContent();
     const start = await this.getQA("mainAddressStartDateValue").textContent();

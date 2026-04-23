@@ -31,27 +31,22 @@ export const contactDetailsDataTable = (data: DataTable): ContactDetails => {
       email = row.value;
     }
   }
-
   const contactDetails = {
-    phone,
-    mobile,
-    email,
-  };
-
+      phone: phone != '' ? phone : undefined, 
+      mobile: mobile != '' ? mobile : undefined,
+      email: email != '' ? email : undefined
+  }
   return contactDetails;
 };
 
-export const getUpdatedContactDetails = (
-  current: ContactDetails,
-  updates: ContactDetails,
-): ContactDetails => {
-  const contactDetails: ContactDetails = {
-    mobile: updates.mobile !== "" ? updates.mobile : current.mobile,
-    phone: updates.phone !== "" ? updates.phone : current.phone,
-    email: updates.email !== "" ? updates.email : current.email,
-  };
-  return contactDetails;
-};
+export const getUpdatedContactDetails = (current: ContactDetails, updates: ContactDetails): ContactDetails => {
+     const contactDetails : ContactDetails = {
+       mobile: updates.mobile !== undefined ? updates.mobile : current.mobile,
+       phone: updates.phone !== undefined ? updates.phone : current.phone,
+       email: updates.email !== undefined ? updates.email : current.email
+     }
+     return contactDetails 
+}
 
 export const getUpdatedAddressDetails = (
   current: AddressDetails,
