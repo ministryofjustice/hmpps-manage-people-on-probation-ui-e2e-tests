@@ -17,7 +17,6 @@ export default abstract class MPopPage {
 
   async checkOnPage(): Promise<boolean> {
     try {
-      const text = await this.getQA("pageHeading").textContent();
       await this.checkQA("pageHeading", this.title ?? "");
       return true;
     } catch {
@@ -276,7 +275,7 @@ export default abstract class MPopPage {
     if (full) {
       const text = await this.getQA("alertsCount").textContent();
       const count = text?.match(/\d+(,\d+)*/g) as unknown as number[];
-      return parseInt(count[2].toString().replace(/\,/g, ""), 10);
+      return parseInt(count[2].toString().replace(/,/g, ""), 10);
     } else {
       return parseInt(
         (

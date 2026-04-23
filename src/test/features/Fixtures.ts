@@ -118,7 +118,7 @@ export const testContext = base.extend<
     await use(ctxMap[testInfo.file]);
   },
   ctxMap: [
-    async ({}, use) => {
+    async (_, use) => {
       const ctxMap: Record<string, Ctx> = {};
       await use(ctxMap);
       for (const ctx of Object.values(ctxMap)) await ctx.base?.page?.close();

@@ -1,5 +1,4 @@
 import { Page } from "@playwright/test";
-import CasePage from "../../casepage";
 import ContactPage from "../Contacts/contact.page";
 import { Address } from "../../../../util/PersonalDetails";
 

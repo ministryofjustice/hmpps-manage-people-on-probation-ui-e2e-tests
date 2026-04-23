@@ -1,15 +1,9 @@
-import {
-  Browser,
-  BrowserContext,
-  expect,
-  Locator,
-  Page,
-} from "@playwright/test";
+import { expect, Locator } from "@playwright/test";
 import { createContact } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact.mjs";
 import { createBdd } from "playwright-bdd";
 import HomePage from "../../pageObjects/home.page";
 import AlertsPage from "../../pageObjects/alerts";
-import { deliusAlert, testUser } from "../../util/Data";
+import { deliusAlert } from "../../util/Data";
 import OverviewPage from "../../pageObjects/Case/overview.page";
 import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import NotePage from "../../pageObjects/Case/Contacts/Appointments/note.page";

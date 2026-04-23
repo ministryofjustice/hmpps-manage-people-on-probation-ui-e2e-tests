@@ -45,11 +45,7 @@ export default class LocationDateTimePage extends ContactPage {
     }
   }
 
-  async completePage(
-    dateTime?: MpopDateTime,
-    locationId?: number,
-    validation: boolean = true,
-  ) {
+  async completePage(dateTime?: MpopDateTime, locationId?: number) {
     if (dateTime != undefined) {
       await this.getClass("moj-datepicker")
         .locator('[type="text"]')

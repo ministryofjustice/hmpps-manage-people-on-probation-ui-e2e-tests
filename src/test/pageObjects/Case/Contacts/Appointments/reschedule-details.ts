@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 import LocationDateTimePage from "./location-datetime.page";
 import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../Contacts/contact.page";
-import { MpopDateTime, today } from "../../../../util/DateTime";
+import { today } from "../../../../util/DateTime";
 import TextConfirmationPage from "./text-confirmation-page";
 import { MpopAppointmentChanges } from "../../../../util/ArrangeAppointment";
 import { DateTime } from "luxon";
@@ -30,7 +30,12 @@ export default class RescheduleDetailsPage extends ContactPage {
       await addNotePage.completePage(changes.sensitivity!, changes.note!); //file
     } else {
       const textConfirmationPage = new TextConfirmationPage(this.page);
-      await textConfirmationPage.completePage(changes.text!, changes.mobile);
+      await textConfirmationPage.completePage(
+        changes.text!,
+        changes.mobile!,
+        changes.dateTime!.date,
+        changes.dateTime!.startTime,
+      );
       const supportingInformationPage = new SupportingInformationPage(
         this.page,
       );

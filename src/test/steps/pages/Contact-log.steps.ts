@@ -22,7 +22,6 @@ Given("I navigate to contact log", async ({ ctx }) => {
 });
 
 Given("I record the full list of activities", async ({ ctx }) => {
-  const page = ctx.base.page;
   const token = await getClientToken();
   const contacts = await getContacts(ctx.case.crn, token);
   ctx.contacts = contacts;
@@ -48,7 +47,6 @@ When("I click on add contact", async ({ ctx }) => {
 When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
   const page = ctx.base.page;
   const contactDetails = addContactDataTable(dataTable);
-  const contactsPage = new ActivityLogPage(page);
   const addContact = new AddContactPage(page);
   // await contactsPage.assertOnPage()
   await addContact.selectFrequentContact(contactDetails.contact);
@@ -58,7 +56,7 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
       break;
     case "I want to add a different contact":
       break;
-    default:
+    default: {
       const data = dataTable.rowsHash();
       await addContact.provideContactDetails({
         contact: data.contact,
@@ -72,6 +70,7 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
         alertPractitioner: data.alert_practitioner,
       });
       break;
+    }
   }
 });
 When("I save the contact details", async ({ ctx }) => {
@@ -122,15 +121,3 @@ Then("there are {string} on contacts page", async ({ ctx }, error: string) => {
     );
   }
 });
-
-type ContactDetails = {
-  contact: string;
-  relation_to: string;
-  title: string;
-  date: string;
-  time: string;
-  contact_details: string;
-  visor_report: string;
-  sensitive_info: string;
-  alert_practitioner: string;
-};

@@ -3,7 +3,6 @@ import * as dotenv from "dotenv";
 import CasePage from "./casepage";
 
 dotenv.config({ path: ".env" });
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
 
 export default class TierPage extends CasePage {
   constructor(page: Page, crn?: string) {

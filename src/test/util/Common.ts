@@ -1,4 +1,4 @@
-import { BrowserContext, BrowserContextOptions, Page } from "@playwright/test";
+import { BrowserContextOptions, Page } from "@playwright/test";
 
 export const getUuid = (page: Page, id: number = 3) => {
   const url = page.url();
@@ -26,6 +26,7 @@ export const chance = () => {
   return Math.random() < 0.5;
 };
 
+//eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const randomEnum = <T>(anEnum: any): T[keyof T] => {
   const enumValues = Object.keys(anEnum)
     .map((n) => Number.parseInt(n))

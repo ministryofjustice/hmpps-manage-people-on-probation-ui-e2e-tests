@@ -1,7 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import ContactPage from "../Contacts/contact.page";
 import { MPOP_URL } from "../../../../util/Data";
-import { MpopArrangeAppointment } from "../../../../util/ArrangeAppointment";
 
 export enum ManageAction {
   AttendedComplied = 0,

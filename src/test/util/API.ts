@@ -1,7 +1,5 @@
 import { APIResponse, Page, request } from "@playwright/test";
 import * as dotenv from "dotenv";
-import { luxonString } from "./DateTime";
-import { photo_1_path, video_1_path } from "./Data";
 import { SurveyResponse } from "./ReviewCheckins";
 dotenv.config({ path: ".env" });
 
@@ -22,7 +20,7 @@ export const getClientToken = async (): Promise<string> => {
   const token = await signin_context.post(
     "/auth/oauth/token?grant_type=client_credentials",
   );
-  const body: any = await token.json();
+  const body = await token.json();
   return await body.access_token;
 };
 
@@ -38,7 +36,7 @@ export const getCalenderEvent = async (urn: string, token: string) => {
       },
     },
   );
-  const body: any = await response.json();
+  const body = await response.json();
   return [response.status(), body];
 };
 
@@ -51,7 +49,7 @@ export const getContacts = async (crn: string, token: string) => {
       Authorization: "Bearer " + token,
     },
   });
-  const body: any = await response.json();
+  const body = await response.json();
   return body.activities;
 };
 
@@ -64,7 +62,7 @@ export const getPersonalDetails = async (crn: string, token: string) => {
       Authorization: "Bearer " + token,
     },
   });
-  const body: any = await response.json();
+  const body = await response.json();
   return body;
 };
 
@@ -84,7 +82,7 @@ export const getExternalReference = async (
       },
     },
   );
-  const body: any = await response.json();
+  const body = await response.json();
   return body.appointment.externalReference;
 };
 
@@ -97,7 +95,7 @@ export const getProbationPractitioner = async (crn: string, token: string) => {
       Authorization: "Bearer " + token,
     },
   });
-  const body: any = await response.json();
+  const body = await response.json();
   return body.username;
 };
 

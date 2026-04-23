@@ -1,12 +1,11 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from "dotenv";
 import CasePage from "./casepage";
-import { caseNavigation, navigateToCase } from "../../util/Navigation";
 
 dotenv.config({ path: ".env" });
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
 
 export default class SentencePage extends CasePage {
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
   [x: string]: any;
 
   constructor(page: Page, crn?: string) {

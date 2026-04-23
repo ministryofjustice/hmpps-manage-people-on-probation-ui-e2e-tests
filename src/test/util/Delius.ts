@@ -6,7 +6,6 @@ import {
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs";
 import { createOffender } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/create-offender.mjs";
 import {
-  data,
   Staff,
   Team,
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
@@ -92,6 +91,7 @@ export const manageCreateOffender = async (
 
     console.log("Offender Created, CRN: ", crn);
     return [crn, person, true];
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
     if (err.code !== "EEXIST") throw err;
     while (!fs.existsSync(USER_FILE)) {

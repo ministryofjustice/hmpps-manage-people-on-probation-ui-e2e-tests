@@ -2,7 +2,7 @@ import { createBdd, DataTable } from "playwright-bdd";
 import { testContext } from "../../features/Fixtures";
 import PersonalDetailsPage from "../../pageObjects/Case/personal-details.page";
 
-const { Given, When, Then } = createBdd(testContext);
+const { Then } = createBdd(testContext);
 
 Then(
   "the personal details page is populated with title {string}",

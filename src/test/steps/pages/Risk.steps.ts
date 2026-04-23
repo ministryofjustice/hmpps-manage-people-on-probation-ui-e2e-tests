@@ -1,10 +1,9 @@
-import { createBdd, DataTable } from "playwright-bdd";
+import { createBdd } from "playwright-bdd";
 import { testContext } from "../../features/Fixtures";
 import OverviewPage from "../../pageObjects/Case/overview.page";
-import TierPage from "../../pageObjects/Case/tier.page";
 import RiskPage from "../../pageObjects/Case/risk.page";
 
-const { Given, When, Then } = createBdd(testContext);
+const { Given, Then } = createBdd(testContext);
 
 Given("I navigate to risk page", async ({ ctx }) => {
   const overviewPage = new OverviewPage(ctx.base.page);

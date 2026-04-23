@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test";
 import * as dotenv from "dotenv";
 import CasePage from "./casepage";
-import { caseNavigation, navigateToCase } from "../../util/Navigation";
+import { caseNavigation } from "../../util/Navigation";
 import {
   AddressDetails,
   ContactDetails,

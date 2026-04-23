@@ -1,8 +1,8 @@
-import { createBdd, DataTable } from "playwright-bdd";
+import { createBdd } from "playwright-bdd";
 import { testContext } from "../../features/Fixtures";
 import SentencePage from "../../pageObjects/Case/sentence.page";
 
-const { Given, When, Then } = createBdd(testContext);
+const { When, Then } = createBdd(testContext);
 
 When("I navigate to sentence page", async ({ ctx }) => {
   const sentencePage = new SentencePage(ctx.base.page);

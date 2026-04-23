@@ -3,15 +3,9 @@ import {
   AddressDetails,
   AddressType,
   ContactDetails,
-  Details,
 } from "../features/Fixtures";
 import { YesNoCheck } from "./ReviewCheckins";
-import {
-  dateTimeMapping,
-  dateWithLongMonth,
-  luxonString,
-  stringToDate,
-} from "./DateTime";
+import { dateTimeMapping, dateWithLongMonth, luxonString } from "./DateTime";
 
 export interface Address {
   address?: string[];
@@ -72,7 +66,7 @@ export const getUpdatedAddressDetails = (
       note: "No notes",
     };
   }
-  let address: string = updates.address?.join("")!;
+  let address: string = updates.address!.join("");
   if (address === "") {
     address = "No fixed address";
   }

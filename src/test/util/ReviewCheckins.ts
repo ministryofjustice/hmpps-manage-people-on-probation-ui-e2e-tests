@@ -2,15 +2,9 @@ import { Page } from "@playwright/test";
 import ReviewIdentityPage from "../pageObjects/Case/Contacts/Checkins/Review/review-identity.page";
 import ReviewNotesPage from "../pageObjects/Case/Contacts/Checkins/Review/review-notes.page";
 import ReviewExpiredPage from "../pageObjects/Case/Contacts/Checkins/Review/review-expired.page";
-import CasePage from "../pageObjects/Case/casepage";
 import OverviewPage from "../pageObjects/Case/overview.page";
 import SearchPage from "../pageObjects/search.page";
-import ContactPage from "../pageObjects/Case/Contacts/Contacts/contact.page";
-import ActivityLogPage from "../pageObjects/Case/activity-log.page";
-import PersonalDetailsPage from "../pageObjects/Case/personal-details.page";
 import { DataTable } from "playwright-bdd";
-import { start } from "repl";
-import HomePage from "../pageObjects/home.page";
 import CasesPage from "../pageObjects/cases.page";
 
 export enum ReviewType {

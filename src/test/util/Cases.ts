@@ -1,5 +1,4 @@
 import { DataTable } from "playwright-bdd";
-import { YesNoCheck } from "./ReviewCheckins";
 
 export interface CaseFilters {
   name_crn?: string;

@@ -1,6 +1,6 @@
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { createBdd } from "playwright-bdd";
-import { attendee, testCrn } from "../../util/Data";
+import { testCrn } from "../../util/Data";
 import AppointmentsPage from "../../pageObjects/Case/appointments.page";
 import { testContext } from "../../features/Fixtures";
 import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
@@ -10,7 +10,7 @@ import LogOutcomesPage from "../../pageObjects/log-outcomes.page";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import UpcomingAppiointmentsPage from "../../pageObjects/upcoming.page";
 
-const { Given, When, Then } = createBdd(testContext);
+const { When, Then } = createBdd(testContext);
 
 When("I navigate to latest past appointment", async ({ ctx }) => {
   const page = ctx.base.page;

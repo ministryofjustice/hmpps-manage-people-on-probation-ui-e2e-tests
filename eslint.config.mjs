@@ -40,6 +40,7 @@ export default [
       "**/.vscode/",
       "**/.env",
       "**/.DS_Store",
+      "**/.features-gen",
     ],
   },
   ...compat.extends(

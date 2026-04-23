@@ -2,7 +2,6 @@ import { expect, Page } from "@playwright/test";
 import ContactPage from "../../Contacts/contact.page";
 import CheckInSummaryPage from "./check-in-summary.page";
 import { MPOP_URL } from "../../../../../util/Data";
-import { MpopDateTime } from "../../../../../util/DateTime";
 
 const DATEPICKER_QA = "input.moj-js-datepicker-input";
 const DATEPICKER_ICON = "moj-datepicker-icon";

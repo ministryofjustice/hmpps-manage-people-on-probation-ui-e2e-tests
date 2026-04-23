@@ -1,7 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import ContactPage from "../Contacts/contact.page";
 
-import { TextMessageOption } from "../../../../util/ArrangeAppointment";
 export default class TextConfirmationPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
     super(page, "Text message confirmation", crn, uuid);
@@ -29,13 +28,11 @@ export default class TextConfirmationPage extends ContactPage {
     return `${hour}:${minute}${ampm}`;
   }
 
-  //
   async completePage(
     text: string,
     mobile: string,
     date: string,
     startTime: string,
-    locationId: string | number,
   ) {
     const smsWrapper = this.page.locator("div.sms-message-wrapper");
 
@@ -46,7 +43,7 @@ export default class TextConfirmationPage extends ContactPage {
       : undefined;
 
     switch (text) {
-      case "yes":
+      case "yes": {
         await this.page.locator('input[type="radio"][value="YES"]').check();
 
         // Wait for SMS preview to appear
@@ -58,8 +55,8 @@ export default class TextConfirmationPage extends ContactPage {
           expect(smsTextYes).toContain(formattedStartTime);
         await this.submit();
         break;
-
-      case "yes-add":
+      }
+      case "yes-add": {
         await this.page
           .locator('input[type="radio"][value="YES_ADD_MOBILE_NUMBER"]')
           .check();
@@ -78,8 +75,8 @@ export default class TextConfirmationPage extends ContactPage {
         await this.page.getByRole("textbox", { name: /mobile/i }).fill(mobile);
         await this.continueButton();
         break;
-
-      case "yes-update":
+      }
+      case "yes-update": {
         await this.page
           .locator('input[type="radio"][value="YES_UPDATE_MOBILE_NUMBER"]')
           .check();
@@ -98,8 +95,8 @@ export default class TextConfirmationPage extends ContactPage {
         await this.page.getByRole("textbox", { name: /mobile/i }).fill(mobile);
         await this.continueButton();
         break;
-
-      case "no":
+      }
+      case "no": {
         await this.page.locator('input[type="radio"][value="NO"]').check();
 
         await smsWrapper.waitFor({ state: "visible", timeout: 15000 });
@@ -109,6 +106,7 @@ export default class TextConfirmationPage extends ContactPage {
         if (formattedStartTime) expect(smsTextNo).toContain(formattedStartTime);
         await this.submit();
         break;
+      }
     }
   }
 }

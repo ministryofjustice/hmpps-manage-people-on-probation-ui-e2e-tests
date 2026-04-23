@@ -5,15 +5,7 @@ import { navigateToCase } from "../../util/Navigation";
 import getUserFriendlyString, {
   MPoPCheckinDetails,
 } from "../../util/SetupOnlineCheckins";
-import {
-  dateWithDayAndWithoutYear,
-  formatToLongDay,
-  lastWeek,
-  luxonString,
-  nextWeek,
-  today,
-  yesterday,
-} from "../../util/DateTime";
+import { dateWithDayAndWithoutYear, yesterday } from "../../util/DateTime";
 import { DateTime } from "luxon";
 import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
 import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";

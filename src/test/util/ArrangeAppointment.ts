@@ -3,11 +3,8 @@ import {
   dateTimeMapping,
   luxonString,
   MpopDateTime,
-  nextWeek,
-  plus3Months,
   today,
   tomorrow,
-  yesterday,
 } from "../util/DateTime";
 import SentencePage from "../pageObjects/Case/Contacts/Appointments/sentence.page";
 import TypeAttendancePage from "../pageObjects/Case/Contacts/Appointments/type-attendance.page";
@@ -21,12 +18,11 @@ import TextConfirmationPage from "../pageObjects/Case/Contacts/Appointments/text
 import CYAPage from "../pageObjects/Case/Contacts/Appointments/CYA.page";
 import ArrangeAnotherPage from "../pageObjects/Case/Contacts/Appointments/arrange-another.page";
 import { DataTable } from "playwright-bdd";
-import { dateTime as defaultTime, attendee as self } from "./Data";
+import { attendee as self } from "./Data";
 import { YesNoCheck } from "./ReviewCheckins";
 import { DateTime } from "luxon";
 import AttendedCompliedPage from "../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page";
-import LocationNotInListPage from "../pageObjects/Case/Contacts/Appointments/location-not-in-list.page";
 import ReschedulePage from "../pageObjects/Case/Contacts/Appointments/reschedule.page";
 import RescheduleDetailsPage from "../pageObjects/Case/Contacts/Appointments/reschedule-details";
 
@@ -103,10 +99,9 @@ export const setupAppointmentMPop = async (
     const textConfirmationPage = new TextConfirmationPage(page);
     await textConfirmationPage.completePage(
       appointment.text,
-      appointment.mobile,
+      appointment.mobile!,
       appointment.dateTime.date,
       appointment.dateTime.startTime,
-      appointment.locationId,
     );
     const supportingInformationPage = new SupportingInformationPage(page);
     await supportingInformationPage.completePage(
@@ -202,7 +197,6 @@ export const appointmentDataTable = (
   let mobile: string;
   let note: string;
   let sensitivity: boolean = false;
-  const noDate = false;
   for (const row of data.hashes()) {
     if (row.label === "sentenceId") {
       if (row.value != "") {

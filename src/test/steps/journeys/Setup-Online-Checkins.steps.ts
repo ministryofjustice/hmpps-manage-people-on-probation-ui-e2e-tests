@@ -2,17 +2,8 @@ import AppointmentsPage from "../../pageObjects/Case/appointments.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
 import ConfirmationPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/confirmation.page";
 import CheckInSummaryPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page";
-import { test as base, createBdd, DataTable } from "playwright-bdd";
-import {
-  dueDateString,
-  lastWeek,
-  luxonString,
-  nextWeek,
-  today,
-  tomorrow,
-  threeDaysAgo,
-  yesterday,
-} from "../../util/DateTime";
+import { createBdd, DataTable } from "playwright-bdd";
+import { dueDateString, lastWeek, today } from "../../util/DateTime";
 import {
   makeChangesSetupCheckins,
   MPoPCheckinDetails,
@@ -23,7 +14,7 @@ import {
   setupCheckinsMPop,
   setupDataTable,
 } from "../../util/SetupOnlineCheckins";
-import { test, testContext } from "../../features/Fixtures";
+import { testContext } from "../../features/Fixtures";
 import {
   createEsupervisionCheckin,
   getClientToken,
@@ -32,7 +23,7 @@ import {
   submitEsupervisionCheckin,
   verifyEsupervisionVideo,
 } from "../../util/API";
-import { getBrowserContext, getUuid } from "../../util/Common";
+import { getUuid } from "../../util/Common";
 import ActivityLogPage from "../../pageObjects/Case/activity-log.page";
 import {
   getCasesWithCheckInsSetup,
@@ -40,7 +31,6 @@ import {
   Review,
   reviewCheckinMpop,
   reviewDataTable,
-  reviewSubmittedCheckinMpop,
   ReviewType,
   SurveyResponse,
   YesNoCheck,
@@ -57,7 +47,6 @@ import PartiallyEligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetU
 import DateFrequencyPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
 import EligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page";
 import IneligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/ineligible.page";
-import PersonalDetailsPage from "../../pageObjects/Case/personal-details.page";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -117,7 +106,7 @@ When("I make random changes", async ({ ctx }) => {
   ctx.checkIns.changes = changes;
 });
 
-When("I submit the checkin", async ({ ctx }, data: DataTable) => {
+When("I submit the checkin", async ({ ctx }) => {
   const confirmationPage = new ConfirmationPage(ctx.base.page);
   await confirmationPage.assertOnPage();
   await confirmationPage.checkWhatHappensNextTextExists();
@@ -304,7 +293,7 @@ Then("Checkins should be setup", async ({ ctx }) => {
 
 Then(
   "I mock the completion of an expired checkin for {string}",
-  async ({ ctx }, cases) => {
+  async (_, cases) => {
     const caseList = cases.split(",");
     for (let i = 0; i < caseList.length; i++) {
       const crn = caseList[i];
@@ -400,7 +389,7 @@ Then(
 
 When(
   "I select {string} button on how to write questions page",
-  async ({ ctx }, buttonName: string) => {
+  async ({ ctx }) => {
     const managePage = new ManageCheckInsPage(ctx.base.page);
     await managePage.selectAddQuestionsToOnlineCheckInsButton();
   },

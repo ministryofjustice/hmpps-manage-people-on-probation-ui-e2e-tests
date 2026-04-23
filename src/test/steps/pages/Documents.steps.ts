@@ -2,8 +2,6 @@ import { createBdd, DataTable } from "playwright-bdd";
 import { testContext } from "../../features/Fixtures";
 import ActivityLogPage from "../../pageObjects/Case/activity-log.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
-import { getClientToken, getContacts } from "../../util/API";
-import { contactDataTable } from "../../util/Contacts";
 import { expect } from "@playwright/test";
 import DocumentsPage from "../../pageObjects/Case/documents.page";
 import { documentsDataTable } from "../../util/Documents";

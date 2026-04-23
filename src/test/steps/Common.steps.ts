@@ -11,7 +11,7 @@ import PersonalDetailsPage from "../pageObjects/Case/personal-details.page";
 import AxeBuilder from "@axe-core/playwright";
 import { expect } from "@playwright/test";
 
-const { Given, When, Then, After } = createBdd(testContext);
+const { Given, Then, After } = createBdd(testContext);
 
 Given(
   `Context has been created for {string} test`,
@@ -28,7 +28,7 @@ Given(
 );
 
 Given("A new offender has been created in Ndelius", async ({ ctx }) => {
-  const [person, crn, created] = await loginDeliusAndCreateOffender(
+  const [person, crn] = await loginDeliusAndCreateOffender(
     ctx.base.page,
     "Wales",
     testUser,
@@ -98,7 +98,7 @@ Given("I navigate to {string}", async ({ ctx }, crn) => {
   ctx.case.crn = crn;
 });
 
-Then("I receive success message {string}", async ({ ctx }, message: string) => {
+Then("I receive success message {string}", async ({ ctx }) => {
   const page = ctx.base.page;
   await page.getByRole("heading", { name: "Contact created" }).isVisible();
 });

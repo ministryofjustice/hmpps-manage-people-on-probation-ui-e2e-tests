@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import { DateTime } from "luxon";
-import { getCalenderEvent, getClientToken, getExternalReference } from "./API";
+import { getCalenderEvent, getExternalReference } from "./API";
 import { getUrn } from "./Common";
 import { CaseType } from "../features/Fixtures";
 import { MpopDateTime } from "./DateTime";

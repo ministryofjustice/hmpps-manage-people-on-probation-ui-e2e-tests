@@ -1,7 +1,7 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import * as dotenv from "dotenv";
 import CasePage from "./casepage";
-import { caseNavigation, navigateToCase } from "../../util/Navigation";
+import { caseNavigation } from "../../util/Navigation";
 import RemovedRiskFlagsPage from "./removed-risk-flags.page";
 import RiskFlagPage from "./Contacts/Checkins/risk-flag.page";
 

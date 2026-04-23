@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { baseNavigation } from "../util/Navigation";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";

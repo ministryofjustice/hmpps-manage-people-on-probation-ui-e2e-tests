@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 import { baseNavigation } from "../util/Navigation";
@@ -40,7 +40,7 @@ export default class CasesPage extends MPopPage {
     try {
       const text = await this.getQA("pagination").textContent();
       const count = text?.match(/\d+(,\d+)*/g) as unknown as number[];
-      return parseInt(count[2].toString().replace(/\,/g, ""), 10);
+      return parseInt(count[2].toString().replace(/,/g, ""), 10);
     } catch {
       const count = await this.getClass("govuk-table__row").count();
       return count - 1;

@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { expect } from "@playwright/test";
 import { createBdd, DataTable } from "playwright-bdd";
 import AppointmentsPage from "../../pageObjects/Case/appointments.page";
 import {
@@ -19,19 +19,14 @@ import LocationNotInListPage from "../../pageObjects/Case/Contacts/Appointments/
 import ConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/confirmation.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
 import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
-import {
-  getCalenderEvent,
-  getClientToken,
-  getExternalReference,
-} from "../../util/API";
-import { getUrn, getUuid } from "../../util/Common";
+import { getClientToken } from "../../util/API";
 import { DateTime } from "luxon";
 import { today } from "../../util/DateTime";
 import { checkOutlook } from "../../util/Outlook";
 import CYAPage from "../../pageObjects/Case/Contacts/Appointments/CYA.page";
 import RemindersPage from "../../pageObjects/Reminders/reminders";
 
-const { Given, When, Then } = createBdd(testContext);
+const { When, Then } = createBdd(testContext);
 
 When("I create an appointment", async ({ ctx }, data: DataTable) => {
   const page = ctx.base.page;

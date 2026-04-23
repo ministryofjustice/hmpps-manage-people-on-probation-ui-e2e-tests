@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES2022",
-    "moduleResolution": "Node",
+    "target": "es2023",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
-    "outDir": "dist",
+    "outDir": "./dist",
     "declaration": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["node"],
+    "rootDir": "./src"
   },
-  "include": ["steps", "test-data", "src/test/delius", "src/performance"]
+  "include": ["src/test", "src/performance"]
 }

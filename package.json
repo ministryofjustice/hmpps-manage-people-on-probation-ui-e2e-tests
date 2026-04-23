@@ -9,13 +9,14 @@
     "test": "npm run clean:feature  && npx bddgen && npx playwright test",
     "lint": "eslint . --cache --max-warnings 0",
     "lint:fix": "eslint . --fix",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc",
     "bdd": "cucumber-js",
     "bdd:tags": "cucumber-js --tags",
     "bdd:headed": "HEADLESS=false cucumber-js",
     "bdd:debug": "npx cucumber-js --profile debug",
     "perf:run": "gatling run --typescript",
-    "perf:home": "gatling run --typescript --sources-folder src/performance --simulation mpop"
+    "perf:home": "gatling run --typescript --sources-folder src/performance --simulation mpop",
+    "prepare": "husky"
   },
   "engines": {
     "node": "^24",
@@ -42,6 +43,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.5.0",
+    "husky": "^9.1.7",
     "luxon": "^3.7.2",
     "playwright-bdd": "^8.5.0",
     "prettier": "^3.8.3",

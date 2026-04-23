@@ -1,4 +1,4 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import ContactPage from "../../Contacts/contact.page";
 
 export default class ReviewedExpiredPage extends ContactPage {

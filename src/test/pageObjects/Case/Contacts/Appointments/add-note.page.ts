@@ -1,9 +1,5 @@
 import { Page } from "@playwright/test";
-import LocationDateTimePage from "./location-datetime.page";
-import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../Contacts/contact.page";
-import { MpopDateTime } from "../../../../util/DateTime";
-import TextConfirmationPage from "./text-confirmation-page";
 
 export default class AddNotePage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
@@ -14,7 +10,9 @@ export default class AddNotePage extends ContactPage {
     if (note) {
       await this.fillText("notes", note);
     }
-    //file
+    if (file) {
+      console.log("not yet implemented"); //file
+    }
     if (sensitivity != undefined) {
       await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1);
     }

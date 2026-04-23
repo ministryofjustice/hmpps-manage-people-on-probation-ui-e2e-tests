@@ -1,6 +1,5 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import ContactPage from "../../Contacts/contact.page";
-import { photo_1_path } from "../../../../../util/Data";
 
 export default class TakePhotoPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {

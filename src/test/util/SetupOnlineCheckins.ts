@@ -3,13 +3,11 @@ import DateFrequencyPage, {
   FrequencyOptions,
 } from "../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
 import ContactPreferencePage, {
-  contactMethod,
   Preference,
 } from "../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page";
 import PhotoOptionsPage, {
   PhotoOptions,
 } from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-options.page";
-import InstructionsPage from "../pageObjects/Case/Contacts/Checkins/SetUp/instructions.page";
 import UploadPhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/upload-photo.page";
 import PhotoMeetRulesPage from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-meet-rules.page";
 import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page";

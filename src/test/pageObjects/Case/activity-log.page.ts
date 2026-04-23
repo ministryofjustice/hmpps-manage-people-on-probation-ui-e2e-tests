@@ -5,7 +5,6 @@ import { caseNavigation } from "../../util/Navigation";
 import { ContactFilters } from "../../util/Contacts";
 
 dotenv.config({ path: ".env" });
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
 
 export default class ActivityLogPage extends CasePage {
   constructor(page: Page, crn?: string) {
