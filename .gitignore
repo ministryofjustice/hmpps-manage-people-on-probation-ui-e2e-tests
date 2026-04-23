@@ -9,6 +9,7 @@ node_modules/
 .features-gen/
 /target
 .eslintcache
+src/test/temp-offender.json
 
 ### playwright report ###
 junit.xml
