@@ -1,35 +1,39 @@
-import { expect, Page } from "@playwright/test";
+import { Page } from "@playwright/test";
 import { baseNavigation } from "../util/Navigation";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 
 export default class SearchPage extends MPopPage {
-    constructor(page: Page) {
-        super(page, "Find a person on probation")
-    }
+  constructor(page: Page) {
+    super(page, "Find a person on probation");
+  }
 
-    async goTo(){
-       await this.page.goto(`${MPOP_URL}/search`)
-    }
+  async goTo() {
+    await this.page.goto(`${MPOP_URL}/search`);
+  }
 
-    async searchCases(text: string){
-        await this.getClass("moj-search").getByRole("searchbox").fill(text)
-        await this.page.getByRole("button", {name: "Search"}).click()
-    }
+  async searchCases(text: string) {
+    await this.getClass("moj-search").getByRole("searchbox").fill(text);
+    await this.page.getByRole("button", { name: "Search" }).click();
+  }
 
-    async countCases(){
-        await this.page.waitForTimeout(1000)
-        const count = await this.page.getByRole("table").getByRole("row").count()
-        return count
-    }
+  async countCases() {
+    await this.page.waitForTimeout(1000);
+    const count = await this.page.getByRole("table").getByRole("row").count();
+    return count;
+  }
 
-    async selectCaseByID(id: number){
-        await this.page.getByRole("table").getByRole("row").nth(id).getByRole("link").click()
-        await this.page.waitForTimeout(15000)
-    }
+  async selectCaseByID(id: number) {
+    await this.page
+      .getByRole("table")
+      .getByRole("row")
+      .nth(id)
+      .getByRole("link")
+      .click();
+    await this.page.waitForTimeout(15000);
+  }
 
-    async navigateTo(page: Page) {
-        await baseNavigation(page, "Search")
-    }
-    
+  async navigateTo(page: Page) {
+    await baseNavigation(page, "Search");
+  }
 }

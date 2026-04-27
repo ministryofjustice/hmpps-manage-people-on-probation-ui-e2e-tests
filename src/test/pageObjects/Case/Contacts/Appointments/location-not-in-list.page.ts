@@ -2,7 +2,7 @@ import { Page } from "@playwright/test";
 import ContactPage from "../Contacts/contact.page";
 
 export default class LocationNotInListPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Arrange an appointment in another location", crn, uuid)
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Arrange an appointment in another location", crn, uuid);
+  }
 }

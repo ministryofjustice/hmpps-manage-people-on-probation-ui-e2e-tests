@@ -4,16 +4,16 @@ import ContactPage from "../Contacts/contact.page";
 export enum NextAction {
   Similar = 0,
   New = 1,
-  No = 2
+  No = 2,
 }
 
 export default class NextAppointmentPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, 'Do you want to arrange the next appointment with', crn, uuid)
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Do you want to arrange the next appointment with", crn, uuid);
+  }
 
-    async completePage(id: NextAction) {
-      await this.clickRadio("option", id)
-      await this.submit()
-    }
+  async completePage(id: NextAction) {
+    await this.clickRadio("option", id);
+    await this.submit();
+  }
 }

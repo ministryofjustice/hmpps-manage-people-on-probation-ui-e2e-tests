@@ -1,39 +1,41 @@
-import { expect, type Page } from '@playwright/test'
+import { expect, type Page } from "@playwright/test";
 
 export const loginAndGetCookies = async (page: Page) => {
-    const baseUrl = process.env.PERF_BASE_URL ?? 'http://localhost:3000'
-    await page.goto(baseUrl)
-    if (await page.title() !== 'Manage people on probation') {
-        await expect(page).toHaveTitle(/HMPPS Digital Services - Sign in/)
+  const baseUrl = process.env.PERF_BASE_URL ?? "http://localhost:3000";
+  await page.goto(baseUrl);
+  if ((await page.title()) !== "Manage people on probation") {
+    await expect(page).toHaveTitle(/HMPPS Digital Services - Sign in/);
 
-        const username = process.env.DELIUS_USERNAME
-        const password = process.env.DELIUS_PASSWORD
+    const username = process.env.DELIUS_USERNAME;
+    const password = process.env.DELIUS_PASSWORD;
 
-        if (!username || !password) {
-            throw new Error(
-                'Missing required environment variables: DELIUS_USERNAME and/or DELIUS_PASSWORD'
-            )
-        }
-
-        await page.fill('#username', username)
-        await page.fill('#password', password)
-        await page.click('#submit')
-    }
-    await expect(page.locator('[data-qa="pageHeading"]')).toContainText('Manage people on probation')
-
-    const cookies = await page.context().cookies()
-
-    const appCookie = cookies.find(
-        c => c.name === 'hmpps-manage-people-on-probation-ui.session'
-    )
-
-    if (!appCookie) {
-        throw new Error('Session cookie not found')
+    if (!username || !password) {
+      throw new Error(
+        "Missing required environment variables: DELIUS_USERNAME and/or DELIUS_PASSWORD",
+      );
     }
 
-    return {
-        appCookie,
-        cookies,
-        cookieHeader: cookies.map(c => `${c.name}=${c.value}`).join('; '),
-    }
-}
+    await page.fill("#username", username);
+    await page.fill("#password", password);
+    await page.click("#submit");
+  }
+  await expect(page.locator('[data-qa="pageHeading"]')).toContainText(
+    "Manage people on probation",
+  );
+
+  const cookies = await page.context().cookies();
+
+  const appCookie = cookies.find(
+    (c) => c.name === "hmpps-manage-people-on-probation-ui.session",
+  );
+
+  if (!appCookie) {
+    throw new Error("Session cookie not found");
+  }
+
+  return {
+    appCookie,
+    cookies,
+    cookieHeader: cookies.map((c) => `${c.name}=${c.value}`).join("; "),
+  };
+};

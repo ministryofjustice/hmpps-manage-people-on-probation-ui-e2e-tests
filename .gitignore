@@ -8,6 +8,8 @@ node_modules/
 *.tgz
 .features-gen/
 /target
+.eslintcache
+src/test/temp-offender.json
 
 ### playwright report ###
 junit.xml

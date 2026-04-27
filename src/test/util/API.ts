@@ -1,181 +1,207 @@
-import { APIResponse, Page, request } from '@playwright/test';
-import * as dotenv from 'dotenv'
-import { luxonString } from './DateTime';
-import { photo_1_path, video_1_path } from './Data';
-import { SurveyResponse } from './ReviewCheckins';
-dotenv.config({ path: '.env' })
+import { APIResponse, Page, request } from "@playwright/test";
+import * as dotenv from "dotenv";
+import { SurveyResponse } from "./ReviewCheckins";
+dotenv.config({ path: ".env" });
 
-const MAS_API_URL = process.env.MAS_API_URL
-const SIGN_IN_URL = process.env.SIGN_IN_URL
-const E_SUPERVISION_API_URL = process.env.E_SUPERVISION_API_URL
-const OUTLOOK_API_URL = process.env.OUTLOOK_API_URL
+const MAS_API_URL = process.env.MAS_API_URL;
+const SIGN_IN_URL = process.env.SIGN_IN_URL;
+const E_SUPERVISION_API_URL = process.env.E_SUPERVISION_API_URL;
+const OUTLOOK_API_URL = process.env.OUTLOOK_API_URL;
 
-export const getClientToken = async() : Promise<string> => {
-    const signin_context = await request.newContext({
-        baseURL: SIGN_IN_URL,
-        httpCredentials: {
-            username: process.env.API_USERNAME!,
-            password: process.env.API_PASSWORD!,
-            send: "always"
-        }
-    });
-    const token = await signin_context.post('/auth/oauth/token?grant_type=client_credentials')
-    const body: any = await token.json()
-    return await body.access_token
-}
+export const getClientToken = async (): Promise<string> => {
+  const signin_context = await request.newContext({
+    baseURL: SIGN_IN_URL,
+    httpCredentials: {
+      username: process.env.API_USERNAME!,
+      password: process.env.API_PASSWORD!,
+      send: "always",
+    },
+  });
+  const token = await signin_context.post(
+    "/auth/oauth/token?grant_type=client_credentials",
+  );
+  const body = await token.json();
+  return await body.access_token;
+};
 
-export const getCalenderEvent = async(urn: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: OUTLOOK_API_URL,
-    });
-    const response: APIResponse = await context.get(`/calendar/event?supervisionAppointmentUrn=${urn}`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    const body : any = await response.json()
-    return [response.status(), body]
-}
+export const getCalenderEvent = async (urn: string, token: string) => {
+  const context = await request.newContext({
+    baseURL: OUTLOOK_API_URL,
+  });
+  const response: APIResponse = await context.get(
+    `/calendar/event?supervisionAppointmentUrn=${urn}`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
+  );
+  const body = await response.json();
+  return [response.status(), body];
+};
 
-export const getContacts = async(crn: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: MAS_API_URL,
-    });
-    const response = await context.get(`/activity/${crn}`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    const body : any = await response.json()
-    return body.activities
-}
+export const getContacts = async (crn: string, token: string) => {
+  const context = await request.newContext({
+    baseURL: MAS_API_URL,
+  });
+  const response = await context.get(`/activity/${crn}`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  const body = await response.json();
+  return body.activities;
+};
 
-export const getPersonalDetails = async(crn: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: MAS_API_URL,
-    });
-    const response = await context.get(`/personal-details/${crn}`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    const body : any = await response.json()
-    return body
-}
+export const getPersonalDetails = async (crn: string, token: string) => {
+  const context = await request.newContext({
+    baseURL: MAS_API_URL,
+  });
+  const response = await context.get(`/personal-details/${crn}`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  const body = await response.json();
+  return body;
+};
 
-export const getExternalReference = async(crn: string, contactId: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: MAS_API_URL,
-    });
-    const response = await context.get(`/schedule/${crn}/appointment/${contactId}`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    const body : any = await response.json()
-    return body.appointment.externalReference
-}
+export const getExternalReference = async (
+  crn: string,
+  contactId: string,
+  token: string,
+) => {
+  const context = await request.newContext({
+    baseURL: MAS_API_URL,
+  });
+  const response = await context.get(
+    `/schedule/${crn}/appointment/${contactId}`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+    },
+  );
+  const body = await response.json();
+  return body.appointment.externalReference;
+};
 
-export const getProbationPractitioner = async(crn: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: MAS_API_URL,
-    });
-    const response = await context.get(`/case/${crn}/probation-practitioner`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        }
-    })
-    const body : any = await response.json()
-    return body.username
-}
+export const getProbationPractitioner = async (crn: string, token: string) => {
+  const context = await request.newContext({
+    baseURL: MAS_API_URL,
+  });
+  const response = await context.get(`/case/${crn}/probation-practitioner`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+  });
+  const body = await response.json();
+  return body.username;
+};
 
-
-export const createEsupervisionCheckin = async(practitioner: string, crn: string, date: string, token: string, allowFail: boolean = false) : Promise<string> => {
-    const context = await request.newContext({
-        baseURL: E_SUPERVISION_API_URL,
-    });
-    const response = await context.post(`/v2/offender_checkins/crn`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        data: {
-            "practitioner": practitioner,
-            "offender": crn,
-            "dueDate": date
-        }
-    })
-    let body
-    if (allowFail){
-        try {
-            body = await response.json()
-        } catch {
-            console.log('failed for CRN: ' + crn)
-        }
-    } else {
-        body = await response.json()
+export const createEsupervisionCheckin = async (
+  practitioner: string,
+  crn: string,
+  date: string,
+  token: string,
+  allowFail: boolean = false,
+): Promise<string> => {
+  const context = await request.newContext({
+    baseURL: E_SUPERVISION_API_URL,
+  });
+  const response = await context.post(`/v2/offender_checkins/crn`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    data: {
+      practitioner: practitioner,
+      offender: crn,
+      dueDate: date,
+    },
+  });
+  let body;
+  if (allowFail) {
+    try {
+      body = await response.json();
+    } catch {
+      console.log("failed for CRN: " + crn);
     }
-    return body.uuid
-}
+  } else {
+    body = await response.json();
+  }
+  return body.uuid;
+};
 
-export const postEsupervisionVideo = async(page: Page, uuid: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: E_SUPERVISION_API_URL,
-    });
-    const response = await context.post(`/v2/offender_checkins/${uuid}/upload_location`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        data: {
-            "video": 'video/mp4',
-            'snapshots': ['image/jpeg','image/jpeg']
-        }
-    })
-    const body = await response.json()
+export const postEsupervisionVideo = async (
+  page: Page,
+  uuid: string,
+  token: string,
+) => {
+  const context = await request.newContext({
+    baseURL: E_SUPERVISION_API_URL,
+  });
+  const response = await context.post(
+    `/v2/offender_checkins/${uuid}/upload_location`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      data: {
+        video: "video/mp4",
+        snapshots: ["image/jpeg", "image/jpeg"],
+      },
+    },
+  );
+  const body = await response.json();
 
-    const videoUrl = body.video.url
-    const videoType = body.video.contentType
-    const snapshotUrl = body.snapshots[0].url
-    const snapshotType = body.snapshots[0].contentType
-    await fetch(videoUrl, {
-        method: 'PUT',
-        body: '',
-        headers: {
-            'Content-Type': videoType
-        }
-    })
-    await fetch(snapshotUrl, {
-        method: 'PUT',
-        body: '',
-        headers: {
-            'Content-Type': snapshotType
-        }
-    })
-}
+  const videoUrl = body.video.url;
+  const videoType = body.video.contentType;
+  const snapshotUrl = body.snapshots[0].url;
+  const snapshotType = body.snapshots[0].contentType;
+  await fetch(videoUrl, {
+    method: "PUT",
+    body: "",
+    headers: {
+      "Content-Type": videoType,
+    },
+  });
+  await fetch(snapshotUrl, {
+    method: "PUT",
+    body: "",
+    headers: {
+      "Content-Type": snapshotType,
+    },
+  });
+};
 
-export const verifyEsupervisionVideo = async(uuid: string, token: string) => {
-    const context = await request.newContext({
-        baseURL: E_SUPERVISION_API_URL,
-    });
-    await context.post(`/v2/offender_checkins/${uuid}/video-verify`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        data: {
-            'numSnapshots': 1
-        }
-    })
-}
+export const verifyEsupervisionVideo = async (uuid: string, token: string) => {
+  const context = await request.newContext({
+    baseURL: E_SUPERVISION_API_URL,
+  });
+  await context.post(`/v2/offender_checkins/${uuid}/video-verify`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    data: {
+      numSnapshots: 1,
+    },
+  });
+};
 
-export const submitEsupervisionCheckin = async(uuid: string, token: string, surveyResponse: SurveyResponse) => {
-    const context = await request.newContext({
-        baseURL: E_SUPERVISION_API_URL,
-    });
-    await context.post(`/v2/offender_checkins/${uuid}/submit`, {
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        data: {
-            "survey": surveyResponse
-        }
-    })
-}
+export const submitEsupervisionCheckin = async (
+  uuid: string,
+  token: string,
+  surveyResponse: SurveyResponse,
+) => {
+  const context = await request.newContext({
+    baseURL: E_SUPERVISION_API_URL,
+  });
+  await context.post(`/v2/offender_checkins/${uuid}/submit`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    data: {
+      survey: surveyResponse,
+    },
+  });
+};

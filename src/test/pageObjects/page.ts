@@ -1,270 +1,307 @@
-import { expect, Locator, Page } from "@playwright/test"
+import { expect, Locator, Page } from "@playwright/test";
 
 export default abstract class MPopPage {
-    readonly page: Page
-    readonly title?: string | RegExp
+  readonly page: Page;
+  readonly title?: string | RegExp;
 
-    protected constructor(page: Page, title?: string | RegExp) {
-        this.page = page
-        this.title = title
+  protected constructor(page: Page, title?: string | RegExp) {
+    this.page = page;
+    this.title = title;
+  }
+
+  async assertOnPage() {
+    await this.page.waitForLoadState("networkidle");
+    const onPage = await this.checkOnPage();
+    expect(onPage).toBeTruthy();
+  }
+
+  async checkOnPage(): Promise<boolean> {
+    try {
+      await this.checkQA("pageHeading", this.title ?? "");
+      return true;
+    } catch {
+      return false;
     }
+  }
 
-    async assertOnPage(){
-        await this.page.waitForLoadState('networkidle')
-        const onPage = await this.checkOnPage()
-        expect(onPage).toBeTruthy()
+  async checkPageHeader(
+    qa: string,
+    expectedText: string | RegExp,
+    timeout = 20000,
+  ) {
+    await this.page.waitForLoadState("domcontentloaded", { timeout });
+    const locator = this.page.locator(`[data-qa="${qa}"]`);
+
+    await expect(locator).toBeVisible();
+
+    const text =
+      (await locator.textContent())?.replace(/\s+/g, " ").trim() || "";
+
+    // Assert manually for regex or string
+    if (expectedText instanceof RegExp) {
+      if (!expectedText.test(text)) {
+        throw new Error(
+          `Header text did not match expected pattern. Found: "${text}"`,
+        );
+      }
+    } else {
+      if (text !== expectedText) {
+        throw new Error(
+          `Header text did not match expected string. Found: "${text}", Expected: "${expectedText}"`,
+        );
+      }
     }
+  }
 
-    async checkOnPage(): Promise<boolean> {
+  getQA(qa: string, locator: Locator | Page = this.page) {
+    return locator.locator(`[data-qa="${qa}"]`);
+  }
+
+  getByID(id: string, locator: Locator | Page = this.page) {
+    return locator.locator(`[id="${id}"]`);
+  }
+
+  async expectElementVisible(selector: string) {
+    await expect(this.page.locator(selector)).toBeVisible();
+  }
+
+  async countRadioOptions(qa: string) {
+    return await this.getQA(qa).getByRole("radio").count();
+  }
+
+  // Safer clickRadio that works for radio buttons
+  async clickRadio(qa: string, id: number) {
+    const radio = this.getQA(qa).getByRole("radio").nth(id);
+
+    // Ensure the radio button is visible
+    await expect(radio).toBeVisible();
+
+    // Use .check() for radio buttons (safer than click)
+    await radio.check();
+
+    // Optionally, you can verify it’s selected
+    await expect(radio).toBeChecked();
+  }
+
+  async submit() {
+    await this.getQA("submit-btn").click();
+  }
+
+  async continueButton() {
+    const submitButton = this.getQA("submitBtn");
+    await expect(submitButton).toBeVisible();
+    await expect(submitButton).toBeEnabled();
+    await submitButton.click();
+  }
+
+  getLink(name: string | RegExp, locator: Locator | Page = this.page) {
+    return locator.getByRole("link", { name: name });
+  }
+  async clickLink(name: string) {
+    await this.getLink(name).click();
+  }
+  async clickBackLink() {
+    await this.getLink(/Back/).click();
+  }
+
+  async checkHref(name: string, value: string) {
+    await expect(this.getLink(name)).toHaveAttribute("href", value);
+  }
+
+  async checkQA(qa: string, value: string | RegExp) {
+    await expect(this.getQA(qa)).toContainText(value);
+  }
+
+  async checkQAExists(qa: string) {
+    const element = this.page.locator(qa);
+    await expect(element).toBeVisible();
+  }
+
+  async checkPageHeaderPhoto(qa: string, expectedText: string) {
+    const header = this.getQA(qa);
+    await expect(header).toBeVisible();
+    // Ensure we are no longer on the previous page
+    await expect(header).not.toHaveText(/Contact preferences/);
+    await expect(header).toContainText(expectedText);
+    //await expect(header).toHaveText(expectedText);
+    const fullText = await header.innerText();
+
+    // Normalize whitespace and remove the last word (the dynamic name)
+    const staticPart = fullText
+      .replace(/\s+/g, " ") // collapse whitespace
+      .trim()
+      .replace(/\s+\w+$/, ""); // remove the last word (e.g. "Teddy")
+
+    expect(staticPart).toBe(expectedText);
+  }
+
+  async clickTableLink(tableqa: string, cellqa: string) {
+    await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click();
+  }
+
+  async sortByColumn(tableqa: string, cellqa: string, ascending: boolean) {
+    const cell = this.getQA(cellqa, this.getQA(tableqa));
+    const currentSort = await cell.getAttribute("aria-sort");
+    const button = await cell.getByRole("button");
+    if (currentSort === "none") {
+      await button.click();
+      if (!ascending) {
+        await button.click();
+      }
+    } else if (currentSort == "ascending") {
+      if (!ascending) {
+        await button.click();
+      }
+    } else {
+      if (ascending) {
+        await button.click();
+      }
+    }
+  }
+
+  async getTableLength(tableqa: string): Promise<number> {
+    const rows = await this.getClass(
+      "govuk-table__row",
+      this.getQA(tableqa),
+    ).all();
+    return rows.length;
+  }
+
+  getNavigation(name: string) {
+    return this.getClass("govuk-pagination").getByRole("link", { name: name });
+  }
+
+  async pagination(id: number | string) {
+    if (id === "previous") {
+      await this.getNavigation("Previous").click();
+    } else if (id == "next") {
+      await this.getNavigation("Next").click();
+    } else {
+      const target: number[] = [id as number];
+      while (true) {
         try {
-            const text = await this.getQA('pageHeading').textContent()
-            await this.checkQA("pageHeading", this.title ?? "")
-            return true
+          await this.getNavigation(`${target[target.length - 1]}`).click({
+            timeout: 1000,
+          });
+          target.pop();
+          if (target.length == 0) {
+            break;
+          }
         } catch {
-            return false
+          target.push(target[target.length - 1] - 3);
+          if (target[target.length - 1] <= 1) {
+            target.pop();
+          }
         }
+      }
     }
+  }
 
-    async checkPageHeader(qa: string, expectedText: string | RegExp, timeout = 20000) {
-        await this.page.waitForLoadState('domcontentloaded', { timeout });
-        const locator = this.page.locator(`[data-qa="${qa}"]`);
-
-        await expect(locator).toBeVisible();
-
-        const text = (await locator.textContent())
-            ?.replace(/\s+/g, ' ')
-            .trim() || '';
-
-        // Assert manually for regex or string
-        if (expectedText instanceof RegExp) {
-            if (!expectedText.test(text)) {
-                throw new Error(`Header text did not match expected pattern. Found: "${text}"`);
-            }
-        } else {
-            if (text !== expectedText) {
-                throw new Error(`Header text did not match expected string. Found: "${text}", Expected: "${expectedText}"`);
-            }
-        }
+  async clickSummaryAction(id: number, qa?: string) {
+    if (qa) {
+      await this.page
+        .locator(`[data-qa="${qa}"]`)
+        .locator(`[class=govuk-summary-list__actions]`)
+        .nth(id)
+        .getByRole("link")
+        .click();
+    } else {
+      await this.page
+        .locator(`[class=govuk-summary-list__actions]`)
+        .nth(id)
+        .getByRole("link")
+        .click();
     }
+  }
 
-    getQA(qa: string, locator: Locator|Page=this.page){
-        return locator.locator(`[data-qa="${qa}"]`)
+  getClass(cssClass: string, locator: Locator | Page = this.page) {
+    return locator.locator(`[class="${cssClass}"]`);
+  }
+
+  async checkForError(value: string) {
+    await expect(this.getQA("errorList")).toContainText(value);
+  }
+
+  async getSummaryRowByID(id: number): Promise<Locator> {
+    return this.getClass("govuk-summary-list__row").nth(id);
+  }
+
+  async getSummaryRowByKey(key: string): Promise<Locator> {
+    const rows = await this.getClass(
+      "govuk-summary-list__key",
+      this.getClass("govuk-summary-list__row"),
+    ).allTextContents();
+    const index = rows.indexOf(
+      rows.find((element) => element.includes(key)) ?? "",
+    );
+    if (index != -1) {
+      return this.getClass("govuk-summary-list__row").nth(index);
     }
+    return undefined!;
+  }
 
-    getByID(id: string, locator: Locator|Page=this.page){
-        return locator.locator(`[id="${id}"]`)
+  async getSummaryRowValue(row: Locator) {
+    return this.getClass("govuk-summary-list__value", row);
+  }
+
+  async checkSummaryRowValue(row: Locator, value: string | RegExp) {
+    await expect(this.getClass("govuk-summary-list__value", row)).toContainText(
+      value,
+    );
+  }
+
+  async checkSummaryRowKey(row: Locator, value: string) {
+    await expect(this.getClass("govuk-summary-list__key", row)).toContainText(
+      value,
+    );
+  }
+
+  async selectOption(qa: string, option: string) {
+    await this.getQA(qa).selectOption(option);
+  }
+
+  async useSubNavigation(qa: string) {
+    await this.getQA(qa).getByRole("link").click();
+  }
+
+  async usePrimaryNavigation(tab: string) {
+    await this.page
+      .locator('[class="moj-primary-navigation"]')
+      .getByRole("link", { name: tab })
+      .click();
+  }
+
+  async getAlertsCount(full: boolean = false): Promise<number> {
+    if (full) {
+      const text = await this.getQA("alertsCount").textContent();
+      const count = text?.match(/\d+(,\d+)*/g) as unknown as number[];
+      return parseInt(count[2].toString().replace(/,/g, ""), 10);
+    } else {
+      return parseInt(
+        (
+          await this.getClass(
+            "moj-notification-badge",
+            this.getLink("Alerts"),
+          ).allTextContents()
+        )[0],
+      );
     }
+  }
 
-    async expectElementVisible(selector: string) {
-        await expect(this.page.locator(selector)).toBeVisible();
-    }
+  async logout() {
+    await this.getQA("probation-common-header-user-name").click();
+    await this.getLink("Sign out").click();
+  }
 
-    async countRadioOptions(qa: string){
-        return await this.getQA(qa).getByRole('radio').count()
-    }
+  async fillText(qa: string, note: string) {
+    await this.getQA(qa).getByRole("textbox").fill(note);
+  }
 
-    // Safer clickRadio that works for radio buttons
-    async clickRadio(qa: string, id: number) {
-        const radio = this.getQA(qa).getByRole('radio').nth(id);
-
-        // Ensure the radio button is visible
-        await expect(radio).toBeVisible();
-
-        // Use .check() for radio buttons (safer than click)
-        await radio.check();
-
-        // Optionally, you can verify it’s selected
-        await expect(radio).toBeChecked();
-    }
-
-    async submit(){
-        await this.getQA("submit-btn").click()
-    }
-
-    async continueButton(){
-        const submitButton = this.getQA("submitBtn");
-        await expect(submitButton).toBeVisible();
-        await expect(submitButton).toBeEnabled();
-        await submitButton.click();
-    }
-
-    getLink(name: string | RegExp, locator: Locator|Page=this.page){
-        return locator.getByRole('link', {name: name})
-    }
-    async clickLink(name: string){
-        await this.getLink(name).click()
-    }
-    async clickBackLink(){
-        await this.getLink(/Back/).click()
-    }
-
-    async checkHref(name: string, value: string){
-        await expect(this.getLink(name)).toHaveAttribute('href', value)
-    }
-
-    async checkQA(qa: string, value: string | RegExp){
-        await expect(this.getQA(qa)).toContainText(value)
-    }
-
-    async checkQAExists(qa: string) {
-        const element = this.page.locator(qa)
-        await expect(element).toBeVisible();
-    }
-
-
-    async checkPageHeaderPhoto(qa: string, expectedText: string) {
-        const header = this.getQA(qa);
-        await expect(header).toBeVisible();
-        // Ensure we are no longer on the previous page
-         await expect(header).not.toHaveText(/Contact preferences/);
-        await expect(header).toContainText(expectedText);
-        //await expect(header).toHaveText(expectedText);
-        const fullText = await header.innerText();
-
-        // Normalize whitespace and remove the last word (the dynamic name)
-        const staticPart = fullText
-            .replace(/\s+/g, ' ')       // collapse whitespace
-            .trim()
-            .replace(/\s+\w+$/, '');    // remove the last word (e.g. "Teddy")
-
-        expect(staticPart).toBe(expectedText);
-    }
-
-
-    async clickTableLink(tableqa: string, cellqa: string){
-        await this.getQA(cellqa, this.getQA(tableqa)).getByRole("link").click()
-    }
-
-    async sortByColumn(tableqa: string, cellqa: string, ascending: boolean){
-        const cell = this.getQA(cellqa, this.getQA(tableqa))
-        const currentSort = await cell.getAttribute('aria-sort')
-        const button = await cell.getByRole('button')
-        if (currentSort === "none"){
-            await button.click()
-            if (!ascending){
-                await button.click()
-            }
-        } else if (currentSort == "ascending"){
-            if (!ascending){
-                await button.click()
-            }
-        } else {
-            if (ascending){
-                await button.click()
-            }
-        }
-    }
-
-    async getTableLength(tableqa: string): Promise<number> {
-        const rows = await this.getClass("govuk-table__row", this.getQA(tableqa)).all()
-        return rows.length
-    }
-
-    getNavigation(name: string){
-        return this.getClass("govuk-pagination").getByRole('link', {name: name})
-    }
-
-    async pagination(id: number | string){
-        if (id === "previous"){
-            await this.getNavigation("Previous").click()
-        } else if (id == "next"){
-            await this.getNavigation("Next").click()
-        } else {
-            let target: number[] = [id as number]
-            while (true){
-                try {
-                    await this.getNavigation(`${target[target.length-1]}`).click({timeout: 1000})
-                    target.pop()
-                    if (target.length == 0){
-                        break
-                    }
-                } catch {
-                    target.push((target[target.length-1])-3)
-                    if ((target[target.length-1]) <= 1){
-                        target.pop()
-                    }
-                }
-            }
-        }
-    }
-
-    async clickSummaryAction(id: number, qa?: string){
-        if (qa){
-            await this.page.locator(`[data-qa="${qa}"]`).locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
-        } else {
-            await this.page.locator(`[class=govuk-summary-list__actions]`).nth(id).getByRole('link').click()
-        }
-    }
-
-    getClass(cssClass: string, locator: Locator|Page=this.page){
-        return locator.locator(`[class="${cssClass}"]`)
-    }
-
-    async checkForError(value: string) {
-        await expect(this.getQA("errorList")).toContainText(value)
-    }
-
-    async getSummaryRowByID(id: number): Promise<Locator> {
-        return this.getClass("govuk-summary-list__row").nth(id)
-    }
-
-    async getSummaryRowByKey(key: string): Promise<Locator> {
-        const rows = await this.getClass("govuk-summary-list__key", this.getClass("govuk-summary-list__row")).allTextContents()
-        const index = rows.indexOf(rows.find(element => (element.includes(key))) ?? '')
-        if (index != -1){
-            return this.getClass("govuk-summary-list__row").nth(index)
-        }
-        return undefined!
-    }
-
-    async getSummaryRowValue(row: Locator){
-        return this.getClass("govuk-summary-list__value", row)
-    }
-
-    async checkSummaryRowValue(row: Locator, value: string|RegExp){
-        await expect(this.getClass("govuk-summary-list__value", row)).toContainText(value)
-    }
-
-    async checkSummaryRowKey(row: Locator, value: string){
-        await expect(this.getClass("govuk-summary-list__key", row)).toContainText(value)
-    }
-
-    async selectOption(qa: string, option: string){
-        await this.getQA(qa).selectOption(option)
-    }
-
-    async useSubNavigation(qa: string){
-        await this.getQA(qa).getByRole('link').click()
-    }
-
-    async usePrimaryNavigation(tab: string){
-        await this.page.locator('[class="moj-primary-navigation"]').getByRole('link', {name: tab}).click()
-    }
-
-    async getAlertsCount(full: boolean = false) : Promise<number> {
-        if (full) {
-            const text = await this.getQA('alertsCount').textContent()
-            const count = text?.match(/\d+(,\d+)*/g) as unknown as number[]
-            return parseInt(count[2].toString().replace(/\,/g,''),10)
-        } else {
-            return parseInt((await (this.getClass("moj-notification-badge", this.getLink("Alerts"))).allTextContents())[0])
-        }
-    }
-
-    async logout() {
-        await this.getQA('probation-common-header-user-name').click()
-        await this.getLink('Sign out').click()
-    }
-
-    async fillText(qa: string, note: string){
-       await this.getQA(qa).getByRole('textbox').fill(note)
-    }
-
-    async locateConfirmationPageTextMessage(page: Page) {
-        await expect(
-            page.getByText(
-                /will receive a confirmation text message with the appointment details/
-            )
-        ).toBeVisible();
-    }
+  async locateConfirmationPageTextMessage(page: Page) {
+    await expect(
+      page.getByText(
+        /will receive a confirmation text message with the appointment details/,
+      ),
+    ).toBeVisible();
+  }
 }
