@@ -2,7 +2,7 @@ import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 import { REMINDERS_URL } from "../../util/Data";
 import { MpopArrangeAppointment } from "../../util/ArrangeAppointment";
-import { Person } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person";
+import { Person } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs";
 
 export default class RemindersPage extends MPopPage {
     constructor(page: Page) {
