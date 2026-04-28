@@ -3,21 +3,20 @@ import ContactPage from "../../Contacts/contact.page";
 import { photo_1_path } from "../../../../../util/Data";
 
 export default class UploadPhotoPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Upload a photo of", crn, uuid);
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Upload a photo of", crn, uuid);
+  }
 
-    async completePage() {
-        await this.uploadPhoto()
-        await this.submit()
-    }
+  async completePage() {
+    await this.uploadPhoto();
+    await this.submit();
+  }
 
-    fileUploadInput() {
-        return this.page.locator('#photoUpload-input');
-    }
+  fileUploadInput() {
+    return this.page.locator("#photoUpload-input");
+  }
 
-    async uploadPhoto() {
-        await this.fileUploadInput().setInputFiles(photo_1_path);
-    }
-
+  async uploadPhoto() {
+    await this.fileUploadInput().setInputFiles(photo_1_path);
+  }
 }

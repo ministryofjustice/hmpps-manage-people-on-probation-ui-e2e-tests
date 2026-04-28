@@ -2,20 +2,20 @@ import { expect, Page } from "@playwright/test";
 import ContactPage from "../Contacts/contact.page";
 
 export default class NotePage extends ContactPage {
-    readonly noteId?: string
+  readonly noteId?: string;
 
-    constructor(page: Page, crn?: string, uuid?: string, noteId?: string) {
-        super(page, "", crn, uuid)
-        this.noteId = noteId
-    }
+  constructor(page: Page, crn?: string, uuid?: string, noteId?: string) {
+    super(page, "", crn, uuid);
+    this.noteId = noteId;
+  }
 
-    async checkOnPage(): Promise<boolean>{
-        try {
-            expect(this.getQA("appointmentType")).toBeDefined()
-            expect(this.getQA("appointmentTitle")).toBeDefined()
-            return true
-        } catch {
-            return false
-        }
+  async checkOnPage(): Promise<boolean> {
+    try {
+      expect(this.getQA("appointmentType")).toBeDefined();
+      expect(this.getQA("appointmentTitle")).toBeDefined();
+      return true;
+    } catch {
+      return false;
     }
+  }
 }

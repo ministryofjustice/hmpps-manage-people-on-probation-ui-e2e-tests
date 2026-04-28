@@ -1,35 +1,37 @@
 import { expect, Page } from "@playwright/test";
-import * as dotenv from 'dotenv'
+import * as dotenv from "dotenv";
 import CasePage from "./casepage";
 
-dotenv.config({ path: '.env' })
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL
+dotenv.config({ path: ".env" });
 
 export default class TierPage extends CasePage {
-    constructor(page: Page, crn?: string) {
-        super(page, "", crn)
-    }
+  constructor(page: Page, crn?: string) {
+    super(page, "", crn);
+  }
 
-    async checkOnPage(): Promise<boolean>{
-        try {
-            await expect(this.getClass('govuk-heading-l').first()).toContainText('Summary')
-            return true
-        } catch {
-            return false
-        }
+  async checkOnPage(): Promise<boolean> {
+    try {
+      await expect(this.getClass("govuk-heading-l").first()).toContainText(
+        "Summary",
+      );
+      return true;
+    } catch {
+      return false;
     }
+  }
 
-    async checkTier(tier: string){
-        await expect(this.page.locator('p').first()).toContainText(`has a tier of ${tier}`)
-    }
+  async checkTier(tier: string) {
+    await expect(this.page.locator("p").first()).toContainText(
+      `has a tier of ${tier}`,
+    );
+  }
 
-    async checkTierLink(){
-        const link = this.getQA('tierLink')
-        const tier = (await link.allTextContents())[0]
-        await link.click()
-        await this.assertOnPage()
-        await this.checkTier(tier!)
-        await this.useBreadcrumbs(1) //always return to case
-    }
-    
+  async checkTierLink() {
+    const link = this.getQA("tierLink");
+    const tier = (await link.allTextContents())[0];
+    await link.click();
+    await this.assertOnPage();
+    await this.checkTier(tier!);
+    await this.useBreadcrumbs(1); //always return to case
+  }
 }

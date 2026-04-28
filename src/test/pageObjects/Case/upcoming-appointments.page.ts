@@ -2,27 +2,29 @@ import { Page } from "@playwright/test";
 import CasePage from "./casepage";
 
 export default class CaseUpcomingAppointmentsPage extends CasePage {
-    constructor(page: Page, crn?: string) {
-        super(page, "", crn)
-    }
+  constructor(page: Page, crn?: string) {
+    super(page, "", crn);
+  }
 
-    async goTo(crn?: string){
-       await this.page.goto(`https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${(crn ?? this.crn)!}/upcoming-appointments/`)
-    }
+  async goTo(crn?: string) {
+    await this.page.goto(
+      `https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk/case/${(crn ?? this.crn)!}/upcoming-appointments/`,
+    );
+  }
 
-    async checkOnPage(): Promise<boolean>{
-        try {
-            await this.checkQA("upcomingAppointments", "All upcoming appointments")
-            return true
-        } catch {
-            return false
-        }
+  async checkOnPage(): Promise<boolean> {
+    try {
+      await this.checkQA("upcomingAppointments", "All upcoming appointments");
+      return true;
+    } catch {
+      return false;
     }
+  }
 
-    async selectAppointment(id: number, byName: boolean){
-        const tableqa = "upcomingAppiointments"
-        const column = byName ? "Type" : "Action"
-        const cellqa = `upcomingAppointment${column}${id}`
-        await this.clickTableLink(tableqa, cellqa)
-    }
+  async selectAppointment(id: number, byName: boolean) {
+    const tableqa = "upcomingAppiointments";
+    const column = byName ? "Type" : "Action";
+    const cellqa = `upcomingAppointment${column}${id}`;
+    await this.clickTableLink(tableqa, cellqa);
+  }
 }

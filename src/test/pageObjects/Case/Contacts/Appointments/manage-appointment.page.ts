@@ -1,52 +1,65 @@
 import { expect, Page } from "@playwright/test";
 import ContactPage from "../Contacts/contact.page";
 import { MPOP_URL } from "../../../../util/Data";
-import { MpopArrangeAppointment } from "../../../../util/ArrangeAppointment";
 
 export enum ManageAction {
   AttendedComplied = 0,
   Notes = 1,
-  Next = 2
+  Next = 2,
 }
 
 export default class ManageAppointmentsPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Manage", crn, uuid)
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Manage", crn, uuid);
+  }
 
-    async goTo(crn?: string, contactId?: string){
-       await this.page.goto(`${MPOP_URL}/case/${(crn ?? this.crn)!}/appointments/appointment/${(contactId ?? this.uuid)!}/manage`)
-    }
+  async goTo(crn?: string, contactId?: string) {
+    await this.page.goto(
+      `${MPOP_URL}/case/${(crn ?? this.crn)!}/appointments/appointment/${(contactId ?? this.uuid)!}/manage`,
+    );
+  }
 
-    async clickNdeliusLink(){
-        await this.clickLink("use NDelius to log non-attendance or non-compliance (opens in new tab)")
-    }
+  async clickNdeliusLink() {
+    await this.clickLink(
+      "use NDelius to log non-attendance or non-compliance (opens in new tab)",
+    );
+  }
 
-    async clickNewAttendedAndCompliedLink(){
-        await this.clickLink("Log appointment outcome")
-    }
+  async clickNewAttendedAndCompliedLink() {
+    await this.clickLink("Log appointment outcome");
+  }
 
-    async clickAttendedAndCompliedLink(){
-        await this.clickLink("Log attended and complied appointment")
-    }
+  async clickAttendedAndCompliedLink() {
+    await this.clickLink("Log attended and complied appointment");
+  }
 
-    async clickAddNotesLink(){
-        await this.clickLink("Add appointment notes")
-    }
+  async clickAddNotesLink() {
+    await this.clickLink("Add appointment notes");
+  }
 
-    async clickNextAppointmentLink(){
-        await this.clickLink("Arrange next appointment")
-    }
+  async clickNextAppointmentLink() {
+    await this.clickLink("Arrange next appointment");
+  }
 
-    async checkActionLink(id: ManageAction, value: string){
-        await expect(this.getQA("appointmentActions").getByRole("listitem").nth(id).getByRole("link")).toHaveText(value)
-    }
+  async checkActionLink(id: ManageAction, value: string) {
+    await expect(
+      this.getQA("appointmentActions")
+        .getByRole("listitem")
+        .nth(id)
+        .getByRole("link"),
+    ).toHaveText(value);
+  }
 
-    async getAppointmentNotes(){
-        return this.getClass("app-note text-break", await this.getSummaryRowValue(await this.getSummaryRowByKey("Appointment notes")))
-    }
+  async getAppointmentNotes() {
+    return this.getClass(
+      "app-note text-break",
+      await this.getSummaryRowValue(
+        await this.getSummaryRowByKey("Appointment notes"),
+      ),
+    );
+  }
 
-    async getNoteCount(){
-        return await (await this.getAppointmentNotes()).count()
-    }
+  async getNoteCount() {
+    return await (await this.getAppointmentNotes()).count();
+  }
 }

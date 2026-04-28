@@ -1,27 +1,25 @@
 import { Page } from "@playwright/test";
-import LocationDateTimePage from "./location-datetime.page";
-import SupportingInformationPage from "./supporting-information.page";
 import ContactPage from "../Contacts/contact.page";
-import { MpopDateTime } from "../../../../util/DateTime";
-import TextConfirmationPage from "./text-confirmation-page";
 
 export default class AddNotePage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Add a note", crn, uuid)
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Add a note", crn, uuid);
+  }
 
-    async changePage(sensitivity?: boolean, note?: string, file?: string) {
-        if (note){
-            await this.fillText("notes", note)
-        }
-        //file
-        if (sensitivity != undefined){
-            await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1)
-        }
-        await this.submit()
+  async changePage(sensitivity?: boolean, note?: string, file?: string) {
+    if (note) {
+      await this.fillText("notes", note);
     }
+    if (file) {
+      console.log("not yet implemented"); //file
+    }
+    if (sensitivity != undefined) {
+      await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1);
+    }
+    await this.submit();
+  }
 
-    async completePage(sensitivity: boolean, note?: string, file?: string) {
-        await this.changePage(sensitivity, note, file)
-    }
+  async completePage(sensitivity: boolean, note?: string, file?: string) {
+    await this.changePage(sensitivity, note, file);
+  }
 }

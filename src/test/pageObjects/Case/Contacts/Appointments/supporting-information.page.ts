@@ -3,32 +3,32 @@ import LocationDateTimePage from "./location-datetime.page";
 import ContactPage from "../Contacts/contact.page";
 
 export default class SupportingInformationPage extends ContactPage {
-    constructor(page: Page, crn?: string, uuid?: string) {
-        super(page, "Add supporting information (optional)", crn, uuid)
-    }
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Add supporting information (optional)", crn, uuid);
+  }
 
-    async changePage(sensitivity?: boolean, note?: string) {
-        if (note != undefined){
-            await this.fillText("notes", note)
-        }
-        if (sensitivity != undefined){
-            await this.clickRadio("visorReport", sensitivity ? 0 : 1)
-        }
-        await this.submit()
+  async changePage(sensitivity?: boolean, note?: string) {
+    if (note != undefined) {
+      await this.fillText("notes", note);
     }
+    if (sensitivity != undefined) {
+      await this.clickRadio("visorReport", sensitivity ? 0 : 1);
+    }
+    await this.submit();
+  }
 
-    async completePage(sensitivity: boolean, note?: string) {
-        await this.changePage(sensitivity, note)
-    }
+  async completePage(sensitivity: boolean, note?: string) {
+    await this.changePage(sensitivity, note);
+  }
 
-    async testBacklink(change: boolean) {
-        await this.clickBackLink()
-        if (change){
-            //change case
-        }else{
-            const locationDateTimePage = new LocationDateTimePage(this.page)
-            locationDateTimePage.submit()
-        }
-        await this.assertOnPage()
+  async testBacklink(change: boolean) {
+    await this.clickBackLink();
+    if (change) {
+      //change case
+    } else {
+      const locationDateTimePage = new LocationDateTimePage(this.page);
+      locationDateTimePage.submit();
     }
+    await this.assertOnPage();
+  }
 }

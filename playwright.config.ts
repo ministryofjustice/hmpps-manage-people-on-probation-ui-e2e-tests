@@ -1,18 +1,12 @@
-import { defineConfig, devices } from '@playwright/test';
-import {
-  secondsToMilliseconds
-} from '@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs'
-import { defineBddConfig } from 'playwright-bdd';
+import { defineConfig, devices } from "@playwright/test";
+import { secondsToMilliseconds } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/date-time.mjs";
+import { defineBddConfig } from "playwright-bdd";
 import path from "path";
 
 const ROOT_DIR = process.cwd();
 const testDir = defineBddConfig({
-  "paths": [
-    "src/test/**/features"
-  ],
-  "import":[
-    "src/test/**/*.ts"
-  ],
+  paths: ["src/test/**/features"],
+  import: ["src/test/**/*.ts"],
 });
 
 /**
@@ -20,12 +14,12 @@ const testDir = defineBddConfig({
  */
 export default defineConfig({
   reporter: [
-        ['github'],
-        ['line'],
-        ['html', { open: 'never' }],
-        ['junit', { outputFile: 'junit.xml' }],
-        ['json', { outputFile: 'results.json' }],
-    ],
+    ["github"],
+    ["line"],
+    ["html", { open: "never" }],
+    ["junit", { outputFile: "junit.xml" }],
+    ["json", { outputFile: "results.json" }],
+  ],
   testDir,
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -41,28 +35,27 @@ export default defineConfig({
   use: {
     viewport: null,
     actionTimeout: secondsToMilliseconds(30),
-    timezoneId: 'Europe/London',
+    timezoneId: "Europe/London",
     launchOptions: { slowMo: 500 },
-    screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    trace: process.env.CI ? 'off' : 'on',
-    ...devices['Desktop Chrome'],
-      headless: true,
+    screenshot: "only-on-failure",
+    video: "retain-on-failure",
+    trace: process.env.CI ? "off" : "on",
+    ...devices["Desktop Chrome"],
+    headless: true,
   },
   /* Configure projects for major browsers */
   projects: [
     {
-      name: 'chromium',
+      name: "chromium",
       use: {
-          launchOptions: {
-              args: [
-                '--start-maximized', 
-                '--use-fake-ui-for-media-stream',
-                '--use-fake-device-for-media-stream',
-                '--use-file-for-fake-video-capture=/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests-1/src/test/fixtures/newfile.mjpeg'
-              ],
-          }
-
+        launchOptions: {
+          args: [
+            "--start-maximized",
+            "--use-fake-ui-for-media-stream",
+            "--use-fake-device-for-media-stream",
+            "--use-file-for-fake-video-capture=/Users/aidan.filby/Desktop/MPOP/hmpps-manage-people-on-probation-ui-e2e-tests-1/src/test/fixtures/newfile.mjpeg",
+          ],
+        },
       },
     },
   ],
