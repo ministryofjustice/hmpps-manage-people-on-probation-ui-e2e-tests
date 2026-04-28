@@ -27,7 +27,7 @@ Feature: As a practitioner
       | OK         |
       | Not Great  |
       | Struggling |
-    And I select 'Back to questions' button on the feeling preview page
+    And I select Back-to-questions button on the preview page
     When I select the 'preview-support' link on add questions page
     Then I see these check-boxes on the support preview page
       | Mental health                            |
@@ -48,7 +48,8 @@ Feature: As a practitioner
       | Tell us what you want us to know about employment and education (optional) |
       | Tell us what you want us to know about your relationships (optional)       |
       | Tell us what you want us to know about (optional)                          |
-    And I select 'Back to questions' button on the feeling preview page
+
+    And I select Back-to-questions button on the preview page
     And I see 'Save questions' button on add questions page
     And I see 'Cancel and go back' link on add questions page
     When I select 'Cancel and go back' link on add questions page
