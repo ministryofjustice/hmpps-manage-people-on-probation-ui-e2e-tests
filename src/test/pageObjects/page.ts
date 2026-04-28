@@ -294,6 +294,7 @@ export default abstract class MPopPage {
   }
 
   async fillText(qa: string, note: string) {
+    await this.getQA(qa).getByRole("textbox").clear();
     await this.getQA(qa).getByRole("textbox").fill(note);
   }
 
