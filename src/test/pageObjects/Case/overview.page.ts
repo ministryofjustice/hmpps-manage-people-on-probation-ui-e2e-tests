@@ -16,7 +16,6 @@ import ManageCheckInsPage from "./Contacts/Checkins/manage.page";
 import PersonalDetailsPage from "./personal-details.page";
 import RiskPage from "./risk.page";
 import CaseSentencePage from "./sentence.page";
-import CompliancePage from "./compliance.page";
 import ActivityLogPage from "./activity-log.page";
 
 dotenv.config({ path: ".env" });
@@ -119,13 +118,6 @@ export default class OverviewPage extends CasePage {
       );
     }
   }
-  async checkComplianceLink() {
-    await this.checkLink(
-      "activityAndComplianceCard",
-      "View all compliance details",
-      new CompliancePage(this.page),
-    );
-  }
   async checkContactsLink() {
     await this.checkLink(
       "activityAndComplianceCard",
@@ -154,7 +146,6 @@ export default class OverviewPage extends CasePage {
     await this.checkOnlineCheckInsLink();
     await this.checkPersonalDetailsLink();
     await this.checkRiskLink();
-    await this.checkComplianceLink();
     await this.checkContactsLink();
   }
 
