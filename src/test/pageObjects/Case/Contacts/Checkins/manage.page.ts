@@ -64,6 +64,201 @@ export default class ManageCheckInsPage extends ContactPage {
     await expect(this.getQA(`preview-support-link`)).toContainText("Preview");
   }
 
+  async selectPreviewFeelingLink() {
+    await this.getQA(`preview-feeling-link`).click();
+  }
+
+  async selectBackToQuestionsButton() {
+    await this.getQA(`submit-btn`).click();
+  }
+
+  async selectPreviewSupportLink() {
+    await this.getQA(`preview-support-link`).click();
+  }
+
+  async assertRadioButtonsOnFeelingPreviewPage(data: DataTable) {
+    for (const row of data.rows()) {
+      const label = row[0];
+
+      switch (label) {
+        case "Very well":
+          await expect(
+            this.page.getByRole("radio", { name: "Very well" }),
+          ).toBeVisible();
+          break;
+        case "Well":
+          await expect(
+            this.page.getByRole("radio", { name: /^Well$/ }),
+          ).toBeVisible();
+          break;
+        case "OK":
+          await expect(
+            this.page.getByRole("radio", { name: "OK" }),
+          ).toBeVisible();
+          break;
+        case "Not Great":
+          await expect(
+            this.page.getByRole("radio", { name: "Not Great" }),
+          ).toBeVisible();
+          break;
+        case "Struggling":
+          await expect(
+            this.page.getByRole("radio", { name: "Struggling" }),
+          ).toBeVisible();
+          break;
+      }
+    }
+  }
+
+  async assertTextAreaOnFeelingPreviewPage(data: DataTable) {
+    for (const row of data.rows()) {
+      const label = row[0];
+
+      switch (label) {
+        case "Very well":
+          await expect(
+            this.page.getByRole("textbox", {
+              name: "Tell us why you are very well (optional)",
+            }),
+          ).toBeVisible();
+          break;
+        case "Well":
+          await expect(
+            this.page.getByRole("textbox", {
+              name: "Tell us why you are well (optional)",
+            }),
+          ).toBeVisible();
+          break;
+        case "OK":
+          await expect(
+            this.page.getByRole("textbox", {
+              name: "Tell us why you are OK (optional)",
+            }),
+          ).toBeVisible();
+          break;
+        case "Not Great":
+          await expect(
+            this.page.getByRole("textbox", {
+              name: "Tell us why you are not great (optional)",
+            }),
+          ).toBeVisible();
+          break;
+        case "Struggling":
+          await expect(
+            this.page.getByRole("textbox", {
+              name: "Tell us why you are struggling (optional)",
+            }),
+          ).toBeVisible();
+          break;
+      }
+    }
+  }
+
+  async assertCheckBoxesOnSupportPreviewPage(data: DataTable) {
+    for (const row of data.rows()) {
+      const label = row[0];
+
+      switch (label) {
+        case "Mental health":
+          await expect(
+            this.page.locator("[id='mentalHealthSupport-checkbox']"),
+          ).toBeVisible();
+          // await expect(this.page.getByRole("checkbox", {name: "Mental health"})).toBeVisible();
+          break;
+        case "Alcohol":
+          // await expect(this.page.getByRole("checkbox", {name: "Alcohol"})).toBeVisible();
+          await expect(
+            this.page.locator("[id='alcoholSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Drugs":
+          await expect(
+            this.page.locator("[id='drugsSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Money":
+          await expect(
+            this.page.locator("[id='moneySupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Housing":
+          await expect(
+            this.page.locator("[id='housingSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Employment and education":
+          await expect(
+            this.page.locator("[id='employmentAndEducationSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Relationships (family, friends, partner)":
+          await expect(
+            this.page.locator("[id='relationshipsSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Something else":
+          await expect(
+            this.page.locator("[id='otherSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "No, I do not need any support":
+          await expect(
+            this.page.locator("[id='no-help-checkbox']"),
+          ).toBeVisible();
+          break;
+      }
+    }
+  }
+
+  async assertTextAreaOnSupportPreviewPage(data: DataTable) {
+    for (const row of data.rows()) {
+      const label = row[0];
+
+      switch (label) {
+        case "Tell us what you want us to know about mental health (optional)":
+          await expect(
+            this.page.locator("[id='mentalHealthSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about alcohol (optional)":
+          await expect(
+            this.page.locator("[id='alcoholSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about drugs (optional)":
+          await expect(
+            this.page.locator("[id='drugsSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about money (optional)":
+          await expect(
+            this.page.locator("[id='moneySupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about housing (optional)":
+          await expect(
+            this.page.locator("[id='housingSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about employment and education (optional)":
+          await expect(
+            this.page.locator("[id='employmentAndEducationSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about your relationships (optional)":
+          await expect(
+            this.page.locator("[id='relationshipsSupport-checkbox']"),
+          ).toBeVisible();
+          break;
+        case "Tell us what you want us to know about (optional)":
+          await expect(
+            this.page.locator("[id='no-help-checkbox']"),
+          ).toBeVisible();
+          break;
+      }
+    }
+  }
+
   async assertAddQuestionButton(expectedButton: string) {
     await expect(this.getQA(`add-question-btn`)).toContainText(expectedButton);
   }

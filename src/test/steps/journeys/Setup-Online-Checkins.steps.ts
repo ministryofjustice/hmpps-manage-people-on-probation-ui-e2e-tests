@@ -413,6 +413,59 @@ Then(
   },
 );
 
+When(
+  "I select the {string} link on add questions page",
+  async ({ ctx }, link: string) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+
+    if (link == "preview-feeling") {
+      await managePage.selectPreviewFeelingLink();
+    } else {
+      await managePage.selectPreviewSupportLink();
+    }
+  },
+);
+
+Then(
+  "I see these radio buttons on the feeling preview page",
+  async ({ ctx }, data: DataTable) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+    await managePage.assertRadioButtonsOnFeelingPreviewPage(data);
+  },
+);
+
+Then(
+  "I see these text areas on the feeling preview page",
+  async ({ ctx }, data: DataTable) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+    await managePage.assertTextAreaOnFeelingPreviewPage(data);
+  },
+);
+
+Then(
+  "I see these check-boxes on the support preview page",
+  async ({ ctx }, data: DataTable) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+    await managePage.assertCheckBoxesOnSupportPreviewPage(data);
+  },
+);
+
+Then(
+  "I see these text areas on the support preview page",
+  async ({ ctx }, data: DataTable) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+    await managePage.assertTextAreaOnSupportPreviewPage(data);
+  },
+);
+
+Then(
+  "I select Back-to-questions button on the preview page",
+  async ({ ctx }) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+    await managePage.selectBackToQuestionsButton();
+  },
+);
+
 Then(
   "I see {string} button on add questions page",
   async ({ ctx }, expectedButton: string) => {
