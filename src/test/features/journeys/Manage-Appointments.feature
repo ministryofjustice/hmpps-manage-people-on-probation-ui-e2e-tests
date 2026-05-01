@@ -12,6 +12,26 @@ Feature: Manage Appointments
         Then I can see the new note on the appointment
         And I close the context
 
+    @smoke @full @manage @updateSensitivity
+    Scenario: Add note to appointment and mark as sensitive
+        Given Context has been created for "Manage" test
+        And I am logged in
+        When I navigate to first non sensitive upcoming appointment
+        And I add a note to the appointment and mark as sensitive
+        Then I can see the new note on the appointment 
+        And I can see the appointment marked as sensitive
+        And I close the context
+
+    @smoke @full @manage @updateSensitivity
+    Scenario: Add note to appointment and attempt to clear sensitivity
+        Given Context has been created for "Manage" test
+        And I am logged in
+        When I navigate to first sensitive upcoming appointment
+        And I add a note to the appointment 
+        Then I can see the new note on the appointment 
+        And I can see the appointment marked as sensitive
+        And I close the context
+
    @smoke @full @manage @attended
    Scenario: Add Attended Complied Outcome
        Given Context has been created for "Manage" test

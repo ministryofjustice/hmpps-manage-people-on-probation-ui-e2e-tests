@@ -34,6 +34,71 @@ When("I navigate to first upcoming appointment", async ({ ctx }) => {
   await managePage.assertOnPage();
 });
 
+When("I navigate to first sensitive upcoming appointment", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const home = new HomePage(page);
+  await home.assertOnPage();
+  await home.viewUpcoming();
+  const upcomingAppointments = new UpcomingAppiointmentsPage(page);
+  let id = 0;
+  while (true) {
+    await upcomingAppointments.assertOnPage();
+    try {
+      await upcomingAppointments.selectOfficeVisit(id);
+    } catch {
+      await upcomingAppointments.pagination("Next");
+      id = 0;
+      continue;
+    }
+    const managePage = new ManageAppointmentsPage(page);
+    await managePage.assertOnPage();
+    try {
+      await expect(managePage.getQA("sensitiveTag")).toBeVisible();
+      break;
+    } catch {
+      await managePage.clickBackLink();
+      id += 1;
+    }
+  }
+  const managePage = new ManageAppointmentsPage(page);
+  await managePage.assertOnPage();
+  await expect(managePage.getQA("sensitiveTag")).toBeVisible();
+});
+
+When(
+  "I navigate to first non sensitive upcoming appointment",
+  async ({ ctx }) => {
+    const page = ctx.base.page;
+    const home = new HomePage(page);
+    await home.assertOnPage();
+    await home.viewUpcoming();
+    const upcomingAppointments = new UpcomingAppiointmentsPage(page);
+    let id = 0;
+    while (true) {
+      await upcomingAppointments.assertOnPage();
+      try {
+        await upcomingAppointments.selectOfficeVisit(id);
+      } catch {
+        await upcomingAppointments.pagination("Next");
+        id = 0;
+        continue;
+      }
+      const managePage = new ManageAppointmentsPage(page);
+      await managePage.assertOnPage();
+      try {
+        await expect(managePage.getQA("sensitiveTag")).toHaveCount(0);
+        break;
+      } catch {
+        await managePage.clickBackLink();
+        id += 1;
+      }
+    }
+    const managePage = new ManageAppointmentsPage(page);
+    await managePage.assertOnPage();
+    await expect(managePage.getQA("sensitiveTag")).toHaveCount(0);
+  },
+);
+
 When("I add a note to the appointment", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
@@ -42,6 +107,26 @@ When("I add a note to the appointment", async ({ ctx }) => {
   const addNotePage = new AddNotePage(page);
   await addNotePage.completePage(false, "note");
   ctx.manage.noteCount = noteCount;
+});
+
+When(
+  "I add a note to the appointment and mark as sensitive",
+  async ({ ctx }) => {
+    const page = ctx.base.page;
+    const managePage = new ManageAppointmentsPage(page);
+    const noteCount = await managePage.getNoteCount();
+    await managePage.clickAddNotesLink();
+    const addNotePage = new AddNotePage(page);
+    await addNotePage.completePage(true, "note");
+    ctx.manage.noteCount = noteCount;
+  },
+);
+
+Then("I can see the appointment marked as sensitive", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const managePage = new ManageAppointmentsPage(page);
+  await managePage.assertOnPage();
+  await expect(managePage.getQA("sensitiveTag")).toBeVisible();
 });
 
 Then("I can see the new note on the appointment", async ({ ctx }) => {
