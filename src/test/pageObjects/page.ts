@@ -53,7 +53,7 @@ export default abstract class MPopPage {
     }
   }
 
-  getQA(qa: string, locator: Locator | Page = this.page) {
+  getQA(qa: string, locator: Locator | Page = this.page): Locator {
     return locator.locator(`[data-qa="${qa}"]`);
   }
 
@@ -214,7 +214,7 @@ export default abstract class MPopPage {
     }
   }
 
-  getClass(cssClass: string, locator: Locator | Page = this.page) {
+  getClass(cssClass: string, locator: Locator | Page = this.page): Locator {
     return locator.locator(`[class="${cssClass}"]`);
   }
 
