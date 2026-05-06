@@ -49,14 +49,13 @@ export default class AddContactPage extends ContactPage {
   }
 
   async selectFrequentContact(contact: string): Promise<void> {
-    const frequentContact = this.page.getByRole("radio", {
+    const frequentContact = this.page.getByRole("link", {
       name: contact,
       exact: true,
     });
 
     await expect(frequentContact).toBeVisible();
     await frequentContact.click();
-    await this.getQA("continue-button").click();
   }
 
   async enterTitle(title?: string): Promise<void> {
