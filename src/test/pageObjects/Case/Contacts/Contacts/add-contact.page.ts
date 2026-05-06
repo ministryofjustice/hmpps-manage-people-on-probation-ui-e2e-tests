@@ -56,7 +56,6 @@ export default class AddContactPage extends ContactPage {
 
     await expect(frequentContact).toBeVisible();
     await frequentContact.click();
-    // await this.getQA("continue-button").click();
   }
 
   async enterTitle(title?: string): Promise<void> {
