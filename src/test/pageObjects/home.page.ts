@@ -1,4 +1,4 @@
-import { Page } from "@playwright/test";
+import {expect, Page} from "@playwright/test";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 import UpcomingAppointmentsPage from "./upcoming.page";
@@ -89,4 +89,19 @@ export default class HomePage extends MPopPage {
     await this.checkUpcoming();
     await this.checkOutcomes();
   }
+
+
+async checkTextIsThisPageUseful(footerExpectedText: string) {
+  await expect(this.getClass('govuk-label govuk-label--s')).toContainText(footerExpectedText)
+}
+
+async checkFooterLinks(linkName: string) {
+  const [newPage] = await Promise.all([
+    this.page.context().waitForEvent('page'),
+    this.page.getByRole('link', { name: linkName }).click(),
+  ])
+  await newPage.waitForLoadState()
+  expect(newPage.url()).not.toBeNull()
+  await newPage.close()
+}
 }

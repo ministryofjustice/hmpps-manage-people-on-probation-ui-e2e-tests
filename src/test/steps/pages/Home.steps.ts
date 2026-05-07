@@ -15,3 +15,14 @@ Then("the home page links work correctly", async ({ ctx }) => {
   await homePage.assertOnPage();
   await homePage.checkLinks();
 });
+
+Then('I see {string} text', async ({ctx}, expectedText :string) => {
+  const homePage = new HomePage(ctx.base.page)
+  await homePage.checkTextIsThisPageUseful(expectedText)
+})
+
+
+Then('I see {string} link at the footer', async ({ctx}, linkName :string)=>{
+  const homePage = new HomePage(ctx.base.page)
+  await homePage.checkFooterLinks(linkName)
+})
