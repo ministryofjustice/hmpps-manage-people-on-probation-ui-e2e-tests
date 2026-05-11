@@ -3,7 +3,7 @@ Feature: Verify Sentence Plan exists
   I want to see Sentence Plan link exists in Risk and plan tab
 
   Background:
-    Given Context has been created for "Contacts" test
+    Given Context has been created for "RiskAndPlan" test
     And I am logged in
 
   @sentenceplan
