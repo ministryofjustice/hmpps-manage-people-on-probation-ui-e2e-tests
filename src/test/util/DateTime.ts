@@ -122,3 +122,17 @@ export const mpopTime = (start: string, end: string) => {
   const endTime = to12Hour(end);
   return startTime + " to " + endTime;
 };
+
+export const convertFeatureDateToString = (date: string): string => {
+  const trimmed = date.trim().toUpperCase();
+
+  const dateTime = dateTimeMapping[trimmed];
+
+  if (!dateTime) {
+    throw new Error(
+      `Unknown date mapping: '${date}'. Valid values are: ${Object.keys(dateTimeMapping).join(", ")}`,
+    );
+  }
+
+  return luxonString(dateTime);
+};

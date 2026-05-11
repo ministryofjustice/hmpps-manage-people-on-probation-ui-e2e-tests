@@ -33,7 +33,7 @@ Feature: As a practitioner
       | validation error      | X793504 | 11/2/2026 |           |          |      |                        |                                            | full     | a missing date to error |
 
 
-  @full @contacts @add_contact
+  @full @contacts @add_frequent_contact
   Scenario Outline: Add new contacts for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
@@ -65,3 +65,74 @@ Feature: As a practitioner
       | Telephone contact from other               | Telephone contact from other               | Sentence           |               | TODAY    | 10:01 | This is test message | true         | false          | true               |
       | Telephone contact to other                 | Telephone contact to other                 | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
       | Telephone contact from person on probation | Telephone contact from person on probation | MPoP               |               | TODAY    | 10:01 | This is test message | false        | false          | false              |
+
+
+  @full @contacts @add_contact_by_category
+  Scenario Outline: Add new contacts for a category without outcome for a Pop - '<description>'
+    And I navigate to '<case>'
+    And I navigate to contact log
+    When I click on add contact
+    And I click on 'Search by category' tab
+    And I search the '<category>'
+    And I provide Contact details
+      | label              | value                |
+      | contact            | <contact>            |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+    And I save the contact details
+    Then I receive success message 'Contact created'
+
+
+    Examples:
+      | description                                           | category                                              | contact                                           | contact_related_to | contact_title | date     | time  | contact_details      | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings                          | Case management and meetings                          | Case reviewed by case manager                     | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Communication and information sharing with others     | Communication and information sharing with others     | Critical communications                           | MPoP               |               | TOMORROW | 10:01 | This is test message | true         | true           | false              |
+      | Communication with person on probation                | Communication with person on probation                | Information from person on probation              | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Multi-agency working (including IOM, MAPPA and MARAC) | Multi-agency working (including IOM, MAPPA and MARAC) | IOM case conference                               | MPoP               |               | TODAY    | 10:01 | This is test message | false        | true           | true               |
+      | Non-compliance and enforcement                        | Non-compliance and enforcement                        | Accommodation evidence                            | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Referrals                                             | Referrals                                             | Health and well being referral                    | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | false              |
+      | Safeguarding and victim liaison                       | Safeguarding and victim liaison                       | Safeguarding case conference                      | Sentence           |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+      | Sentence management                                   | Sentence management                                   | Death under supervision category and notification | Sentence           |               | TODAY    | 10:01 | This is test message | true         | false          | true               |
+      | Sentence management, Case management and meetings     | Sentence management, Case management and meetings     | Comment                                           | MPoP               |               | TODAY    | 10:01 | This is test message | true         | true           | true               |
+
+
+  @full @contacts @add_contact_by_category
+  Scenario Outline: Add new contacts for a category with outcome for a Pop - '<description>'
+    And I navigate to '<case>'
+    And I navigate to contact log
+    When I click on add contact
+    And I click on 'Search by category' tab
+    And I search the '<category>'
+    And I provide Contact details
+      | label              | value                |
+      | contact            | <contact>            |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | outcome            | <outcome>            |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+    And I save the contact details
+    Then I receive success message 'Contact created'
+
+
+    Examples:
+      | description                                           | category                                              | contact                                           | contact_related_to | contact_title | date     | time  | contact_details      | outcome                                           | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings                          | Case management and meetings                          | Case decisions                                    | Sentence           |               | TODAY    | 10:01 | This is test message | Contact frequency                                 | true         | true           | true               |
+      | Communication and information sharing with others     | Communication and information sharing with others     | Critical communications                           | MPoP               |               | TOMORROW | 10:01 | This is test message | Acceptable critical communications - no breach    | true         | true           | false              |
+      | Communication with person on probation                | Communication with person on probation                | Unplanned contact from person on probation        | MPoP               |               | TODAY    | 10:01 | This is test message | Unacceptable behaviour                            | true         | true           | true               |
+      | Multi-agency working (including IOM, MAPPA and MARAC) | Multi-agency working (including IOM, MAPPA and MARAC) | IOM referral                                      | MPoP               |               | TODAY    | 10:01 | This is test message | Referral decision - pending                       | false        | true           | true               |
+      | Non-compliance and enforcement                        | Non-compliance and enforcement                        | Alcohol consumption                               | MPoP               |               | TODAY    | 10:01 | This is test message | Acceptable - Monitoring only                      | true         | true           | true               |
+      | Referrals                                             | Referrals                                             | MAPPA referral                                    | MPoP               |               | TODAY    | 10:01 | This is test message | Category 3 referral rejected - not MAPPA managed  | true         | true           | false              |
+      | Safeguarding and victim liaison                       | Safeguarding and victim liaison                       | Safeguarding enquiries requested                  | Sentence           |               | TODAY    | 10:01 | This is test message | Request not sent - up to date information already | true         | true           | true               |
+      | Sentence management                                   | Sentence management                                   | Death under supervision category and notification | Sentence           |               | TODAY    | 10:01 | This is test message | Alcohol poisoning                                 | true         | false          | true               |
+      | Sentence management, Case management and meetings     | Sentence management, Case management and meetings     | Management oversight                              | Sentence           |               | TODAY    | 10:01 | This is test message | Management oversight decision                     | true         | true           | true               |

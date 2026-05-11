@@ -100,7 +100,10 @@ Given("I navigate to {string}", async ({ ctx }, crn) => {
 
 Then("I receive success message {string}", async ({ ctx }) => {
   const page = ctx.base.page;
-  await page.getByRole("heading", { name: "Contact created" }).isVisible();
+  await page.waitForLoadState("domcontentloaded");
+  await page
+    .getByRole("heading", { name: "Contact created", level: 2 })
+    .isVisible();
 });
 
 After(async function ({ ctx }) {

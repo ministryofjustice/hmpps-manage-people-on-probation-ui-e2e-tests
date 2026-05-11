@@ -8,6 +8,7 @@ export type AddContactDetails = {
   date?: string;
   time?: string;
   contactDetails?: string;
+  outcome?: string;
   visorReport?: string;
   sensitiveInfo?: string;
   alertPractitioner?: string;
@@ -22,30 +23,66 @@ export default class AddContactPage extends ContactPage {
     await this.clickLink("Add a contact");
   }
 
-  async selectContactRelatedTo(contactType: string): Promise<string> {
+  async selectContactRelatedTo(contactType?: string): Promise<string> {
+    if (!contactType || contactType.trim() === "") return "No contact logged";
+
+    const personLevelText = this.page.getByText(
+      "This contact will be logged against the person.",
+    );
+
+    if (await personLevelText.isVisible()) {
+      return "No contact logged";
+    }
+
     const fieldset = this.page.getByRole("group", {
       name: "What is the contact related to?",
     });
+
+    if ((await fieldset.count()) === 0) return "No contact logged";
 
     await expect(fieldset).toBeVisible();
 
     const radios = fieldset.getByRole("radio");
     const count = await radios.count();
 
-    if (count < 2) {
-      throw new Error(
-        `Expected at least 2 contact related to options, but found ${count}`,
+    if (count === 0) return "No contact logged";
+
+    const isMpop = contactType.trim().toUpperCase() === "MPOP";
+
+    if (isMpop) {
+      const mpopRadio = fieldset.locator("input[value='PERSON_LEVEL_CONTACT']");
+
+      if ((await mpopRadio.count()) === 0) {
+        // No PERSON_LEVEL_CONTACT radio — fall back to first radio
+        const firstRadio = radios.first();
+        await expect(firstRadio).toBeVisible();
+        if (!(await firstRadio.isChecked())) await firstRadio.check();
+        await expect(firstRadio).toBeChecked();
+        return "MPoP";
+      }
+
+      await expect(mpopRadio).toBeVisible();
+      if (!(await mpopRadio.isChecked())) await mpopRadio.check();
+      await expect(mpopRadio).toBeChecked();
+      return "MPoP";
+    } else {
+      // Sentence = any radio that is NOT PERSON_LEVEL_CONTACT
+      const sentenceRadios = fieldset.locator(
+        "input[type='radio']:not([value='PERSON_LEVEL_CONTACT'])",
       );
+
+      const sentenceCount = await sentenceRadios.count();
+
+      if (sentenceCount === 0) {
+        throw new Error("No sentence radio button found");
+      }
+
+      const selected = sentenceRadios.first();
+      await expect(selected).toBeVisible();
+      if (!(await selected.isChecked())) await selected.check();
+      await expect(selected).toBeChecked();
+      return "Sentence";
     }
-
-    const index = contactType.trim().toUpperCase() === "MPOP" ? 0 : 1;
-    const selectedRadio = radios.nth(index);
-
-    await expect(selectedRadio).toBeVisible();
-    await selectedRadio.check();
-    await expect(selectedRadio).toBeChecked();
-
-    return `option-${index}`;
   }
 
   async selectFrequentContact(contact: string): Promise<void> {
@@ -138,6 +175,26 @@ export default class AddContactPage extends ContactPage {
     );
   }
 
+  async selectOutcome(value?: string): Promise<void> {
+    if (!value || value.trim() === "") return;
+
+    const outcomeGroup = this.page.getByRole("group", {
+      name: "Select an outcome",
+    });
+
+    if ((await outcomeGroup.count()) === 0) return;
+
+    const outcome = outcomeGroup.getByRole("radio", {
+      name: value,
+      exact: true,
+    });
+
+    if (await outcome.isVisible()) {
+      await outcome.click();
+      await expect(outcome).toBeChecked();
+    }
+  }
+
   async selectSensitiveInformation(value?: string): Promise<void> {
     await this.selectOptionalBinaryQuestion(
       "Does this contact include sensitive information?",
@@ -162,6 +219,7 @@ export default class AddContactPage extends ContactPage {
     await this.enterDate(data.date);
     await this.enterTime(data.time);
     await this.enterContactDetails(data.contactDetails);
+    await this.selectOutcome(data.outcome);
     await this.selectVisorReport(data.visorReport);
     await this.selectSensitiveInformation(data.sensitiveInfo);
     await this.selectAlertPractitioner(data.alertPractitioner);
