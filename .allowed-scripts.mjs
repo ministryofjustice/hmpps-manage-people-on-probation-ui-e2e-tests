@@ -8,5 +8,7 @@ export default configureAllowedScripts({
     "node_modules/fsevents@2.3.2": "ALLOW",
     // Need by playwright for detecting file system changes during test runs
     "node_modules/tsx/node_modules/fsevents@2.3.3": "ALLOW",
+    // Needed by gatling for performance testing
+    "node_modules/@gatling.io/cli/node_modules/esbuild@0.28.0": "ALLOW",
   },
 });
