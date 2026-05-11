@@ -7,6 +7,7 @@ import { addContactDataTable, contactDataTable } from "../../util/Contacts";
 import { expect } from "@playwright/test";
 import ContactPage from "../../pageObjects/Case/Contacts/Contacts/contact.page";
 import AddContactPage from "../../pageObjects/Case/Contacts/Contacts/add-contact.page";
+import { convertFeatureDateToString } from "../../util/DateTime";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -44,6 +45,15 @@ When("I click on add contact", async ({ ctx }) => {
   await contactPage.getQA("headerActionButton").click();
 });
 
+When("I click on {string} tab", async ({ ctx }, contact) => {
+  const page = ctx.base.page;
+  const contactByCategory = page.getByRole("link", {
+    name: contact,
+  });
+  await expect(contactByCategory).toBeVisible();
+  await contactByCategory.click();
+});
+
 When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
   const page = ctx.base.page;
   const contactDetails = addContactDataTable(dataTable);
@@ -62,8 +72,9 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
         contact: data.contact,
         relationTo: data.relation_to,
         title: data.title,
-        date: data.date,
+        date: convertFeatureDateToString(data.date),
         time: data.time,
+        outcome: data.outcome,
         contactDetails: data.contact_details,
         visorReport: data.visor_report,
         sensitiveInfo: data.sensitive_info,
@@ -73,6 +84,7 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
     }
   }
 });
+
 When("I save the contact details", async ({ ctx }) => {
   const page = ctx.base.page;
   const button = page.getByRole("button", { name: "Create contact" });
@@ -109,6 +121,21 @@ Then(
     }
   },
 );
+
+When("I search the {string}", async ({ ctx }, categoryToSelect: string) => {
+  const page = ctx.base.page;
+  const categoryList = categoryToSelect.split(",");
+  for (const cat of categoryList) {
+    const category = page.getByLabel(cat);
+    await expect(category).toBeVisible();
+    if (!(await category.isChecked())) {
+      await category.check();
+    }
+  }
+  const search = page.getByRole("button", { name: "Search" });
+  await expect(search).toBeVisible();
+  await search.click();
+});
 
 Then("there are {string} on contacts page", async ({ ctx }, error: string) => {
   const page = ctx.base.page;
