@@ -3,7 +3,6 @@ import { testContext } from "../../features/Fixtures";
 import OverviewPage from "../../pageObjects/Case/overview.page";
 import { caseNavigation } from "../../util/Navigation";
 import SearchPage from "../../pageObjects/search.page";
-import PersonalDetailsPage from "../../pageObjects/Case/personal-details.page";
 
 const { When, Then } = createBdd(testContext);
 
@@ -21,7 +20,6 @@ Then("I can view the CRN", async ({ ctx }) => {
 });
 
 When("I search for a case CRN {string}", async ({ ctx }, caseCRN: string) => {
-  const crn = ctx.case.crn;
   const page = ctx.base.page;
 
   const searchPage = new SearchPage(page);
