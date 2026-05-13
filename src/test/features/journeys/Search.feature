@@ -11,7 +11,7 @@ Feature: Use Search Service
     Then I can view the CRN
 
 
-  @full @search1
+  @full @search
   Scenario: Search for a Case and validate the columns on search result page
     Given Context has been created for "Search" test
     And I am logged in
