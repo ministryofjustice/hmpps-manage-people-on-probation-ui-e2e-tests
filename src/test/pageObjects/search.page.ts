@@ -1,7 +1,8 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import { baseNavigation } from "../util/Navigation";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
+import { DataTable } from "playwright-bdd";
 
 export default class SearchPage extends MPopPage {
   constructor(page: Page) {
@@ -14,6 +15,7 @@ export default class SearchPage extends MPopPage {
 
   async searchCases(text: string) {
     await this.getClass("moj-search").getByRole("searchbox").fill(text);
+    await this.page.waitForTimeout(10000);
     await this.page.getByRole("button", { name: "Search" }).click();
   }
 
@@ -35,5 +37,43 @@ export default class SearchPage extends MPopPage {
 
   async navigateTo(page: Page) {
     await baseNavigation(page, "Search");
+  }
+
+  async assertColumnNames(data: DataTable) {
+    for (const row of data.rows()) {
+      const label = row[0];
+
+      switch (label) {
+        case "Name":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(0),
+          ).toContainText(label);
+          break;
+
+        case "CRN":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(1),
+          ).toContainText(label);
+          break;
+
+        case "Date of Birth":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(2),
+          ).toContainText(label);
+          break;
+
+        case "Managed by":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(3),
+          ).toContainText(label);
+          break;
+
+        case "PDU":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(4),
+          ).toContainText(label);
+          break;
+      }
+    }
   }
 }
