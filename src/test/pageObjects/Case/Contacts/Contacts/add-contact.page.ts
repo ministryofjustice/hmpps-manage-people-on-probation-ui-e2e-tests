@@ -1,5 +1,6 @@
 import { expect, Page } from "@playwright/test";
 import ContactPage from "./contact.page";
+import path from "path";
 
 export type AddContactDetails = {
   contact: string;
@@ -9,6 +10,7 @@ export type AddContactDetails = {
   time?: string;
   contactDetails?: string;
   outcome?: string;
+  fileName?: string;
   visorReport?: string;
   sensitiveInfo?: string;
   alertPractitioner?: string;
@@ -213,6 +215,22 @@ export default class AddContactPage extends ContactPage {
     );
   }
 
+  async uploadFile(fileName?: string): Promise<void> {
+    if (!fileName || fileName.trim() === "") return;
+
+    const filePath = path.resolve(
+      process.cwd(),
+      `src/test/fixtures/${fileName}`,
+    );
+    const fileInput = this.page.locator("input[type='file']");
+
+    await fileInput.evaluate((el) => {
+      (el as HTMLInputElement).style.display = "block";
+    });
+
+    await fileInput.setInputFiles(filePath);
+  }
+
   async provideContactDetails(data: AddContactDetails): Promise<void> {
     await this.selectContactRelatedTo(data.relationTo);
     await this.enterTitle(data.title);
@@ -220,6 +238,7 @@ export default class AddContactPage extends ContactPage {
     await this.enterTime(data.time);
     await this.enterContactDetails(data.contactDetails);
     await this.selectOutcome(data.outcome);
+    await this.uploadFile(data.fileName);
     await this.selectVisorReport(data.visorReport);
     await this.selectSensitiveInformation(data.sensitiveInfo);
     await this.selectAlertPractitioner(data.alertPractitioner);
