@@ -76,6 +76,7 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
         time: data.time,
         outcome: data.outcome,
         contactDetails: data.contact_details,
+        fileName: data.file_name,
         visorReport: data.visor_report,
         sensitiveInfo: data.sensitive_info,
         alertPractitioner: data.alert_practitioner,
