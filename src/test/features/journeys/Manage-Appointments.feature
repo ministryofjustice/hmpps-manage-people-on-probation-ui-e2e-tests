@@ -10,7 +10,7 @@ Feature: Manage Appointments
         When I navigate to first non sensitive upcoming appointment
         And I note the current number of notes
         And I navigate to the add a note page
-        And I complete the add note page with note "note" and sensitivity "No"
+        And I complete the add note page with large note and sensitivity "No"
         Then I can see the new note on the appointment
         And I close the context
 

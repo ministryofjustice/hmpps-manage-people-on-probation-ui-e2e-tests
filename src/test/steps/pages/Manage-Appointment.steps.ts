@@ -9,7 +9,6 @@ import HomePage from "../../pageObjects/home.page";
 import LogOutcomesPage from "../../pageObjects/log-outcomes.page";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import UpcomingAppiointmentsPage from "../../pageObjects/upcoming.page";
-import * as fs from "fs";
 
 const { When, Then } = createBdd(testContext);
 
@@ -115,17 +114,6 @@ When("I navigate to the add a note page", async ({ ctx }) => {
   await addNotePage.assertOnPage();
 });
 
-When("I add a large note to the appointment", async ({ ctx }) => {
-  const page = ctx.base.page;
-  const managePage = new ManageAppointmentsPage(page);
-  const noteCount = await managePage.getNoteCount();
-  await managePage.clickAddNotesLink();
-  const addNotePage = new AddNotePage(page);
-  const file = fs.readFileSync("src/test/fixtures/note.txt", "utf8");
-  await addNotePage.completePage(true, file.toString());
-  ctx.manage.noteCount = noteCount;
-});
-
 Then("I can see the appointment marked as sensitive", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
@@ -139,7 +127,7 @@ Then("I can see the new note on the appointment", async ({ ctx }) => {
   await managePage.assertOnPage();
   expect(await managePage.getNoteCount()).toBe(ctx.manage.noteCount + 1);
   await expect((await managePage.getAppointmentNotes()).first()).toContainText(
-    "note",
+    ctx.manage.note,
   );
 });
 

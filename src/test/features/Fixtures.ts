@@ -62,6 +62,7 @@ export interface Alerts {
 }
 export interface Manage {
   noteCount: number;
+  note: string;
 }
 export interface Activity {
   type: string;

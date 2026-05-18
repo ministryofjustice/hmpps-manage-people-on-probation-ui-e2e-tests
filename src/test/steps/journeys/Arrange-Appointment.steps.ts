@@ -32,6 +32,7 @@ import NextAppointmentPage from "../../pageObjects/Case/Contacts/Appointments/ne
 import ArrangeAnotherPage from "../../pageObjects/Case/Contacts/Appointments/arrange-another.page";
 import ReschedulePage from "../../pageObjects/Case/Contacts/Appointments/reschedule.page";
 import RescheduleDetailsPage from "../../pageObjects/Case/Contacts/Appointments/reschedule-details";
+import * as fs from "fs";
 
 const { When, Then } = createBdd(testContext);
 
@@ -221,6 +222,8 @@ When(
     if (ctx.appointments.length > 0) {
       ctx.appointments[ctx.appointments.length - 1].note = note;
       ctx.appointments[ctx.appointments.length - 1].sensitivity = sensitivity;
+    } else {
+      ctx.manage.note = note;
     }
   },
 );
@@ -236,6 +239,25 @@ When(
       ctx.appointments[ctx.appointments.length - 1].note = note;
       ctx.appointments[ctx.appointments.length - 1].sensitivity = "Yes";
       ctx.appointments[ctx.appointments.length - 1].sensitivityLocked = true;
+    } else {
+      ctx.manage.note = note;
+    }
+  },
+);
+
+When(
+  "I complete the add note page with large note and sensitivity {string}",
+  async ({ ctx }, note, sensitivity) => {
+    const page = ctx.base.page;
+    const attendedCompliedPage = new AddNotePage(page);
+    await attendedCompliedPage.assertOnPage();
+    const file = fs.readFileSync("src/test/fixtures/note.txt", "utf8");
+    await attendedCompliedPage.completePage(file.toString(), sensitivity);
+    if (ctx.appointments.length > 0) {
+      ctx.appointments[ctx.appointments.length - 1].note = note;
+      ctx.appointments[ctx.appointments.length - 1].sensitivity = sensitivity;
+    } else {
+      ctx.manage.note = file.toString();
     }
   },
 );
