@@ -18,7 +18,7 @@ export default class AddNotePage extends ContactPage {
     if (file) {
       console.log("not yet implemented"); //file
     }
-    if (sensitivity && !sensitivitySet) {
+    if (sensitivity != undefined && !sensitivitySet) {
       await this.clickRadioByName("sensitiveInformation", sensitivity);
     }
     await this.submit();

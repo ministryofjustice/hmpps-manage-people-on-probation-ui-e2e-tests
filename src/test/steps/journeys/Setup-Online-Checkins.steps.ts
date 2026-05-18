@@ -352,7 +352,7 @@ When(
     const page = ctx.base.page;
     const numbers = ids.split(",").map((i) => Number(i));
     const setUpOnLineCheckinsPage = new AppointmentsPage(page);
-    await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn();
+    await setUpOnLineCheckinsPage.clickManageOnlineCheckInsBtn();
     const eligibilityPage = new EligibilityPage(page);
     await eligibilityPage.assertOnPage();
     await eligibilityPage.completePage(numbers);

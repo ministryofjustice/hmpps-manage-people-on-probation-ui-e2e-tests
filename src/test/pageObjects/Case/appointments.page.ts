@@ -69,10 +69,16 @@ export default class AppointmentsPage extends CasePage {
   }
 
   async checkSetupCheckIns() {
-    await this.checkQA("online-manage-btn", "Set up online check ins");
+    await this.checkQA("online-checkin-btn", "Set up online check ins");
   }
 
   async clickSetupOnlineCheckInsBtn() {
+    const btn = this.getQA("online-checkin-btn");
+    await expect(btn).toBeVisible(); // ensure visible
+    await btn.click();
+  }
+
+  async clickManageOnlineCheckInsBtn() {
     const btn = this.getQA("online-manage-btn");
     await expect(btn).toBeVisible(); // ensure visible
     await btn.click();

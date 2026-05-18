@@ -247,14 +247,14 @@ When(
 
 When(
   "I complete the add note page with large note and sensitivity {string}",
-  async ({ ctx }, note, sensitivity) => {
+  async ({ ctx }, sensitivity) => {
     const page = ctx.base.page;
     const attendedCompliedPage = new AddNotePage(page);
     await attendedCompliedPage.assertOnPage();
     const file = fs.readFileSync("src/test/fixtures/note.txt", "utf8");
     await attendedCompliedPage.completePage(file.toString(), sensitivity);
     if (ctx.appointments.length > 0) {
-      ctx.appointments[ctx.appointments.length - 1].note = note;
+      ctx.appointments[ctx.appointments.length - 1].note = file.toString();
       ctx.appointments[ctx.appointments.length - 1].sensitivity = sensitivity;
     } else {
       ctx.manage.note = file.toString();
@@ -289,6 +289,7 @@ When("I submit the appointment", async ({ ctx }) => {
   const cyaPage = new CYAPage(page);
   await cyaPage.assertOnPage();
   await cyaPage.submit();
+  await page.waitForLoadState("networkidle");
 });
 
 Then(

@@ -127,7 +127,7 @@ Then("I can see the new note on the appointment", async ({ ctx }) => {
   await managePage.assertOnPage();
   expect(await managePage.getNoteCount()).toBe(ctx.manage.noteCount + 1);
   await expect((await managePage.getAppointmentNotes()).first()).toContainText(
-    ctx.manage.note,
+    ctx.manage.note.substring(0, 100), //just check the start of the note as it can be truncated on the UI
   );
 });
 
