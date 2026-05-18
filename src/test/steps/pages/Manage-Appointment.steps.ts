@@ -9,6 +9,7 @@ import HomePage from "../../pageObjects/home.page";
 import LogOutcomesPage from "../../pageObjects/log-outcomes.page";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import UpcomingAppiointmentsPage from "../../pageObjects/upcoming.page";
+import * as fs from "fs";
 
 const { When, Then } = createBdd(testContext);
 
@@ -112,6 +113,17 @@ When("I navigate to the add a note page", async ({ ctx }) => {
   await managePage.clickAddNotesLink();
   const addNotePage = new AddNotePage(page);
   await addNotePage.assertOnPage();
+});
+
+When("I add a large note to the appointment", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const managePage = new ManageAppointmentsPage(page);
+  const noteCount = await managePage.getNoteCount();
+  await managePage.clickAddNotesLink();
+  const addNotePage = new AddNotePage(page);
+  const file = fs.readFileSync("src/test/fixtures/note.txt", "utf8");
+  await addNotePage.completePage(true, file.toString());
+  ctx.manage.noteCount = noteCount;
 });
 
 Then("I can see the appointment marked as sensitive", async ({ ctx }) => {

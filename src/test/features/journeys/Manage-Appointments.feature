@@ -4,7 +4,7 @@ Feature: Manage Appointments
     So that I can update their details
 
     @smoke @full @manage @note
-    Scenario: Add Note to Appointment
+    Scenario: Add Large Note to Appointment - Test mod security rules
         Given Context has been created for "Manage" test
         And I am logged in
         When I navigate to first non sensitive upcoming appointment
