@@ -7,18 +7,26 @@ export default class SupportingInformationPage extends ContactPage {
     super(page, "Add supporting information (optional)", crn, uuid);
   }
 
-  async changePage(sensitivity?: boolean, note?: string) {
+  async changePage(
+    sensitivity?: string,
+    note?: string,
+    sensitvitySet: boolean = false,
+  ) {
     if (note != undefined) {
       await this.fillText("notes", note);
     }
-    if (sensitivity != undefined) {
-      await this.clickRadio("visorReport", sensitivity ? 0 : 1);
+    if (sensitivity != undefined && !sensitvitySet) {
+      await this.clickRadioByName("visorReport", sensitivity);
     }
     await this.submit();
   }
 
-  async completePage(sensitivity: boolean, note?: string) {
-    await this.changePage(sensitivity, note);
+  async completePage(
+    sensitivity?: string,
+    note?: string,
+    sensitvitySet: boolean = false,
+  ) {
+    await this.changePage(sensitivity, note, sensitvitySet);
   }
 
   async testBacklink(change: boolean) {

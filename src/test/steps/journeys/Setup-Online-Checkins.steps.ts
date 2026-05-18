@@ -150,6 +150,7 @@ When("I review the completed checkIn", async ({ ctx }) => {
     type: ReviewType.SUBMITTED,
     review: {
       identity: YesNoCheck.YES,
+      sensitivity: "Yes",
     },
   };
   await reviewCheckinMpop(ctx.base.page, review);
@@ -193,6 +194,7 @@ When("I review the missed checkIn", async ({ ctx }) => {
     type: ReviewType.EXPIRED,
     review: {
       comment: "note",
+      sensitivity: "Yes",
     },
   };
   await reviewCheckinMpop(ctx.base.page, review);

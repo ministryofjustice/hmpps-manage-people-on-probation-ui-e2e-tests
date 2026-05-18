@@ -69,8 +69,13 @@ export default abstract class MPopPage {
     return await this.getQA(qa).getByRole("radio").count();
   }
 
-  // Safer clickRadio that works for radio buttons
-  async clickRadio(qa: string, id: number) {
+  async clickRadioByName(qa: string, name: string) {
+    const radio = this.getQA(qa).getByRole("radio", { name: name });
+    await radio.check();
+  }
+
+  // Safer clickRadioById that works for radio buttons
+  async clickRadioById(qa: string, id: number) {
     const radio = this.getQA(qa).getByRole("radio").nth(id);
 
     // Ensure the radio button is visible
@@ -142,7 +147,7 @@ export default abstract class MPopPage {
   async sortByColumn(tableqa: string, cellqa: string, ascending: boolean) {
     const cell = this.getQA(cellqa, this.getQA(tableqa));
     const currentSort = await cell.getAttribute("aria-sort");
-    const button = await cell.getByRole("button");
+    const button = cell.getByRole("button");
     if (currentSort === "none") {
       await button.click();
       if (!ascending) {
@@ -172,9 +177,9 @@ export default abstract class MPopPage {
   }
 
   async pagination(id: number | string) {
-    if (id === "previous") {
+    if (id === "Previous") {
       await this.getNavigation("Previous").click();
-    } else if (id == "next") {
+    } else if (id == "Next") {
       await this.getNavigation("Next").click();
     } else {
       const target: number[] = [id as number];
@@ -215,7 +220,7 @@ export default abstract class MPopPage {
   }
 
   getClass(cssClass: string, locator: Locator | Page = this.page): Locator {
-    return locator.locator(`[class="${cssClass}"]`);
+    return locator.locator(`.${cssClass}`);
   }
 
   async checkForError(value: string) {
@@ -229,12 +234,11 @@ export default abstract class MPopPage {
   async getSummaryRowByKey(key: string): Promise<Locator> {
     const rows = await this.getClass(
       "govuk-summary-list__key",
-      this.getClass("govuk-summary-list__row"),
     ).allTextContents();
     const index = rows.indexOf(
       rows.find((element) => element.includes(key)) ?? "",
     );
-    if (index != -1) {
+    if (index != -2) {
       return this.getClass("govuk-summary-list__row").nth(index);
     }
     return undefined!;

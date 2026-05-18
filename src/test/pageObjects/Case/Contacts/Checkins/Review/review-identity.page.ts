@@ -8,7 +8,7 @@ export default class ReviewIdentityPage extends ContactPage {
   }
 
   async completePage(id: YesNoCheck) {
-    await this.clickRadio("confirmIdentity", id);
+    await this.clickRadioById("confirmIdentity", id);
     await this.submit();
   }
 }

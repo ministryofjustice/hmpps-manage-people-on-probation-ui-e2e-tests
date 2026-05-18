@@ -52,7 +52,7 @@ export default class DateFrequencyPage extends ContactPage {
       await this.getClass("moj-datepicker").locator('[type="text"]').fill(date);
     }
     if (frequencyId !== undefined) {
-      await this.clickRadio("checkInFrequency", frequencyId);
+      await this.clickRadioById("checkInFrequency", frequencyId);
     }
     await this.submit();
   }
@@ -61,7 +61,7 @@ export default class DateFrequencyPage extends ContactPage {
     await this.checkQAExists(this.datepickerQA);
   }
   async selectOption8Weeks() {
-    await this.clickRadio("checkInFrequency", 3);
+    await this.clickRadioById("checkInFrequency", 3);
     await this.submit();
   }
 

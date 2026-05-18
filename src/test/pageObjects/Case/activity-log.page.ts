@@ -62,7 +62,10 @@ export default class ActivityLogPage extends CasePage {
   async checkAvailable(): Promise<boolean> {
     try {
       await expect(
-        this.getClass("govuk-table__cell govuk-!-width-one-quarter").first(),
+        this.getClass(
+          "govuk-!-width-one-quarter",
+          this.getClass("govuk-table__cell"),
+        ).first(),
       ).toHaveText("Today");
       for (const entry of await this.getClass(
         "govuk-details",

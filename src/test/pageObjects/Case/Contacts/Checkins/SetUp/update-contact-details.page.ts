@@ -7,6 +7,11 @@ export default class ContactDetailsPage extends ContactPage {
     super(page, "Edit contact details for", crn, uuid);
   }
 
+  async completePageForAppointment(mobile: string) {
+    await this.fillText("mobileNumber", mobile);
+    await this.getQA("submitBtn").click();
+  }
+
   async completePage(contacts: ContactDetails) {
     if (contacts.phone != undefined) {
       await this.fillText("phoneNumber", contacts.phone);

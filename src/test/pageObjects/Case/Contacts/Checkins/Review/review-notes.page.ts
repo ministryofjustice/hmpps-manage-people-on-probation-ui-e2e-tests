@@ -7,13 +7,14 @@ export default class ReviewNotesPage extends ContactPage {
     super(page, "Online check in submitted", crn, uuid);
   }
 
-  async completePage(note?: string, id?: YesNoCheck) {
+  async completePage(sensitivty: string, note?: string, id?: YesNoCheck) {
     if (note) {
       await this.fillText("notes", note);
     }
     if (id) {
-      await this.clickRadio("riskManagement", id);
+      await this.clickRadioById("riskManagement", id);
     }
+    await this.clickRadioByName("sensitiveContact", sensitivty);
     await this.submit();
   }
 }

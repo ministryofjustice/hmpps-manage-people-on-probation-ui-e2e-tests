@@ -91,7 +91,7 @@ export default class HomePage extends MPopPage {
   }
 
   async checkTextIsThisPageUseful(footerExpectedText: string) {
-    await expect(this.getClass("govuk-label govuk-label--s")).toContainText(
+    await expect(this.getClass("govuk-label--s")).toContainText(
       footerExpectedText,
     );
   }

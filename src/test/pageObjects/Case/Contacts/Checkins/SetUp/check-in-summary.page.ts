@@ -26,12 +26,12 @@ export default class CheckInSummaryPage extends ContactPage {
   }
 
   async selectTakeAPhotoNowUsingLaptop() {
-    await this.clickRadio("uploadOptions", 0);
+    await this.clickRadioById("uploadOptions", 0);
     await this.submit();
   }
 
   async selectUploadAPhoto() {
-    await this.clickRadio("uploadOptions", 1);
+    await this.clickRadioById("uploadOptions", 1);
     await this.submit();
   }
 

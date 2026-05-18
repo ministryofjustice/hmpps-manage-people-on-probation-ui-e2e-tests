@@ -6,13 +6,8 @@ export default class SentencePage extends ContactPage {
     super(page, "What is this appointment for?", crn, uuid);
   }
 
-  async completePage(id: number | "person") {
-    if (id === "person") {
-      const options = await this.getQA("sentences").getByRole("radio").count();
-      await this.clickRadio("sentences", options - 1);
-    } else {
-      await this.clickRadio("sentences", id);
-    }
+  async completePage(option: string) {
+    await this.clickRadioByName("sentences", option);
     await this.submit();
   }
 
