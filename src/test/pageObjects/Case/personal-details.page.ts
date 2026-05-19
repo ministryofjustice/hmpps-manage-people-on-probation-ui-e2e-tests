@@ -30,6 +30,12 @@ export default class PersonalDetailsPage extends CasePage {
     await caseNavigation(this.page, (crn ?? this.crn)!, "personalDetailsTab");
   }
 
+  async navigateToUpdateContactDetails(type: string) {
+    (await this.getSummaryRowByKey(type))
+      .getByRole("link", { name: "Change" })
+      .click();
+  }
+
   async updateContactDetails(details: ContactDetails) {
     if (details.phone != undefined) {
       await this.getQA("telephoneNumberAction").click();
