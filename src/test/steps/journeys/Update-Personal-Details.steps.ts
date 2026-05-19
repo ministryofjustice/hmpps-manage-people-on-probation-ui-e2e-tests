@@ -1,15 +1,15 @@
 import { createBdd, DataTable } from "playwright-bdd";
-import { ContactDetails, testContext } from "../../features/Fixtures";
+import { testContext } from "../../features/Fixtures";
 import { getClientToken, getPersonalDetails } from "../../util/API";
 import { expect } from "@playwright/test";
 import PersonalDetailsPage from "../../pageObjects/Case/personal-details.page";
 import {
   Address,
   addressDataTable,
-  contactDetailsDataTable,
   getUpdatedAddressDetails,
-  getUpdatedContactDetails,
 } from "../../util/PersonalDetails";
+import ContactDetailsPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/update-contact-details.page";
+import UpdateAddressPage from "../../pageObjects/Case/Contacts/Checkins/update-address.page";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -42,13 +42,66 @@ When("I can note the current details", async ({ ctx }) => {
   ctx.details = await personalDetails.noteDetails();
 });
 
-When("I change the contact details", async ({ ctx }, data: DataTable) => {
-  const contactDetails: ContactDetails = contactDetailsDataTable(data);
-  console.log(contactDetails);
-  ctx.details.contactDetails = getUpdatedContactDetails(
-    ctx.details.contactDetails!,
-    contactDetails,
-  );
+When(
+  "I navigate to update contact details via {string} link",
+  async ({ ctx }, changeLink: string) => {
+    const page = ctx.base.page;
+    const crn = ctx.case.crn;
+    const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(
+      page,
+      crn,
+    );
+    await personalDetails.assertOnPage();
+    await personalDetails.navigateToUpdateContactDetails(changeLink);
+    const contactDetailsPage = new ContactDetailsPage(page);
+    await contactDetailsPage.assertOnPage();
+  },
+);
+
+When(
+  "I update the phone number to {string}",
+  async ({ ctx }, phoneNumber: string) => {
+    const page = ctx.base.page;
+    const contactDetailsPage = new ContactDetailsPage(page);
+    await contactDetailsPage.assertOnPage();
+    await contactDetailsPage.fillText("phoneNumber", phoneNumber);
+    ctx.details.contactDetails!.phone =
+      phoneNumber === "" ? "No phone number" : phoneNumber;
+  },
+);
+
+When(
+  "I update the mobile number to {string}",
+  async ({ ctx }, mobileNumber: string) => {
+    const page = ctx.base.page;
+    const contactDetailsPage = new ContactDetailsPage(page);
+    await contactDetailsPage.assertOnPage();
+    await contactDetailsPage.fillText("mobileNumber", mobileNumber);
+    ctx.details.contactDetails!.mobile =
+      mobileNumber === "" ? "No mobile number" : mobileNumber;
+  },
+);
+
+When(
+  "I update the email address to {string}",
+  async ({ ctx }, emailAddress: string) => {
+    const page = ctx.base.page;
+    const contactDetailsPage = new ContactDetailsPage(page);
+    await contactDetailsPage.assertOnPage();
+    await contactDetailsPage.fillText("emailAddress", emailAddress);
+    ctx.details.contactDetails!.email =
+      emailAddress === "" ? "No email address" : emailAddress;
+  },
+);
+
+When("I submit the updated contact details", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const contactDetailsPage = new ContactDetailsPage(page);
+  await contactDetailsPage.assertOnPage();
+  await contactDetailsPage.getQA("submitBtn").click();
+});
+
+When("I navigate to the update main address page", async ({ ctx }) => {
   const page = ctx.base.page;
   const crn = ctx.case.crn;
   const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(
@@ -56,10 +109,12 @@ When("I change the contact details", async ({ ctx }, data: DataTable) => {
     crn,
   );
   await personalDetails.assertOnPage();
-  await personalDetails.updateContactDetails(contactDetails);
+  await personalDetails.getQA("mainAddressAction").click();
+  const updateAddressPage = new UpdateAddressPage(page);
+  await updateAddressPage.assertOnPage();
 });
 
-When("I update the main address", async ({ ctx }, data: DataTable) => {
+When("I update the main address details", async ({ ctx }, data: DataTable) => {
   const address: Address = addressDataTable(data);
   ctx.details.addressDetails = getUpdatedAddressDetails(
     ctx.details.addressDetails!,
@@ -67,13 +122,9 @@ When("I update the main address", async ({ ctx }, data: DataTable) => {
     ctx.addressTypes,
   );
   const page = ctx.base.page;
-  const crn = ctx.case.crn;
-  const personalDetails: PersonalDetailsPage = new PersonalDetailsPage(
-    page,
-    crn,
-  );
-  await personalDetails.assertOnPage();
-  await personalDetails.updateMainAddress(address);
+  const updateAddressPage = new UpdateAddressPage(page);
+  await updateAddressPage.assertOnPage();
+  await updateAddressPage.completePage(address);
 });
 
 Then("I can see the updated details", async ({ ctx }) => {

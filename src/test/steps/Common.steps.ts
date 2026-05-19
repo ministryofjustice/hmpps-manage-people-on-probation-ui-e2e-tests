@@ -93,6 +93,7 @@ Given("I clear the contact details if set", async ({ ctx }) => {
   const created = ctx.case.created;
   const page = ctx.base.page;
   const crn = ctx.case.crn;
+  ctx.details = {};
   if (!created) {
     const personalDetailsPage = new PersonalDetailsPage(page, crn);
     await personalDetailsPage.navigateTo();
