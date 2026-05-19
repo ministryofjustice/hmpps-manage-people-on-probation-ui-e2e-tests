@@ -5,7 +5,7 @@ Feature: Reschedule Appointments
 
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
-    Scenario Outline: Reschedule appointment with critera: inFuture and noText
+    Scenario: Reschedule appointment with critera: inFuture and noText
         Given Context has been created for "appointments" test
         And I am logged in
         When I navigate to first non sensitive upcoming appointment
@@ -23,7 +23,7 @@ Feature: Reschedule Appointments
 
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
-    Scenario Outline: Reschedule appointment with critera: inFuture, setSensitiveEarly and noText
+    Scenario: Reschedule appointment with critera: inFuture, setSensitiveEarly and noText
         Given Context has been created for "appointments" test
         And I am logged in
         When I navigate to first non sensitive upcoming appointment
@@ -40,7 +40,7 @@ Feature: Reschedule Appointments
 
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
-    Scenario Outline: Reschedule a sensitive appointment with critera: inFuture and noText
+    Scenario: Reschedule a sensitive appointment with critera: inFuture and noText
         Given Context has been created for "appointments" test
         And I am logged in
         When I navigate to first sensitive upcoming appointment

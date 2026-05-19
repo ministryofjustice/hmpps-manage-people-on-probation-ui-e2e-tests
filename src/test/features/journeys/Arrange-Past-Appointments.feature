@@ -4,7 +4,7 @@ Feature: Create Past Appointments
     So that I can manage my schedule
 
     @full @appointments @past
-    Scenario Outline: Create appointment with critera: inPast and defaultAttendee for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with critera: inPast and defaultAttendee for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in

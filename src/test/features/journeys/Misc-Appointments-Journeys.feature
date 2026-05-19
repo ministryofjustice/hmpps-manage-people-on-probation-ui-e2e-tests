@@ -4,7 +4,7 @@ Feature: Create Appointments related misc journeys
     So that I can manage my schedule
 
     @full @appointments
-    Scenario Outline: Create appointment with critera: locationNotInList for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with critera: locationNotInList for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -18,7 +18,7 @@ Feature: Create Appointments related misc journeys
 
     # #requires an appointment to exist
     @full @appointments @similar
-    Scenario Outline: Create similar appointment with critera: inFuture and noText for case with criteria: singleSentence, noVisor
+    Scenario: Create similar appointment with critera: inFuture and noText for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in

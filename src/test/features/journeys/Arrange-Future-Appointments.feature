@@ -4,7 +4,7 @@ Feature: Create Future Appointments
     So that I can manage my schedule
 
     @full @appointments @basic
-    Scenario Outline: Create appointment with critera: inFuture, noText, defaultAttendee and sensitive, for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with critera: inFuture, noText, defaultAttendee and sensitive, for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -25,7 +25,7 @@ Feature: Create Future Appointments
         Then I close the context
 
     @full @appointments @basic
-    Scenario Outline: Create appointment with critera: inFuture, noText, defaultAttendee and non-sensitive, for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with critera: inFuture, noText, defaultAttendee and non-sensitive, for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -46,7 +46,7 @@ Feature: Create Future Appointments
         Then I close the context
 
     @full @appointments @noLocationNeeded
-    Scenario Outline: Create appointment with critera: inFuture, noText, defaultAttendee and locationNotNeeded for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with critera: inFuture, noText, defaultAttendee and locationNotNeeded for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -66,7 +66,7 @@ Feature: Create Future Appointments
         And I close the context    
 
     @full @appointments @addText
-    Scenario Outline: Create appointment with critera: inFuture, addText, defaultAttendee for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with critera: inFuture, addText, defaultAttendee for case with criteria: singleSentence, noVisor
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -91,7 +91,7 @@ Feature: Create Future Appointments
         And I close the context    
 
     @full @appointments @dual
-    Scenario Outline: Create appointment with critera: inFuture, noText, defaultAttendee for case with criteria: dualSentence, noVisor
+    Scenario: Create appointment with critera: inFuture, noText, defaultAttendee for case with criteria: dualSentence, noVisor
         Given Context has been created for "appointments" test
         And A new dual offender has been created in Ndelius
         And I am logged in

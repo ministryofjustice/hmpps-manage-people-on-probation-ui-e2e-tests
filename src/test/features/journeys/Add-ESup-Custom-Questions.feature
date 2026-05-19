@@ -2,7 +2,7 @@ Feature: As a practitioner
   I want to add ESup custom questions while online checkins
 
   @full @eSupQuestions
-  Scenario Outline: Add Custom Questions to checkins  - preview links'<case>'
+  Scenario: Add Custom Questions to checkins  - preview links'<case>'
     Given Context has been created for "Esupervision" test
     And I am logged in
     And I navigate to '<case_crn>'

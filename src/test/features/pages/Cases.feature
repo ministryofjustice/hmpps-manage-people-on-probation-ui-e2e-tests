@@ -10,7 +10,7 @@ Feature: As a practitioner
     And the cases page links work correctly 
 
 @full @cases
-Scenario Outline: Filter the cases page - '<description>'
+Scenario: Filter the cases page - '<description>'
     Given Context has been created for "Cases" test
     And I am logged in
     And I navigate to cases page
