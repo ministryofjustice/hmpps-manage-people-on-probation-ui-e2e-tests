@@ -40,7 +40,7 @@ export default class ContactPreferencePage extends ContactPage {
     }
 
     if (preference !== undefined) {
-      await this.clickRadio("checkInPreferredComs", preference);
+      await this.clickRadioById("checkInPreferredComs", preference);
     }
     await this.getQA("submitBtn").click();
   }

@@ -7,7 +7,7 @@ Feature: As a practitioner
     And I am logged in
 
   @full @contacts @filter_contacts
-  Scenario Outline: View contacts for a Pop - '<description>'
+  Scenario: View contacts for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I filter the contact log with values
@@ -34,7 +34,7 @@ Feature: As a practitioner
 
 
   @full @contacts @add_frequent_contact
-  Scenario Outline: Add new contacts for a Pop - '<description>'
+  Scenario: Add new contacts for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I click on add contact
@@ -69,7 +69,7 @@ Feature: As a practitioner
 
 
   @full @contacts @add_contact_by_category
-  Scenario Outline: Add new contacts for a category without outcome for a Pop - '<description>'
+  Scenario: Add new contacts for a category without outcome for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I click on add contact
@@ -105,7 +105,7 @@ Feature: As a practitioner
 
 
   @full @contacts @add_contact_by_category
-  Scenario Outline: Add new contacts for a category with outcome for a Pop - '<description>'
+  Scenario: Add new contacts for a category with outcome for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I click on add contact

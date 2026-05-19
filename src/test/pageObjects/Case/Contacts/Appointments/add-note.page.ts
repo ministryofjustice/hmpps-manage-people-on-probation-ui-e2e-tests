@@ -6,20 +6,30 @@ export default class AddNotePage extends ContactPage {
     super(page, "Add a note", crn, uuid);
   }
 
-  async changePage(sensitivity?: boolean, note?: string, file?: string) {
+  async changePage(
+    note?: string,
+    sensitivity?: string,
+    file?: string,
+    sensitivitySet: boolean = false,
+  ) {
     if (note) {
       await this.fillText("notes", note);
     }
     if (file) {
       console.log("not yet implemented"); //file
     }
-    if (sensitivity != undefined) {
-      await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1);
+    if (sensitivity != undefined && !sensitivitySet) {
+      await this.clickRadioByName("sensitiveInformation", sensitivity);
     }
     await this.submit();
   }
 
-  async completePage(sensitivity: boolean, note?: string, file?: string) {
-    await this.changePage(sensitivity, note, file);
+  async completePage(
+    note: string,
+    sensitivity: string,
+    file?: string,
+    sensitivitySet: boolean = false,
+  ) {
+    await this.changePage(note, sensitivity, file, sensitivitySet);
   }
 }

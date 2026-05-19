@@ -1,7 +1,7 @@
 import { expect, Page } from "@playwright/test";
 import TypeAttendancePage from "./type-attendance.page";
 import ContactPage from "../Contacts/contact.page";
-import { MpopDateTime, updateDateTime } from "../../../../util/DateTime";
+import { MpopDateTime } from "../../../../util/DateTime";
 
 export default class LocationDateTimePage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
@@ -45,7 +45,11 @@ export default class LocationDateTimePage extends ContactPage {
     }
   }
 
-  async completePage(dateTime?: MpopDateTime, locationId?: number) {
+  async completePage(
+    dateTime?: MpopDateTime,
+    location?: string,
+    attempt: number = 0,
+  ) {
     if (dateTime != undefined) {
       await this.getClass("moj-datepicker")
         .locator('[type="text"]')
@@ -53,32 +57,42 @@ export default class LocationDateTimePage extends ContactPage {
       await this.fillText("startTime", dateTime.startTime);
       await this.fillText("endTime", dateTime.endTime);
     }
-    if (locationId !== undefined) {
-      await this.clickRadio("locationCode", locationId as number);
+    if (location !== undefined) {
+      await this.clickRadioByName("locationCode", location);
     }
     await this.submit();
-    const warning = await this.checkOnPage();
-    if (warning) {
-      if (dateTime != undefined) {
-        await this.getClass("moj-datepicker")
-          .locator('[type="text"]')
-          .fill(dateTime.date);
-        await this.fillText("startTime", dateTime.startTime);
-        await this.fillText("endTime", dateTime.endTime);
-      }
-      if (locationId !== undefined) {
-        await this.clickRadio("locationCode", locationId as number);
-      }
-      await this.submit();
+    const validationFailed = await this.checkOnPage();
+    if (validationFailed && attempt == 0) {
+      await this.completePage(dateTime, location, 1);
     }
   }
 
-  async validateDateTime(dateTime: MpopDateTime, locationId?: number) {
-    const onPage = await this.checkOnPage();
-    if (onPage) {
-      dateTime = updateDateTime(dateTime);
-      await this.completePage(dateTime, locationId);
+  async completePageWithId(
+    dateTime?: MpopDateTime,
+    locationId?: number,
+    attempt: number = 0,
+  ): Promise<string> {
+    if (dateTime != undefined) {
+      await this.getClass("moj-datepicker")
+        .locator('[type="text"]')
+        .fill(dateTime.date);
+      await this.fillText("startTime", dateTime.startTime);
+      await this.fillText("endTime", dateTime.endTime);
     }
+    let locationName = "";
+    if (locationId !== undefined) {
+      await this.clickRadioById("locationCode", locationId);
+      locationName = await this.getQA("locationCode")
+        .getByRole("radio")
+        .nth(locationId)
+        .innerText();
+    }
+    await this.submit();
+    const validationFailed = await this.checkOnPage();
+    if (validationFailed && attempt == 0) {
+      await this.completePageWithId(dateTime, locationId, 1);
+    }
+    return locationName;
   }
 
   async testBacklink(change: boolean) {

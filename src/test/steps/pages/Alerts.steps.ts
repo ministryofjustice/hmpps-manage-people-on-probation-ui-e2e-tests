@@ -122,7 +122,7 @@ Then("I should be on the note page", async ({ ctx }) => {
 When("I navigate through pagination", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
   await alerts.navigateTo(ctx.base.page);
-  await alerts.pagination("next");
+  await alerts.pagination("Next");
 });
 
 Then("the alerts list should be updated", async ({ ctx }) => {
@@ -154,7 +154,7 @@ When("I try to clear alerts without selection", async ({ ctx }) => {
 
 Then("I should see an error message", async ({ ctx }) => {
   await expect(
-    ctx.alerts.alertsPage.getClass("moj-alert moj-alert--error"),
+    ctx.alerts.alertsPage.getClass("moj-alert--error"),
   ).toContainText("Select an alert to clear it");
 });
 
@@ -175,27 +175,27 @@ When("I select and clear an alert", async ({ ctx }) => {
 
 Then("the alert should be cleared", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
-  await expect(alerts.getClass("moj-alert moj-alert--success")).toContainText(
+  await expect(alerts.getClass("moj-alert--success")).toContainText(
     "You've cleared 1 alert.",
   );
   const finalCount = await alerts.getAlertsCount();
   expect(finalCount).toBe(ctx.alerts.alertCount);
 });
 
-When("I select and clear all alerts over 80", async ({ ctx }) => {
+When("I select and clear all alerts over 60", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
   const page = ctx.base.page;
   await alerts.navigateTo(page);
   const fullCount = await alerts.getAlertsCount(true);
-  if (fullCount > 80) {
-    let diff = fullCount - 80;
+  if (fullCount > 60) {
+    let diff = fullCount - 60;
     while (diff > 10) {
       await alerts.getQA("selectAllAlertsBtn").click();
       await alerts.getQA("clearSelectedAlerts").click();
       await alerts.page.waitForTimeout(1000);
-      await expect(
-        alerts.getClass("moj-alert moj-alert--success"),
-      ).toContainText("You've cleared 10 alerts.");
+      await expect(alerts.getClass("moj-alert--success")).toContainText(
+        "You've cleared 10 alerts.",
+      );
       diff -= 10;
     }
     for (let i = 0; i < diff; i++) {
@@ -206,8 +206,8 @@ When("I select and clear all alerts over 80", async ({ ctx }) => {
   }
 });
 
-Then("the alert count should be 80", async ({ ctx }) => {
+Then("the alert count should be 60", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
   const finalCount = await alerts.getAlertsCount();
-  expect(finalCount).toBe(80);
+  expect(finalCount).toBe(60);
 });

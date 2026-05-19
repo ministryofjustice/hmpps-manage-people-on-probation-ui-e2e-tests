@@ -3,7 +3,7 @@ Feature: As a practitioner
   and view them as per the filter criteria
 
   @full @documents
-  Scenario Outline: View documents for a Pop - <description>
+  Scenario: View documents for a Pop - <description>
     Given Context has been created for "Documents" test
     And I am logged in
     And I navigate to '<case>'

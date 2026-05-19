@@ -78,6 +78,12 @@ export default class AppointmentsPage extends CasePage {
     await btn.click();
   }
 
+  async clickManageOnlineCheckInsBtn() {
+    const btn = this.getQA("online-manage-btn");
+    await expect(btn).toBeVisible(); // ensure visible
+    await btn.click();
+  }
+
   async manageAppointment(appointment: MpopArrangeAppointment) {
     const dateTime = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy");
     const date = dateTime.toFormat("d MMMM yyyy");

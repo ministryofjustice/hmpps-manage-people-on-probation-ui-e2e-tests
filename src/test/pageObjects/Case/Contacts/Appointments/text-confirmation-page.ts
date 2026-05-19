@@ -28,85 +28,21 @@ export default class TextConfirmationPage extends ContactPage {
     return `${hour}:${minute}${ampm}`;
   }
 
-  async completePage(
-    text: string,
-    mobile: string,
-    date: string,
-    startTime: string,
-  ) {
-    const smsWrapper = this.page.locator("div.sms-message-wrapper");
-
+  async confirmPreview(date: string, startTime: string) {
     // Format date and time for SMS validation
     const formattedDate = date ? this.formatDateForSMS(date) : undefined;
     const formattedStartTime = startTime
       ? this.formatTimeForSMS(startTime)
       : undefined;
+    const smsPreview = await this.page
+      .locator("div.sms-message-wrapper")
+      .innerText();
+    expect(smsPreview).toContain(formattedDate);
+    expect(smsPreview).toContain(formattedStartTime);
+  }
 
-    switch (text) {
-      case "yes": {
-        await this.page.locator('input[type="radio"][value="YES"]').check();
-
-        // Wait for SMS preview to appear
-        await smsWrapper.waitFor({ state: "visible", timeout: 15000 });
-        const smsTextYes = await smsWrapper.innerText();
-
-        if (formattedDate) expect(smsTextYes).toContain(formattedDate);
-        if (formattedStartTime)
-          expect(smsTextYes).toContain(formattedStartTime);
-        await this.submit();
-        break;
-      }
-      case "yes-add": {
-        await this.page
-          .locator('input[type="radio"][value="YES_ADD_MOBILE_NUMBER"]')
-          .check();
-        await smsWrapper.waitFor({ state: "visible", timeout: 15000 });
-
-        const smsTextAdd = await smsWrapper.innerText();
-
-        if (formattedDate) expect(smsTextAdd).toContain(formattedDate);
-        if (formattedStartTime)
-          expect(smsTextAdd).toContain(formattedStartTime);
-        await this.submit();
-
-        await this.page.waitForLoadState("networkidle");
-        if (!mobile)
-          throw new Error("Mobile number is required when using yes-add");
-        await this.page.getByRole("textbox", { name: /mobile/i }).fill(mobile);
-        await this.continueButton();
-        break;
-      }
-      case "yes-update": {
-        await this.page
-          .locator('input[type="radio"][value="YES_UPDATE_MOBILE_NUMBER"]')
-          .check();
-
-        await smsWrapper.waitFor({ state: "visible", timeout: 15000 });
-        const smsTextUpdate = await smsWrapper.innerText();
-
-        if (formattedDate) expect(smsTextUpdate).toContain(formattedDate);
-        if (formattedStartTime)
-          expect(smsTextUpdate).toContain(formattedStartTime);
-        await this.submit();
-
-        await this.page.waitForLoadState("networkidle");
-        if (!mobile)
-          throw new Error("Mobile number is required when using yes-update");
-        await this.page.getByRole("textbox", { name: /mobile/i }).fill(mobile);
-        await this.continueButton();
-        break;
-      }
-      case "no": {
-        await this.page.locator('input[type="radio"][value="NO"]').check();
-
-        await smsWrapper.waitFor({ state: "visible", timeout: 15000 });
-        const smsTextNo = await smsWrapper.innerText();
-
-        if (formattedDate) expect(smsTextNo).toContain(formattedDate);
-        if (formattedStartTime) expect(smsTextNo).toContain(formattedStartTime);
-        await this.submit();
-        break;
-      }
-    }
+  async completePage(option: string) {
+    await this.clickRadioByName("smsOptIn", option);
+    await this.submit();
   }
 }

@@ -6,10 +6,17 @@ export default class ReschedulePage extends ContactPage {
     super(page, "Reschedule an appointment", crn, uuid);
   }
 
-  async completePage(who: number, note: string, sensitivity: boolean) {
-    await this.clickRadio("whoNeedsToReschedule", who);
+  async completePage(
+    who: number,
+    note: string,
+    sensitivity: string,
+    sensitivitySet: boolean = false,
+  ) {
+    await this.clickRadioById("whoNeedsToReschedule", who);
     await this.fillText("reason", note);
-    await this.clickRadio("sensitiveInformation", sensitivity ? 0 : 1);
+    if (!sensitivitySet) {
+      await this.clickRadioByName("sensitiveInformation", sensitivity);
+    }
     await this.submit();
   }
 }

@@ -27,11 +27,10 @@ export default class UpdateAddressPage extends ContactPage {
     } else {
       await this.getQA("noFixedAddress").check();
     }
-    await this.getClass(
-      "govuk-select govuk-select--width-30",
-      this.getQA("addressType"),
-    ).selectOption(address.type);
-    await this.clickRadio("verified", address.verified);
+    await this.getClass("govuk-select", this.getQA("addressType")).selectOption(
+      address.type,
+    );
+    await this.clickRadioById("verified", address.verified);
     await this.fillText("startDate", address.start);
     if (address.end) {
       await this.fillText("endDate", address.end);

@@ -24,18 +24,18 @@ export default class PhotoOptionsPage extends ContactPage {
 
   async changePage(optionId?: PhotoOptions) {
     if (optionId !== undefined) {
-      await this.clickRadio("uploadOptions", optionId);
+      await this.clickRadioById("uploadOptions", optionId);
     }
     await this.submit();
   }
 
   async selectTakeAPhotoNowUsingLaptop() {
-    await this.clickRadio("uploadOptions", PhotoOptions.TAKE);
+    await this.clickRadioById("uploadOptions", PhotoOptions.TAKE);
     await this.submit();
   }
 
   async selectUploadAPhoto() {
-    await this.clickRadio("uploadOptions", PhotoOptions.UPLOAD);
+    await this.clickRadioById("uploadOptions", PhotoOptions.UPLOAD);
     await this.submit();
   }
 }

@@ -150,6 +150,7 @@ When("I review the completed checkIn", async ({ ctx }) => {
     type: ReviewType.SUBMITTED,
     review: {
       identity: YesNoCheck.YES,
+      sensitivity: "Yes",
     },
   };
   await reviewCheckinMpop(ctx.base.page, review);
@@ -193,6 +194,7 @@ When("I review the missed checkIn", async ({ ctx }) => {
     type: ReviewType.EXPIRED,
     review: {
       comment: "note",
+      sensitivity: "Yes",
     },
   };
   await reviewCheckinMpop(ctx.base.page, review);
@@ -223,14 +225,17 @@ When("I select {string} link", async ({ ctx }) => {
   await managePage.clickChangeQuestions();
 });
 
-When("I stop checkIns with {string}", async ({ ctx }, reason) => {
-  const page = ctx.base.page;
-  const managePage = new ManageCheckInsPage(page);
-  await managePage.assertOnPage();
-  await managePage.clickStopCheckIns();
-  const stopPage = new StopCheckInsPage(page);
-  await stopPage.completePage(true, reason);
-});
+When(
+  "I stop checkIns with {string} and sensitivity {string}",
+  async ({ ctx }, reason) => {
+    const page = ctx.base.page;
+    const managePage = new ManageCheckInsPage(page);
+    await managePage.assertOnPage();
+    await managePage.clickStopCheckIns();
+    const stopPage = new StopCheckInsPage(page);
+    await stopPage.completePage("No", reason);
+  },
+);
 
 Then("checkIns are labelled as stopped", async ({ ctx }) => {
   const page = ctx.base.page;

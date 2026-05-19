@@ -9,7 +9,6 @@ import HomePage from "../../pageObjects/home.page";
 import LogOutcomesPage from "../../pageObjects/log-outcomes.page";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import UpcomingAppiointmentsPage from "../../pageObjects/upcoming.page";
-import * as fs from "fs";
 
 const { When, Then } = createBdd(testContext);
 
@@ -30,7 +29,7 @@ When("I navigate to first upcoming appointment", async ({ ctx }) => {
   await home.viewUpcoming();
   const upcomingAppointments = new UpcomingAppiointmentsPage(page);
   await upcomingAppointments.assertOnPage();
-  await upcomingAppointments.selectOfficeVisit();
+  await upcomingAppointments.selectOfficeVisit(); //office visits only until person level bug fixed
   const managePage = new ManageAppointmentsPage(page);
   await managePage.assertOnPage();
 });
@@ -45,7 +44,7 @@ When("I navigate to first sensitive upcoming appointment", async ({ ctx }) => {
   while (true) {
     await upcomingAppointments.assertOnPage();
     try {
-      await upcomingAppointments.selectOfficeVisit(id);
+      await upcomingAppointments.selectOfficeVisit(id); //office visits only until person level bug fixed
     } catch {
       await upcomingAppointments.pagination("Next");
       id = 0;
@@ -78,7 +77,7 @@ When(
     while (true) {
       await upcomingAppointments.assertOnPage();
       try {
-        await upcomingAppointments.selectOfficeVisit(id);
+        await upcomingAppointments.selectOfficeVisit(id); //office visits only until person level bug fixed
       } catch {
         await upcomingAppointments.pagination("Next");
         id = 0;
@@ -100,38 +99,19 @@ When(
   },
 );
 
-When("I add a note to the appointment", async ({ ctx }) => {
+When("I note the current number of notes", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
   const noteCount = await managePage.getNoteCount();
-  await managePage.clickAddNotesLink();
-  const addNotePage = new AddNotePage(page);
-  await addNotePage.completePage(false, "note");
   ctx.manage.noteCount = noteCount;
 });
 
-When(
-  "I add a note to the appointment and mark as sensitive",
-  async ({ ctx }) => {
-    const page = ctx.base.page;
-    const managePage = new ManageAppointmentsPage(page);
-    const noteCount = await managePage.getNoteCount();
-    await managePage.clickAddNotesLink();
-    const addNotePage = new AddNotePage(page);
-    await addNotePage.completePage(true, "note");
-    ctx.manage.noteCount = noteCount;
-  },
-);
-
-When("I add a large note to the appointment", async ({ ctx }) => {
+When("I navigate to the add a note page", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
-  const noteCount = await managePage.getNoteCount();
   await managePage.clickAddNotesLink();
   const addNotePage = new AddNotePage(page);
-  const file = fs.readFileSync("src/test/fixtures/note.txt", "utf8");
-  await addNotePage.completePage(true, file.toString());
-  ctx.manage.noteCount = noteCount;
+  await addNotePage.assertOnPage();
 });
 
 Then("I can see the appointment marked as sensitive", async ({ ctx }) => {
@@ -147,12 +127,12 @@ Then("I can see the new note on the appointment", async ({ ctx }) => {
   await managePage.assertOnPage();
   expect(await managePage.getNoteCount()).toBe(ctx.manage.noteCount + 1);
   await expect((await managePage.getAppointmentNotes()).first()).toContainText(
-    "note",
+    ctx.manage.note.substring(0, 100), //just check the start of the note as it can be truncated on the UI
   );
 });
 
 When(
-  "I navigate to latest appointment requiring an outcome",
+  "I navigate to latest non sensitive appointment requiring an outcome",
   async ({ ctx }) => {
     const page = ctx.base.page;
     const home = new HomePage(page);
@@ -173,7 +153,13 @@ When(
       await managePage.assertOnPage(); //will backLink if restricted
       const restricted = await logPage.checkOnPage();
       if (!restricted) {
-        break;
+        try {
+          await expect(managePage.getQA("sensitiveTag")).toHaveCount(0);
+          break;
+        } catch {
+          await managePage.clickBackLink();
+          id += 1;
+        }
       }
       id += 1;
     }
@@ -183,15 +169,12 @@ When(
   },
 );
 
-When("I mark the attended complied outcome", async ({ ctx }) => {
+When("I navigate to the appointment outcome page", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
   await managePage.clickAttendedAndCompliedLink();
   const attendedCompliedPage = new AttendedCompliedPage(page);
   await attendedCompliedPage.assertOnPage();
-  await attendedCompliedPage.completePage();
-  const addNotePage = new AddNotePage(page);
-  await addNotePage.completePage(false, "note");
 });
 
 Then("I can see the attended and complied status", async ({ ctx }) => {
