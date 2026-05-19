@@ -28,7 +28,7 @@ Feature: Create Appointments
 
     @full @appointments @basic
     Scenario: Create appointment with critera: inFuture, noText, defaultAttendee and non-sensitive, for case with criteria: singleSentence, noVisor
-        When And I complete the location and datetime page with date "TOMORROW", startTime "07:10", endTime "08:10" and location "Wrexham Team Office"
+        When I complete the location and datetime page with date "TOMORROW", startTime "07:10", endTime "08:10" and location "Wrexham Team Office"
         Then I confirm the text message preview
         When I complete the text message confirmation page with option "No"
         And I complete the supporting information page with note "" and sensitivity "No"
