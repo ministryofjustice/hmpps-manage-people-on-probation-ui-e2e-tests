@@ -2,9 +2,6 @@ name: Delete PoP Tests
 on:
   # Run manually via GitHub API
   workflow_dispatch:
-  push:
-    branches:
-      - run-delete-pop-job
 
 jobs:
   test:
