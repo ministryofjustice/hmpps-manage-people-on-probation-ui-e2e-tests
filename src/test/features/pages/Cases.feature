@@ -1,19 +1,18 @@
 Feature: As a practitioner
   I want to view my cases page
 
-  @full @cases
-  Scenario: View my cases page
+  Background: 
     Given Context has been created for "Cases" test
     And I am logged in
     And I navigate to cases page
+
+  @full @cases
+  Scenario: View my cases page
     Then the cases page is populated
     And the cases page links work correctly 
 
 @full @cases
 Scenario: Filter the cases page - '<description>'
-    Given Context has been created for "Cases" test
-    And I am logged in
-    And I navigate to cases page
     When I filter the cases with values
       | label    | value      |
       | text     | <text>     |
