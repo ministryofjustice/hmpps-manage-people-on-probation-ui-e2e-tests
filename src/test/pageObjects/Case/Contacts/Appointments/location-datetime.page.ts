@@ -95,14 +95,6 @@ export default class LocationDateTimePage extends ContactPage {
     return locationName;
   }
 
-  // async validateDateTime(dateTime: MpopDateTime, locationId?: number) {
-  //   const onPage = await this.checkOnPage();
-  //   if (onPage) {
-  //     dateTime = updateDateTime(dateTime);
-  //     await this.completePage(dateTime, locationId);
-  //   }
-  // }
-
   async testBacklink(change: boolean) {
     await this.clickBackLink();
     if (change) {

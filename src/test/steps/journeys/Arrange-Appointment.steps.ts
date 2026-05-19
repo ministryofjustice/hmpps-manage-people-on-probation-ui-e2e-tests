@@ -33,6 +33,7 @@ import ArrangeAnotherPage from "../../pageObjects/Case/Contacts/Appointments/arr
 import ReschedulePage from "../../pageObjects/Case/Contacts/Appointments/reschedule.page";
 import RescheduleDetailsPage from "../../pageObjects/Case/Contacts/Appointments/reschedule-details";
 import * as fs from "fs";
+import { expect } from "@playwright/test";
 
 const { When, Then } = createBdd(testContext);
 
@@ -482,75 +483,40 @@ Then(
   },
 );
 
-// When("I create another appointment", async ({ ctx }, data: DataTable) => {
-//   const appointment: MpopArrangeAppointment = appointmentDataTable(
-//     data,
-//     true,
-//   ) as MpopArrangeAppointment;
-//   ctx.appointments.push(appointment);
-//   await createAnotherAppointmentMPop(ctx.base.page, appointment);
-// });
+Then(
+  "the sms text message confirmation and appointment added to your calendar text is displayed",
+  async ({ ctx }) => {
+    await expect(
+      ctx.base.page
+        .locator("p") // selects all <p> elements
+        .filter({
+          hasText:
+            "will receive a confirmation text message with the appointment details. This will also be logged as a contact on NDelius.",
+        }), // narrows down to the one containing your text
+    ).toBeVisible();
+    await expect(
+      ctx.base.page.locator('ul[data-qa="outlook-msg"] li'),
+    ).toContainText([
+      "your calendar",
+      "the NDelius contact log and officer diary, along with any supporting information",
+    ]);
+  },
+);
 
-// Then(
-//   "the sms text message confirmation and appointment added to your calendar text is displayed",
-//   async ({ ctx }) => {
-//     await expect(
-//       ctx.base.page
-//         .locator("p") // selects all <p> elements
-//         .filter({
-//           hasText:
-//             "will receive a confirmation text message with the appointment details. This will also be logged as a contact on NDelius.",
-//         }), // narrows down to the one containing your text
-//     ).toBeVisible();
-//     await expect(
-//       ctx.base.page.locator('ul[data-qa="outlook-msg"] li'),
-//     ).toContainText([
-//       "your calendar",
-//       "the NDelius contact log and officer diary, along with any supporting information",
-//     ]);
-//   },
-// );
+Then(
+  "give the appointment details and your calendar text is displayed",
+  async ({ ctx }) => {
+    await expect(
+      ctx.base.page
+        .locator("p") // selects all <p> elements
+        .filter({ hasText: "You need to give" }), // narrows down to the one containing your text
+    ).toBeVisible();
+    await expect(
+      ctx.base.page.locator('ul[data-qa="outlook-msg"] li'),
+    ).toContainText([
+      "your calendar",
+      "the NDelius contact log and officer diary, along with any supporting information",
+    ]);
+  },
+);
 
-// Then(
-//   "give the appointment details and your calendar text is displayed",
-//   async ({ ctx }) => {
-//     await expect(
-//       ctx.base.page
-//         .locator("p") // selects all <p> elements
-//         .filter({ hasText: "You need to give" }), // narrows down to the one containing your text
-//     ).toBeVisible();
-//     await expect(
-//       ctx.base.page.locator('ul[data-qa="outlook-msg"] li'),
-//     ).toContainText([
-//       "your calendar",
-//       "the NDelius contact log and officer diary, along with any supporting information",
-//     ]);
-//   },
-// );
-
-// When(
-//   "I make the following changes to appointment",
-//   async ({ ctx }, data: DataTable) => {
-//     const page = ctx.base.page;
-//     const changes: MpopAppointmentChanges = appointmentDataTable(
-//       data,
-//       false,
-//       true,
-//     );
-//     let appointment = ctx.appointments[ctx.appointments.length - 1];
-//     const currentPast =
-//       DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
-//     appointment = fullDetailsFromChanges(changes, appointment);
-//     ctx.appointments[ctx.appointments.length - 1] = appointment;
-//     const cyaPage = new CYAPage(page);
-//     await cyaPage.assertOnPage();
-//     const newPast =
-//       DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
-//     await cyaPage.makeChanges(
-//       changes,
-//       appointment.typeId,
-//       currentPast,
-//       newPast,
-//     );
-//   },
-// );
