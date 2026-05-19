@@ -182,13 +182,13 @@ Then("the alert should be cleared", async ({ ctx }) => {
   expect(finalCount).toBe(ctx.alerts.alertCount);
 });
 
-When("I select and clear all alerts over 80", async ({ ctx }) => {
+When("I select and clear all alerts over 60", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
   const page = ctx.base.page;
   await alerts.navigateTo(page);
   const fullCount = await alerts.getAlertsCount(true);
-  if (fullCount > 80) {
-    let diff = fullCount - 80;
+  if (fullCount > 60) {
+    let diff = fullCount - 60;
     while (diff > 10) {
       await alerts.getQA("selectAllAlertsBtn").click();
       await alerts.getQA("clearSelectedAlerts").click();
@@ -206,8 +206,8 @@ When("I select and clear all alerts over 80", async ({ ctx }) => {
   }
 });
 
-Then("the alert count should be 80", async ({ ctx }) => {
+Then("the alert count should be 60", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
   const finalCount = await alerts.getAlertsCount();
-  expect(finalCount).toBe(80);
+  expect(finalCount).toBe(60);
 });

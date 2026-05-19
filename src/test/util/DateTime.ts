@@ -99,6 +99,9 @@ export const formatToDMY = (dateStr: string) => {
 export const dateWithDayAndWithoutYear = (datetimeString: string) => {
   return stringToDate(datetimeString).toFormat("cccc d MMMM");
 };
+export const dateWithoutDayAndWithYear = (datetimeString: string) => {
+  return stringToDate(datetimeString).toFormat("d MMMM yyyy");
+};
 export const dateWithLongMonth = (datetimeString: string) => {
   return stringToDate(datetimeString).toFormat("d MMMM yyyy");
 };

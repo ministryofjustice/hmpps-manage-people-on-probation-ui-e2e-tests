@@ -5,7 +5,7 @@ import { navigateToCase } from "../../util/Navigation";
 import getUserFriendlyString, {
   MPoPCheckinDetails,
 } from "../../util/SetupOnlineCheckins";
-import { dateWithDayAndWithoutYear, yesterday } from "../../util/DateTime";
+import { dateWithoutDayAndWithYear, yesterday } from "../../util/DateTime";
 import { DateTime } from "luxon";
 import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
 import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";
@@ -170,8 +170,8 @@ export default class OverviewPage extends CasePage {
   async verifyCheckinDetails(details: MPoPCheckinDetails) {
     await this.getQA("checkinCard").isVisible();
     await this.checkSummaryRowValue(
-      await this.getSummaryRowByKey("First check in"),
-      dateWithDayAndWithoutYear(details.date),
+      await this.getSummaryRowByKey("Next check in due"),
+      dateWithoutDayAndWithYear(details.date),
     );
     await this.checkSummaryRowValue(
       await this.getSummaryRowByKey("Frequency"),

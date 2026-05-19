@@ -24,6 +24,6 @@ Feature: Alerts page
         When I select and deselect all alerts
         When I try to clear alerts without selection
         Then I should see an error message
-        When I select and clear all alerts over 80
-        Then the alert count should be 80
+        When I select and clear all alerts over 60
+        Then the alert count should be 60
         And I close the context

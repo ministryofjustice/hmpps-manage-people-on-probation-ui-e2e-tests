@@ -45,7 +45,7 @@ Feature: Setup Checkins
     @smoke @full @esupervision @sequential
     Scenario: Stop CheckIns
         When I navigate to checkIn details
-        And I stop checkIns with '<reason>'
+        And I stop checkIns with '<reason>' and sensitivity 'No'
         Then checkIns are labelled as stopped
 
         Examples:

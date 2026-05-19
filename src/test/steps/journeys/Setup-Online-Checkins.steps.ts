@@ -225,14 +225,17 @@ When("I select {string} link", async ({ ctx }) => {
   await managePage.clickChangeQuestions();
 });
 
-When("I stop checkIns with {string}", async ({ ctx }, reason) => {
-  const page = ctx.base.page;
-  const managePage = new ManageCheckInsPage(page);
-  await managePage.assertOnPage();
-  await managePage.clickStopCheckIns();
-  const stopPage = new StopCheckInsPage(page);
-  await stopPage.completePage(true, reason);
-});
+When(
+  "I stop checkIns with {string} and sensitivity {string}",
+  async ({ ctx }, reason) => {
+    const page = ctx.base.page;
+    const managePage = new ManageCheckInsPage(page);
+    await managePage.assertOnPage();
+    await managePage.clickStopCheckIns();
+    const stopPage = new StopCheckInsPage(page);
+    await stopPage.completePage("No", reason);
+  },
+);
 
 Then("checkIns are labelled as stopped", async ({ ctx }) => {
   const page = ctx.base.page;
@@ -352,7 +355,7 @@ When(
     const page = ctx.base.page;
     const numbers = ids.split(",").map((i) => Number(i));
     const setUpOnLineCheckinsPage = new AppointmentsPage(page);
-    await setUpOnLineCheckinsPage.clickManageOnlineCheckInsBtn();
+    await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn();
     const eligibilityPage = new EligibilityPage(page);
     await eligibilityPage.assertOnPage();
     await eligibilityPage.completePage(numbers);
