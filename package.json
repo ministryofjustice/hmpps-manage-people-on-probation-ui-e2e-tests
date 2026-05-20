@@ -35,8 +35,8 @@
     "@faker-js/faker": "^10.4.0",
     "@gatling.io/cli": "^3.15.3",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.5",
-    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.214.0",
-    "@playwright/test": "^1.60.0",
+    "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.218.0",
+    "@playwright/test": "1.59.1",
     "@types/luxon": "^3.7.1",
     "@types/node": "^22.19.19",
     "@typescript-eslint/eslint-plugin": "^8.59.3",
@@ -48,6 +48,7 @@
     "husky": "^9.1.7",
     "luxon": "^3.7.2",
     "playwright-bdd": "^8.5.1",
+    "playwright-core": "1.59.1",
     "prettier": "^3.8.3",
     "tsx": "^4.22.0"
   },
