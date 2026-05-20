@@ -98,7 +98,7 @@ When("I submit the updated contact details", async ({ ctx }) => {
   const page = ctx.base.page;
   const contactDetailsPage = new ContactDetailsPage(page);
   await contactDetailsPage.assertOnPage();
-  await contactDetailsPage.getQA("submitBtn").click();
+  await contactDetailsPage.submitPage();
 });
 
 When("I navigate to the update main address page", async ({ ctx }) => {

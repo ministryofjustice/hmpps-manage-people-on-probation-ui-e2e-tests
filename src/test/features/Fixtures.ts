@@ -1,10 +1,10 @@
 import { Browser, BrowserContext, Page } from "@playwright/test";
 import { test as base } from "playwright-bdd";
-import {
-  MpopSetupChanges,
-  MpopSetupCheckin,
-  MpopSetupRestart,
-} from "../util/SetupOnlineCheckins";
+// import {
+//   MpopSetupChanges,
+//   MpopSetupCheckin,
+//   MpopSetupRestart,
+// } from "../util/SetupOnlineCheckins";
 import { Person } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs";
 import AlertsPage from "../pageObjects/alerts";
 import { MpopArrangeAppointment } from "../util/ArrangeAppointment";
@@ -35,10 +35,10 @@ export interface AddressType {
   description: string;
 }
 export interface CheckIns {
-  setup: MpopSetupCheckin;
-  changes: MpopSetupChanges;
+  // setup: MpopSetupCheckin;
+  // changes: MpopSetupChanges;
   expiredCrn: string;
-  restart?: MpopSetupRestart;
+  // restart?: MpopSetupRestart;
 }
 export interface Contact {
   uuid: string;

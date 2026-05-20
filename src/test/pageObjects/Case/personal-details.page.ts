@@ -31,7 +31,7 @@ export default class PersonalDetailsPage extends CasePage {
   }
 
   async navigateToUpdateContactDetails(type: string) {
-    (await this.getSummaryRowByKey(type))
+    await (await this.getSummaryRowByKey(type))
       .getByRole("link", { name: "Change" })
       .click();
   }

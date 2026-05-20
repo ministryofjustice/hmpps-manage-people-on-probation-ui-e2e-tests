@@ -12,6 +12,14 @@ export default class ContactDetailsPage extends ContactPage {
     await this.getQA("submitBtn").click();
   }
 
+  async submitPage() {
+    try {
+      await this.getQA("submitBtn").click();
+    } catch {
+      await this.submit();
+    }
+  }
+
   async completePage(contacts: ContactDetails) {
     if (contacts.phone != undefined) {
       await this.fillText("phoneNumber", contacts.phone);

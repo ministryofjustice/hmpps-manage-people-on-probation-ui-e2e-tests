@@ -2,11 +2,6 @@ import { Page } from "@playwright/test";
 import ContactPage from "../../Contacts/contact.page";
 import { MPOP_URL } from "../../../../../util/Data";
 
-export enum PhotoOptions {
-  TAKE = 0,
-  UPLOAD = 1,
-}
-
 export default class PhotoOptionsPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
     super(page, "Take a photo of", crn, uuid);
@@ -18,24 +13,8 @@ export default class PhotoOptionsPage extends ContactPage {
     );
   }
 
-  async completePage(optionId: PhotoOptions) {
-    await this.changePage(optionId);
-  }
-
-  async changePage(optionId?: PhotoOptions) {
-    if (optionId !== undefined) {
-      await this.clickRadioById("uploadOptions", optionId);
-    }
-    await this.submit();
-  }
-
-  async selectTakeAPhotoNowUsingLaptop() {
-    await this.clickRadioById("uploadOptions", PhotoOptions.TAKE);
-    await this.submit();
-  }
-
-  async selectUploadAPhoto() {
-    await this.clickRadioById("uploadOptions", PhotoOptions.UPLOAD);
+  async completePage(option: string) {
+    await this.clickRadioByName("uploadOptions", option);
     await this.submit();
   }
 }

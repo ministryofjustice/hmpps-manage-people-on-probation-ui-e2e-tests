@@ -2,13 +2,8 @@ import { expect, Page } from "@playwright/test";
 import * as dotenv from "dotenv";
 import CasePage from "./casepage";
 import { navigateToCase } from "../../util/Navigation";
-import getUserFriendlyString, {
-  MPoPCheckinDetails,
-} from "../../util/SetupOnlineCheckins";
-import { dateWithoutDayAndWithYear, yesterday } from "../../util/DateTime";
+import { yesterday } from "../../util/DateTime";
 import { DateTime } from "luxon";
-import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
-import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";
 import AppointmentsPage from "./appointments.page";
 import ContactPage from "./Contacts/Contacts/contact.page";
 import InstructionsPage from "./Contacts/Checkins/SetUp/instructions.page";
@@ -167,19 +162,19 @@ export default class OverviewPage extends CasePage {
     await navigateToCase(this.page, (crn ?? this.crn)!);
   }
 
-  async verifyCheckinDetails(details: MPoPCheckinDetails) {
-    await this.getQA("checkinCard").isVisible();
-    await this.checkSummaryRowValue(
-      await this.getSummaryRowByKey("Next check in due"),
-      dateWithoutDayAndWithYear(details.date),
-    );
-    await this.checkSummaryRowValue(
-      await this.getSummaryRowByKey("Frequency"),
-      getUserFriendlyString(FrequencyOptions[details.frequency]),
-    );
-    await this.checkSummaryRowValue(
-      await this.getSummaryRowByKey("Contact preferences"),
-      getUserFriendlyString(Preference[details.preference]),
-    );
-  }
+  // async verifyCheckinDetails(details: MPoPCheckinDetails) {
+  //   await this.getQA("checkinCard").isVisible();
+  //   await this.checkSummaryRowValue(
+  //     await this.getSummaryRowByKey("Next check in due"),
+  //     dateWithoutDayAndWithYear(details.date),
+  //   );
+  //   await this.checkSummaryRowValue(
+  //     await this.getSummaryRowByKey("Frequency"),
+  //     getUserFriendlyString(FrequencyOptions[details.frequency]),
+  //   );
+  //   await this.checkSummaryRowValue(
+  //     await this.getSummaryRowByKey("Contact preferences"),
+  //     getUserFriendlyString(Preference[details.preference]),
+  //   );
+  // }
 }

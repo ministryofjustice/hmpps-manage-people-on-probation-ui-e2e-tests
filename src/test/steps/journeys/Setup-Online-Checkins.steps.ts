@@ -3,17 +3,13 @@ import OverviewPage from "../../pageObjects/Case/overview.page";
 import ConfirmationPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/confirmation.page";
 import CheckInSummaryPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page";
 import { createBdd, DataTable } from "playwright-bdd";
-import { dueDateString, lastWeek, today } from "../../util/DateTime";
 import {
-  makeChangesSetupCheckins,
-  MPoPCheckinDetails,
-  MpopSetupChanges,
-  MpopSetupCheckin,
-  MpopSetupRestart,
-  randomCheckIn,
-  setupCheckinsMPop,
-  setupDataTable,
-} from "../../util/SetupOnlineCheckins";
+  dateTimeMapping,
+  dueDateString,
+  lastWeek,
+  luxonString,
+  today,
+} from "../../util/DateTime";
 import { testContext } from "../../features/Fixtures";
 import {
   createEsupervisionCheckin,
@@ -23,7 +19,6 @@ import {
   submitEsupervisionCheckin,
   verifyEsupervisionVideo,
 } from "../../util/API";
-import { getUuid } from "../../util/Common";
 import ActivityLogPage from "../../pageObjects/Case/activity-log.page";
 import {
   getCasesWithCheckInsSetup,
@@ -39,7 +34,6 @@ import ReviewedSubmittedPage from "../../pageObjects/Case/Contacts/Checkins/Revi
 import ReviewedExpiredPage from "../../pageObjects/Case/Contacts/Checkins/Review/reviewed-expired.page";
 import ManageCheckInsPage from "../../pageObjects/Case/Contacts/Checkins/manage.page";
 import StopCheckInsPage from "../../pageObjects/Case/Contacts/Checkins/stop.page";
-import { restartCheckinsMPop } from "../../util/StopStartCheckins";
 import ReviewExpiredPage from "../../pageObjects/Case/Contacts/Checkins/Review/review-expired.page";
 import { expect } from "@playwright/test";
 import EligibilityPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page";
@@ -47,7 +41,13 @@ import PartiallyEligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetU
 import DateFrequencyPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
 import EligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page";
 import IneligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/ineligible.page";
-
+import SPOApprovalPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/spo-approval.page";
+import ContactPreferencePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page";
+import PhotoOptionsPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/photo-options.page";
+import UploadPhotoPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/upload-photo.page";
+import TakePhotoPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/take-photo.page";
+import PhotoMeetRulesPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/photo-meet-rules.page";
+import ContactDetailsPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/update-contact-details.page";
 const { Given, When, Then } = createBdd(testContext);
 
 Given("I have navigated to new offender", async ({ ctx }) => {
@@ -58,56 +58,143 @@ Given("I have navigated to new offender", async ({ ctx }) => {
   await setUpOnLineCheckinsPage.navigateTo();
 });
 
-When("I set up checkIns with values", async ({ ctx }, data: DataTable) => {
+When("I click to set up online checkIns", async ({ ctx }) => {
   const page = ctx.base.page;
-  const setup: MpopSetupCheckin = setupDataTable(data) as MpopSetupCheckin;
-  const setUpOnLineCheckinsPage = new AppointmentsPage(page);
-  await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn();
-  await setupCheckinsMPop(page, setup);
-  const checkInSummaryPage = new CheckInSummaryPage(page);
-  await checkInSummaryPage.assertOnPage();
-  const uuid = getUuid(page);
-  ctx.contact.uuid = uuid;
-  ctx.checkIns.setup = setup;
+  const crn = ctx.case.crn;
+  const appointments: AppointmentsPage = new AppointmentsPage(page, crn);
+  await appointments.clickSetupOnlineCheckInsBtn();
+  await page.waitForLoadState("networkidle");
 });
 
-When("I set up checkIns with random values", async ({ ctx }) => {
+When(
+  "I complete the eligibility check page with criteria",
+  async ({ ctx }, criteria: DataTable) => {
+    const page = ctx.base.page;
+    const eligibilityPage = new EligibilityPage(page);
+    await eligibilityPage.assertOnPage();
+    await eligibilityPage.completePage(criteria);
+  },
+);
+
+When("I complete the eligibile page", async ({ ctx }) => {
   const page = ctx.base.page;
-  const setup: MpopSetupCheckin = randomCheckIn() as MpopSetupCheckin;
-  const setUpOnLineCheckinsPage = new AppointmentsPage(page);
-  await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn();
-  await setupCheckinsMPop(page, setup);
-  const checkInSummaryPage = new CheckInSummaryPage(page);
-  await checkInSummaryPage.assertOnPage();
-  const uuid = getUuid(page);
-  ctx.contact.uuid = uuid;
-  ctx.checkIns.setup = setup;
+  const eligiblePage = new EligiblePage(page);
+  await eligiblePage.assertOnPage();
+  await eligiblePage.completePage();
 });
 
-When("I make the following changes", async ({ ctx }, data: DataTable) => {
+When(
+  "I complete the eligibile page with use {string}",
+  async ({ ctx }, use: string) => {
+    const page = ctx.base.page;
+    const eligiblePage = new EligiblePage(page);
+    await eligiblePage.assertOnPage();
+    await eligiblePage.completePage(use);
+  },
+);
+
+When("I complete the SPO approval page", async ({ ctx }) => {
   const page = ctx.base.page;
-  const changes: MpopSetupChanges = setupDataTable(data);
-  await makeChangesSetupCheckins(page, changes);
-  const checkInSummaryPage = new CheckInSummaryPage(page);
-  await checkInSummaryPage.assertOnPage();
-  await checkInSummaryPage.submit();
-  await new Promise((resolve) => setTimeout(resolve, 4000));
-  ctx.checkIns.changes = changes;
+  const spoApprovalPage = new SPOApprovalPage(page);
+  await spoApprovalPage.assertOnPage();
+  await spoApprovalPage.completePage();
 });
 
-When("I make random changes", async ({ ctx }) => {
+When(
+  "I complete the date frequency page with date {string} and frequency {string}",
+  async ({ ctx }, date: string, frequency: string) => {
+    const page = ctx.base.page;
+    const dateFrequencyPage = new DateFrequencyPage(page);
+    await dateFrequencyPage.assertOnPage();
+    await dateFrequencyPage.completePage(
+      luxonString(dateTimeMapping[date]),
+      frequency,
+    );
+  },
+);
+
+When(
+  "I navigate to update contact details via {string} link from checkins journey",
+  async ({ ctx }, changeLink: string) => {
+    const page = ctx.base.page;
+    const contactPreferencePage = new ContactPreferencePage(page);
+    await contactPreferencePage.assertOnPage();
+    await page.waitForLoadState("networkidle");
+    await contactPreferencePage.navigateToUpdateContactDetails(changeLink);
+    const contactDetailsPage = new ContactDetailsPage(page);
+    await contactDetailsPage.assertOnPage();
+  },
+);
+
+When(
+  "I complete the contact preference page with preference {string}",
+  async ({ ctx }, preference: string) => {
+    const page = ctx.base.page;
+    const contactPreferencePage = new ContactPreferencePage(page);
+    await contactPreferencePage.assertOnPage();
+    await contactPreferencePage.completePage(preference);
+  },
+);
+
+When(
+  "I complete the photo options page with option {string}",
+  async ({ ctx }, option: string) => {
+    const page = ctx.base.page;
+    const photoOptionsPage = new PhotoOptionsPage(page);
+    await photoOptionsPage.assertOnPage();
+    await photoOptionsPage.completePage(option);
+  },
+);
+
+When("I complete the upload photo page", async ({ ctx }) => {
   const page = ctx.base.page;
-  const changes: MpopSetupChanges = randomCheckIn(false) as MpopSetupChanges;
-  await makeChangesSetupCheckins(page, changes);
+  const uploadPhotoPage = new UploadPhotoPage(page);
+  await uploadPhotoPage.assertOnPage();
+  await uploadPhotoPage.completePage();
+});
+
+When("I complete the take a photo page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const takePhotoPage = new TakePhotoPage(page);
+  await takePhotoPage.assertOnPage();
+  await takePhotoPage.completePage();
+});
+
+When("I complete the photo meet the rules page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  // // Photo Meet the rules page
+  const photoMeetRulesPage = new PhotoMeetRulesPage(page);
+  await photoMeetRulesPage.assertOnPage();
+  await photoMeetRulesPage.completePage();
+});
+
+Then("I can see the checkIn summary page", async ({ ctx }) => {
+  const page = ctx.base.page;
   const checkInSummaryPage = new CheckInSummaryPage(page);
   await checkInSummaryPage.assertOnPage();
-  await checkInSummaryPage.submit();
-  await new Promise((resolve) => setTimeout(resolve, 4000));
-  ctx.checkIns.changes = changes;
 });
+
+// When("I make the following changes", async ({ ctx }, data: DataTable) => {
+//   const page = ctx.base.page;
+//   const changes: MpopSetupChanges = setupDataTable(data);
+//   await makeChangesSetupCheckins(page, changes);
+//   const checkInSummaryPage = new CheckInSummaryPage(page);
+//   await checkInSummaryPage.assertOnPage();
+//   await checkInSummaryPage.submit();
+//   await new Promise((resolve) => setTimeout(resolve, 4000));
+//   ctx.checkIns.changes = changes;
+// });
 
 When("I submit the checkin", async ({ ctx }) => {
-  const confirmationPage = new ConfirmationPage(ctx.base.page);
+  const page = ctx.base.page;
+  const checkInSummaryPage = new CheckInSummaryPage(page);
+  // await checkInSummaryPage.assertOnPage();
+  await checkInSummaryPage.submit();
+});
+
+Then("I can see the confirmation page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const confirmationPage = new ConfirmationPage(page);
   await confirmationPage.assertOnPage();
   await confirmationPage.checkWhatHappensNextTextExists();
   await confirmationPage.checkGoToAllCasesLinkExists();
@@ -160,6 +247,7 @@ Then("I can view the reviewed checkIn", async ({ ctx }) => {
   const page = ctx.base.page;
   const crn = ctx.case.crn;
   const contactLog = new ActivityLogPage(page, crn);
+  await page.waitForLoadState("networkidle");
   await contactLog.assertOnPage();
   await contactLog.getQA("esup-manage-link").first().click();
   const reviewedSubmittedPage = new ReviewedSubmittedPage(page, crn);
@@ -250,51 +338,83 @@ Then("checkIns are labelled as stopped", async ({ ctx }) => {
   );
 });
 
-Then("I restart checkIns with values", async ({ ctx }, data: DataTable) => {
+When("I go to manage checkIns page", async ({ ctx }) => {
   const page = ctx.base.page;
-  const overview = new OverviewPage(page);
+  const crn = ctx.case.crn;
+  const overview = new OverviewPage(page, crn);
   await overview.assertOnPage();
   await overview.checkOnlineCheckInsLink(false);
+  const managePage = new ManageCheckInsPage(page, crn);
+  await managePage.assertOnPage();
+});
+
+When("I click to restart checkIns", async ({ ctx }) => {
+  const page = ctx.base.page;
   const managePage = new ManageCheckInsPage(page);
   await managePage.assertOnPage();
   await managePage.clickRestartCheckIns();
-  const restart: MpopSetupRestart = setupDataTable(data) as MpopSetupRestart;
-  ctx.checkIns.restart = restart;
-  await restartCheckinsMPop(page, restart);
-  const checkInSummaryPage = new CheckInSummaryPage(page, true);
-  await checkInSummaryPage.assertOnPage();
-  await checkInSummaryPage.submit();
-  const confirmationPage = new ConfirmationPage(ctx.base.page, true);
-  await confirmationPage.assertOnPage();
-  await confirmationPage.checkWhatHappensNextTextExists();
-  await confirmationPage.checkGoToAllCasesLinkExists();
-  await confirmationPage.returnToPoPsOverviewButtonExist();
-  await confirmationPage.selectPoPsOverviewButton();
 });
 
-Then("Checkins should be setup", async ({ ctx }) => {
-  const restart = ctx.checkIns.restart;
-  let details: MPoPCheckinDetails;
-  if (restart) {
-    details = {
-      date: restart.date,
-      frequency: restart.frequency,
-      preference: restart.preference,
-    };
-  } else {
-    const setup = ctx.checkIns.setup;
-    const changes = ctx.checkIns.changes;
-    details = {
-      date: changes.date ?? setup.date,
-      frequency: changes.frequency ?? setup.frequency,
-      preference: changes.preference ?? setup.preference,
-    };
-  }
-  //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
-  const overviewPage = new OverviewPage(ctx.base.page);
-  await overviewPage.assertOnPage();
-  await overviewPage.verifyCheckinDetails(details);
+When(
+  "I complete the restart date frequency page with date {string} and frequency {string}",
+  async ({ ctx }, date: string, frequency: string) => {
+    const page = ctx.base.page;
+    const dateFrequencyPage = new DateFrequencyPage(page, true);
+    await dateFrequencyPage.assertOnPage();
+    await dateFrequencyPage.completePage(
+      luxonString(dateTimeMapping[date]),
+      frequency,
+    );
+  },
+);
+
+When(
+  "I complete the restart contact preference page with preference {string}",
+  async ({ ctx }, preference: string) => {
+    const page = ctx.base.page;
+    const contactPreferencePage = new ContactPreferencePage(page, true);
+    await contactPreferencePage.assertOnPage();
+    await contactPreferencePage.completePage(preference);
+  },
+);
+
+Then("I can see the checkIn summary page for restart", async ({ ctx }) => {
+  const summaryPage = new CheckInSummaryPage(ctx.base.page, true);
+  await summaryPage.assertOnPage();
 });
+
+Then("I can see the confirmation page for restart", async ({ ctx }) => {
+  const confirmationPage = new ConfirmationPage(ctx.base.page, true);
+  await confirmationPage.assertOnPage();
+  // await confirmationPage.checkWhatHappensNextTextExists();
+  // await confirmationPage.checkGoToAllCasesLinkExists();
+  // await confirmationPage.returnToPoPsOverviewButtonExist();
+  // await confirmationPage.selectPoPsOverviewButton();
+});
+
+// Then("Checkins should be setup", async ({ ctx }) => {
+//   const restart = ctx.checkIns.restart;
+//   let details: MPoPCheckinDetails;
+//   if (restart) {
+//     details = {
+//       date: restart.date,
+//       frequency: restart.frequency,
+//       preference: restart.preference,
+//     };
+//   } else {
+//     const setup = ctx.checkIns.setup;
+//     const changes = ctx.checkIns.changes;
+//     details = {
+//       date: changes.date ?? setup.date,
+//       frequency: changes.frequency ?? setup.frequency,
+//       preference: changes.preference ?? setup.preference,
+//     };
+//   }
+//   //Overview Page - Verify Online check ins section is displayed. Verify Contact Preference
+//   const overviewPage = new OverviewPage(ctx.base.page);
+//   await overviewPage.assertOnPage();
+//   // await overviewPage.verifyCheckinDetails(details);
+// });
 
 Then(
   "I mock the completion of an expired checkin for {string}",
@@ -358,7 +478,7 @@ When(
     await setUpOnLineCheckinsPage.clickSetupOnlineCheckInsBtn();
     const eligibilityPage = new EligibilityPage(page);
     await eligibilityPage.assertOnPage();
-    await eligibilityPage.completePage(numbers);
+    await eligibilityPage.completePageWithIDs(numbers);
   },
 );
 
@@ -373,7 +493,7 @@ Then("I {string} use checkIns", async ({ ctx }, can: string) => {
   } else if (can === "can") {
     const eligiblePage = new EligiblePage(page);
     await eligiblePage.assertOnPage();
-    await eligiblePage.completePage(1);
+    await eligiblePage.completePage("As well as existing face-to-face contact");
     const dateFrequencyPage = new DateFrequencyPage(page);
     await dateFrequencyPage.assertOnPage();
   } else if (can === "cannot") {

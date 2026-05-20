@@ -6,8 +6,8 @@ export default class EligiblePage extends ContactPage {
     super(page, /[^\s]+ is eligible to use online check ins/, crn, uuid);
   }
 
-  async completePage(id: number) {
-    await this.clickRadioById("eligibility-options", id);
+  async completePage(use?: string) {
+    if (use) await this.clickRadioByName("eligibility-options", use);
     await this.submit();
   }
 }
