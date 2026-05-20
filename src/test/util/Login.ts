@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import HomePage from "../pageObjects/home.page";
 
 export const login = async (page: Page) => {
