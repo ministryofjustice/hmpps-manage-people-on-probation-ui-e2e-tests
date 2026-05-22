@@ -158,16 +158,22 @@ Then(
 
 When("I click on the {string} link", async ({ ctx }, linkText: string) => {
   await ctx.base.page.getByRole("link", { name: linkText }).click();
-})
+});
 
 When("I click on the {string} button", async ({ ctx }, buttonText: string) => {
   await ctx.base.page.getByRole("button", { name: buttonText }).click();
-})
+});
 
-When("I click on the {string} radio option in {string} section", async ({ ctx }, radioText: string, section: string) => {
-  await ctx.base.currentPage!.clickRadioByName(section, radioText);
-})
+When(
+  "I click on the {string} radio option in {string} section",
+  async ({ ctx }, radioText: string, section: string) => {
+    await ctx.base.currentPage!.clickRadioByName(section, radioText);
+  },
+);
 
-When("I click on the {string} radio option", async ({ ctx }, radioText: string) => {
-  await ctx.base.page.getByRole("radio", { name: radioText }).click();
-})
+When(
+  "I click on the {string} radio option",
+  async ({ ctx }, radioText: string) => {
+    await ctx.base.page.getByRole("radio", { name: radioText }).click();
+  },
+);
