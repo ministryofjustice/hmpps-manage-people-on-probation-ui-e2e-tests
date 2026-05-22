@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../../Contacts/contact.page";
+import ContactPage from "../Contacts/contact.page";
 
-export default class ConfirmationPage extends ContactPage {
+export default class CheckInConfirmationPage extends ContactPage {
   constructor(
     page: Page,
     restart: boolean = false,

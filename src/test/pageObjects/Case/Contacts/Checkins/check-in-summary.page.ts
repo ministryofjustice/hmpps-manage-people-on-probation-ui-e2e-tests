@@ -1,6 +1,6 @@
 import { expect, Page } from "@playwright/test";
-import ContactPage from "../../Contacts/contact.page";
-import { MPOP_URL } from "../../../../../util/Data";
+import ContactPage from "../Contacts/contact.page";
+import { MPOP_URL } from "../../../../util/Data";
 
 export default class CheckInSummaryPage extends ContactPage {
   constructor(

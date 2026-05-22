@@ -7,9 +7,9 @@ import {
   ContactDetails,
   Details,
 } from "../../features/Fixtures";
-import ContactDetailsPage from "./Contacts/Checkins/SetUp/update-contact-details.page";
+import ContactDetailsPage from "./Contacts/update-contact-details.page";
 import { Address } from "../../util/PersonalDetails";
-import UpdateAddressPage from "./Contacts/Checkins/update-address.page";
+import UpdateAddressPage from "./Contacts/update-address.page";
 import { DataTable } from "playwright-bdd";
 
 dotenv.config({ path: ".env" });
