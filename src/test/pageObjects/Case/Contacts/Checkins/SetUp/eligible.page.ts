@@ -7,7 +7,7 @@ export default class EligiblePage extends ContactPage {
   }
 
   async completePage(id: number) {
-    await this.clickRadio("eligibility-options", id);
+    await this.clickRadioById("eligibility-options", id);
     await this.submit();
   }
 }

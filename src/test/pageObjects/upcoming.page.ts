@@ -6,8 +6,22 @@ export default class UpcomingAppointmentsPage extends MPopPage {
     super(page, "My upcoming appointments");
   }
 
+  async selectFirst(id: number = 0) {
+    await this.page
+      .getByRole("link", { name: /^Manage$/i })
+      .nth(id)
+      .click();
+  }
+
   async selectOfficeVisit(id: number = 0) {
-    await this.page.getByRole("link", { name: "Planned" }).nth(id).click();
+    await this.page
+      .getByRole("link", { name: "Planned office" })
+      .nth(id)
+      .click(); //limited to office visits for now due to issues with person level appointments
+  }
+
+  async selectNSLink(id: number = 0) {
+    await this.page.getByRole("link", { name: "(NS)" }).nth(id).click(); //limited to office visits for now due to issues with person level appointments
   }
 
   async checkTop5(upcoming: string[]) {

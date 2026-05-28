@@ -11,11 +11,9 @@ export default class StopCheckInsPage extends ContactPage {
     );
   }
 
-  async completePage(stop: boolean = true, reason?: string) {
-    await this.clickRadio("stopCheckIn", stop ? 0 : 1);
-    if (stop) {
-      await this.fillText("stop-checkin-reason", reason!);
-    }
+  async completePage(sensitivity: string, reason?: string) {
+    await this.fillText("stop-checkin-reason", reason!);
+    await this.clickRadioByName("sensitiveContact", sensitivity);
     await this.submit();
   }
 }

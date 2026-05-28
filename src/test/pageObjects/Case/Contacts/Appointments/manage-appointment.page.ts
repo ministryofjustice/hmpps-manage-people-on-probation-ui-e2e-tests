@@ -52,7 +52,7 @@ export default class ManageAppointmentsPage extends ContactPage {
 
   async getAppointmentNotes() {
     return this.getClass(
-      "app-note text-break",
+      "app-note",
       await this.getSummaryRowValue(
         await this.getSummaryRowByKey("Appointment notes"),
       ),

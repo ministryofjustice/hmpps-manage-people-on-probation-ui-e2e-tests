@@ -53,9 +53,7 @@ export default class CasesPage extends MPopPage {
 
   async checkSections() {
     await this.getQA("caseloadNavigation").isVisible();
-    await this.getClass(
-      "govuk-filter-background govuk-!-margin-bottom-3",
-    ).isVisible();
+    await this.getClass("govuk-filter-background").isVisible();
     await this.getQA("myCasesCard").isVisible();
   }
 

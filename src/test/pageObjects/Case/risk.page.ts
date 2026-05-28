@@ -61,7 +61,7 @@ export default class RiskPage extends CasePage {
   }
   async checkRiskFlagLinks() {
     const links = await this.getClass(
-      "govuk-table govuk-!-margin-bottom-4",
+      "govuk-table",
       this.getQA("riskFlagsCard"),
     )
       .getByRole("link")

@@ -22,3 +22,4 @@ Feature: Use Search Service
       | Date of Birth |
       | Managed by    |
       | PDU           |
+

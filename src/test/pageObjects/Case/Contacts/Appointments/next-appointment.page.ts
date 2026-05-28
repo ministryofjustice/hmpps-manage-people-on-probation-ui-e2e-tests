@@ -13,7 +13,7 @@ export default class NextAppointmentPage extends ContactPage {
   }
 
   async completePage(id: NextAction) {
-    await this.clickRadio("option", id);
+    await this.clickRadioById("option", id);
     await this.submit();
   }
 }

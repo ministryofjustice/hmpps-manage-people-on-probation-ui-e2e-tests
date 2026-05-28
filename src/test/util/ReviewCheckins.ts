@@ -22,11 +22,13 @@ export interface Review {
 }
 export interface ExpiredReview {
   comment: string;
+  sensitivity: string;
 }
 export interface SubmittedReview {
   identity: YesNoCheck;
   note?: string;
   risk?: YesNoCheck;
+  sensitivity: string;
 }
 
 export interface SurveyResponse {
@@ -80,7 +82,7 @@ export const reviewExpiredCheckinMpop = async (
 ) => {
   const reviewExpiredPage = new ReviewExpiredPage(page);
   await reviewExpiredPage.assertOnPage();
-  await reviewExpiredPage.completePage(review.comment);
+  await reviewExpiredPage.completePage(review.comment, review.sensitivity);
 };
 export const reviewSubmittedCheckinMpop = async (
   page: Page,
@@ -92,7 +94,11 @@ export const reviewSubmittedCheckinMpop = async (
 
   const reviewNotesPage = new ReviewNotesPage(page);
   await reviewNotesPage.assertOnPage();
-  await reviewNotesPage.completePage(review.note, review.risk);
+  await reviewNotesPage.completePage(
+    review.sensitivity,
+    review.note,
+    review.risk,
+  );
 };
 
 export const getCasesWithCheckInsSetup = async (page: Page) => {

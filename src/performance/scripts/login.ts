@@ -1,4 +1,4 @@
-import { expect, type Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 
 export const loginAndGetCookies = async (page: Page) => {
   const baseUrl = process.env.PERF_BASE_URL ?? "http://localhost:3000";

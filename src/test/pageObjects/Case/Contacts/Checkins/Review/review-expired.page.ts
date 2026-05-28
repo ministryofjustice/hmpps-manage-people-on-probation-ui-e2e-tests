@@ -6,8 +6,9 @@ export default class ReviewExpiredPage extends ContactPage {
     super(page, "Online check in missed", crn, uuid);
   }
 
-  async completePage(note: string) {
+  async completePage(note: string, sensitivity: string) {
     await this.fillText("notes", note);
+    await this.clickRadioByName("sensitiveContact", sensitivity);
     await this.submit();
   }
 }

@@ -79,7 +79,7 @@ export default class PersonalDetailsPage extends CasePage {
     let note = await this.getQA("mainAddressNotesValue").textContent();
     if (note?.trim() === "") {
       note = await this.getClass(
-        "app-note text-break",
+        "app-note",
         this.getQA("mainAddressValue"),
       ).textContent();
     }
