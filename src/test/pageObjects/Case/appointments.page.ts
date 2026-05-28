@@ -28,20 +28,20 @@ export default class AppointmentsPage extends CasePage {
       await upcomingAppointment.assertOnPage();
       //sort descending
       await upcomingAppointment.page
-          .getByRole("button", { name: "Date" })
-          .click();
+        .getByRole("button", { name: "Date" })
+        .click();
       await upcomingAppointment.page
-          .getByRole("button", { name: "Date" })
-          .click();
+        .getByRole("button", { name: "Date" })
+        .click();
       await this.getQA("upcomingAppointments")
-          .getByRole("link", { name: /Manage/ })
-          .first()
-          .click();
+        .getByRole("link", { name: /Manage/ })
+        .first()
+        .click();
     } catch {
       await this.getQA("upcomingAppointmentsSection")
-          .getByRole("link", { name: /Manage/ })
-          .last()
-          .click();
+        .getByRole("link", { name: /Manage/ })
+        .last()
+        .click();
     }
   }
 
