@@ -10,29 +10,6 @@ export default abstract class CasePage extends MPopPage {
         this.crn = crn;
     }
 
-    async getNewestAppointment() {
-        try {
-            await this.clickLink("View all upcoming appointments.");
-            const upcomingAppointment = new UpcomingAppointmentsPage(this.page);
-            await upcomingAppointment.assertOnPage();
-            //sort descending
-            await upcomingAppointment.page
-                .getByRole("button", { name: "Date" })
-                .click();
-            await upcomingAppointment.page
-                .getByRole("button", { name: "Date" })
-                .click();
-            await this.getQA("upcomingAppointments")
-                .getByRole("link", { name: /Manage/ })
-                .first()
-                .click();
-        } catch {
-            await this.getQA("upcomingAppointmentsSection")
-                .getByRole("link", { name: /Manage/ })
-                .last()
-                .click();
-        }
-    }
 
     async assertOnPage(allowRestricted: boolean = true) {
         await this.page.waitForLoadState("networkidle");
