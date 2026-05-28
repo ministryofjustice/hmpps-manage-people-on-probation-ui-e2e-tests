@@ -5,6 +5,7 @@ import CasePage from "./casepage";
 import { MpopArrangeAppointment } from "../../util/ArrangeAppointment";
 import { DateTime } from "luxon";
 import { mpopTime } from "../../util/DateTime";
+import UpcomingAppointmentsPage from "../upcoming.page";
 
 dotenv.config({ path: ".env" });
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
@@ -18,6 +19,30 @@ export default class AppointmentsPage extends CasePage {
     await this.page.goto(
       `${MPOP_URL}/case/${(crn ?? this.crn)!}/appointments/`,
     );
+  }
+
+  async getNewestAppointment() {
+    try {
+      await this.clickLink("View all upcoming appointments.");
+      const upcomingAppointment = new UpcomingAppointmentsPage(this.page);
+      await upcomingAppointment.assertOnPage();
+      //sort descending
+      await upcomingAppointment.page
+        .getByRole("button", { name: "Date" })
+        .click();
+      await upcomingAppointment.page
+        .getByRole("button", { name: "Date" })
+        .click();
+      await this.getQA("upcomingAppointments")
+        .getByRole("link", { name: /Manage/ })
+        .first()
+        .click();
+    } catch {
+      await this.getQA("upcomingAppointmentsSection")
+        .getByRole("link", { name: /Manage/ })
+        .last()
+        .click();
+    }
   }
 
   async checkOnPage(): Promise<boolean> {

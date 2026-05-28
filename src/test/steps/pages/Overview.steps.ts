@@ -4,6 +4,7 @@ import OverviewPage from "../../pageObjects/Case/overview.page";
 import TierPage from "../../pageObjects/Case/tier.page";
 
 const { Then } = createBdd(testContext);
+const { When } = createBdd(testContext);
 
 Then("the overview page is populated", async ({ ctx }) => {
   const overviewPage = new OverviewPage(ctx.base.page);
@@ -24,4 +25,19 @@ Then("the pop header is correct", async ({ ctx }) => {
   await overviewPage.checkCrn();
   const tierPage = new TierPage(ctx.base.page);
   await tierPage.checkTierLink();
+});
+
+Then("I can see the text {string}", async ({ ctx }, expectedText: string) => {
+  const overviewPage = new OverviewPage(ctx.base.page);
+  await overviewPage.assertTextOnOverviewPage(expectedText);
+});
+
+Then("link with href {string}", async ({ ctx }, expectedText: string) => {
+  const overviewPage = new OverviewPage(ctx.base.page);
+  await overviewPage.assertLinkTextOnOverviewPage(expectedText);
+});
+
+When("I select the outcome link", async ({ ctx }) => {
+  const overviewPage = new OverviewPage(ctx.base.page);
+  await overviewPage.selectOutcomeLink();
 });
