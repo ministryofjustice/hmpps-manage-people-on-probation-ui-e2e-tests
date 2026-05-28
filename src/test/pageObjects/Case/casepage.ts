@@ -1,5 +1,6 @@
 import {expect, Page} from "@playwright/test";
 import MPopPage from "../page";
+import UpcomingAppointmentsPage from "../upcoming.page";
 
 export default abstract class CasePage extends MPopPage {
     readonly crn?: string;
@@ -7,6 +8,30 @@ export default abstract class CasePage extends MPopPage {
     protected constructor(page: Page, title?: string | RegExp, crn?: string) {
         super(page, title);
         this.crn = crn;
+    }
+
+    async getNewestAppointment() {
+        try {
+            await this.clickLink("View all upcoming appointments.");
+            const upcomingAppointment = new UpcomingAppointmentsPage(this.page);
+            await upcomingAppointment.assertOnPage();
+            //sort descending
+            await upcomingAppointment.page
+                .getByRole("button", { name: "Date" })
+                .click();
+            await upcomingAppointment.page
+                .getByRole("button", { name: "Date" })
+                .click();
+            await this.getQA("upcomingAppointments")
+                .getByRole("link", { name: /Manage/ })
+                .first()
+                .click();
+        } catch {
+            await this.getQA("upcomingAppointmentsSection")
+                .getByRole("link", { name: /Manage/ })
+                .last()
+                .click();
+        }
     }
 
     async assertOnPage(allowRestricted: boolean = true) {
