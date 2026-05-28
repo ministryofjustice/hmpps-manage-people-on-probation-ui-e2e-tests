@@ -1,6 +1,5 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
-import UpcomingAppointmentsPage from "../upcoming.page";
 
 export default abstract class CasePage extends MPopPage {
   readonly crn?: string;

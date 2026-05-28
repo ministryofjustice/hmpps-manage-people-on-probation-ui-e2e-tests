@@ -4,7 +4,6 @@ import CasePage from "./casepage";
 import { today } from "../../util/DateTime";
 import { DateTime } from "luxon";
 dotenv.config({ path: ".env" });
-const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
 
 export default class RecordAnOutcomePage extends CasePage {
   constructor(page: Page, crn?: string) {
@@ -16,7 +15,7 @@ export default class RecordAnOutcomePage extends CasePage {
     expect(actualTitle).toEqual(expectedTitle);
   }
 
-  async assertDefaultRadioSelection(expectedRadio: string) {
+  async assertDefaultRadioSelection() {
     const radioButton = this.page.locator(
       'input[type="radio"][value="PAST_TWO_YEARS"]',
     );

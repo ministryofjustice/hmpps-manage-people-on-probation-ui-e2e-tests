@@ -1,8 +1,6 @@
-import { createBdd, DataTable } from "playwright-bdd";
+import { createBdd } from "playwright-bdd";
 import { testContext } from "../../features/Fixtures";
 import RecordAnOutcomePage from "../../pageObjects/Case/record-an-outcome.page";
-import OverviewPage from "../../pageObjects/Case/overview.page";
-import CasesPage from "../../pageObjects/cases.page";
 
 const { Then, When } = createBdd(testContext);
 
@@ -15,10 +13,10 @@ Then(
 );
 
 Then(
-  "radio filter {string} is selected by default on record an outcome page",
-  async ({ ctx }, radioOption: string) => {
+  "radio filter PAST_TWO_YEARS is selected by default on record an outcome page",
+  async ({ ctx }) => {
     const recordAnOutcomePage = new RecordAnOutcomePage(ctx.base.page);
-    await recordAnOutcomePage.assertDefaultRadioSelection(radioOption);
+    await recordAnOutcomePage.assertDefaultRadioSelection();
   },
 );
 
