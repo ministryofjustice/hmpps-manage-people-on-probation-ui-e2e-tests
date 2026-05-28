@@ -16,7 +16,7 @@ Feature: As a practitioner
       | X793504 |
 
 
-  @full @outcomes @raj
+  @full @outcomes
   Scenario Outline: Validate outcomes link at overview page for a case - '<case>'
     Given Context has been created for "Overview" test
     And I am logged in
