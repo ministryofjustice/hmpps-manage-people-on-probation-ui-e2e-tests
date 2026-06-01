@@ -1,8 +1,8 @@
 Feature: As a practitioner
   I want to view the overview details for a Pop
 
-  @full @overview
-  Scenario: View overview for a case - '<case>'
+  @full @overview @integration
+  Scenario Outline: View overview for a case - '<case>'
     Given Context has been created for "Overview" test
     And I am logged in
     And I navigate to '<case>'
@@ -16,7 +16,7 @@ Feature: As a practitioner
       | X793504 |
 
 
-  @full @outcomes
+  @full @outcomes @integration
   Scenario Outline: Validate outcomes link at overview page for a case - '<case>'
     Given Context has been created for "Overview" test
     And I am logged in

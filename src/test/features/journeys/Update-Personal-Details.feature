@@ -2,8 +2,8 @@ Feature: Update personal details
     As a user
     I want to update personal details for a Pop
 
-    @full @personaldetails
-    Scenario: Update current details - '<description>'
+    @full @personaldetails @integration
+    Scenario Outline: Update current details - '<description>'
         Given Context has been created for "Personal details" test
         And A new offender has been created or existing made available
         And I am logged in
