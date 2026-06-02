@@ -7,7 +7,110 @@ Feature: As a practitioner
     And I am logged in
 
   @full @contacts @filter_contacts
-  Scenario: View contacts for a Pop - '<description>'
+  Scenario Outline: View contacts for a Pop
+    And I navigate to '<case>'
+    And I navigate to contact log
+    When I filter the contact log with values
+      | label              | value        |
+      | date_from          | <from>       |
+      | date_to            | <to>         |
+      | keywords           | <keywords>   |
+      | system_generated   | <hide>       |
+      | compliance_filters | <compliance> |
+      | category_filters   | <categories> |
+    Then the contact log contains '<count>' entries
+    And there are '<errors>' on contacts page
+    And I close the context
+
+    Examples:
+      | description           | case    | from      | to        | keywords | hide | compliance             | categories                                 | count    | errors                  |
+      | date range            | X793504 | 11/2/2026 | 15/2/2026 |          |      |                        |                                            | filtered | no errors               |
+
+
+  @full @contacts @add_frequent_contact
+  Scenario Outline: Add new contacts for a Pop
+    And I navigate to '<case>'
+    And I navigate to contact log
+    When I click on add contact
+    And I provide Contact details
+      | label              | value                |
+      | contact            | <frequent_contact>   |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | file_name          | <file_name>          |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+    And I save the contact details
+    Then I receive success message 'Contact created'
+
+
+    Examples:
+      | description                                | frequent_contact                           | contact_related_to | contact_title | date     | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Text or Email from other                   | Email or text from other                   | MPoP               |               | TODAY    | 10:01 | This is test message | test.pdf  | true         | true           | true               |
+
+
+  @full @contacts @add_contact_by_category
+  Scenario Outline: Add new contacts for a category without outcome for a Pop
+    And I navigate to '<case>'
+    And I navigate to contact log
+    When I click on add contact
+    And I click on 'Search by category' tab
+    And I search the '<category>'
+    And I provide Contact details
+      | label              | value                |
+      | contact            | <contact>            |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | file_name          | <file_name>          |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+    And I save the contact details
+    Then I receive success message 'Contact created'
+
+
+    Examples:
+      | description                                           | category                                              | contact                                           | contact_related_to | contact_title | date     | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings                          | Case management and meetings                          | Case reviewed by case manager                     | MPoP               |               | TODAY    | 10:01 | This is test message |           | true         | true           | true               |
+
+
+  @full @contacts @add_contact_by_category
+  Scenario Outline: Add new contacts for a category with outcome for a Pop
+    And I navigate to '<case>'
+    And I navigate to contact log
+    When I click on add contact
+    And I click on 'Search by category' tab
+    And I search the '<category>'
+    And I provide Contact details
+      | label              | value                |
+      | contact            | <contact>            |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | outcome            | <outcome>            |
+      | file_name          | <file_name>          |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+    And I save the contact details
+    Then I receive success message 'Contact created'
+
+
+    Examples:
+      | description                                           | category                                              | contact                                           | contact_related_to | contact_title | date     | time  | contact_details      | outcome                                           | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings                          | Case management and meetings                          | Case decisions                                    | Sentence           |               | TODAY    | 10:01 | This is test message | Contact frequency                                 | test.pdf  | true         | true           | true               |
+
+  @integration @contacts @filter_contacts
+  Scenario Outline: View contacts for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I filter the contact log with values
@@ -33,8 +136,8 @@ Feature: As a practitioner
       | validation error      | X793504 | 11/2/2026 |           |          |      |                        |                                            | full     | a missing date to error |
 
 
-  @full @contacts @add_frequent_contact
-  Scenario: Add new contacts for a Pop - '<description>'
+  @integration @contacts @add_frequent_contact
+  Scenario Outline: Add new contacts for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I click on add contact
@@ -68,8 +171,8 @@ Feature: As a practitioner
       | Telephone contact from person on probation | Telephone contact from person on probation | MPoP               |               | TODAY    | 10:01 | This is test message |           | false        | false          | false              |
 
 
-  @full @contacts @add_contact_by_category
-  Scenario: Add new contacts for a category without outcome for a Pop - '<description>'
+  @integration @contacts @add_contact_by_category
+  Scenario Outline: Add new contacts for a category without outcome for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I click on add contact
@@ -104,8 +207,8 @@ Feature: As a practitioner
       | Sentence management, Case management and meetings     | Sentence management, Case management and meetings     | Comment                                           | MPoP               |               | TODAY    | 10:01 | This is test message |           | true         | true           | true               |
 
 
-  @full @contacts @add_contact_by_category
-  Scenario: Add new contacts for a category with outcome for a Pop - '<description>'
+  @integration @contacts @add_contact_by_category
+  Scenario Outline: Add new contacts for a category with outcome for a Pop - '<description>'
     And I navigate to '<case>'
     And I navigate to contact log
     When I click on add contact

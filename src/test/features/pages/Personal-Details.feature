@@ -1,8 +1,8 @@
 Feature: As a practitioner
   I want to view the overview details for a Pop
 
-  @personalDetails  @smoke @full
-  Scenario: View personal details page and assert sections on the page
+  @personalDetails  @smoke @full @integration
+  Scenario Outline: View personal details page and assert sections on the page
     Given Context has been created for "Personal details" test
     And I am logged in
     And I navigate to "<case_crn>"

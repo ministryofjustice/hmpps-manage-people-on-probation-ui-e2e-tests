@@ -1,8 +1,8 @@
 Feature: As a practitioner
   I want to view the overview details for a Pop
 
-  @full @sentence
-  Scenario: View sentence and probation history for a case - '<case>'
+  @full @sentence @integration
+  Scenario Outline: View sentence and probation history for a case - '<case>'
     Given Context has been created for "Sentence" test
     And I am logged in
     And I navigate to '<case_crn>'
