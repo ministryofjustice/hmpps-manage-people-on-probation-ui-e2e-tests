@@ -116,6 +116,10 @@ export const getCasesWithCheckInsSetup = async (page: Page) => {
       console.log(totalId);
       await cases.selectCaseByID(i);
       const casePage = new OverviewPage(page);
+      const restricted = await casePage.assertOnPage();
+      if (restricted === "restricted") {
+        continue;
+      }
       const crn = await casePage.getQA("crn").textContent();
       console.log(crn);
       const setup = await casePage.checkOnlineCheckInsSetup();

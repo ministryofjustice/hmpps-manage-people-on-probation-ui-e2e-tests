@@ -26,8 +26,8 @@ Scenario Outline: Filter the cases page - '<description>'
     Examples:
       | description      | text    | type | sentence | count    |
       | no filters       |         |      |          | full     |
-      | CRN filter       | X990175 |      |          | 1        |
+      | CRN filter       | Y006988 |      |          | 1        |
       | sentence filter  |         |      | 307      | filtered |
-      | type filter      |         | CODC |          | filtered |
+      | type filter      |         | COAP |          | filtered |
       | no cases         | RANDOM  |      |          | 0        |
 

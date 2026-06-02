@@ -9,14 +9,14 @@ export default abstract class CasePage extends MPopPage {
     this.crn = crn;
   }
 
-  async assertOnPage(allowRestricted: boolean = true) {
+  async assertOnPage(allowRestricted: boolean = true): Promise<string | void> {
     await this.page.waitForLoadState("networkidle");
     const onPage = await this.checkOnPage();
     if (!onPage && allowRestricted) {
       const restricted = await this.isRestricted();
       if (restricted) {
         await this.clickBackLink();
-        return;
+        return "restricted";
       }
     }
     expect(onPage).toBeTruthy();

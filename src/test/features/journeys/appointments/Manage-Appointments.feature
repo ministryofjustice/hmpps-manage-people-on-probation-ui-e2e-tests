@@ -9,7 +9,8 @@ Feature: Manage Appointments
 
     @smoke @full @manage @note
     Scenario: Add Large Note to Appointment - Test mod security rules
-        When I navigate to first non sensitive upcoming appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first non sensitive upcoming appointment
         And I note the current number of notes
         And I navigate to the add a note page
         And I complete the add note page with large note and sensitivity "No"
@@ -18,7 +19,8 @@ Feature: Manage Appointments
 
     @smoke @full @manage @updateSensitivity
     Scenario: Add note to non sensitive appointment and mark as sensitive
-        When I navigate to first non sensitive upcoming appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first non sensitive upcoming appointment
         And I note the current number of notes
         And I navigate to the add a note page
         And I complete the add note page with note "note" and sensitivity "Yes"
@@ -28,7 +30,8 @@ Feature: Manage Appointments
 
     @smoke @full @manage @updateSensitivity
     Scenario: Add note to sensitive appointment
-        When I navigate to first sensitive upcoming appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first sensitive upcoming appointment
         And I note the current number of notes
         And I navigate to the add a note page
         And I complete the add note page with note "note"
@@ -39,7 +42,8 @@ Feature: Manage Appointments
 # Commented out pending non compliance changes
 #    @smoke @full @manage @attended
 #    Scenario: Add Attended Complied Outcome to non sensitive appointment
-#        When I navigate to latest non sensitive appointment requiring an outcome
+#        When I navigate to the log outcomes page
+#        And I navigate to latest non sensitive appointment requiring an outcome
 #        And I complete the attended complied page
 #        And I complete the add note page with note "test" and sensitivity "No"
 #        Then I can see the attended and complied status
