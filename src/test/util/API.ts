@@ -148,12 +148,11 @@ export const postEsupervisionVideo = async (
       },
       data: {
         video: "video/mp4",
-        snapshots: ["image/jpeg", "image/jpeg"],
+        snapshots: [],
       },
     },
   );
   const body = await response.json();
-
   const videoUrl = body.video.url;
   const videoType = body.video.contentType;
   const snapshotUrl = body.snapshots[0].url;
