@@ -22,7 +22,7 @@ export default class CaseUpcomingAppointmentsPage extends CasePage {
   }
 
   async selectAppointment(id: number, byName: boolean) {
-    const tableqa = "upcomingAppiointments";
+    const tableqa = "UpcomingAppointments";
     const column = byName ? "Type" : "Action";
     const cellqa = `upcomingAppointment${column}${id}`;
     await this.clickTableLink(tableqa, cellqa);

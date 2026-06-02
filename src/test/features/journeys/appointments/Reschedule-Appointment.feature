@@ -10,7 +10,8 @@ Feature: Reschedule Appointments
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
     Scenario: Reschedule appointment with critera: inFuture and noText
-        When I navigate to first non sensitive upcoming appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first non sensitive upcoming appointment
         And I select the Reschedule link
         And I complete the reschedule page with userId 0, reason "none" and sensitivity "No"
         And I select the "Choose date and time" link on the Reschedule Details page
@@ -26,7 +27,8 @@ Feature: Reschedule Appointments
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
     Scenario: Reschedule appointment with critera: inFuture, setSensitiveEarly and noText
-        When I navigate to first non sensitive upcoming appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first non sensitive upcoming appointment
         And I select the Reschedule link
         And I complete the reschedule page with userId 0, reason "none" and sensitivity "Yes"
         And I select the "Choose date and time" link on the Reschedule Details page
@@ -41,7 +43,8 @@ Feature: Reschedule Appointments
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
     Scenario: Reschedule a sensitive appointment with critera: inFuture and noText
-        When I navigate to first sensitive upcoming appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first sensitive upcoming appointment
         And I select the Reschedule link
         And I complete the reschedule page with userId 0, reason "none"
         And I select the "Choose date and time" link on the Reschedule Details page
