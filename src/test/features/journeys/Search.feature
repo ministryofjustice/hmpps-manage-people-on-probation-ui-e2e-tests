@@ -2,7 +2,7 @@ Feature: Use Search Service
   As a user
   I want to search for a specific CRN
 
-  @full @search
+  @full @search @integration
   Scenario: Search for Case
     Given Context has been created for "Search" test
     And A new offender has been created or existing made available
@@ -11,7 +11,7 @@ Feature: Use Search Service
     Then I can view the CRN
 
 
-  @full @search
+  @full @search @integration
   Scenario: Search for a Case and validate the columns on search result page
     Given Context has been created for "Search" test
     And I am logged in

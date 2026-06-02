@@ -3,7 +3,7 @@ Feature: Alerts page
     I want to view and manage alerts
     So that I can stay informed about important events
 
-    @full @alerts @smoke
+    @full @alerts @smoke @integration
     Scenario: Verify alerts page functionality
         Given Context has been created for "Alerts" test
         And I am logged in

@@ -1,7 +1,7 @@
 Feature: As a practitioner
   I want to view my home page
 
-  @full @home @footer
+  @full @home @footer @integration
   Scenario: View my home page
     Given Context has been created for "Home" test
     And I am logged in

@@ -6,13 +6,13 @@ Feature: As a practitioner
     And I am logged in
     And I navigate to cases page
 
-  @full @cases
+  @full @cases @integration
   Scenario: View my cases page
     Then the cases page is populated
     And the cases page links work correctly 
 
-@full @cases
-Scenario: Filter the cases page - '<description>'
+@full @cases @integration
+Scenario Outline: Filter the cases page - '<description>'
     When I filter the cases with values
       | label    | value      |
       | text     | <text>     |
