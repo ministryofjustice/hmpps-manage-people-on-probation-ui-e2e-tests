@@ -59,6 +59,14 @@ export default class ManageAppointmentsPage extends ContactPage {
     );
   }
 
+  async checkSensitive(sensitve: boolean) {
+    if (sensitve) {
+      await expect(this.getQA("sensitiveTag")).toHaveCount(1);
+    } else {
+      await expect(this.getQA("sensitiveTag")).toHaveCount(0);
+    }
+  }
+
   async getNoteCount() {
     return await (await this.getAppointmentNotes()).count();
   }

@@ -9,7 +9,7 @@ export default abstract class MPopPage {
     this.title = title;
   }
 
-  async assertOnPage() {
+  async assertOnPage(): Promise<string | void> {
     await this.page.waitForLoadState("networkidle");
     const onPage = await this.checkOnPage();
     expect(onPage).toBeTruthy();
