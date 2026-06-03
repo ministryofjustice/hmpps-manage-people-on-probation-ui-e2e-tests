@@ -19,7 +19,13 @@ export default abstract class CasePage extends MPopPage {
         return "restricted";
       }
     }
-    expect(onPage).toBeTruthy();
+    try {
+      expect(onPage).toBeTruthy();
+    } catch {
+      throw (
+        "Expected to be on page: " + this.constructor.name + ", but was not."
+      );
+    }
   }
 
   async isRestricted(): Promise<boolean> {

@@ -12,7 +12,13 @@ export default abstract class MPopPage {
   async assertOnPage(): Promise<string | void> {
     await this.page.waitForLoadState("networkidle");
     const onPage = await this.checkOnPage();
-    expect(onPage).toBeTruthy();
+    try {
+      expect(onPage).toBeTruthy();
+    } catch {
+      throw (
+        "Expected to be on page: " + this.constructor.name + ", but was not."
+      );
+    }
   }
 
   async checkOnPage(): Promise<boolean> {
