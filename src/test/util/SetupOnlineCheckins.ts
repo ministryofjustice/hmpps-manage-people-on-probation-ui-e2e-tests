@@ -1,16 +1,16 @@
 import { Page } from "@playwright/test";
 import DateFrequencyPage, {
   FrequencyOptions,
-} from "../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
+} from "../pageObjects/Case/Contacts/Checkins/date-frequency.page";
 import ContactPreferencePage, {
   Preference,
-} from "../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page";
+} from "../pageObjects/Case/Contacts/Checkins/contact-preference.page";
 import PhotoOptionsPage, {
   PhotoOptions,
 } from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-options.page";
 import UploadPhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/upload-photo.page";
 import PhotoMeetRulesPage from "../pageObjects/Case/Contacts/Checkins/SetUp/photo-meet-rules.page";
-import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page";
+import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/check-in-summary.page";
 import { futureTimes, luxonString, nextWeek, tomorrow } from "./DateTime";
 import { DataTable } from "playwright-bdd";
 import TakePhotoPage from "../pageObjects/Case/Contacts/Checkins/SetUp/take-photo.page";

@@ -7,16 +7,16 @@ import getUserFriendlyString, {
 } from "../../util/SetupOnlineCheckins";
 import { dateWithoutDayAndWithYear, yesterday } from "../../util/DateTime";
 import { DateTime } from "luxon";
-import { FrequencyOptions } from "./Contacts/Checkins/SetUp/date-frequency.page";
-import { Preference } from "./Contacts/Checkins/SetUp/contact-preference.page";
+import { FrequencyOptions } from "./Contacts/Checkins/date-frequency.page";
+import { Preference } from "./Contacts/Checkins/contact-preference.page";
 import AppointmentsPage from "./appointments.page";
 import ContactPage from "./Contacts/Contacts/contact.page";
-import InstructionsPage from "./Contacts/Checkins/SetUp/instructions.page";
 import ManageCheckInsPage from "./Contacts/Checkins/manage.page";
 import PersonalDetailsPage from "./personal-details.page";
 import RiskPage from "./risk.page";
 import CaseSentencePage from "./sentence.page";
 import ActivityLogPage from "./activity-log.page";
+import EligibilityPage from "./Contacts/Checkins/SetUp/eligibility-check.page";
 
 dotenv.config({ path: ".env" });
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
@@ -90,7 +90,7 @@ export default class OverviewPage extends CasePage {
       await this.checkLink(
         "checkinCard",
         "Set up online check ins",
-        new InstructionsPage(this.page),
+        new EligibilityPage(this.page),
         back,
       );
     }

@@ -1,8 +1,8 @@
 import { Page } from "@playwright/test";
 import { MpopSetupRestart } from "./SetupOnlineCheckins";
-import DateFrequencyPage from "../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
-import ContactPreferencePage from "../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page";
-import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page";
+import DateFrequencyPage from "../pageObjects/Case/Contacts/Checkins/date-frequency.page";
+import ContactPreferencePage from "../pageObjects/Case/Contacts/Checkins/contact-preference.page";
+import CheckInSummaryPage from "../pageObjects/Case/Contacts/Checkins/check-in-summary.page";
 
 export const restartCheckinsMPop = async (
   page: Page,
