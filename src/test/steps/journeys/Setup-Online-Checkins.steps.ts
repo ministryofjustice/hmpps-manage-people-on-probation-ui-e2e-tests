@@ -322,7 +322,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
   const caseList = cases.split(",");
   for (let i = 0; i < caseList.length; i++) {
     const crn = caseList[i];
-    console.log(crn);
+    console.log("Looking at: " + crn);
     const contactPage = new ActivityLogPage(page, crn);
     await contactPage.navigateTo();
     await contactPage.assertOnPage();
@@ -332,7 +332,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
         .first()
         .click({ timeout: 3000 });
     } catch {
-      console.log("no checkins");
+      console.log("No checkins found");
       continue;
     }
     const review = new ReviewExpiredPage(page);
@@ -343,7 +343,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
       ctx.checkIns.expiredCrn = crn;
       return;
     } catch {
-      console.log("completed or reviewed");
+      console.log("Checkin is completed or reviewed");
     }
   }
   console.log("No valid cases left");

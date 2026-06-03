@@ -57,10 +57,13 @@ Given(
       data.teams.allocationsTestTeam,
     );
     if (created) {
+      console.log("Using new case:", crn); // Log the CRN for debugging
       await createCustodialEvent(ctx.base.page, {
         crn,
         allocation: { team: data.teams.approvedPremisesTestTeam },
       });
+    } else {
+      console.log("Using existing case:", crn); // Log the CRN for debugging
     }
     ctx.case.crn = crn;
     ctx.case.person = person;
