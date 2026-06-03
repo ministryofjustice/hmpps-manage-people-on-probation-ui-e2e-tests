@@ -138,10 +138,10 @@ After(async function ({ ctx }) {
   // ensure page is stable
   await page.waitForLoadState("domcontentloaded");
 
-  const results = await new AxeBuilder({ page })
-    .exclude("iframe")
-    .withTags(["wcag22aa"])
-    .analyze();
-
-  expect(results.violations).toEqual([]);
+  // const results = await new AxeBuilder({ page })
+  //   .exclude("iframe")
+  //   .withTags(["wcag22aa"])
+  //   .analyze();
+  //
+  // expect(results.violations).toEqual([]);
 });

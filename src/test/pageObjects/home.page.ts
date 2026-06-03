@@ -2,7 +2,7 @@ import { expect, Page } from "@playwright/test";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 import UpcomingAppointmentsPage from "./upcoming.page";
-import LogOutcomesPage from "./log-outcomes.page";
+import LogOutcomesPage from "./Case/log-outcomes.page";
 
 export default class HomePage extends MPopPage {
   constructor(page: Page) {
