@@ -34,8 +34,11 @@ export default class CYAPage extends ContactPage {
       await this.checkRow("Text message confirmation", mobile);
     }
   }
-  async checkNotes(note?: string) {
+  async checkSupportingInfo(note?: string) {
     await this.checkRow("Supporting information", note ?? "Not entered");
+  }
+  async checkNotes(note?: string) {
+    await this.checkRow("Notes", note ?? "Not entered");
   }
   async checkSensitivity(sensitivity: string) {
     await this.checkRow("Sensitivity", sensitivity);
@@ -43,11 +46,11 @@ export default class CYAPage extends ContactPage {
 
   async checkRow(row: string, value: string, link: boolean = true) {
     if (link) {
-      expect(
+      await expect(
         (await this.getSummaryRowByKey(row)).getByRole("link"),
       ).toBeVisible();
     }
-    expect(await this.getSummaryRowByKey(row)).toContainText(value);
+    await expect(await this.getSummaryRowByKey(row)).toContainText(value);
   }
 
   async checkPageFuture(
@@ -65,7 +68,7 @@ export default class CYAPage extends ContactPage {
     await this.checkLocation(details.location);
     //this.checkDateTIme(details.dateTime)
     await this.checkMessage(details.text, details.mobile);
-    await this.checkNotes(details.note);
+    await this.checkSupportingInfo(details.note);
     await this.checkSensitivity(details.sensitivity);
   }
 

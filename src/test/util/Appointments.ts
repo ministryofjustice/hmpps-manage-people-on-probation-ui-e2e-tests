@@ -1,3 +1,4 @@
+import { expect } from "@playwright/test";
 import ManageAppointmentsPage from "../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import MPopPage from "../pageObjects/page";
 
@@ -23,7 +24,9 @@ export const searchForAppointment = async (
       continue;
     }
     try {
-      await targetPage.checkSensitive(sensitive);
+      await expect(targetPage.getQA("sensitiveTag")).toHaveCount(
+        sensitive ? 1 : 0,
+      );
       break;
     } catch {
       await targetPage.clickBackLink();

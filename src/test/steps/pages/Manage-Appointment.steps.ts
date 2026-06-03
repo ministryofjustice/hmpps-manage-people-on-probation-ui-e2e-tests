@@ -57,7 +57,7 @@ When("I navigate to first sensitive upcoming appointment", async ({ ctx }) => {
   const page = ctx.base.page;
   const upcomingAppointments = new UpcomingAppointmentsPage(page);
   const managePage = new ManageAppointmentsPage(page);
-  searchForAppointment(
+  await searchForAppointment(
     upcomingAppointments,
     managePage,
     "Planned office",
@@ -73,7 +73,7 @@ When(
     const page = ctx.base.page;
     const upcomingAppointments = new UpcomingAppointmentsPage(page);
     const managePage = new ManageAppointmentsPage(page);
-    searchForAppointment(
+    await searchForAppointment(
       upcomingAppointments,
       managePage,
       "Planned office",
@@ -122,7 +122,7 @@ When(
     const page = ctx.base.page;
     const logPage = new LogOutcomesPage(page);
     const managePage = new ManageAppointmentsPage(page);
-    searchForAppointment(logPage, managePage, /^Manage$/, false);
+    await searchForAppointment(logPage, managePage, /^Manage$/, false);
     await expect(managePage.getQA("appointmentAlert")).toContainText(
       "You must log an outcome",
     );
