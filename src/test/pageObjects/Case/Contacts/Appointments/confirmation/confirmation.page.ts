@@ -1,10 +1,10 @@
 import { Page } from "@playwright/test";
-import NextAppointmentPage from "./next-appointment.page";
-import ContactPage from "../Contacts/contact.page";
+import NextAppointmentPage from "../next-appointment.page";
+import ContactPage from "../../Contacts/contact.page";
 
 export default class ConfirmationPage extends ContactPage {
-  constructor(page: Page, typeOverride?: string, crn?: string, uuid?: string) {
-    super(page, typeOverride ?? "Appointment arranged", crn, uuid);
+  constructor(page: Page, title?: string, crn?: string, uuid?: string) {
+    super(page, title, crn, uuid);
   }
 
   async completePage(option: string) {

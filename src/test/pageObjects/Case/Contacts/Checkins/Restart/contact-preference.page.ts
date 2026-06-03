@@ -1,8 +1,8 @@
 import { Page } from "@playwright/test";
 import ContactPreferencePage from "../contact-preference.page";
 
-export default class SetupContactPreferencePage extends ContactPreferencePage {
+export default class RestartContactPreferencePage extends ContactPreferencePage {
   constructor(page: Page, crn?: string, uuid?: string) {
-    super(page, false, crn, uuid);
+    super(page, true, crn, uuid);
   }
 }

@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../../Contacts/contact.page";
-import { ContactDetails } from "../../../../../features/Fixtures";
+import ContactPage from "./Contacts/contact.page";
+import { ContactDetails } from "../../../features/Fixtures";
 
 export default class ContactDetailsPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {

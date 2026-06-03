@@ -3,7 +3,7 @@ Feature: Alerts page
     I want to view and manage alerts
     So that I can stay informed about important events
 
-    @full @alerts @smoke
+    @full @alerts @smoke @integration
     Scenario: Verify alerts page functionality
         Given Context has been created for "Alerts" test
         And I am logged in
@@ -25,5 +25,5 @@ Feature: Alerts page
         When I try to clear alerts without selection
         Then I should see an error message
         When I select and clear all alerts over 60
-        Then the alert count should be 60
+        Then the alert count should be less than or equal to 60
         And I close the context

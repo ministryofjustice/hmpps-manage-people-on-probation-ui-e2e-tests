@@ -8,6 +8,7 @@ import {
 import { Person } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person.mjs";
 import AlertsPage from "../pageObjects/alerts";
 import { MpopArrangeAppointment } from "../util/ArrangeAppointment";
+import MPopPage from "../pageObjects/page";
 
 export interface Ctx {
   checkIns: CheckIns;
@@ -50,6 +51,9 @@ export interface Base {
   page: Page;
   browser: Browser;
   context: BrowserContext;
+  currentPage?: MPopPage;
+  currentCrn?: string;
+  currentContactId?: string;
 }
 export interface CaseType {
   crn: string;

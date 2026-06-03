@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import CasePage from "./casepage";
 import { caseNavigation } from "../../util/Navigation";
 import RemovedRiskFlagsPage from "./removed-risk-flags.page";
-import RiskFlagPage from "./Contacts/Checkins/risk-flag.page";
+import RiskFlagPage from "./Contacts/risk-flag.page";
 
 dotenv.config({ path: ".env" });
 const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;

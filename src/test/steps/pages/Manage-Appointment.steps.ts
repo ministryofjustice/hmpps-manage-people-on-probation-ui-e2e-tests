@@ -8,7 +8,8 @@ import AddNotePage from "../../pageObjects/Case/Contacts/Appointments/add-note.p
 import HomePage from "../../pageObjects/home.page";
 import LogOutcomesPage from "../../pageObjects/Case/log-outcomes.page";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
-import UpcomingAppiointmentsPage from "../../pageObjects/upcoming.page";
+import UpcomingAppointmentsPage from "../../pageObjects/upcoming.page";
+import { searchForAppointment } from "../../util/Appointments";
 
 const { When, Then } = createBdd(testContext);
 
@@ -27,40 +28,41 @@ When("I navigate to first upcoming appointment", async ({ ctx }) => {
   const home = new HomePage(page);
   await home.assertOnPage();
   await home.viewUpcoming();
-  const upcomingAppointments = new UpcomingAppiointmentsPage(page);
+  const upcomingAppointments = new UpcomingAppointmentsPage(page);
   await upcomingAppointments.assertOnPage();
   await upcomingAppointments.selectOfficeVisit(); //office visits only until person level bug fixed
   const managePage = new ManageAppointmentsPage(page);
   await managePage.assertOnPage();
 });
 
-When("I navigate to first sensitive upcoming appointment", async ({ ctx }) => {
+When("I navigate to the upcoming appointments page", async ({ ctx }) => {
   const page = ctx.base.page;
   const home = new HomePage(page);
   await home.assertOnPage();
   await home.viewUpcoming();
-  const upcomingAppointments = new UpcomingAppiointmentsPage(page);
-  let id = 0;
-  while (true) {
-    await upcomingAppointments.assertOnPage();
-    try {
-      await upcomingAppointments.selectOfficeVisit(id); //office visits only until person level bug fixed
-    } catch {
-      await upcomingAppointments.pagination("Next");
-      id = 0;
-      continue;
-    }
-    const managePage = new ManageAppointmentsPage(page);
-    await managePage.assertOnPage();
-    try {
-      await expect(managePage.getQA("sensitiveTag")).toBeVisible();
-      break;
-    } catch {
-      await managePage.clickBackLink();
-      id += 1;
-    }
-  }
+  const upcomingAppointments = new UpcomingAppointmentsPage(page);
+  await upcomingAppointments.assertOnPage();
+});
+
+When("I navigate to the log outcomes page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const home = new HomePage(page);
+  await home.assertOnPage();
+  await home.logMoreOutcomes();
+  const logPage = new LogOutcomesPage(page);
+  await logPage.assertOnPage();
+});
+
+When("I navigate to first sensitive upcoming appointment", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const upcomingAppointments = new UpcomingAppointmentsPage(page);
   const managePage = new ManageAppointmentsPage(page);
+  await searchForAppointment(
+    upcomingAppointments,
+    managePage,
+    "Planned office",
+    true,
+  );
   await managePage.assertOnPage();
   await expect(managePage.getQA("sensitiveTag")).toBeVisible();
 });
@@ -69,31 +71,14 @@ When(
   "I navigate to first non sensitive upcoming appointment",
   async ({ ctx }) => {
     const page = ctx.base.page;
-    const home = new HomePage(page);
-    await home.assertOnPage();
-    await home.viewUpcoming();
-    const upcomingAppointments = new UpcomingAppiointmentsPage(page);
-    let id = 0;
-    while (true) {
-      await upcomingAppointments.assertOnPage();
-      try {
-        await upcomingAppointments.selectOfficeVisit(id); //office visits only until person level bug fixed
-      } catch {
-        await upcomingAppointments.pagination("Next");
-        id = 0;
-        continue;
-      }
-      const managePage = new ManageAppointmentsPage(page);
-      await managePage.assertOnPage();
-      try {
-        await expect(managePage.getQA("sensitiveTag")).toHaveCount(0);
-        break;
-      } catch {
-        await managePage.clickBackLink();
-        id += 1;
-      }
-    }
+    const upcomingAppointments = new UpcomingAppointmentsPage(page);
     const managePage = new ManageAppointmentsPage(page);
+    await searchForAppointment(
+      upcomingAppointments,
+      managePage,
+      "Planned office",
+      false,
+    );
     await managePage.assertOnPage();
     await expect(managePage.getQA("sensitiveTag")).toHaveCount(0);
   },
@@ -135,34 +120,9 @@ When(
   "I navigate to latest non sensitive appointment requiring an outcome",
   async ({ ctx }) => {
     const page = ctx.base.page;
-    const home = new HomePage(page);
-    await home.assertOnPage();
-    await home.logMoreOutcomes();
     const logPage = new LogOutcomesPage(page);
-    await logPage.assertOnPage();
     const managePage = new ManageAppointmentsPage(page);
-    let id = 0;
-    while (true) {
-      try {
-        await logPage.selectFirst(id);
-      } catch {
-        await logPage.pagination("Next");
-        id = 0;
-        continue;
-      }
-      await managePage.assertOnPage(); //will backLink if restricted
-      const restricted = await logPage.checkOnPage();
-      if (!restricted) {
-        try {
-          await expect(managePage.getQA("sensitiveTag")).toHaveCount(0);
-          break;
-        } catch {
-          await managePage.clickBackLink();
-          id += 1;
-        }
-      }
-      id += 1;
-    }
+    await searchForAppointment(logPage, managePage, /^Manage$/, false);
     await expect(managePage.getQA("appointmentAlert")).toContainText(
       "You must log an outcome",
     );

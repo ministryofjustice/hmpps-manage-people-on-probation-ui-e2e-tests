@@ -1,6 +1,6 @@
 import { Page } from "@playwright/test";
-import ContactPage from "../Contacts/contact.page";
-import { Address } from "../../../../util/PersonalDetails";
+import ContactPage from "./Contacts/contact.page";
+import { Address } from "../../../util/PersonalDetails";
 
 export const addressFields = [
   "buildingName",

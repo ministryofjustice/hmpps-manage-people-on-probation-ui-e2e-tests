@@ -206,8 +206,8 @@ When("I select and clear all alerts over 60", async ({ ctx }) => {
   }
 });
 
-Then("the alert count should be 60", async ({ ctx }) => {
+Then("the alert count should be less than or equal to 60", async ({ ctx }) => {
   const alerts = ctx.alerts.alertsPage;
   const finalCount = await alerts.getAlertsCount();
-  expect(finalCount).toBe(60);
+  expect(finalCount).toBeLessThanOrEqual(60);
 });

@@ -6,7 +6,7 @@ import {
 } from "../../util/ArrangeAppointment";
 import { testContext } from "../../features/Fixtures";
 import LocationNotInListPage from "../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page";
-import ConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/confirmation.page";
+import ConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/confirmation/confirmation.page";
 import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import { getClientToken } from "../../util/API";
 import { DateTime } from "luxon";
@@ -24,7 +24,7 @@ import AttendancePage from "../../pageObjects/Case/Contacts/Appointments/attenda
 import LocationDateTimePage from "../../pageObjects/Case/Contacts/Appointments/location-datetime.page";
 import SupportingInformationPage from "../../pageObjects/Case/Contacts/Appointments/supporting-information.page";
 import TextConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/text-confirmation-page";
-import ContactDetailsPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/update-contact-details.page";
+import ContactDetailsPage from "../../pageObjects/Case/Contacts/update-contact-details.page";
 import SentencePage from "../../pageObjects/Case/Contacts/Appointments/sentence.page";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import AddNotePage from "../../pageObjects/Case/Contacts/Appointments/add-note.page";

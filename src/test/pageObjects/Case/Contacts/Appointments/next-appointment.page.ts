@@ -9,11 +9,11 @@ export enum NextAction {
 
 export default class NextAppointmentPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
-    super(page, "Do you want to arrange the next appointment with", crn, uuid);
+    super(page, "next supervision appointment", crn, uuid);
   }
 
   async completePage(id: NextAction) {
-    await this.clickRadioById("option", id);
+    await this.clickRadioById("anotherAppointment", id);
     await this.submit();
   }
 }

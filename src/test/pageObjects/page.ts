@@ -1,18 +1,24 @@
 import { expect, Locator, Page } from "@playwright/test";
 
-export default abstract class MPopPage {
+export default class MPopPage {
   readonly page: Page;
   readonly title?: string | RegExp;
 
-  protected constructor(page: Page, title?: string | RegExp) {
+  constructor(page: Page, title?: string | RegExp) {
     this.page = page;
     this.title = title;
   }
 
-  async assertOnPage() {
+  async assertOnPage(): Promise<string | void> {
     await this.page.waitForLoadState("networkidle");
     const onPage = await this.checkOnPage();
-    expect(onPage).toBeTruthy();
+    try {
+      expect(onPage).toBeTruthy();
+    } catch {
+      throw (
+        "Expected to be on page: " + this.constructor.name + ", but was not."
+      );
+    }
   }
 
   async checkOnPage(): Promise<boolean> {
