@@ -7,7 +7,6 @@ Feature: Create Appointments related misc journeys
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
-        Then I end up on the location-not-in-list page
 
     @full @appointments @locationNotInList
     Scenario: Create appointment with critera: locationNotInList for case with criteria: singleSentence, noVisor
