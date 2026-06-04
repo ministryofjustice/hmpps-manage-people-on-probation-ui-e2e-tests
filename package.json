@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "prepare": "hmpps-precommit-hooks-prepare",
     "clean": "rm -rf node_modules .features-gen",
     "clean:feature": "rm -rf .features-gen",
     "rebuild": "npm run clean && npm ci && npx playwright install && npx bddgen",
@@ -16,7 +17,6 @@
     "bdd:debug": "npx cucumber-js --profile debug",
     "perf:run": "gatling run --typescript",
     "perf:home": "gatling run --typescript --sources-folder src/performance --simulation mpop",
-    "prepare": "husky",
     "setup": "npm ci && hmpps-npm-script-run-allowlist"
   },
   "engines": {
@@ -55,6 +55,7 @@
   "dependencies": {
     "@gatling.io/core": "^3.15.101",
     "@gatling.io/http": "^3.15.101",
+    "@ministryofjustice/hmpps-precommit-hooks": "3.0.1",
     "date-fns": "4.3.0",
     "op": "^0.0.6"
   }
