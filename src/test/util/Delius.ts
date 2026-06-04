@@ -35,20 +35,15 @@ export const loginDeliusAndCreateOffender = async (
   let created: boolean;
   let crn: string;
   if (createNewOffender) {
-    console.time("createOffender-forced");
     await loginToDelius(page);
     crn = await createOffender(page, { person, providerName });
     created = true;
-    console.timeEnd("createOffender-forced");
-    console.log("Forced offender creation, CRN: ", crn);
   } else {
-    console.time("manageCreateOffender");
     [crn, person, created] = await manageCreateOffender(
       page,
       person,
       providerName,
     );
-    console.timeEnd("manageCreateOffender");
   }
 
   // Only call internalTransfer if providerName, staff, and team are provided
@@ -68,17 +63,14 @@ export const manageCreateOffender = async (
 ): Promise<[string, Person, boolean]> => {
   if (fs.existsSync(USER_FILE)) {
     const data = JSON.parse(fs.readFileSync(USER_FILE, "utf-8"));
-    console.log("READING CRN from existing file:", data.crn);
     return [data.crn, data.person, false];
   }
 
   let crn;
   try {
     const fd = fs.openSync(TMP_FILE, "wx");
-    console.time("deliusCreateOffender");
     await loginToDelius(page);
     crn = await deliusCreateOffender(page, { person, providerName });
-    console.timeEnd("deliusCreateOffender");
     fs.writeSync(
       fd,
       JSON.stringify({
@@ -88,8 +80,6 @@ export const manageCreateOffender = async (
     );
     fs.closeSync(fd);
     fs.renameSync(TMP_FILE, USER_FILE);
-
-    console.log("Offender Created, CRN: ", crn);
     return [crn, person, true];
     //eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -98,7 +88,6 @@ export const manageCreateOffender = async (
       await new Promise((r) => setTimeout(r, 50));
     }
     const data = JSON.parse(fs.readFileSync(USER_FILE, "utf-8"));
-    console.log("Reading Offender CRN from file: ", data.crn);
     return [data.crn, data.person, false];
   }
 };

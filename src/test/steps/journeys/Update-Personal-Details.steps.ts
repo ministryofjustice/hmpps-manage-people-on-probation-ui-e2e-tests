@@ -44,7 +44,6 @@ When("I can note the current details", async ({ ctx }) => {
 
 When("I change the contact details", async ({ ctx }, data: DataTable) => {
   const contactDetails: ContactDetails = contactDetailsDataTable(data);
-  console.log(contactDetails);
   ctx.details.contactDetails = getUpdatedContactDetails(
     ctx.details.contactDetails!,
     contactDetails,
