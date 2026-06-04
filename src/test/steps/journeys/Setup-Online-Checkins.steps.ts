@@ -1,7 +1,7 @@
 import AppointmentsPage from "../../pageObjects/Case/appointments.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
-import ConfirmationPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/confirmation.page";
-import CheckInSummaryPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/check-in-summary.page";
+import ConfirmationPage from "../../pageObjects/Case/Contacts/Checkins/check-in-confirmation.page";
+import CheckInSummaryPage from "../../pageObjects/Case/Contacts/Checkins/check-in-summary.page";
 import { createBdd, DataTable } from "playwright-bdd";
 import { dueDateString, lastWeek, today } from "../../util/DateTime";
 import {
@@ -44,7 +44,7 @@ import ReviewExpiredPage from "../../pageObjects/Case/Contacts/Checkins/Review/r
 import { expect } from "@playwright/test";
 import EligibilityPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page";
 import PartiallyEligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/partially-eligible.page";
-import DateFrequencyPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
+import DateFrequencyPage from "../../pageObjects/Case/Contacts/Checkins/date-frequency.page";
 import EligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page";
 import IneligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/ineligible.page";
 
@@ -322,7 +322,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
   const caseList = cases.split(",");
   for (let i = 0; i < caseList.length; i++) {
     const crn = caseList[i];
-    console.log(crn);
+    console.log("Looking at: " + crn);
     const contactPage = new ActivityLogPage(page, crn);
     await contactPage.navigateTo();
     await contactPage.assertOnPage();
@@ -332,7 +332,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
         .first()
         .click({ timeout: 3000 });
     } catch {
-      console.log("no checkins");
+      console.log("No checkins found");
       continue;
     }
     const review = new ReviewExpiredPage(page);
@@ -343,7 +343,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
       ctx.checkIns.expiredCrn = crn;
       return;
     } catch {
-      console.log("completed or reviewed");
+      console.log("Checkin is completed or reviewed");
     }
   }
   console.log("No valid cases left");

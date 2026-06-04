@@ -1,7 +1,7 @@
 import { Page } from "@playwright/test";
-import DateFrequencyPage from "../date-frequency.page";
+import CheckInSummaryPage from "../check-in-summary.page";
 
-export default class SetupDateFrequencyPage extends DateFrequencyPage {
+export default class SetupCheckInSummaryPage extends CheckInSummaryPage {
   constructor(page: Page, crn?: string, uuid?: string) {
     super(page, false, crn, uuid);
   }

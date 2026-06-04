@@ -12,7 +12,7 @@ const MPOP_URL = process.env.MANAGE_PEOPLE_ON_PROBATION_URL;
 
 export default class AppointmentsPage extends CasePage {
   constructor(page: Page, crn?: string) {
-    super(page, undefined, crn);
+    super(page, "Appointments", crn);
   }
 
   async goTo(crn?: string) {
@@ -47,8 +47,7 @@ export default class AppointmentsPage extends CasePage {
 
   async checkOnPage(): Promise<boolean> {
     try {
-      await this.checkQA("upcomingAppointments", "Upcoming appointments");
-      await this.checkQA("appointmentHistory", "Appointment history");
+      await this.checkQA("appointments-header-label", "Appointments");
       return true;
     } catch {
       return false;
