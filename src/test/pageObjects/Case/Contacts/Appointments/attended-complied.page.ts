@@ -18,7 +18,7 @@ export class NewAttendedCompliedPage extends ContactPage {
   }
   async completePage() {
     const radioButton = this.page.getByRole("radio", {
-      name: "Attended",
+      name: "Attended - complied",
       exact: true,
     });
     await expect(radioButton).toBeVisible();

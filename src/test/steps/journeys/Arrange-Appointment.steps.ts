@@ -26,7 +26,9 @@ import SupportingInformationPage from "../../pageObjects/Case/Contacts/Appointme
 import TextConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/text-confirmation-page";
 import ContactDetailsPage from "../../pageObjects/Case/Contacts/update-contact-details.page";
 import SentencePage from "../../pageObjects/Case/Contacts/Appointments/sentence.page";
-import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
+import AttendedCompliedPage, {
+  NewAttendedCompliedPage,
+} from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import AddNotePage from "../../pageObjects/Case/Contacts/Appointments/add-note.page";
 import NextAppointmentPage from "../../pageObjects/Case/Contacts/Appointments/next-appointment.page";
 import ArrangeAnotherPage from "../../pageObjects/Case/Contacts/Appointments/arrange-another.page";
@@ -208,9 +210,11 @@ When(
 
 When("I complete the attended complied page", async ({ ctx }) => {
   const page = ctx.base.page;
-  const attendedCompliedPage = new AttendedCompliedPage(page);
-  await attendedCompliedPage.assertOnPage();
-  await attendedCompliedPage.completePage();
+  //const attendedCompliedPage = new AttendedCompliedPage(page);
+  const newAttendedCompliedPage = new NewAttendedCompliedPage(page);
+  //await attendedCompliedPage.assertOnPage();
+  //await attendedCompliedPage.completePage();
+  await newAttendedCompliedPage.completePage();
 });
 
 When(

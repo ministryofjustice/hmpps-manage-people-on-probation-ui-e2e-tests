@@ -1,7 +1,7 @@
 import { expect, Locator, Page } from "@playwright/test";
 import CasePage from "../../pageObjects/Case/casepage";
 
-export default class OutcomePage extends CasePage {
+export default class LogOutcomesPage extends CasePage {
   readonly uuid?: string;
 
   constructor(
@@ -13,7 +13,14 @@ export default class OutcomePage extends CasePage {
     super(page, title, crn);
     this.uuid = uuid;
   }
-
+  async verifyOptions(expected: string[]) {
+    for (const option of expected) {
+      await expect(this.page.getByLabel(option)).toBeVisible();
+    }
+  }
+  async selectOutcome(option: string) {
+    await this.page.getByLabel(option).check();
+  }
   // Radio buttons
   private get attendedCompliedRadio(): Locator {
     return this.page.getByRole("radio", {
