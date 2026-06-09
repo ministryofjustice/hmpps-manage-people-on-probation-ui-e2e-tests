@@ -434,8 +434,8 @@ Then(
     await reschedulePage.completePage(userId, reason, sensitivity);
     ctx.appointments.push({} as MpopArrangeAppointment);
     await page.waitForLoadState("networkidle");
+    ctx.appointments[ctx.appointments.length - 1].sensitivity = sensitivity;
     if (sensitivity === "Yes") {
-      ctx.appointments[ctx.appointments.length - 1].sensitivity = "Yes";
       ctx.appointments[ctx.appointments.length - 1].sensitivityLocked = true;
     }
   },
