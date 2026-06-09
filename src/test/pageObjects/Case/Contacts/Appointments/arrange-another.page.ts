@@ -37,11 +37,15 @@ export default class ArrangeAnotherPage extends ContactPage {
 
   async checkRow(row: string, value: string, link: boolean = true) {
     if (link) {
-      expect(
+      await expect(
         (await this.getSummaryRowByKey(row)).getByRole("link"),
       ).toBeVisible();
     }
-    expect(await this.getSummaryRowByKey(row)).toContainText(value);
+    try {
+      await expect(await this.getSummaryRowByKey(row)).toContainText(value);
+    } catch {
+      throw `Row: ${row} should have value: ${value}`;
+    }
   }
 
   async checkPageFuture(details: MpopArrangeAppointment) {
