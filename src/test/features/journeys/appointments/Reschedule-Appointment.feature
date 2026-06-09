@@ -3,7 +3,7 @@ Feature: Reschedule Appointments
     I want to create appointments
     So that I can manage my schedule
 
-    Background: 
+    Background:
         Given Context has been created for "appointments" test
         And I am logged in
 
@@ -18,7 +18,6 @@ Feature: Reschedule Appointments
         And I complete the location and datetime page with date "PLUS6MONTHS", startTime "01:10", endTime "02:10" and locationID 0
         Then I confirm the text message preview
         When I complete the text message confirmation page with option "No"
-        And I complete the supporting information page with note "" and sensitivity "No"
         Then I can see the correct information on the Reschedule Details page for a future appointment
         When I submit the rescheduled appointment
         Then I can see the Confirmation page for "rescheduled" appointment
