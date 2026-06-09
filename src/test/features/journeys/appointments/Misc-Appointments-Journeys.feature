@@ -3,7 +3,7 @@ Feature: Create Appointments related misc journeys
     I want to create appointments
     So that I can manage my schedule
 
-    Background:        
+    Background:
         Given Context has been created for "appointments" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -15,14 +15,13 @@ Feature: Create Appointments related misc journeys
         And I complete the type attendance page with type "Planned video contact (NS)" and default attendee
         And I complete the location and datetime page with date "LASTWEEK", startTime "12:10", endTime "13:10" and location "The location I’m looking for is not in this list"
         Then I end up on the location-not-in-list page
-        And I close the context    
+        And I close the context
 
     # #requires an appointment to exist
     @full @appointments @similar
     Scenario: Create similar appointment with critera: inFuture and noText for case with criteria: singleSentence, noVisor
-        When I navigate to the appointments page
-        #Can fail if newest is Delius managed
-        And I go to the newest appointment
+        When I navigate to the upcoming appointments page
+        And I navigate to first non sensitive upcoming appointment
         And I select to arrange next appointment
         And I select similar appointment
         And I select the "Choose date and time" link on the Arrange Another page
@@ -59,4 +58,4 @@ Feature: Create Appointments related misc journeys
         And I can see the outlook event was created succesfully
         When I navigate to the reminders service
         Then I can see the appointment text message details
-        And I close the context    
+        And I close the context
