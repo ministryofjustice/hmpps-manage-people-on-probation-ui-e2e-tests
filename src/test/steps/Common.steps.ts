@@ -125,12 +125,10 @@ Given("I navigate to {string}", async ({ ctx }, crn) => {
   ctx.case.crn = crn;
 });
 
-Then("I receive success message {string}", async ({ ctx }) => {
+Then("I receive success message {string}", async ({ ctx }, message) => {
   const page = ctx.base.page;
   await page.waitForLoadState("domcontentloaded");
-  await page
-    .getByRole("heading", { name: "Contact created", level: 2 })
-    .isVisible();
+  await page.getByRole("heading", { name: message, level: 2 }).isVisible();
 });
 
 After(async function ({ ctx }) {
