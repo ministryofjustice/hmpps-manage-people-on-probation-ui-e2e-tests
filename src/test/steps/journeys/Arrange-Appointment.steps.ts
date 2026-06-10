@@ -210,11 +210,11 @@ When(
 
 When("I complete the attended complied page", async ({ ctx }) => {
   const page = ctx.base.page;
-  //const attendedCompliedPage = new AttendedCompliedPage(page);
-  const newAttendedCompliedPage = new NewAttendedCompliedPage(page);
-  //await attendedCompliedPage.assertOnPage();
-  //await attendedCompliedPage.completePage();
-  await newAttendedCompliedPage.completePage();
+  const attendedCompliedPage = new AttendedCompliedPage(page);
+  // const newAttendedCompliedPage = new NewAttendedCompliedPage(page);
+  // await newAttendedCompliedPage.assertOnPage();
+  await attendedCompliedPage.completePage();
+  //await newAttendedCompliedPage.completePage();
 });
 
 When(

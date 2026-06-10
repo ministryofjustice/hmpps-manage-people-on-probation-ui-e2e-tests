@@ -1,94 +1,48 @@
 Feature: Log appointment outcome
-    As a user
-    I want to log Outcomes for any Past Appointments
-    So that I can manage my appointment notes
+  As a user
+  I want to log Outcomes for any Past Appointments
+  So that I can manage my appointment notes
 
   Background:
     Given Context has been created for "Log Outcome for Past Appointment" test
     And I am logged in
-    And I navigate to 'D006309'
+    And I navigate to 'Y011372'
     When I navigate to the appointments page
     And I click to arrange an appointment
 
-
-
-    #Future Appointment Scenario:
-
-  @pastappointment
+  @pastappointment @telephonecontact @homevisit @logoutcome
   Scenario Outline: Validate outcome journeys for different appointment outcomes TEST
     When I complete the type attendance page with type "<appointmentType>" and default attendee
-    And I complete the location and datetime page with date "LASTWEEK", startTime "10:10", endTime "11:11" and location "Chelmsford"
-    And I complete the attended complied page
-#    And I complete the add note page with note "test" and sensitivity "No"
-#    Then I can see the correct information on the CYA page for a past appointment
-#    When I submit the appointment
-#    Then I can see the Confirmation page for "past" appointment
-#    When I navigate to the appointments page
-#    And I access the created appointment
-#    Then I can see the Manage page
-#    When I click the "Log appointment outcome" link
-#    Then I am on the "Outcome" page
+    And I complete the location and datetime page with date "LASTWEEK", startTime "10:10", endTime "11:11" and location "Wrexham Team Office"
+    Then I am on the what was the outcome of this appointment? page
     And I can see the following outcome options:
-      | outcome                      |
-      | Attended - complied          |
-      | Attended - failed to comply  |
-      | Unacceptable absence         |
-      | Failed to attend             |
+      | outcome                     |
+      | Attended - complied         |
+      | Attended - failed to comply |
+      | Acceptable absence          |
+      | Unacceptable absence        |
+      | Failed to attend            |
+
     When I select the option "<outcomeType>" and continue
-#    Then I am navigated to the "<nextPage>" page
+    And I complete the acceptable absence reason page if applicable "<outcomeType>"
+    Then I am navigated to the "<enforcementPage>" page
+    When I select the enforcement action "<enforcementAction>" and continue
+    Then I am navigated to the "<recallPage>" page
+    When I complete the add a note page
+    And I complete the next appointment page
+    Then I am on the check your answers page
+#    And I confirm the appointment outcome
+#    Then I am on the confirmation page
 
     Examples:
-      | appointmentType                          | outcomeType                      | nextPage                    |
-      | Planned video contact (NS)               | Attended - complied             | Add a note                  |
-#      | Planned video contact (NS)               | Attended - failed to comply     | Enforcement action          |
-#      | Planned video contact (NS)               | Unacceptable absence            | Unacceptable absence        |
-#      | Planned video contact (NS)               | Failed to attend                | Failed to attend            |
-#      | Planned telephone contact (NS)           | Attended - complied             | Add a note                  |
-#      | Planned telephone contact (NS)           | Attended - failed to comply     | Enforcement action          |
-#      | Planned telephone contact (NS)           | Unacceptable absence            | Unacceptable absence        |
-#      | Planned telephone contact (NS)           | Failed to attend                | Failed to attend            |
-#      | Planned Contact - other than office (NS) | Attended - complied             | Add a note                  |
-#      | Planned Contact - other than office (NS) | Attended - failed to comply     | Enforcement action          |
-#      | Planned Contact - other than office (NS) | Unacceptable absence            | Unacceptable absence        |
-#      | Planned Contact - other than office (NS) | Failed to attend                | Failed to attend            |
-
-  # Not Responsible officee or PP will display Refer to offender manager
-#  @pastappointment
-#  Scenario Outline: Validate outcome journeys for different appointment outcomes
-#    When I complete the type attendance page with type "<appointmentType>" and default attendee
-#    And I complete the location and datetime page with date "LASTWEEK", startTime "10:10", endTime "11:11" and location "Chelmsford"
-#
-#    Then I am on the "Outcome" page
-##    And I can see the following outcome options:
-##      | outcome                      |
-##      | Attended - complied          |
-##      | Attended - failed to comply  |
-##      | Unacceptable absence         |
-##      | Failed to attend             |
-##
-##    When I select the option "<outcome>" and continue
-##    Then I am navigated to the "<nextPage>" page
-##
-##    And I can see the following enforcement options:
-#      | enforcementOption                                                          |
-#      | Send a letter                                                              |
-#      | [~] initiate a breach - [~] initiate a recall                              |
-#      | [~] initiate a breach - [~] initiate a recall - and send a letter          |
-#      | Refer to offender manager                                                  |
-#      | Notify the allocated probation practitioner so they can take action        |
-#      | No further action                                                          |
-#      | I want to add a different action                                           |
-#
-#    Examples:
-#      | appointmentType                          | outcome                         | nextPage                                             |
-#      | Planned video contact (NS)               | Attended - failed to comply     | Failure to comply - NOT responsible officer          |
-#      | Planned telephone contact (NS)           | Attended - failed to comply     | Failure to comply - Telephone/home visit appointment |
-#      | Planned Contact - other than office (NS) | Attended - failed to comply     | Failure to comply - Telephone/home visit appointment |
-
-
-
-
-
-
-
-
+      | appointmentType                | outcomeType                 | enforcementPage      | enforcementAction | recallPage        |
+      | Planned telephone contact (NS) | Attended - complied         |                      |                   |                   |
+      | Planned telephone contact (NS) | Acceptable absence          |                      |                   |                   |
+      | Planned telephone contact (NS) | Attended - failed to comply | failure to comply    | Initiate a breach | Initiate a recall |
+      | Planned telephone contact (NS) | Unacceptable absence        | unacceptable absence | Initiate a breach | Initiate a recall |
+#      | Planned telephone contact (NS) | Failed to attend            | absence              | Send a letter     | Send a letter     |
+#      | Home visit to case (NS)        | Attended - complied         |                      |                   |                   |
+#      | Home visit to case (NS)        | Acceptable absence          |                      |                   |                   |
+#      | Home visit to case (NS)        | Attended - failed to comply | failure to comply    | Initiate a breach | Initiate a recall |
+#      | Home visit to case (NS)        | Unacceptable absence        | unacceptable absence | Initiate a breach | Initiate a recall |
+#      | Home visit to case (NS)        | Failed to attend            | absence              | Send a letter     | Send a letter     |

@@ -15,7 +15,12 @@ export default class LogOutcomesPage extends CasePage {
   }
   async verifyOptions(expected: string[]) {
     for (const option of expected) {
-      await expect(this.page.getByLabel(option)).toBeVisible();
+      await expect(
+        this.page.getByRole("radio", {
+          name: option,
+          exact: true,
+        }),
+      ).toBeVisible();
     }
   }
   async selectOutcome(option: string) {

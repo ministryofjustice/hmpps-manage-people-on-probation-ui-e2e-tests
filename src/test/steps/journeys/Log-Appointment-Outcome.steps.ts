@@ -1,11 +1,22 @@
 import { expect } from "@playwright/test";
 import { createBdd, DataTable } from "playwright-bdd";
-import AppointmentsPage from "../../pageObjects/Case/appointments.page";
 import { testContext } from "../../features/Fixtures";
-import LocationNotInListPage from "../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page";
 import OverviewPage from "../../pageObjects/Case/overview.page";
-import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import LogOutcomesPage from "../../pageObjects/Case/log-outcomes.page";
+import AddNotePage from "../../pageObjects/Case/Contacts/Appointments/add-note.page";
+import { NewAttendedCompliedPage } from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
+import {
+  LogAppointmentOutcomePage,
+  UnacceptableAbsencePage,
+  FailedToAttendPage,
+  InitiateARecallPage,
+  SendALetterPage,
+  AcceptableAbsencePage,
+} from "../../pageObjects/Case/Contacts/Appointments/log-appointment-outcome.page";
+import NextAppointmentPage, {
+  NextAction,
+} from "../../pageObjects/Case/Contacts/Appointments/next-appointment.page";
+import CheckYourAnswersPage from "../../pageObjects/Case/Contacts/Appointments/logoutcome-CYA.page";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -19,60 +30,154 @@ Given("I navigate to appointment page", async ({ ctx }) => {
 
 Then(
   "I can see the following outcome options:",
-  async ({ ctx }, dataTable: string[][]) => {
-    const expectedOptions = dataTable.map((row) => row[0]);
+  async ({ ctx }, dataTable: DataTable) => {
+    const expectedOptions = dataTable.rows().map((row) => row[0]);
     await new LogOutcomesPage(ctx.base.page).verifyOptions(expectedOptions);
+  },
+);
+
+Then(
+  "I am on the what was the outcome of this appointment? page",
+  async ({ ctx }) => {
+    const newAttendedCompliedPage = new NewAttendedCompliedPage(ctx.base.page);
+    await newAttendedCompliedPage.assertOnPage();
   },
 );
 
 When(
   "I select the option {string} and continue",
   async ({ ctx }, option: string) => {
-    const outcomePage = new LogOutcomesPage(ctx.base.page);
-
-    switch (option) {
-      case "Attended - complied":
-        await outcomePage.selectAttendedComplied();
-        break;
-
-      case "Attended - failed to comply":
-        await outcomePage.selectAttendedFailedToComply();
-        break;
-
-      case "Unacceptable absence":
-        await outcomePage.selectUnacceptableAbsence();
-        break;
-
-      case "Failed to attend":
-        await outcomePage.selectFailedToAttend();
-        break;
-
-      default:
-        throw new Error(`Unknown outcome option: ${option}`);
-    }
-
-    await outcomePage.submit();
+    const page = ctx.base.page;
+    const newAttendedCompliedPage = new NewAttendedCompliedPage(page);
+    await newAttendedCompliedPage.selectRadioOption(option);
   },
 );
-//
-// Then("I am navigated to the {string} page", async function (nextPage: string) {
-//   const pageMap: Record<string, () => Promise<void>> = {
-//     "Add a note": async () => {
-//       await this.addNotePage.assertOnPage();
-//     },
-//     "Enforcement action": async () => {
-//       await this.enforcementActionPage.assertOnPage();
-//     },
-//     "Unacceptable absence": async () => {
-//       await this.unacceptableAbsencePage.assertOnPage();
-//     },
-//     "Failed to attend": async () => {
-//       await this.failedToAttendPage.assertOnPage();
-//     },
-//   };
-//   const handler = pageMap[nextPage];
-//   if (!handler) {
-//     throw new Error(`Unknown next page: ${nextPage}`);
-//   }
-//   await handler();
+
+When(
+  "I select the enforcement action {string} and continue",
+  async ({ ctx }, enforcementAction: string) => {
+    const page = ctx.base.page;
+    if (!enforcementAction) return;
+    switch (enforcementAction) {
+      case "Initiate a breach": {
+        const attendedFailedToComplyPage = new LogAppointmentOutcomePage(page);
+        await attendedFailedToComplyPage.selectRadioOption("Initiate a breach");
+        break;
+      }
+      case "Send a letter": {
+        const failedToAttendPage = new FailedToAttendPage(page);
+        await failedToAttendPage.selectRadioOption("Send a letter");
+        break;
+      }
+      default:
+        throw new Error(`Unknown enforcement action: ${enforcementAction}`);
+    }
+  },
+);
+
+Then(
+  "I am navigated to the {string} page",
+  async ({ ctx }, nextPage: string) => {
+    const page = ctx.base.page;
+
+    if (!nextPage) return;
+
+    const getPageType = (page: string) => {
+      if (/unacceptable absence/i.test(page)) return "unacceptable absence";
+      if (/failure to comply/i.test(page)) return "failure to comply";
+      if (/absence/i.test(page)) return "absence";
+      if (/initiate a recall/i.test(page)) return "initiate a recall";
+      if (/send a letter/i.test(page)) return "send a letter";
+      return page;
+    };
+
+    switch (getPageType(nextPage)) {
+      case "failure to comply": {
+        const attendedFailedToComplyPage = new LogAppointmentOutcomePage(page);
+        await attendedFailedToComplyPage.assertOnPage();
+        break;
+      }
+      case "unacceptable absence": {
+        const unacceptableAbsencePage = new UnacceptableAbsencePage(page);
+        await unacceptableAbsencePage.assertOnPage();
+        break;
+      }
+      case "absence": {
+        const failedToAttendPage = new FailedToAttendPage(page);
+        await failedToAttendPage.assertOnPage();
+        break;
+      }
+      case "initiate a recall": {
+        const initiateARecallPage = new InitiateARecallPage(page);
+        await initiateARecallPage.assertOnPage();
+        await initiateARecallPage.completePage();
+        break;
+      }
+      case "send a letter": {
+        const sendALetterPage = new SendALetterPage(page);
+        await sendALetterPage.assertOnPage();
+        await sendALetterPage.completePage();
+        break;
+      }
+      default:
+        throw new Error(`Unknown page: ${nextPage}`);
+    }
+  },
+);
+
+When(
+  "I complete the acceptable absence reason page if applicable {string}",
+  async ({ ctx }, outcomeType: string) => {
+    if (outcomeType !== "Acceptable absence") return;
+    const page = ctx.base.page;
+    const acceptableAbsencePage = new AcceptableAbsencePage(page);
+    await acceptableAbsencePage.assertOnPage();
+    await acceptableAbsencePage.completePage();
+  },
+);
+
+When("I complete the add a note page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const addNotePage = new AddNotePage(page);
+  await addNotePage.assertOnPage();
+  await addNotePage.completePage("test", "no");
+  if (ctx.appointments.length > 0) {
+    ctx.appointments[ctx.appointments.length - 1].note = "test";
+    ctx.appointments[ctx.appointments.length - 1].sensitivity = "No";
+  } else {
+    ctx.manage.note = "test";
+  }
+});
+
+// When("I complete the next appointment page", async ({ ctx }) => {
+//   const page = ctx.base.page;
+//   const nextAppointmentPage = new NextAppointmentPage(page);
+//   await nextAppointmentPage.assertOnPage();
+//   await nextAppointmentPage.completePage(NextAction.No);
 // });
+When("I complete the next appointment page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const nextAppointmentPage = new NextAppointmentPage(page);
+  const url = page.url();
+  if (url.includes("next-appointment")) {
+    await nextAppointmentPage.completePage(NextAction.No);
+  }
+});
+Then("I am on the check your answers page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const checkYourAnswersPage = new CheckYourAnswersPage(page);
+  await checkYourAnswersPage.assertOnPage();
+});
+
+Then("I confirm the appointment outcome", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const checkYourAnswersPage = new CheckYourAnswersPage(page);
+  await checkYourAnswersPage.completePage();
+});
+
+Then("I am on the confirmation page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  await expect(page.locator('[data-qa="pageHeading"]')).toContainText(
+    "Appointment outcome updated",
+  );
+});
