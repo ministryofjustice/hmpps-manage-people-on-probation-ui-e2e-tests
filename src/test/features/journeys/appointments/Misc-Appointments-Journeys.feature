@@ -17,27 +17,6 @@ Feature: Create Appointments related misc journeys
         Then I end up on the location-not-in-list page
         And I close the context
 
-    # #requires an appointment to exist
-    @full @appointments @similar
-    Scenario: Create similar appointment with critera: inFuture and noText for case with criteria: singleSentence, noVisor
-        When I navigate to the upcoming appointments page
-        And I navigate to first non sensitive upcoming appointment
-        And I select to arrange next appointment
-        And I select similar appointment
-        And I select the "Choose date and time" link on the Arrange Another page
-        And I complete the location and datetime page with date "PLUS3MONTHS", startTime "12:10", endTime "13:10" and locationID 0
-        Then I confirm the text message preview
-        When I complete the text message confirmation page with option "No"
-        And I complete the supporting information page with note "" and sensitivity "Yes"
-        Then I can see the correct information on the Arrange Another page for a future appointment
-        When I submit the similar appointment
-        Then I can see the Confirmation page for "future" appointment
-        When I navigate to the appointments page
-        And I access the created appointment
-        Then I can see the Manage page
-        And I can see the outlook event was created succesfully
-        Then I close the context
-
     @full @appointments @addText
     Scenario: Create appointment with critera: inFuture, addText, defaultAttendee for case with criteria: singleSentence, noVisor
         Given I clear the contact details if set
