@@ -67,6 +67,7 @@ import RestartDateFrequencyPage from "../pageObjects/Case/Contacts/Checkins/Rest
 import SetupContactPreferencePage from "../pageObjects/Case/Contacts/Checkins/SetUp/contact-preference.page";
 import SetupDateFrequencyPage from "../pageObjects/Case/Contacts/Checkins/SetUp/date-frequency.page";
 import MPopPage from "../pageObjects/page";
+import CasePage from "../pageObjects/Case/casepage";
 
 const { When, Then } = createBdd(testContext);
 
@@ -163,6 +164,27 @@ When("I click on the {string} link", async ({ ctx }, linkText: string) => {
 When("I click on the {string} button", async ({ ctx }, buttonText: string) => {
   await ctx.base.page.getByRole("button", { name: buttonText }).click();
 });
+
+When("I submit the page", async ({ ctx }) => {
+  if (ctx.base.currentPage) {
+    await ctx.base.currentPage.submit();
+  } else {
+    const MpopPage = new MPopPage(ctx.base.page);
+    await MpopPage.submit();
+  }
+});
+
+When(
+  "I select the {string} in case navigation",
+  async ({ ctx }, tabQA: string) => {
+    if (ctx.base.currentPage instanceof CasePage) {
+      await ctx.base.currentPage.useSubNavigation(tabQA);
+    } else {
+      const casePage = new CasePage(ctx.base.page);
+      await casePage.useSubNavigation(tabQA);
+    }
+  },
+);
 
 When(
   "I click on the {string} radio option in {string} section",

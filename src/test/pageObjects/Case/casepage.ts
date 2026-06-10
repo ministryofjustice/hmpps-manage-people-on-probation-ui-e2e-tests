@@ -1,12 +1,20 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 
-export default abstract class CasePage extends MPopPage {
+export default class CasePage extends MPopPage {
   readonly crn?: string;
 
-  protected constructor(page: Page, title?: string | RegExp, crn?: string) {
+  constructor(page: Page, title?: string | RegExp, crn?: string) {
     super(page, title);
     this.crn = crn;
+  }
+
+  async getCRN(): Promise<string> {
+    const crnLocator = this.page.locator(`[data-qa="crn"]`);
+    await expect(crnLocator).toBeVisible();
+    const crnText =
+      (await crnLocator.textContent())?.replace(/\s+/g, " ").trim() || "";
+    return crnText;
   }
 
   async assertOnPage(allowRestricted: boolean = true): Promise<string | void> {

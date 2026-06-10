@@ -6,7 +6,7 @@ export const searchForAppointment = async (
   initialPage: MPopPage,
   targetPage: ManageAppointmentsPage,
   type: string | RegExp,
-  sensitive: boolean,
+  sensitive?: boolean,
 ) => {
   let id = 0;
   while (true) {
@@ -24,9 +24,11 @@ export const searchForAppointment = async (
       continue;
     }
     try {
-      await expect(targetPage.getQA("sensitiveTag")).toHaveCount(
-        sensitive ? 1 : 0,
-      );
+      if (sensitive !== undefined) {
+        await expect(targetPage.getQA("sensitiveTag")).toHaveCount(
+          sensitive ? 1 : 0,
+        );
+      }
       break;
     } catch {
       await targetPage.clickBackLink();
