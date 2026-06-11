@@ -94,6 +94,30 @@ export class SendALetterPage extends ContactPage {
     await expect(radioButton).toBeVisible();
     await radioButton.check();
     await expect(radioButton).toBeChecked();
+    const radioButtonLetterType = this.page.getByRole("radio", {
+      name: "First warning letter",
+      exact: true,
+    });
+    await expect(radioButtonLetterType).toBeVisible();
+    await radioButtonLetterType.check();
+    await expect(radioButtonLetterType).toBeChecked();  
+    await this.submit();
+  }
+}
+
+export class InitiateABreachPage extends ContactPage {
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Initiate a breach", crn, uuid);
+  }
+
+  async completePage() {
+    const radioButton = this.page.getByRole("radio", {
+      name: "Case administrator",
+      exact: true,
+    });
+    await expect(radioButton).toBeVisible();
+    await radioButton.check();
+    await expect(radioButton).toBeChecked();
     await this.submit();
   }
 }

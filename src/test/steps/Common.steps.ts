@@ -122,6 +122,12 @@ Given("I navigate to {string}", async ({ ctx }, crn) => {
   ctx.case.crn = crn;
 });
 
+Given("I pick a CRN {string}", async ({ ctx }, crn) => {
+  const overviewPage = new OverviewPage(ctx.base.page, crn);
+  await overviewPage.navigateTo(crn);
+  ctx.case.crn = crn;
+});
+
 Then("I receive success message {string}", async ({ ctx }) => {
   const page = ctx.base.page;
   await page.waitForLoadState("domcontentloaded");

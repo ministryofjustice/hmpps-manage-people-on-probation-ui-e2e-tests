@@ -12,6 +12,7 @@ import {
   InitiateARecallPage,
   SendALetterPage,
   AcceptableAbsencePage,
+  InitiateABreachPage,
 } from "../../pageObjects/Case/Contacts/Appointments/log-appointment-outcome.page";
 import NextAppointmentPage, {
   NextAction,
@@ -69,6 +70,11 @@ When(
         await failedToAttendPage.selectRadioOption("Send a letter");
         break;
       }
+      case "Initiate a recall": {
+        const initiateARecallPage = new LogAppointmentOutcomePage(page);
+        await initiateARecallPage.selectRadioOption("Initiate a recall");
+        break;
+      }
       default:
         throw new Error(`Unknown enforcement action: ${enforcementAction}`);
     }
@@ -88,6 +94,7 @@ Then(
       if (/absence/i.test(page)) return "absence";
       if (/initiate a recall/i.test(page)) return "initiate a recall";
       if (/send a letter/i.test(page)) return "send a letter";
+      if (/initiate a breach/i.test(page)) return "initiate a breach";
       return page;
     };
 
@@ -117,6 +124,12 @@ Then(
         const sendALetterPage = new SendALetterPage(page);
         await sendALetterPage.assertOnPage();
         await sendALetterPage.completePage();
+        break;
+      }
+      case "initiate a breach": {
+        const initiateABreachPage = new InitiateABreachPage(page);
+        await initiateABreachPage.assertOnPage();
+        await initiateABreachPage.completePage();
         break;
       }
       default:
@@ -177,7 +190,10 @@ Then("I confirm the appointment outcome", async ({ ctx }) => {
 
 Then("I am on the confirmation page", async ({ ctx }) => {
   const page = ctx.base.page;
-  await expect(page.locator('[data-qa="pageHeading"]')).toContainText(
-    "Appointment outcome updated",
-  );
+  const heading = page.locator('[data-qa="pageHeading"]');
+  try {
+    await expect(heading).toContainText("Past appointment arranged");
+  } catch {
+    await expect(heading).toContainText("You\u2019ve already arranged this appointment");
+  }
 });

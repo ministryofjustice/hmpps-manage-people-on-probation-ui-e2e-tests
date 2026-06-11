@@ -59,6 +59,7 @@ When("I click to arrange an appointment", async ({ ctx }) => {
 When(
   "I complete the sentence page with sentence {string}",
   async ({ ctx }, sentence: string) => {
+    if (!sentence) return;
     const page = ctx.base.page;
     const sentencePage = new SentencePage(page);
     await sentencePage.assertOnPage();
