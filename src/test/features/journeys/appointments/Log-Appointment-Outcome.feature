@@ -36,6 +36,7 @@ Feature: Log appointment outcome
     Then I am on the confirmation page
 
     Examples:
+      # ------ Passing tests --------
       | case_crn | sentenceType                      | appointmentType                          | location            | outcomeType                 | enforcementPage      | enforcementAction | recallPage        |
       | Y013598  |                                   | Planned office visit (NS)                | Wrexham Team Office | Attended - complied         |                      |                   |                   |
       | Y013524  |                                   | Planned telephone contact (NS)           | Wrexham Team Office | Acceptable absence          |                      |                   |                   |
@@ -45,6 +46,7 @@ Feature: Log appointment outcome
       | Y013603  | SA2020 Community Order (6 Months) | 3 way meeting (NS)                       | Wrexham Team Office | Attended - complied         |                      |                   |                   |
       | Y013291  |                                   | Planned doorstep contact (NS)            | Wrexham Team Office | Acceptable absence          |                      |                   |                   |
       | Y013332  |                                   | Home visit to case (NS)                  | Wrexham Team Office | Attended - failed to comply | failure to comply    | Initiate a recall | Initiate a recall |
+      # -------------------------
       | Y013352  |                                   | Planned office visit (NS)                | Wrexham Team Office | Attended - complied         |                      |                   |                   |
       | Y012277  |                                   | Planned telephone contact (NS)           | Wrexham Team Office | Acceptable absence          |                      |                   |                   |
       | Y012571  |                                   | Planned video contact (NS)               | Wrexham Team Office | Attended - failed to comply | failure to comply    | Initiate a breach | Initiate a breach |
@@ -77,7 +79,6 @@ Feature: Log appointment outcome
       | Y008341  |                                   | 3 way meeting (NS)                       | Wrexham Team Office | Attended - complied         |                      |                   |                   |
       | Y007848  |                                   | Planned doorstep contact (NS)            | Wrexham Team Office | Acceptable absence          |                      |                   |                   |
       | Y008647  |                                   | Home visit to case (NS)                  | Wrexham Team Office | Attended - failed to comply | failure to comply    | Initiate a breach | Initiate a breach |
-      # Group 6 - recall
       | Y009258  |                                   | Planned office visit (NS)                | Wrexham Team Office | Attended - complied         |                      |                   |                   |
       | Y009776  |                                   | Planned telephone contact (NS)           | Wrexham Team Office | Acceptable absence          |                      |                   |                   |
       | Y011981  |                                   | Planned video contact (NS)               | Wrexham Team Office | Attended - failed to comply | failure to comply    | Initiate a recall | Initiate a recall |
