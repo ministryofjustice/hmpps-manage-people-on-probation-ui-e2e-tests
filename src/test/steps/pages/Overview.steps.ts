@@ -41,3 +41,43 @@ When("I select the outcome link", async ({ ctx }) => {
   const overviewPage = new OverviewPage(ctx.base.page);
   await overviewPage.selectOutcomeLink();
 });
+
+Then(
+    "I see {string} under ORA Community Order at overview page",
+    async ({ ctx }, expectedText: string) => {
+      const overviewPage = new OverviewPage(ctx.base.page);
+      await overviewPage.assertRequirementText(expectedText);
+    },
+);
+
+Then(
+    "I see {string} link under Requirements section at overview page",
+    async ({ ctx }, expectedText: string) => {
+      const overviewPage = new OverviewPage(ctx.base.page);
+      await overviewPage.assertGPSDataLink(expectedText);
+    },
+);
+
+When(
+    "I select {string} link at overview page",
+    async ({ ctx }, linkName: string) => {
+      const overviewPage = new OverviewPage(ctx.base.page);
+      await overviewPage.selectLink(linkName);
+    },
+);
+
+Then(
+    "I see {string} under ORA Adult Custody at overview page",
+    async ({ ctx }, expectedText: string) => {
+      const overviewPage = new OverviewPage(ctx.base.page);
+      await overviewPage.assertRequirementText(expectedText);
+    },
+);
+
+Then(
+    "I see {string} link under Licence conditions at overview page",
+    async ({ ctx }, expectedText: string) => {
+      const overviewPage = new OverviewPage(ctx.base.page);
+      await overviewPage.assertGPSDataLink(expectedText);
+    },
+);
