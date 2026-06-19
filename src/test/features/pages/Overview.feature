@@ -37,3 +37,19 @@ Feature: As a practitioner
     Examples:
       | case    |
       | X756510 |
+
+
+  @full @sentence
+  Scenario Outline: View requirements and licence conditions under sentence tab for a case - '<case>'
+    Given Context has been created for "Overview" test
+    And I am logged in
+    And I navigate to '<case_crn>'
+    And the overview page is populated
+    Then I see 'Requirements' under ORA Community Order at overview page
+    And I see 'View (GPS tagging) Trail Monitoring data' link under Requirements section at overview page
+    Then I see 'Licence conditions' under ORA Adult Custody at overview page
+    Then I see 'View GPS location monitoring data' link under Licence conditions at overview page
+    And I close the context
+    Examples:
+      | case_crn |
+      | X969367  |
