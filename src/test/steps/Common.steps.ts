@@ -13,6 +13,7 @@ import OverviewPage from "../pageObjects/Case/overview.page";
 import PersonalDetailsPage from "../pageObjects/Case/personal-details.page";
 import AxeBuilder from "@axe-core/playwright";
 import { expect } from "@playwright/test";
+import CreateSentencePlanPage from "../pageObjects/Case/create-sentence-plan.page";
 
 const { Given, Then, After } = createBdd(testContext);
 
@@ -29,6 +30,14 @@ Given(
     };
   },
 );
+
+Given("Create sentence plan for a case", async ({ ctx }) => {
+  const createSentencePlanPage = new CreateSentencePlanPage(ctx.base.page);
+  await createSentencePlanPage.gotToPage();
+  await createSentencePlanPage.customiseScenario(ctx.case.crn);
+  await createSentencePlanPage.createGoal();
+  await createSentencePlanPage.agreeOnPlan();
+});
 
 Given("A new offender has been created in Ndelius", async ({ ctx }) => {
   const [person, crn] = await loginDeliusAndCreateOffender(
@@ -117,6 +126,11 @@ Then("I close the context", async ({ ctx }) => {
   const context = ctx.base.context;
   ctx.appointments = [];
   await context.close();
+});
+
+Given("I navigate to the person on probation", async ({ ctx }) => {
+  const overviewPage = new OverviewPage(ctx.base.page, ctx.case.crn);
+  await overviewPage.navigateTo(ctx.base.currentCrn);
 });
 
 Given("I navigate to {string}", async ({ ctx }, crn) => {
