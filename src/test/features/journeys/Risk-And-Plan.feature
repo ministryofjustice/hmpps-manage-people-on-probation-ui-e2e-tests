@@ -8,7 +8,7 @@ Feature: Verify Sentence Plan exists
     And Create sentence plan for a case
     And I am logged in
 
-  @sentenceplan @integration @anand
+  @sentenceplan @integration @full
   Scenario: Verify Sentence Plan exists
     Given I navigate to the person on probation
     When I navigate to the Risk and Plan tab
