@@ -34,40 +34,40 @@ Then(
 );
 
 When(
-    "I select {string} link at sentence page",
-    async ({ ctx }, linkName: string) => {
-        const sentencePage = new SentencePage(ctx.base.page);
-        await sentencePage.selectLink(linkName);
-    },
+  "I select {string} link at sentence page",
+  async ({ ctx }, linkName: string) => {
+    const sentencePage = new SentencePage(ctx.base.page);
+    await sentencePage.selectLink(linkName);
+  },
 );
 
 Then(
-    "I see {string} under ORA Community Order at sentence page",
-    async ({ ctx }, expectedText: string) => {
-        const sentencePage = new SentencePage(ctx.base.page);
-        await sentencePage.assertRequirementText(expectedText);
-    },
+  "I see {string} under ORA Community Order at sentence page",
+  async ({ ctx }, expectedText: string) => {
+    const sentencePage = new SentencePage(ctx.base.page);
+    await sentencePage.assertRequirementText(expectedText);
+  },
 );
 
 Then(
-    "I see {string} link under Requirements section at sentence page",
-    async ({ ctx }, expectedText: string) => {
-        const sentencePage = new SentencePage(ctx.base.page);
-        await sentencePage.assertGPSDataLink(expectedText);
-    },
+  "I see {string} link under Requirements section at sentence page",
+  async ({ ctx }, expectedText: string) => {
+    const sentencePage = new SentencePage(ctx.base.page);
+    await sentencePage.assertGPSDataLink(expectedText);
+  },
 );
 Then(
-    "I see {string} under ORA Adult Custody at sentence page",
-    async ({ ctx }, expectedText: string) => {
-        const sentencePage = new SentencePage(ctx.base.page);
-        await sentencePage.assertRequirementText(expectedText);
-    },
+  "I see {string} under ORA Adult Custody at sentence page",
+  async ({ ctx }, expectedText: string) => {
+    const sentencePage = new SentencePage(ctx.base.page);
+    await sentencePage.assertRequirementText(expectedText);
+  },
 );
 
 Then(
-    "I see {string} link under Licence conditions at sentence page",
-    async ({ ctx }, expectedText: string) => {
-        const sentencePage = new SentencePage(ctx.base.page);
-        await sentencePage.assertGPSDataLink(expectedText);
-    },
+  "I see {string} link under Licence conditions at sentence page",
+  async ({ ctx }, expectedText: string) => {
+    const sentencePage = new SentencePage(ctx.base.page);
+    await sentencePage.assertGPSDataLink(expectedText);
+  },
 );
