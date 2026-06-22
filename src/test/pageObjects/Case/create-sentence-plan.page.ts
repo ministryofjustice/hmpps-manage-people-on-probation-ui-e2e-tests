@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 import CasePage from "./casepage";
 
 dotenv.config({ path: ".env" });
-const arnsSentencePlanUrl: string = process.env.ARNS_SENTENCE_PLAN_URL;
+const arnsSentencePlanUrl: string = process.env.ARNS_SENTENCE_PLAN_URL!;
 
 export default class CreateSentencePlanPage extends CasePage {
   constructor(page: Page, crn?: string) {
