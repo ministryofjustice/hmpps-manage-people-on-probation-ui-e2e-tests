@@ -36,7 +36,7 @@
     "@gatling.io/cli": "^3.15.102",
     "@ministryofjustice/hmpps-npm-script-allowlist": "0.0.6",
     "@ministryofjustice/hmpps-probation-integration-e2e-tests": "1.235.0",
-    "@playwright/test": "1.61.0",
+    "@playwright/test": "1.60.0",
     "@types/luxon": "^3.7.1",
     "@types/node": "^22.19.21",
     "@typescript-eslint/eslint-plugin": "^8.61.1",
@@ -48,8 +48,8 @@
     "husky": "^9.1.7",
     "luxon": "^3.7.2",
     "playwright-bdd": "^9.1.0",
-    "playwright-core": "1.61.0",
     "prettier": "^3.8.4",
+    "playwright-core": "1.60.0",
     "tsx": "^4.22.4"
   },
   "dependencies": {
