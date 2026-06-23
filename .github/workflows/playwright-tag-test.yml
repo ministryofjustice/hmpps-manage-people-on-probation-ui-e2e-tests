@@ -62,6 +62,7 @@ jobs:
           SIGN_IN_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
           OUTLOOK_API_URL: https://probation-supervision-appointments-api-dev.hmpps.service.justice.gov.uk
           REMINDERS_UI_URL: https://probation-supervision-reminders-ui-dev.hmpps.service.justice.gov.uk
+          ARNS_SENTENCE_PLAN_URL: https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk/training-session-launcher/browse?scenario=default
 
           # Credentials
           DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
