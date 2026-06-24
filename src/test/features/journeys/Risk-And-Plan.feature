@@ -4,13 +4,12 @@ Feature: Verify Sentence Plan exists
 
   Background:
     Given Context has been created for "RiskAndPlan" test
+    And A new offender has been created or existing made available
+    And Create sentence plan for a case
     And I am logged in
 
-  @sentenceplan @integration
-  Scenario Outline: Verify Sentence Plan exists
-    Given I navigate to '<case>'
+  @sentenceplan @integration @full
+  Scenario: Verify Sentence Plan exists
+    Given I navigate to the person on probation
     When I navigate to the Risk and Plan tab
     Then I can see the Sentence Plan link
-    Examples:
-       | case    |
-       | X997911 |

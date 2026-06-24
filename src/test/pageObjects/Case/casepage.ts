@@ -1,12 +1,20 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 
-export default abstract class CasePage extends MPopPage {
+export default class CasePage extends MPopPage {
   readonly crn?: string;
 
-  protected constructor(page: Page, title?: string | RegExp, crn?: string) {
+  constructor(page: Page, title?: string | RegExp, crn?: string) {
     super(page, title);
     this.crn = crn;
+  }
+
+  async getCRN(): Promise<string> {
+    const crnLocator = this.page.locator(`[data-qa="crn"]`);
+    await expect(crnLocator).toBeVisible();
+    const crnText =
+      (await crnLocator.textContent())?.replace(/\s+/g, " ").trim() || "";
+    return crnText;
   }
 
   async assertOnPage(allowRestricted: boolean = true): Promise<string | void> {
@@ -71,5 +79,37 @@ export default abstract class CasePage extends MPopPage {
     await this.page
       .locator(".govuk-notification-banner__content ul li a")
       .click();
+  }
+
+  async assertRequirementText(expectedText: string) {
+    if (expectedText == "requirements")
+      await expect(this.getQA("requirementsLabel")).toContainText(expectedText);
+    else if (expectedText == "Licence conditions")
+      await expect(this.getQA("licenceConditionsLabel")).toContainText(
+        expectedText,
+      );
+  }
+
+  async assertGPSDataLink(expectedLinkText: string) {
+    if (
+      expectedLinkText ==
+      "Location Monitoring(GPS Tagging) - Monitored Appointment"
+    )
+      await expect(this.getQA("requirementsEMDILink")).toContainText(
+        expectedLinkText,
+      );
+    else if (expectedLinkText == "View GPS location monitoring data")
+      await expect(this.getQA("licencesEMDILink")).toContainText(
+        expectedLinkText,
+      );
+  }
+
+  async selectLink(linkName: string) {
+    if (linkName == "ORA Community Order")
+      await this.page
+        .getByRole("link", { name: /ORA Community Order/ })
+        .click();
+    else if (linkName == "ORA Adult Custody (inc PSS)")
+      await this.page.getByRole("link", { name: /ORA Adult Custody/ }).click();
   }
 }

@@ -39,7 +39,7 @@ export default defineConfig({
     launchOptions: { slowMo: 500 },
     screenshot: "only-on-failure",
     video: "retain-on-failure",
-    trace: process.env.CI ? "off" : "on",
+    trace: process.env.CI ? "retain-on-failure" : "on",
     ...devices["Desktop Chrome"],
     headless: false,
   },

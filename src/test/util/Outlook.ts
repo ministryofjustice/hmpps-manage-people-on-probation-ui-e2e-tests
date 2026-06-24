@@ -4,6 +4,7 @@ import { getCalenderEvent, getExternalReference } from "./API";
 import { getUrn } from "./Common";
 import { CaseType } from "../features/Fixtures";
 import { MpopDateTime } from "./DateTime";
+import CasePage from "../pageObjects/Case/casepage";
 
 export const checkOutlook = async (
   page: Page,
@@ -12,11 +13,14 @@ export const checkOutlook = async (
   past: boolean,
   dateTime: MpopDateTime,
 ) => {
+  if (!caseInfo.crn) {
+    const casePage = new CasePage(page);
+    caseInfo.crn = await casePage.getCRN();
+  }
   const urn = getUrn(page);
   const external = await getExternalReference(caseInfo.crn, urn, token);
   const [status, body] = await getCalenderEvent(external, token);
   if (past) {
-    console.log("appointment in past. no outlook event");
     expect(status).toBe(404);
   } else {
     expect(status).toBe(200);

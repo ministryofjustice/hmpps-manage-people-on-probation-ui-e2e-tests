@@ -118,6 +118,11 @@ export default class AppointmentsPage extends CasePage {
     const row = this.getClass("govuk-table__row")
       .filter({ hasText: new RegExp(" " + date) })
       .filter({ hasText: new RegExp(" " + time) });
-    await row.getByRole("link", { name: "Manage" }).click();
+    try {
+      await row.getByRole("link", { name: "Manage" }).click();
+    } catch {
+      await row.getByRole("link", { name: "Manage" }).first().click();
+      console.log("Multiple matches found, clicked first");
+    }
   }
 }

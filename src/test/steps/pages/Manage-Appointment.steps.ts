@@ -25,13 +25,28 @@ When("I navigate to latest past appointment", async ({ ctx }) => {
 
 When("I navigate to first upcoming appointment", async ({ ctx }) => {
   const page = ctx.base.page;
-  const home = new HomePage(page);
-  await home.assertOnPage();
-  await home.viewUpcoming();
   const upcomingAppointments = new UpcomingAppointmentsPage(page);
-  await upcomingAppointments.assertOnPage();
-  await upcomingAppointments.selectOfficeVisit(); //office visits only until person level bug fixed
   const managePage = new ManageAppointmentsPage(page);
+  await searchForAppointment(
+    upcomingAppointments,
+    managePage,
+    "Planned office",
+  );
+  await managePage.assertOnPage();
+});
+
+When("I navigate to last upcoming appointment", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const upcomingAppointments = new UpcomingAppointmentsPage(page);
+  const managePage = new ManageAppointmentsPage(page);
+  await upcomingAppointments.page
+    .getByRole("button", { name: "Date and time" })
+    .click();
+  await searchForAppointment(
+    upcomingAppointments,
+    managePage,
+    "Planned office",
+  );
   await managePage.assertOnPage();
 });
 

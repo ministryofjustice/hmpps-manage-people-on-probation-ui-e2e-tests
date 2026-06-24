@@ -218,22 +218,22 @@ When("I navigate to checkIn details", async ({ ctx }) => {
   await managePage.assertOnPage();
 });
 
-When("I select {string} link", async ({ ctx }) => {
+When("I select {string} link", async ({ ctx }, linkText) => {
   const page = ctx.base.page;
   const crn = ctx.case.crn;
   const managePage = new ManageCheckInsPage(page, crn);
-  await managePage.clickChangeQuestions();
+  await managePage.clickLink(linkText);
 });
 
 When(
   "I stop checkIns with {string} and sensitivity {string}",
-  async ({ ctx }, reason) => {
+  async ({ ctx }, reason, sensitivity) => {
     const page = ctx.base.page;
     const managePage = new ManageCheckInsPage(page);
     await managePage.assertOnPage();
     await managePage.clickStopCheckIns();
     const stopPage = new StopCheckInsPage(page);
-    await stopPage.completePage("No", reason);
+    await stopPage.completePage(sensitivity, reason);
   },
 );
 
@@ -322,7 +322,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
   const caseList = cases.split(",");
   for (let i = 0; i < caseList.length; i++) {
     const crn = caseList[i];
-    console.log(crn);
+    console.log("Looking at: " + crn);
     const contactPage = new ActivityLogPage(page, crn);
     await contactPage.navigateTo();
     await contactPage.assertOnPage();
@@ -332,7 +332,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
         .first()
         .click({ timeout: 3000 });
     } catch {
-      console.log("no checkins");
+      console.log("No checkins found");
       continue;
     }
     const review = new ReviewExpiredPage(page);
@@ -343,7 +343,7 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
       ctx.checkIns.expiredCrn = crn;
       return;
     } catch {
-      console.log("completed or reviewed");
+      console.log("Checkin is completed or reviewed");
     }
   }
   console.log("No valid cases left");
@@ -395,9 +395,9 @@ Then(
 
 When(
   "I select {string} button on how to write questions page",
-  async ({ ctx }) => {
+  async ({ ctx }, buttonText: string) => {
     const managePage = new ManageCheckInsPage(ctx.base.page);
-    await managePage.selectAddQuestionsToOnlineCheckInsButton();
+    await managePage.page.getByRole("button", { name: buttonText }).click();
   },
 );
 
@@ -492,10 +492,13 @@ Then(
   },
 );
 
-When("I select {string} link on add questions page", async ({ ctx }) => {
-  const managePage = new ManageCheckInsPage(ctx.base.page);
-  await managePage.selectCancelAndGoBackLink();
-});
+When(
+  "I select {string} link on add questions page",
+  async ({ ctx }, linkText: string) => {
+    const managePage = new ManageCheckInsPage(ctx.base.page);
+    await managePage.clickLink(linkText);
+  },
+);
 
 Then(
   "I am directed to {string} page",

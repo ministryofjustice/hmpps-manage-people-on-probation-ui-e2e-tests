@@ -50,7 +50,11 @@ export default class CYAPage extends ContactPage {
         (await this.getSummaryRowByKey(row)).getByRole("link"),
       ).toBeVisible();
     }
-    await expect(await this.getSummaryRowByKey(row)).toContainText(value);
+    try {
+      await expect(await this.getSummaryRowByKey(row)).toContainText(value);
+    } catch {
+      throw `Row: ${row} should have value: ${value}`;
+    }
   }
 
   async checkPageFuture(

@@ -13,6 +13,7 @@ import OverviewPage from "../pageObjects/Case/overview.page";
 import PersonalDetailsPage from "../pageObjects/Case/personal-details.page";
 import AxeBuilder from "@axe-core/playwright";
 import { expect } from "@playwright/test";
+import CreateSentencePlanPage from "../pageObjects/Case/create-sentence-plan.page";
 
 const { Given, Then, After } = createBdd(testContext);
 
@@ -29,6 +30,14 @@ Given(
     };
   },
 );
+
+Given("Create sentence plan for a case", async ({ ctx }) => {
+  const createSentencePlanPage = new CreateSentencePlanPage(ctx.base.page);
+  await createSentencePlanPage.gotToPage();
+  await createSentencePlanPage.customiseScenario(ctx.case.crn);
+  await createSentencePlanPage.createGoal();
+  await createSentencePlanPage.agreeOnPlan();
+});
 
 Given("A new offender has been created in Ndelius", async ({ ctx }) => {
   const [person, crn] = await loginDeliusAndCreateOffender(
@@ -57,10 +66,13 @@ Given(
       data.teams.allocationsTestTeam,
     );
     if (created) {
+      console.log("Using new case:", crn); // Log the CRN for debugging
       await createCustodialEvent(ctx.base.page, {
         crn,
         allocation: { team: data.teams.approvedPremisesTestTeam },
       });
+    } else {
+      console.log("Using existing case:", crn); // Log the CRN for debugging
     }
     ctx.case.crn = crn;
     ctx.case.person = person;
@@ -116,24 +128,21 @@ Then("I close the context", async ({ ctx }) => {
   await context.close();
 });
 
+Given("I navigate to the person on probation", async ({ ctx }) => {
+  const overviewPage = new OverviewPage(ctx.base.page, ctx.case.crn);
+  await overviewPage.navigateTo(ctx.base.currentCrn);
+});
+
 Given("I navigate to {string}", async ({ ctx }, crn) => {
   const overviewPage = new OverviewPage(ctx.base.page, crn);
   await overviewPage.navigateTo(crn);
   ctx.case.crn = crn;
 });
 
-Given("I pick a CRN {string}", async ({ ctx }, crn) => {
-  const overviewPage = new OverviewPage(ctx.base.page, crn);
-  await overviewPage.navigateTo(crn);
-  ctx.case.crn = crn;
-});
-
-Then("I receive success message {string}", async ({ ctx }) => {
+Then("I receive success message {string}", async ({ ctx }, message) => {
   const page = ctx.base.page;
   await page.waitForLoadState("domcontentloaded");
-  await page
-    .getByRole("heading", { name: "Contact created", level: 2 })
-    .isVisible();
+  await page.getByRole("heading", { name: message, level: 2 }).isVisible();
 });
 
 After(async function ({ ctx }) {
@@ -144,10 +153,10 @@ After(async function ({ ctx }) {
   // ensure page is stable
   await page.waitForLoadState("domcontentloaded");
 
-  // const results = await new AxeBuilder({ page })
-  //   .exclude("iframe")
-  //   .withTags(["wcag22aa"])
-  //   .analyze();
-  //
-  // expect(results.violations).toEqual([]);
+  const results = await new AxeBuilder({ page })
+    .exclude("iframe")
+    .withTags(["wcag22aa"])
+    .analyze();
+
+  expect(results.violations).toEqual([]);
 });

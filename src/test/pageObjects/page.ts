@@ -270,15 +270,15 @@ export default class MPopPage {
     await this.getQA(qa).selectOption(option);
   }
 
-  async useSubNavigation(qa: string) {
-    await this.getQA(qa).getByRole("link").click();
-  }
-
   async usePrimaryNavigation(tab: string) {
     await this.page
       .locator('[class="moj-primary-navigation"]')
       .getByRole("link", { name: tab })
       .click();
+  }
+
+  async useSubNavigation(qa: string) {
+    await this.getQA(qa).getByRole("link").click();
   }
 
   async getAlertsCount(full: boolean = false): Promise<number> {
