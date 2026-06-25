@@ -19,6 +19,7 @@ import { ContactDetails } from "../features/Fixtures";
 import EligibilityPage from "../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page";
 import EligiblePage from "../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page";
 import SPOApprovalPage from "../pageObjects/Case/Contacts/Checkins/SetUp/spo-approval.page";
+import WhyEligiblePage from "../pageObjects/Case/Contacts/Checkins/SetUp/why-eligible.page";
 
 export interface MpopSetupCheckin {
   date: string;
@@ -65,6 +66,10 @@ export const setupCheckinsMPop = async (
   const spoApprovalPage = new SPOApprovalPage(page);
   await spoApprovalPage.assertOnPage();
   await spoApprovalPage.completePage();
+
+  const whyEligiblePage = new WhyEligiblePage(page);
+  await whyEligiblePage.assertOnPage();
+  await whyEligiblePage.completePage();
 
   // Navigate to Date frequency page, verify page header and complete the page
   const dateFrequencyPage = new DateFrequencyPage(page);
