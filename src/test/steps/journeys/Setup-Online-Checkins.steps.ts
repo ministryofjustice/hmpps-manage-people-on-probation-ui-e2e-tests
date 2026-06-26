@@ -3,7 +3,7 @@ import OverviewPage from "../../pageObjects/Case/overview.page";
 import ConfirmationPage from "../../pageObjects/Case/Contacts/Checkins/check-in-confirmation.page";
 import CheckInSummaryPage from "../../pageObjects/Case/Contacts/Checkins/check-in-summary.page";
 import { createBdd, DataTable } from "playwright-bdd";
-import { dueDateString, lastWeek, today } from "../../util/DateTime";
+import { dueDateString, today } from "../../util/DateTime";
 import {
   makeChangesSetupCheckins,
   MPoPCheckinDetails,
@@ -309,7 +309,7 @@ Then(
       await createEsupervisionCheckin(
         practitioner,
         crn,
-        dueDateString(lastWeek),
+        dueDateString(today),
         token,
         true,
       );
