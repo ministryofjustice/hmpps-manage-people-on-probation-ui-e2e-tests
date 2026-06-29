@@ -15,7 +15,7 @@ export default class CreateSentencePlanPage extends CasePage {
   }
 
   async customiseScenario(crn: string) {
-    await this.page.getByRole("button", { name: "Customize scenario" }).click();
+    await this.page.getByRole("button", { name: "Customise scenario" }).click();
     const randomizeCheckbox = this.page.locator("#crn-randomize-checkbox");
     const crnInput = this.page.locator("#crn");
 
@@ -34,15 +34,12 @@ export default class CreateSentencePlanPage extends CasePage {
   async createGoal() {
     await this.page.getByRole("button", { name: "Create goal" }).click();
 
+    await this.page.getByRole("radio", { name: "Drug use" }).click();
+
+    await this.page.getByRole("button", { name: "Continue" }).click();
+
     // Select the goal from the autocomplete
     await this.page.locator("#goal_title").fill("tenancy");
-
-    // Wait for the option to appear and select it
-    await this.page
-      .getByRole("option", {
-        name: "I will comply with the conditions of my tenancy agreement",
-      })
-      .click();
 
     // Is this goal related to any other area of need? -> Yes
     await this.page.getByLabel("Yes").first().check();

@@ -3,7 +3,7 @@ import OverviewPage from "../../pageObjects/Case/overview.page";
 import ConfirmationPage from "../../pageObjects/Case/Contacts/Checkins/check-in-confirmation.page";
 import CheckInSummaryPage from "../../pageObjects/Case/Contacts/Checkins/check-in-summary.page";
 import { createBdd, DataTable } from "playwright-bdd";
-import { dueDateString, lastWeek, today } from "../../util/DateTime";
+import { dueDateString, today } from "../../util/DateTime";
 import {
   makeChangesSetupCheckins,
   MPoPCheckinDetails,
@@ -44,9 +44,9 @@ import ReviewExpiredPage from "../../pageObjects/Case/Contacts/Checkins/Review/r
 import { expect } from "@playwright/test";
 import EligibilityPage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligibility-check.page";
 import PartiallyEligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/partially-eligible.page";
-import DateFrequencyPage from "../../pageObjects/Case/Contacts/Checkins/date-frequency.page";
 import EligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/eligible.page";
 import IneligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/ineligible.page";
+import WhyEligiblePage from "../../pageObjects/Case/Contacts/Checkins/SetUp/why-eligible.page";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -309,7 +309,7 @@ Then(
       await createEsupervisionCheckin(
         practitioner,
         crn,
-        dueDateString(lastWeek),
+        dueDateString(today),
         token,
         true,
       );
@@ -337,9 +337,12 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
     }
     const review = new ReviewExpiredPage(page);
     try {
-      await expect(review.getQA("pageHeading")).toHaveText(review.title!, {
-        timeout: 3000,
-      });
+      await expect(review.getQA("pageHeading")).toHaveText(
+        /^Online check in missed$/,
+        {
+          timeout: 3000,
+        },
+      );
       ctx.checkIns.expiredCrn = crn;
       return;
     } catch {
@@ -368,14 +371,14 @@ Then("I {string} use checkIns", async ({ ctx }, can: string) => {
     const partialPage = new PartiallyEligiblePage(page);
     await partialPage.assertOnPage();
     await partialPage.completePage();
-    const dateFrequencyPage = new DateFrequencyPage(page);
-    await dateFrequencyPage.assertOnPage();
+    const whyEligiblePage = new WhyEligiblePage(page);
+    await whyEligiblePage.assertOnPage();
   } else if (can === "can") {
     const eligiblePage = new EligiblePage(page);
     await eligiblePage.assertOnPage();
     await eligiblePage.completePage(1);
-    const dateFrequencyPage = new DateFrequencyPage(page);
-    await dateFrequencyPage.assertOnPage();
+    const whyEligiblePage = new WhyEligiblePage(page);
+    await whyEligiblePage.assertOnPage();
   } else if (can === "cannot") {
     const ineligiblePage = new IneligiblePage(page);
     await ineligiblePage.assertOnPage();
