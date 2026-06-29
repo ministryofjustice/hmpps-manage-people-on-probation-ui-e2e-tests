@@ -140,7 +140,7 @@ Then(
 );
 Then(
   "I am navigated to the {string} page and I select the radio option {string}",
-  async ({ ctx }, nextPage: string, radioOption: string) => {
+  async ({ ctx }, nextPage: string, whoWillSend: string) => {
     const page = ctx.base.page;
 
     if (!nextPage) return;
@@ -174,7 +174,7 @@ Then(
       case "initiate a recall": {
         const initiateARecallPage = new InitiateARecallPage(page);
         await initiateARecallPage.assertOnPage();
-        await initiateARecallPage.completePage(radioOption);
+        await initiateARecallPage.completePage(whoWillSend);
         break;
       }
       case "send a letter": {
@@ -186,7 +186,7 @@ Then(
       case "initiate a breach": {
         const initiateABreachPage = new InitiateABreachPage(page);
         await initiateABreachPage.assertOnPage();
-        await initiateABreachPage.completePage(radioOption);
+        await initiateABreachPage.completePage(whoWillSend);
         break;
       }
       default:
