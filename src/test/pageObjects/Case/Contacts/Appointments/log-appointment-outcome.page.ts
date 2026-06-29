@@ -110,9 +110,9 @@ export class InitiateABreachPage extends ContactPage {
     super(page, "Initiate a breach", crn, uuid);
   }
 
-  async completePage() {
+  async completePage(radioOptionName: string) {
     const radioButton = this.page.getByRole("radio", {
-      name: "Case administrator",
+      name: radioOptionName,
       exact: true,
     });
     await expect(radioButton).toBeVisible();
@@ -127,9 +127,26 @@ export class InitiateARecallPage extends ContactPage {
     super(page, "Initiate a recall", crn, uuid);
   }
 
-  async completePage() {
+  async completePage(radioOptionName: string) {
     const radioButton = this.page.getByRole("radio", {
-      name: "Case administrator",
+      name: radioOptionName,
+      exact: true,
+    });
+    await expect(radioButton).toBeVisible();
+    await radioButton.check();
+    await expect(radioButton).toBeChecked();
+    await this.submit();
+  }
+}
+
+export class InitiateBreachOrRecallPage extends ContactPage {
+  constructor(page: Page, crn?: string, uuid?: string) {
+    super(page, "Initiate a recall", crn, uuid);
+  }
+
+  async completePage(radioOptionName: string) {
+    const radioButton = this.page.getByRole("radio", {
+      name: radioOptionName,
       exact: true,
     });
     await expect(radioButton).toBeVisible();

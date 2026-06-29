@@ -117,7 +117,64 @@ Then(
       case "initiate a recall": {
         const initiateARecallPage = new InitiateARecallPage(page);
         await initiateARecallPage.assertOnPage();
-        await initiateARecallPage.completePage();
+        // await initiateARecallPage.completePage();
+
+        break;
+      }
+      case "send a letter": {
+        const sendALetterPage = new SendALetterPage(page);
+        await sendALetterPage.assertOnPage();
+        // await sendALetterPage.completePage();
+        break;
+      }
+      case "initiate a breach": {
+        const initiateABreachPage = new InitiateABreachPage(page);
+        await initiateABreachPage.assertOnPage();
+        // await initiateABreachPage.completePage();
+        break;
+      }
+      default:
+        throw new Error(`Unknown page: ${nextPage}`);
+    }
+  },
+);
+Then(
+  "I am navigated to the {string} page and I select the radio option {string}",
+  async ({ ctx }, nextPage: string, radioOption: string) => {
+    const page = ctx.base.page;
+
+    if (!nextPage) return;
+
+    const getPageType = (page: string) => {
+      if (/unacceptable absence/i.test(page)) return "unacceptable absence";
+      if (/failure to comply/i.test(page)) return "failure to comply";
+      if (/absence/i.test(page)) return "absence";
+      if (/initiate a recall/i.test(page)) return "initiate a recall";
+      if (/send a letter/i.test(page)) return "send a letter";
+      if (/initiate a breach/i.test(page)) return "initiate a breach";
+      return page;
+    };
+
+    switch (getPageType(nextPage)) {
+      case "failure to comply": {
+        const attendedFailedToComplyPage = new LogAppointmentOutcomePage(page);
+        await attendedFailedToComplyPage.assertOnPage();
+        break;
+      }
+      case "unacceptable absence": {
+        const unacceptableAbsencePage = new UnacceptableAbsencePage(page);
+        await unacceptableAbsencePage.assertOnPage();
+        break;
+      }
+      case "absence": {
+        const failedToAttendPage = new FailedToAttendPage(page);
+        await failedToAttendPage.assertOnPage();
+        break;
+      }
+      case "initiate a recall": {
+        const initiateARecallPage = new InitiateARecallPage(page);
+        await initiateARecallPage.assertOnPage();
+        await initiateARecallPage.completePage(radioOption);
         break;
       }
       case "send a letter": {
@@ -129,7 +186,7 @@ Then(
       case "initiate a breach": {
         const initiateABreachPage = new InitiateABreachPage(page);
         await initiateABreachPage.assertOnPage();
-        await initiateABreachPage.completePage();
+        await initiateABreachPage.completePage(radioOption);
         break;
       }
       default:
@@ -194,6 +251,8 @@ Then("I am on the confirmation page", async ({ ctx }) => {
   try {
     await expect(heading).toContainText("Past appointment arranged");
   } catch {
-    await expect(heading).toContainText("You\u2019ve already arranged this appointment");
+    await expect(heading).toContainText(
+      "You\u2019ve already arranged this appointment",
+    );
   }
 });
