@@ -54,6 +54,7 @@ Feature: Manage Appointments
     Scenario: Create similar appointment with critera: inFuture and noText for case with criteria: singleSentence, noVisor
         When I navigate to the upcoming appointments page
         And I navigate to last upcoming appointment
+        And I note down the POP name
         And I select to arrange next appointment
         And I select similar appointment
         And I select the "Choose date and time" link on the Arrange Another page
