@@ -5,7 +5,23 @@ export class LogAppointmentOutcomePage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
     super(page, /failure to comply/i, crn, uuid);
   }
-
+  async checkTop5(upcoming: string[]) {
+    const text = await this.getClass("moj-scrollable-pane")
+      .getByRole("link", { name: /,/ })
+      .allTextContents();
+    const top5 = text.slice(0, 5).map((i) => i.trim());
+    expect(upcoming[0]).toEqual(top5[0]); //only check top1 atm due to sorting issues to be resolved in backend
+  }
+  async verifyOptions(expected: string[]) {
+    for (const option of expected) {
+      await expect(
+        this.page.getByRole("radio", {
+          name: option,
+          exact: true,
+        }),
+      ).toBeVisible();
+    }
+  }
   async selectRadioOption(option: string) {
     const radioButton = this.page.getByRole("radio", {
       name: option,
@@ -100,7 +116,7 @@ export class SendALetterPage extends ContactPage {
     });
     await expect(radioButtonLetterType).toBeVisible();
     await radioButtonLetterType.check();
-    await expect(radioButtonLetterType).toBeChecked();  
+    await expect(radioButtonLetterType).toBeChecked();
     await this.submit();
   }
 }

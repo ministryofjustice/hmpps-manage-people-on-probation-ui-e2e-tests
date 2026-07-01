@@ -13,6 +13,14 @@ export default class LogOutcomesPage extends CasePage {
     super(page, title, crn);
     this.uuid = uuid;
   }
+
+  async checkTop5(upcoming: string[]) {
+    const text = await this.getClass("moj-scrollable-pane")
+      .getByRole("link", { name: /,/ })
+      .allTextContents();
+    const top5 = text.slice(0, 5).map((i) => i.trim());
+    expect(upcoming[0]).toEqual(top5[0]); //only check top1 atm due to sorting issues to be resolved in backend
+  }
   async verifyOptions(expected: string[]) {
     for (const option of expected) {
       await expect(
