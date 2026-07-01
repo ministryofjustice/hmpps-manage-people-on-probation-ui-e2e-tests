@@ -75,6 +75,28 @@ When(
         await initiateARecallPage.selectRadioOption("Initiate a recall");
         break;
       }
+      case "Initiate a breach and send a letter": {
+        const initiateARecallPage = new LogAppointmentOutcomePage(page);
+        await initiateARecallPage.selectRadioOption("Initiate a recall");
+        break;
+      }
+      case "Initiate a recall and send a letter": {
+        const initiateARecallPage = new LogAppointmentOutcomePage(page);
+        await initiateARecallPage.selectRadioOption("Initiate a recall");
+        break;
+      }
+      case "No further action": {
+        const initiateARecallPage = new LogAppointmentOutcomePage(page);
+        await initiateARecallPage.selectRadioOption("No further action");
+        break;
+      }
+      case "I want to add a different action": {
+        const initiateARecallPage = new LogAppointmentOutcomePage(page);
+        await initiateARecallPage.selectRadioOption(
+          "I want to add a different action",
+        );
+        break;
+      }
       default:
         throw new Error(`Unknown enforcement action: ${enforcementAction}`);
     }
@@ -117,20 +139,16 @@ Then(
       case "initiate a recall": {
         const initiateARecallPage = new InitiateARecallPage(page);
         await initiateARecallPage.assertOnPage();
-        // await initiateARecallPage.completePage();
-
         break;
       }
       case "send a letter": {
         const sendALetterPage = new SendALetterPage(page);
         await sendALetterPage.assertOnPage();
-        // await sendALetterPage.completePage();
         break;
       }
       case "initiate a breach": {
         const initiateABreachPage = new InitiateABreachPage(page);
         await initiateABreachPage.assertOnPage();
-        // await initiateABreachPage.completePage();
         break;
       }
       default:
@@ -219,12 +237,6 @@ When("I complete the add a note page", async ({ ctx }) => {
   }
 });
 
-// When("I complete the next appointment page", async ({ ctx }) => {
-//   const page = ctx.base.page;
-//   const nextAppointmentPage = new NextAppointmentPage(page);
-//   await nextAppointmentPage.assertOnPage();
-//   await nextAppointmentPage.completePage(NextAction.No);
-// });
 When("I complete the next appointment page", async ({ ctx }) => {
   const page = ctx.base.page;
   const nextAppointmentPage = new NextAppointmentPage(page);
