@@ -68,4 +68,5 @@ Feature: Manage Appointments
         And I select the "appointmentsTab" in case navigation
         And I access the created appointment
         Then I can see the Manage page
+        And I can see the outlook event was created succesfully
         And I close the context
