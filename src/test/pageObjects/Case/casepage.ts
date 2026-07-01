@@ -1,6 +1,12 @@
 import { expect, Page } from "@playwright/test";
 import MPopPage from "../page";
 
+export interface POPInfo {
+  crn: string;
+  firstName: string;
+  lastName: string;
+}
+
 export default class CasePage extends MPopPage {
   readonly crn?: string;
 
@@ -15,6 +21,25 @@ export default class CasePage extends MPopPage {
     const crnText =
       (await crnLocator.textContent())?.replace(/\s+/g, " ").trim() || "";
     return crnText;
+  }
+
+  async getName(): Promise<string> {
+    const nameLocator = this.page.locator(`[data-qa="name"]`);
+    await expect(nameLocator).toBeVisible();
+    const nameText = (await nameLocator.textContent())?.trim() || "";
+    return nameText;
+  }
+
+  async getPOPHeader(): Promise<POPInfo> {
+    const crn = await this.getCRN();
+    const name = await this.getName();
+    const firstName = name.split(" ")[0];
+    const lastName = name.split(" ")[1];
+    return {
+      crn,
+      firstName,
+      lastName,
+    };
   }
 
   async assertOnPage(allowRestricted: boolean = true): Promise<string | void> {

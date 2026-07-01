@@ -29,6 +29,7 @@ export const checkOutlook = async (
     const endDate = DateTime.fromISO(body.endDate).toFormat("HH:mm");
     expect(startDate).toBe(dateTime.startTime);
     expect(endDate).toBe(dateTime.endTime);
+    console.log(message);
     expect(message).toContain(
       `${caseInfo.person.firstName[0]}. ${caseInfo.person.lastName}`,
     );

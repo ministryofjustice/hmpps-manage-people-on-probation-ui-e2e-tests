@@ -14,6 +14,8 @@ import PersonalDetailsPage from "../pageObjects/Case/personal-details.page";
 import AxeBuilder from "@axe-core/playwright";
 import { expect } from "@playwright/test";
 import CreateSentencePlanPage from "../pageObjects/Case/create-sentence-plan.page";
+import CasePage from "../pageObjects/Case/casepage";
+import { Person } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/utils/person";
 
 const { Given, Then, After } = createBdd(testContext);
 
@@ -143,6 +145,15 @@ Then("I receive success message {string}", async ({ ctx }, message) => {
   const page = ctx.base.page;
   await page.waitForLoadState("domcontentloaded");
   await page.getByRole("heading", { name: message, level: 2 }).isVisible();
+});
+
+Then("I note down the POP name", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const casePage = new CasePage(page);
+  const POP = await casePage.getPOPHeader();
+  ctx.case.person = {} as Person;
+  ctx.case.person.firstName = POP.firstName;
+  ctx.case.person.lastName = POP.lastName;
 });
 
 After(async function ({ ctx }) {
