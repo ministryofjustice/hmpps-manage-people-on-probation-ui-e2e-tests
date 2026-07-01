@@ -54,6 +54,7 @@ Feature: Manage Appointments
     Scenario: Create similar appointment with critera: inFuture and noText for case with criteria: singleSentence, noVisor
         When I navigate to the upcoming appointments page
         And I navigate to last upcoming appointment
+        And I note down the POP name
         And I select to arrange next appointment
         And I select similar appointment
         And I select the "Choose date and time" link on the Arrange Another page
@@ -68,4 +69,5 @@ Feature: Manage Appointments
         And I select the "appointmentsTab" in case navigation
         And I access the created appointment
         Then I can see the Manage page
+        And I can see the outlook event was created succesfully
         And I close the context
