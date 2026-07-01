@@ -41,7 +41,7 @@ export default defineConfig({
     video: "retain-on-failure",
     trace: process.env.CI ? "retain-on-failure" : "on",
     ...devices["Desktop Chrome"],
-    headless: false,
+    headless: true,
   },
   /* Configure projects for major browsers */
   projects: [
