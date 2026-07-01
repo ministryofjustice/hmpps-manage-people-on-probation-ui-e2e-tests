@@ -33,6 +33,12 @@ Given(
   },
 );
 
+Given("I pick a CRN {string}", async ({ ctx }, crn) => {
+  const overviewPage = new OverviewPage(ctx.base.page, crn);
+  await overviewPage.navigateTo(crn);
+  ctx.case.crn = crn;
+});
+
 Given("Create sentence plan for a case", async ({ ctx }) => {
   const createSentencePlanPage = new CreateSentencePlanPage(ctx.base.page);
   await createSentencePlanPage.gotToPage();

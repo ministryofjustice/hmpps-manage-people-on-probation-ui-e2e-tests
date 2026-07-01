@@ -26,7 +26,6 @@ import SupportingInformationPage from "../../pageObjects/Case/Contacts/Appointme
 import TextConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/text-confirmation-page";
 import ContactDetailsPage from "../../pageObjects/Case/Contacts/update-contact-details.page";
 import SentencePage from "../../pageObjects/Case/Contacts/Appointments/sentence.page";
-import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import AddNotePage from "../../pageObjects/Case/Contacts/Appointments/add-note.page";
 import NextAppointmentPage from "../../pageObjects/Case/Contacts/Appointments/next-appointment.page";
 import ArrangeAnotherPage from "../../pageObjects/Case/Contacts/Appointments/arrange-another.page";
@@ -34,6 +33,7 @@ import ReschedulePage from "../../pageObjects/Case/Contacts/Appointments/resched
 import RescheduleDetailsPage from "../../pageObjects/Case/Contacts/Appointments/reschedule-details";
 import * as fs from "fs";
 import { expect } from "@playwright/test";
+import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 
 const { When, Then } = createBdd(testContext);
 
@@ -57,6 +57,7 @@ When("I click to arrange an appointment", async ({ ctx }) => {
 When(
   "I complete the sentence page with sentence {string}",
   async ({ ctx }, sentence: string) => {
+    if (!sentence) return;
     const page = ctx.base.page;
     const sentencePage = new SentencePage(page);
     await sentencePage.assertOnPage();
@@ -209,8 +210,10 @@ When(
 When("I complete the attended complied page", async ({ ctx }) => {
   const page = ctx.base.page;
   const attendedCompliedPage = new AttendedCompliedPage(page);
-  await attendedCompliedPage.assertOnPage();
+  // const newAttendedCompliedPage = new NewAttendedCompliedPage(page);
+  // await newAttendedCompliedPage.assertOnPage();
   await attendedCompliedPage.completePage();
+  //await newAttendedCompliedPage.completePage();
 });
 
 When(

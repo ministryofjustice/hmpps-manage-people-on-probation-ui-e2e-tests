@@ -16,14 +16,19 @@ export class NewAttendedCompliedPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
     super(page, "What was the outcome of this appointment?", crn, uuid);
   }
-  async completePage() {
+
+  async selectRadioOption(option: string) {
     const radioButton = this.page.getByRole("radio", {
-      name: "Attended",
+      name: option,
       exact: true,
     });
     await expect(radioButton).toBeVisible();
     await radioButton.check();
     await expect(radioButton).toBeChecked();
     await this.submit();
+  }
+
+  async completePage() {
+    await this.selectRadioOption("Attended - complied");
   }
 }

@@ -55,7 +55,7 @@ Feature: Create Appointments
         And I access the created appointment
         Then I can see the Manage page
         And I can see the outlook event was created succesfully
-        And I close the context
+        And I close the context    
 
     # @full @appointments @past
     # Scenario: Create appointment with critera: inPast and defaultAttendee for case with criteria: singleSentence, noVisor

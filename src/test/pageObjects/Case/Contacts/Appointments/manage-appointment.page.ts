@@ -25,6 +25,10 @@ export default class ManageAppointmentsPage extends ContactPage {
     );
   }
 
+  async clickLogAppointmentOutcomeLink() {
+    await this.clickLink("Log appointment outcome");
+  }
+
   async clickNewAttendedAndCompliedLink() {
     await this.clickLink("Log appointment outcome");
   }

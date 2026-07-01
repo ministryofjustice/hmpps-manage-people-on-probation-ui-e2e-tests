@@ -6,7 +6,7 @@ import CasesPage from "../pageObjects/cases.page";
 import SearchPage from "../pageObjects/search.page";
 import RecentCasesPage from "../pageObjects/recent-cases.page";
 import UpcomingAppointmentsPage from "../pageObjects/upcoming.page";
-import LogOutcomesPage from "../pageObjects/log-outcomes.page";
+import LogOutcomesPage from "../pageObjects/Case/log-outcomes.page";
 import RemindersPage from "../pageObjects/Reminders/reminders";
 import ActivityLogPage from "../pageObjects/Case/activity-log.page";
 import AppointmentsPage from "../pageObjects/Case/appointments.page";
