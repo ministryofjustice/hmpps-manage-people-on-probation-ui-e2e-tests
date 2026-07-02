@@ -11,7 +11,7 @@ Feature: Create Appointments
         And I click to arrange an appointment
 
     @full @appointments @dual
-    Scenario: Create appointment with critera: inFuture, noText, defaultAttendee for case with criteria: dualSentence, noVisor
+    Scenario: Create appointment with criteria: inFuture, noText, defaultAttendee for case with criteria: dualSentence, noVisor
         When I complete the sentence page with sentence "Adult Custody < 12m (6 Months)"
         And I complete the type attendance page with type "Planned office visit (NS)" and default attendee
         And I complete the location and datetime page with date "TOMORROW", startTime "14:14", endTime "15:15" and location "Wrexham Team Office"
@@ -24,5 +24,5 @@ Feature: Create Appointments
         When I navigate to the appointments page
         And I access the created appointment
         Then I can see the Manage page
-        And I can see the outlook event was created succesfully
+        And I can see the outlook event was created successfully
         And I close the context    

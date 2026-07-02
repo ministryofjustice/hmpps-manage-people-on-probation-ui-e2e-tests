@@ -317,7 +317,22 @@ Then(
   },
 );
 
-Then("I can see the outlook event was created succesfully", async ({ ctx }) => {
+Then("Outlook message on confirmation page is displayed", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const confirmationPage = new ConfirmationPage(page);
+  await expect(
+    ctx.base.page
+      .locator("p") // selects all <p> elements
+      .filter({ hasText: "The appointment has been added to:" }), // narrows down to the one containing your text
+  ).toBeVisible();
+  await expect(
+    ctx.base.page.locator('//p[data-qa="outlook-err-msg-1"]'),
+  ).toBeHidden();
+});
+
+Then(
+  "I can see the outlook event was created successfully",
+  async ({ ctx }) => {
   const page = ctx.base.page;
   const token = await getClientToken();
   const appointment: MpopArrangeAppointment =
