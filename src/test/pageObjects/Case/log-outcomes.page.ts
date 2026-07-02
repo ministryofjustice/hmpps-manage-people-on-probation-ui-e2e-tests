@@ -10,7 +10,7 @@ export default class LogOutcomesPage extends CasePage {
     crn?: string,
     uuid?: string,
   ) {
-    super(page, title, crn);
+    super(page, "Outcomes to log", crn);
     this.uuid = uuid;
   }
 

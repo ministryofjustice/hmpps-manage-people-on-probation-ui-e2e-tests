@@ -337,11 +337,8 @@ When("I find valid case from {string}", async ({ ctx }, cases) => {
     }
     const review = new ReviewExpiredPage(page);
     try {
-      await expect(review.getQA("pageHeading")).toHaveText(
-        /^Online check in missed$/,
-        {
-          timeout: 3000,
-        },
+      expect((await review.getQA("pageHeading").textContent())?.trim()).toEqual(
+        "Online check in missed",
       );
       ctx.checkIns.expiredCrn = crn;
       return;

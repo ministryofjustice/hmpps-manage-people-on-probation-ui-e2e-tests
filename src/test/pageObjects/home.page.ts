@@ -2,8 +2,7 @@ import { expect, Page } from "@playwright/test";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 import UpcomingAppointmentsPage from "./upcoming.page";
-//import LogOutcomesPage from "./Case/log-outcomes.page";
-import { LogAppointmentOutcomePage } from "./Case/Contacts/Appointments/log-appointment-outcome.page";
+import LogOutcomesPage from "./Case/log-outcomes.page";
 
 export default class HomePage extends MPopPage {
   constructor(page: Page) {
@@ -76,11 +75,7 @@ export default class HomePage extends MPopPage {
   async checkOutcomes() {
     const outcomes = await this.noteOutcomes();
     await this.page.getByRole("link", { name: "Log more outcomes" }).click();
-    // const outcomesPage = new LogOutcomesPage(this.page);
-    // await outcomesPage.assertOnPage();
-    // await outcomesPage.checkTop5(outcomes);
-
-    const outcomesPage = new LogAppointmentOutcomePage(this.page);
+    const outcomesPage = new LogOutcomesPage(this.page);
     await outcomesPage.assertOnPage();
     await outcomesPage.checkTop5(outcomes);
     await this.returnToPage();

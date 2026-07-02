@@ -320,6 +320,7 @@ Then(
 Then("Outlook message on confirmation page is displayed", async ({ ctx }) => {
   const page = ctx.base.page;
   const confirmationPage = new ConfirmationPage(page);
+  await confirmationPage!.assertOnPage();
   await expect(
     ctx.base.page
       .locator("p") // selects all <p> elements
@@ -333,14 +334,15 @@ Then("Outlook message on confirmation page is displayed", async ({ ctx }) => {
 Then(
   "I can see the outlook event was created successfully",
   async ({ ctx }) => {
-  const page = ctx.base.page;
-  const token = await getClientToken();
-  const appointment: MpopArrangeAppointment =
-    ctx.appointments[ctx.appointments.length - 1];
-  const past =
-    DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
-  await checkOutlook(page, ctx.case, token, past, appointment.dateTime);
-});
+    const page = ctx.base.page;
+    const token = await getClientToken();
+    const appointment: MpopArrangeAppointment =
+      ctx.appointments[ctx.appointments.length - 1];
+    const past =
+      DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy") < today;
+    await checkOutlook(page, ctx.case, token, past, appointment.dateTime);
+  },
+);
 
 Then("I can see no outlook event was created", async ({ ctx }) => {
   const page = ctx.base.page;
