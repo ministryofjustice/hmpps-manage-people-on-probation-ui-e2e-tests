@@ -9,7 +9,7 @@ Feature: Reschedule Appointments
 
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
-    Scenario: Reschedule appointment with critera: inFuture and noText
+    Scenario: Reschedule appointment with criteria: inFuture and noText
         When I navigate to the upcoming appointments page
         And I navigate to first non sensitive upcoming appointment
         And I select the Reschedule link
@@ -25,7 +25,7 @@ Feature: Reschedule Appointments
 
     #requires an appointment to exist (may not know case criteria)
     @full @appointments @reschedule
-    Scenario: Reschedule appointment with critera: inFuture, setSensitiveEarly and noText
+    Scenario: Reschedule appointment with criteria: inFuture, setSensitiveEarly and noText
         When I navigate to the upcoming appointments page
         And I navigate to first non sensitive upcoming appointment
         And I select the Reschedule link

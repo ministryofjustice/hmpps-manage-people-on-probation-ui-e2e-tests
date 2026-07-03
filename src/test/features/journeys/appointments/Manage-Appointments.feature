@@ -65,9 +65,10 @@ Feature: Manage Appointments
         Then I can see the correct information on the Arrange Another page for a future appointment
         When I submit the similar appointment
         Then I can see the Confirmation page for "future" appointment
+        And Outlook message on confirmation page is displayed
         When I submit the page
         And I select the "appointmentsTab" in case navigation
         And I access the created appointment
         Then I can see the Manage page
-        And I can see the outlook event was created succesfully
+        And I can see the outlook event was created successfully
         And I close the context

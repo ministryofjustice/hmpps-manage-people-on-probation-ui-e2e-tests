@@ -9,7 +9,7 @@ Feature: Create Appointments related misc journeys
         And I am logged in
 
     @full @appointments @locationNotInList
-    Scenario: Create appointment with critera: locationNotInList for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with criteria: locationNotInList for case with criteria: singleSentence, noVisor
         When I navigate to the appointments page
         And I click to arrange an appointment
         And I complete the type attendance page with type "Planned video contact (NS)" and default attendee
@@ -18,7 +18,7 @@ Feature: Create Appointments related misc journeys
         And I close the context
 
     @full @appointments @addText
-    Scenario: Create appointment with critera: inFuture, addText, defaultAttendee for case with criteria: singleSentence, noVisor
+    Scenario: Create appointment with criteria: inFuture, addText, defaultAttendee for case with criteria: singleSentence, noVisor
         Given I clear the contact details if set
         When I navigate to the appointments page
         And I click to arrange an appointment
@@ -34,7 +34,7 @@ Feature: Create Appointments related misc journeys
         When I navigate to the appointments page
         And I access the created appointment
         Then I can see the Manage page
-        And I can see the outlook event was created succesfully
+        And I can see the outlook event was created successfully
         When I navigate to the reminders service
         Then I can see the appointment text message details
         And I close the context

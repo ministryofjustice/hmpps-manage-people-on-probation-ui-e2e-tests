@@ -8,10 +8,7 @@ export enum Preference {
   EMAIL = 1,
 }
 export type contactMethod =
-  | "Text message"
-  | "email"
-  | "textUpdate"
-  | "emailUpdate";
+  "Text message" | "email" | "textUpdate" | "emailUpdate";
 
 export default class ContactPreferencePage extends ContactPage {
   constructor(

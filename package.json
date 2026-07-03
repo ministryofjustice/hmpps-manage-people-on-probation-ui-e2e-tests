@@ -7,7 +7,7 @@
     "clean": "rm -rf node_modules .features-gen",
     "clean:feature": "rm -rf .features-gen",
     "rebuild": "npm run clean && npm ci && npx playwright install && npx bddgen",
-    "test": "npm run clean:feature  && npx bddgen && npx playwright test --grep \"@full\"",
+    "test": "npm run clean:feature && npx bddgen && npx playwright test --grep \"@full\"",
     "lint": "eslint . --cache --max-warnings 0",
     "lint:fix": "eslint . --fix",
     "typecheck": "tsc",
@@ -47,9 +47,9 @@
     "globals": "^17.6.0",
     "husky": "^9.1.7",
     "luxon": "^3.7.2",
-    "playwright-bdd": "^9.1.0",
-    "prettier": "^3.8.4",
+    "playwright-bdd": "9.2.0",
     "playwright-core": "1.60.0",
+    "prettier": "^3.8.4",
     "tsx": "^4.22.4"
   },
   "dependencies": {
