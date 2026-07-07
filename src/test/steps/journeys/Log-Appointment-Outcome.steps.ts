@@ -156,9 +156,67 @@ Then(
     }
   },
 );
+
 Then(
-  "I am navigated to the {string} page and I select the radio option {string}",
-  async ({ ctx }, nextPage: string, whoWillSend: string) => {
+    "I am navigated to the {string} page and I select the radio option {string}",
+    async ({ ctx }, nextPage: string, whoWillSend: string) => {
+      const page = ctx.base.page;
+
+      if (!nextPage) return;
+
+      const getPageType = (page: string) => {
+        if (/unacceptable absence/i.test(page)) return "unacceptable absence";
+        if (/failure to comply/i.test(page)) return "failure to comply";
+        if (/absence/i.test(page)) return "absence";
+        if (/initiate a recall/i.test(page)) return "initiate a recall";
+        if (/send a letter/i.test(page)) return "send a letter";
+        if (/initiate a breach/i.test(page)) return "initiate a breach";
+        return page;
+      };
+
+      switch (getPageType(nextPage)) {
+        case "failure to comply": {
+          const attendedFailedToComplyPage = new LogAppointmentOutcomePage(page);
+          await attendedFailedToComplyPage.assertOnPage();
+          break;
+        }
+        case "unacceptable absence": {
+          const unacceptableAbsencePage = new UnacceptableAbsencePage(page);
+          await unacceptableAbsencePage.assertOnPage();
+          break;
+        }
+        case "absence": {
+          const failedToAttendPage = new FailedToAttendPage(page);
+          await failedToAttendPage.assertOnPage();
+          break;
+        }
+        case "initiate a recall": {
+          const initiateARecallPage = new InitiateARecallPage(page);
+          await initiateARecallPage.assertOnPage();
+          await initiateARecallPage.completePage(whoWillSend);
+          break;
+        }
+        case "send a letter": {
+          const sendALetterPage = new SendALetterPage(page);
+          await sendALetterPage.assertOnPage();
+          await sendALetterPage.completePage();
+          break;
+        }
+        case "initiate a breach": {
+          const initiateABreachPage = new InitiateABreachPage(page);
+          await initiateABreachPage.assertOnPage();
+          await initiateABreachPage.completePage(whoWillSend);
+          break;
+        }
+        default:
+          throw new Error(`Unknown page: ${nextPage}`);
+      }
+    },
+);
+
+Then(
+  "I am navigated to the {string} page and I select the radio option {string} and check the {string} are displayed",
+  async ({ ctx }, nextPage: string, whoWillSend: string, insetText?: string) => {
     const page = ctx.base.page;
 
     if (!nextPage) return;
@@ -177,6 +235,7 @@ Then(
       case "failure to comply": {
         const attendedFailedToComplyPage = new LogAppointmentOutcomePage(page);
         await attendedFailedToComplyPage.assertOnPage();
+        await attendedFailedToComplyPage.assertInsetTextIsPresent(insetText)
         break;
       }
       case "unacceptable absence": {

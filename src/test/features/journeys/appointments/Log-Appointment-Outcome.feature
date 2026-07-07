@@ -6,7 +6,7 @@ Feature: Log appointment outcome
 
   # TODO -> Initiate a breach and send a letter / recall
   # TODO - Initiate a recall and send a letter option - select - any of the 3 set of radio options
-  @pastappointment @logoutcome
+  @pastappointment @logoutcome @test
   Scenario Outline: Validate appointment outcome journeys - <appointmentType> for <case_crn> - <outcomeType>
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
@@ -28,7 +28,7 @@ Feature: Log appointment outcome
     And I complete the acceptable absence reason page if applicable "<outcomeType>"
     Then I am navigated to the "<enforcementPage>" page
     When I select the enforcement action "<enforcementAction>" and continue
-    Then I am navigated to the "<breachOrRecallPage>" page and I select the radio option "<whoWillSend>"
+    Then I am navigated to the "<breachOrRecallPage>" page and I select the radio option "<whoWillSend>" and check the "<insetText>" are displayed
     Then I complete the add a note page
     And I complete the next appointment page
     Then I am on the check your answers page
@@ -37,13 +37,14 @@ Feature: Log appointment outcome
     When I navigate to the appointments page
     And I access the created appointment
     Then I can see the Manage page
+#    Then I can see the outcome status "<outcomeStatus>"
     Examples:
-      | appointmentType                | location            | outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend              |
-      | Planned office visit (NS)      | Wrexham Team Office | Attended - complied         |                      |                   |                    |                          |
-      | Planned telephone contact (NS) | Wrexham Team Office | Acceptable absence          |                      |                   |                    |                          |
-      | Planned video contact (NS)     | Wrexham Team Office | Attended - failed to comply | failure to comply    | Initiate a recall | Initiate a recall  | I’ll initiate the recall |
-      | Planned doorstep contact (NS)  | Wrexham Team Office | Unacceptable absence        | unacceptable absence | Send a letter     | Send a letter      | Case administrator       |
-      | Home visit to case (NS)        | Wrexham Team Office | Attended - failed to comply | failure to comply    | No further action |                    |                          |
+      | appointmentType                | location            | outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend              | insetText              |outcomeStatus              |
+      | Planned office visit (NS)      | Wrexham Team Office | Attended - complied         |                      |                   |                    |                          |                        | complied                           |
+#      | Planned telephone contact (NS) | Wrexham Team Office | Acceptable absence          |                      |                   |                    |                          |                        |
+#      | Planned video contact (NS)     | Wrexham Team Office | Attended - failed to comply | failure to comply    | Initiate a recall | Initiate a recall  | I’ll initiate the recall | I will initiate the recall |                       |
+#      | Planned doorstep contact (NS)  | Wrexham Team Office | Unacceptable absence        | unacceptable absence | Send a letter     | Send a letter      | Case administrator       | Case administrator will send a first warning letter |
+#      | Home visit to case (NS)        | Wrexham Team Office | Attended - failed to comply | failure to comply    | No further action |                    |                          |                                                     |
 
 
   @pastappointment @logoutcome

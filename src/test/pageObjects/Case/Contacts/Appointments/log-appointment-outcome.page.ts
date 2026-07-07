@@ -36,6 +36,15 @@ export class LogAppointmentOutcomePage extends ContactPage {
   async completePage() {
     await this.selectRadioOption("Send a letter");
   }
+
+    async assertInsetTextIsPresent(insetText: string) {
+
+      if(!insetText) return
+      const inset = this.page.locator('.govuk-inset-text')
+      await expect(inset).toContainText(
+          insetText
+      )
+    }
 }
 
 export class AcceptableAbsencePage extends ContactPage {

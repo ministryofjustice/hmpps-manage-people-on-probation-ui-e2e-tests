@@ -369,6 +369,20 @@ Then("I can see the Manage page", async ({ ctx }) => {
   await managePage.assertOnPage();
 });
 
+
+Then("I can see the outcome status {string}", async ({ ctx }, outcomeStatus:string) => {
+    const page = ctx.base.page;
+    const compliedTag = page
+        .locator('.govuk-task-list__item', {
+            has: page.getByRole('link', { name: 'Change appointment outcome' }),
+        })
+        .locator('.govuk-tag')
+
+    await expect(compliedTag).toHaveText(outcomeStatus)
+});
+
+
+
 When("I navigate to the reminders service", async ({ ctx }) => {
   const page = ctx.base.page;
   const remindersPage = new RemindersPage(page);
