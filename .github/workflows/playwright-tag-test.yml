@@ -8,9 +8,6 @@ on:
         type: choice
         required: true
         options:
-          - "@sequential"
-          - "@reschedule"
-          - "@past"
           - "@logoutcome"
       test_path:
         description: "Optional path to a specific test file"
