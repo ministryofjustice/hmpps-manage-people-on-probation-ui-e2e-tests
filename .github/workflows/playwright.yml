@@ -166,14 +166,6 @@ jobs:
          path: stats-summary.json
          retention-days: 7
 
-    - name: Upload videos
-      if: always() && github.ref == 'refs/heads/main'
-      uses: actions/upload-artifact@v7
-      with:
-         name: playwright-videos
-         path: ./videos/
-         retention-days: 7
-
     - name: Notify Slack
       if: always() && github.ref == 'refs/heads/main'
       uses: slackapi/slack-github-action@v3.0.3
