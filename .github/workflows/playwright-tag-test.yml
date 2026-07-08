@@ -95,14 +95,6 @@ jobs:
           check_name: Single test results
           report_paths: junit.xml
 
-      - name: Upload videos
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: playwright-single-test-videos
-          path: ./videos/
-          retention-days: 7
-
       - name: Notify Slack
         if: always()
         uses: slackapi/slack-github-action@v3.0.3
