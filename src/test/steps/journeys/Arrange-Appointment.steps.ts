@@ -35,7 +35,7 @@ import * as fs from "fs";
 import { expect } from "@playwright/test";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import { login as loginToDelius } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login";
-import {toNDeliusSearchResponseDateTimeFormat} from "../../util/Delius";
+import { toNDeliusSearchResponseDateTimeFormat } from "../../util/Delius";
 
 const { When, Then } = createBdd(testContext);
 
@@ -590,4 +590,3 @@ Then(
     ]);
   },
 );
-
