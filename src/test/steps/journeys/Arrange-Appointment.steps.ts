@@ -149,10 +149,6 @@ When(
       locationId,
     );
 
-    console.log("********arrange appt dateTime*************");
-    console.log(dateTime);
-    console.log("*********************");
-
     ctx.appointments[ctx.appointments.length - 1].location = location;
     ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
   },

@@ -47,7 +47,7 @@ Feature: Log appointment outcome
       | Home visit to case (NS)        | Wrexham Team Office | Attended - failed to comply | failure to comply    | No further action |                    |                          |
 
 
-  @pastappointment @logoutcome @test
+  @pastappointment @logoutcome
   Scenario Outline: Validate appointment outcome journeys - <appointmentType> for <case_crn> - <outcomeType>
     Given Context has been created for "appointments" test
     And A new dual offender has been created in Ndelius
