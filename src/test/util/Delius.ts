@@ -133,3 +133,11 @@ export async function internalTransfer(
 
   return selectedStaff;
 }
+
+export const toNDeliusSearchResponseDateTimeFormat = (
+  date: string,
+  time: string,
+): string => {
+  const [day, month, year] = date.split("/");
+  return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year} ${time}`;
+};

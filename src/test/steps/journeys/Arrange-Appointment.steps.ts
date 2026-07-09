@@ -34,6 +34,8 @@ import RescheduleDetailsPage from "../../pageObjects/Case/Contacts/Appointments/
 import * as fs from "fs";
 import { expect } from "@playwright/test";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
+import { login as loginToDelius } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login";
+import { toNDeliusSearchResponseDateTimeFormat } from "../../util/Delius";
 
 const { When, Then } = createBdd(testContext);
 
@@ -368,6 +370,54 @@ Then("I can see the Manage page", async ({ ctx }) => {
   const managePage = new ManageAppointmentsPage(page);
   await managePage.assertOnPage();
 });
+
+Then(
+  "I confirm I can see the contact log on nDelius with appointment type {string} and outcome type {string}",
+  async ({ ctx }, appointmentType: string, outcomeType: string) => {
+    const page = ctx.base.page;
+    await loginToDelius(page);
+    await page.locator("a", { hasText: "National search" }).click();
+    await page.fill("#crn\\:inputText", ctx.case.crn);
+    await page.click("#searchButton");
+    await page
+      .locator("#offendersTable tbody tr")
+      .first()
+      .getByRole("link", { name: "View" })
+      .click();
+    await page.waitForTimeout(2000);
+    await page.getByRole("link", { name: "Contact List" }).click();
+
+    await page
+      .getByLabel("From date")
+      .fill(ctx.appointments[ctx.appointments.length - 1].dateTime.date);
+    await page
+      .getByLabel("To date")
+      .fill(ctx.appointments[ctx.appointments.length - 1].dateTime.date);
+    await page.getByLabel("To date").press("Tab");
+
+    await page.locator('input[type="submit"][value="Search"]').click();
+
+    const deliusSearchResponseDateTime = toNDeliusSearchResponseDateTimeFormat(
+      ctx.appointments[ctx.appointments.length - 1].dateTime.date,
+      ctx.appointments[ctx.appointments.length - 1].dateTime.startTime,
+    );
+    const row = page
+      .locator("#contactTable tbody tr")
+      .filter({
+        has: page.locator("td", { hasText: appointmentType }),
+      })
+      .filter({
+        has: page.locator("td", { hasText: outcomeType }),
+      })
+      .filter({
+        has: page.locator("td", { hasText: deliusSearchResponseDateTime }),
+      })
+      .filter({
+        has: page.locator("td", { hasText: "TestUser, MPOP" }),
+      });
+    await expect(row).toBeVisible();
+  },
+);
 
 When("I navigate to the reminders service", async ({ ctx }) => {
   const page = ctx.base.page;

@@ -37,6 +37,7 @@ Feature: Log appointment outcome
     When I navigate to the appointments page
     And I access the created appointment
     Then I can see the Manage page
+    Then I confirm I can see the contact log on nDelius with appointment type "<appointmentType>" and outcome type "<outcomeType>"
     Examples:
       | appointmentType                | location            | outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend              |
       | Planned office visit (NS)      | Wrexham Team Office | Attended - complied         |                      |                   |                    |                          |
@@ -78,6 +79,7 @@ Feature: Log appointment outcome
     When I navigate to the appointments page
     And I access the created appointment
     Then I can see the Manage page
+    Then I confirm I can see the contact log on nDelius with appointment type "<appointmentType>" and outcome type "<outcomeType>"
     Examples:
       | sentenceType                      | appointmentType                          | location            | outcomeType                      | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend        |
       | SA2020 Community Order (6 Months) | Planned contact - other than office (NS) | Wrexham Team Office | Unacceptable absence             | unacceptable absence | Initiate a breach | Initiate a breach  | Case administrator |
