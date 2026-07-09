@@ -124,12 +124,6 @@ When(
     await locationDateTimePage.completePage(dateTime, location);
     ctx.appointments[ctx.appointments.length - 1].location = location;
     ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
-
-    console.log("********dateTime*************");
-    console.log(dateTime);
-    console.log("*********************");
-    console.log(ctx.appointments[ctx.appointments.length - 1].dateTime);
-    console.log("*********************");
   },
 );
 
