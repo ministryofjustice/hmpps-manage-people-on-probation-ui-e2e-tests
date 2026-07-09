@@ -35,6 +35,7 @@ import * as fs from "fs";
 import { expect } from "@playwright/test";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import { login as loginToDelius } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login";
+import {toNDeliusSearchResponseDateTimeFormat} from "../../util/Delius";
 
 const { When, Then } = createBdd(testContext);
 
@@ -397,7 +398,7 @@ Then(
 
     await page.locator('input[type="submit"][value="Search"]').click();
 
-    const deliusSearchResponseDateTime = toNDeliusSearchResponseDateTime(
+    const deliusSearchResponseDateTime = toNDeliusSearchResponseDateTimeFormat(
       ctx.appointments[ctx.appointments.length - 1].dateTime.date,
       ctx.appointments[ctx.appointments.length - 1].dateTime.startTime,
     );
@@ -590,10 +591,3 @@ Then(
   },
 );
 
-export const toNDeliusSearchResponseDateTime = (
-  date: string,
-  time: string,
-): string => {
-  const [day, month, year] = date.split("/");
-  return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year} ${time}`;
-};
