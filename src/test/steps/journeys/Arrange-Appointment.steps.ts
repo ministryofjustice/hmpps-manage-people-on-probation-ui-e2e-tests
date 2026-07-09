@@ -149,7 +149,6 @@ When(
       dateTime,
       locationId,
     );
-
     ctx.appointments[ctx.appointments.length - 1].location = location;
     ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
   },
