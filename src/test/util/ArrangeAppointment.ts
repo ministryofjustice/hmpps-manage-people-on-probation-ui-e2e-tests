@@ -12,6 +12,8 @@ export interface MpopArrangeAppointment {
   note?: string;
   sensitivity: string;
   sensitivityLocked?: boolean;
+  appointmentType: string;
+  outcomeType: string;
 }
 
 export interface MpopAppointmentChanges {

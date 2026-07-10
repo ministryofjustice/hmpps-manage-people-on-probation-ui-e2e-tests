@@ -43,6 +43,7 @@ export interface CheckIns {
 }
 export interface Contact {
   uuid: string;
+  contactId: string;
 }
 export interface Cases {
   count: number;

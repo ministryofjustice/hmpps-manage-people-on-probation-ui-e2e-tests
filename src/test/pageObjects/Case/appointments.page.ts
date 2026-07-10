@@ -115,14 +115,63 @@ export default class AppointmentsPage extends CasePage {
       appointment.dateTime.startTime,
       appointment.dateTime.endTime,
     );
+
     const row = this.getClass("govuk-table__row")
       .filter({ hasText: new RegExp(" " + date) })
-      .filter({ hasText: new RegExp(" " + time) });
+      .filter({ hasText: new RegExp(" " + time) })
+      .filter({ hasText: appointment.appointmentType });
+
     try {
       await row.getByRole("link", { name: "Manage" }).click();
     } catch {
       await row.getByRole("link", { name: "Manage" }).first().click();
-      console.log("Multiple matches found, clicked first");
+      console.warn("Multiple matches found, clicked first");
     }
+  }
+
+  async waitForAppointmentInPastAppointments(
+    appointment: MpopArrangeAppointment,
+    timeout = 80_000,
+    interval = 10_000,
+  ) {
+    const dateTime = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy");
+    const date = dateTime.toFormat("d MMMM yyyy");
+    const time = mpopTime(
+      appointment.dateTime.startTime,
+      appointment.dateTime.endTime,
+    );
+
+    const deadline = Date.now() + timeout;
+
+    while (Date.now() < deadline) {
+      await this.page.reload();
+
+      const section = this.page.locator('[data-qa="pastAppointmentsSection"]');
+      console.log(
+        "Past appointment section before filter row count:",
+        await section.count(),
+      );
+
+      const row = section
+        .locator(".govuk-table__row")
+        .filter({ hasText: new RegExp(` ${date}`) })
+        .filter({ hasText: new RegExp(` ${time}`) })
+        .filter({ hasText: appointment.appointmentType });
+
+      console.log(
+        "Past appointment section after filter row count::",
+        await row.count(),
+      );
+
+      if (await row.getByRole("link", { name: "Manage" }).first().isVisible()) {
+        return;
+      }
+
+      await this.page.waitForTimeout(interval);
+    }
+
+    throw new Error(
+      `Appointment did not appear in Past appointments within ${timeout / 1000} seconds.`,
+    );
   }
 }

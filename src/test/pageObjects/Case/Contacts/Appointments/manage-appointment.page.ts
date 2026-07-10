@@ -1,6 +1,8 @@
 import { expect, Page } from "@playwright/test";
 import ContactPage from "../Contacts/contact.page";
 import { MPOP_URL } from "../../../../util/Data";
+import { MpopDateTime } from "../../../../util/DateTime";
+import { DateTime } from "luxon";
 
 export enum ManageAction {
   AttendedComplied = 0,
@@ -8,7 +10,7 @@ export enum ManageAction {
   Next = 2,
 }
 
-export default class ManageAppointmentsPage extends ContactPage {
+export class ManageAppointmentsPage extends ContactPage {
   constructor(page: Page, crn?: string, uuid?: string) {
     super(page, "Manage", crn, uuid);
   }
@@ -63,6 +65,33 @@ export default class ManageAppointmentsPage extends ContactPage {
     );
   }
 
+  async getDateTimeOfAppointment(): Promise<MpopDateTime> {
+    const text = await this.page
+      .locator("dt", { hasText: "Date and time" })
+      .locator("xpath=following-sibling::dd[1]")
+      .textContent();
+
+    if (!text) throw new Error("Date and time not found");
+
+    const match = text.trim().match(/(.+?) at (.+?) to (.+)/);
+
+    if (!match) throw new Error(`Unexpected format: ${text}`);
+
+    const [, datePart, startPart, endPart] = match;
+
+    const dateTime: MpopDateTime = {
+      date: DateTime.fromFormat(datePart, "d MMMM yyyy").toFormat("d/M/yyyy"),
+      startTime: DateTime.fromFormat(startPart.toUpperCase(), "h:mma").toFormat(
+        "HH:mm",
+      ),
+      endTime: DateTime.fromFormat(endPart.toUpperCase(), "h:mma").toFormat(
+        "HH:mm",
+      ),
+    };
+
+    return dateTime;
+  }
+
   async checkSensitive(sensitve: boolean) {
     if (sensitve) {
       await expect(this.getQA("sensitiveTag")).toHaveCount(1);
@@ -73,5 +102,26 @@ export default class ManageAppointmentsPage extends ContactPage {
 
   async getNoteCount() {
     return await (await this.getAppointmentNotes()).count();
+  }
+
+  async getContactId(): Promise<string> {
+    return this.page.url().split("/appointment/")[1].split("/")[0];
+  }
+
+  async getAppointmentType(): Promise<string> {
+    const heading = await this.page
+      .locator('[data-qa="pageHeading"]')
+      .textContent();
+
+    if (!heading) {
+      throw new Error("Page heading not found");
+    }
+
+    const appointmentType = heading
+      .replace(/^Manage\s+/i, "")
+      .replace(/\s+with\s+.*$/i, "")
+      .replace(/^./, (c) => c.toUpperCase());
+
+    return appointmentType;
   }
 }

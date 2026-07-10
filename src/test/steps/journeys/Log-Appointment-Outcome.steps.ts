@@ -18,6 +18,8 @@ import NextAppointmentPage, {
   NextAction,
 } from "../../pageObjects/Case/Contacts/Appointments/next-appointment.page";
 import CheckYourAnswersPage from "../../pageObjects/Case/Contacts/Appointments/logoutcome-CYA.page";
+import { ManageAppointmentsPage } from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import { MpopArrangeAppointment } from "../../util/ArrangeAppointment";
 
 const { Given, When, Then } = createBdd(testContext);
 
@@ -216,6 +218,7 @@ Then(
 When(
   "I complete the acceptable absence reason page if applicable {string}",
   async ({ ctx }, outcomeType: string) => {
+    ctx.appointments[ctx.appointments.length - 1].outcomeType = outcomeType;
     if (outcomeType !== "Acceptable absence") return;
     const page = ctx.base.page;
     const acceptableAbsencePage = new AcceptableAbsencePage(page);
@@ -268,3 +271,68 @@ Then("I am on the confirmation page", async ({ ctx }) => {
     );
   }
 });
+
+Then(
+  "I am on the confirmation page with content {string}",
+  async ({ ctx }, contentOnPage: string) => {
+    const page = ctx.base.page;
+    const heading = page.locator('[data-qa="pageHeading"]');
+    await expect(heading).toContainText(contentOnPage);
+  },
+);
+
+Then("I navigate to the log more outcomes page", async ({ ctx }) => {
+  const page = ctx.base.page;
+  await page.getByRole("link", { name: "Log more outcomes" }).click();
+
+  const outcomesPage = new LogOutcomesPage(page);
+  await outcomesPage.assertOnPage();
+});
+
+When(
+  "I click on the manage link to record an outcome for the appointment",
+  async ({ ctx }) => {
+    const page = ctx.base.page;
+    let found = false;
+
+    const rows = page.locator("table tbody tr");
+
+    for (let i = 0; i < (await rows.count()); i++) {
+      const manage = rows.nth(i).getByRole("link", { name: "Manage" });
+
+      if ((await manage.count()) === 0) continue;
+
+      await manage.click();
+      await page.waitForLoadState("domcontentloaded");
+
+      if (
+        await page
+          .getByText("You are restricted from viewing this case")
+          .isVisible()
+      ) {
+        await page.goBack();
+        await page.waitForLoadState("domcontentloaded");
+        continue;
+      }
+
+      console.log("CRN", ctx.base.currentCrn);
+      await expect(page.getByText("You must log an outcome")).toBeVisible();
+      found = true;
+      break;
+    }
+
+    expect(found).toBeTruthy();
+
+    const managePage = new ManageAppointmentsPage(page);
+    await managePage.assertOnPage();
+    ctx.case.crn = await managePage.getCRN();
+
+    const dateTime = await managePage.getDateTimeOfAppointment();
+
+    ctx.appointments.push({} as MpopArrangeAppointment);
+    ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
+    ctx.appointments[ctx.appointments.length - 1].appointmentType =
+      await managePage.getAppointmentType();
+    await managePage.clickLogAppointmentOutcomeLink();
+  },
+);

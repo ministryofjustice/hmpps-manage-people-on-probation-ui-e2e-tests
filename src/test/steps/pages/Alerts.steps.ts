@@ -5,7 +5,7 @@ import HomePage from "../../pageObjects/home.page";
 import AlertsPage from "../../pageObjects/alerts";
 import { deliusAlert } from "../../util/Data";
 import OverviewPage from "../../pageObjects/Case/overview.page";
-import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import { ManageAppointmentsPage } from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import NotePage from "../../pageObjects/Case/Contacts/Appointments/note.page";
 import { testContext } from "../../features/Fixtures";
 import { login as loginToDelius } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login.mjs";
