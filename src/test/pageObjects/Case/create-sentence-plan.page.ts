@@ -36,13 +36,12 @@ export default class CreateSentencePlanPage extends CasePage {
 
     await this.page.locator("#goal_title").fill("tenancy");
 
-    await this.page.locator("#is_related_to_other_areas" ).click();
+    await this.page.locator("#is_related_to_other_areas").click();
 
     await this.page.getByRole("checkbox", { name: "Drug use" }).click();
 
-    await this.page.locator("#can_start_now" ).click();
-    await this.page.locator("#target_date_option" ).click();
-
+    await this.page.locator("#can_start_now").click();
+    await this.page.locator("#target_date_option").click();
 
     // Select the goal from the autocomplete
 
@@ -52,22 +51,21 @@ export default class CreateSentencePlanPage extends CasePage {
     // Select "Alcohol use"
     await this.page.getByLabel("Alcohol use").check();
 
-     await this.page.getByRole("button", { name: /Add Steps/i }).click();
+    await this.page.getByRole("button", { name: /Add Steps/i }).click();
   }
 
   async agreeOnPlan() {
     // agree on plan
     // Select first option in "Who will do the step?"
 
-     await this.page.locator('#step_actor_0').click();
-     await this.page.locator('#step_actor_0-option-2').click();
+    await this.page.locator("#step_actor_0").click();
+    await this.page.locator("#step_actor_0-option-2").click();
 
     // Enter step description
     await this.page.locator("#step_description_0").fill("Test goal");
 
-    await this.page.locator('#step_status_0').click();
-    await this.page.locator('#step_status_0-option-2').click();
-
+    await this.page.locator("#step_status_0").click();
+    await this.page.locator("#step_status_0-option-2").click();
 
     // Click "Save and continue"
     await this.page.getByRole("button", { name: /save and continue/i }).click();
