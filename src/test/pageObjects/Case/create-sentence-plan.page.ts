@@ -15,7 +15,7 @@ export default class CreateSentencePlanPage extends CasePage {
   }
 
   async customiseScenario(crn: string) {
-    await this.page.getByRole("button", { name: "Customise scenario" }).click();
+    await this.page.getByRole("button", { name: "Customize scenario" }).click();
     const randomizeCheckbox = this.page.locator("#crn-randomize-checkbox");
     const crnInput = this.page.locator("#crn");
 
@@ -34,12 +34,17 @@ export default class CreateSentencePlanPage extends CasePage {
   async createGoal() {
     await this.page.getByRole("button", { name: "Create goal" }).click();
 
-    await this.page.getByRole("radio", { name: "Drug use" }).click();
+    await this.page.locator("#goal_title").fill("tenancy");
 
-    await this.page.getByRole("button", { name: "Continue" }).click();
+    await this.page.locator("#is_related_to_other_areas" ).click();
+
+    await this.page.getByRole("checkbox", { name: "Drug use" }).click();
+
+    await this.page.locator("#can_start_now" ).click();
+    await this.page.locator("#target_date_option" ).click();
+
 
     // Select the goal from the autocomplete
-    await this.page.locator("#goal_title").fill("tenancy");
 
     // Is this goal related to any other area of need? -> Yes
     await this.page.getByLabel("Yes").first().check();
@@ -47,21 +52,22 @@ export default class CreateSentencePlanPage extends CasePage {
     // Select "Alcohol use"
     await this.page.getByLabel("Alcohol use").check();
 
-    // Next Yes question (assuming there's another radio group further down)
-    await this.page.getByRole("radio", { name: "Yes" }).nth(1).check();
-
-    await this.page.locator('label[for="target_date_option"]').click();
-    // Click Add steps
-    await this.page.getByRole("button", { name: "Add steps" }).click();
+     await this.page.getByRole("button", { name: /Add Steps/i }).click();
   }
 
   async agreeOnPlan() {
     // agree on plan
     // Select first option in "Who will do the step?"
-    await this.page.locator("#step_actor_0").selectOption({ index: 1 });
+
+     await this.page.locator('#step_actor_0').click();
+     await this.page.locator('#step_actor_0-option-2').click();
 
     // Enter step description
     await this.page.locator("#step_description_0").fill("Test goal");
+
+    await this.page.locator('#step_status_0').click();
+    await this.page.locator('#step_status_0-option-2').click();
+
 
     // Click "Save and continue"
     await this.page.getByRole("button", { name: /save and continue/i }).click();
