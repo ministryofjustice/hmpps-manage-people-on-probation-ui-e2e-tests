@@ -21,6 +21,14 @@ export default class MPopPage {
     }
   }
 
+  async assertYellowLabelOnPage(expectedText: string) {
+    await expect(
+      this.page.locator(
+        `.govuk-tag--yellow`,
+      ).first(),
+    ).toContainText(expectedText);
+  }
+
   async checkOnPage(): Promise<boolean> {
     try {
       await this.checkQA("pageHeading", this.title ?? "");

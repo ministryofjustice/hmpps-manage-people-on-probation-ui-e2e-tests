@@ -8,7 +8,14 @@ Feature: As a practitioner
 
   @full @cases @integration
   Scenario: View my cases page
+    Then I can view below columns on the cases page:
+      | Title            |
+      | Cases            |
+      | Main Sentence    |
+      | Last Appointment |
+      | Next Appointment |
     Then the cases page is populated
+    And the case page has yellow 'New case' label
     And the cases page links work correctly
 
 @full @cases @integration

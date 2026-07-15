@@ -1,10 +1,11 @@
-import { Page } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import MPopPage from "./page";
 import { MPOP_URL } from "../util/Data";
 import { baseNavigation } from "../util/Navigation";
 import OverviewPage from "./Case/overview.page";
 import RecentCasesPage from "./recent-cases.page";
 import { CaseFilters } from "../util/Cases";
+import { DataTable } from "playwright-bdd";
 
 export default class CasesPage extends MPopPage {
   constructor(page: Page) {
@@ -55,6 +56,38 @@ export default class CasesPage extends MPopPage {
     await this.getQA("caseloadNavigation").isVisible();
     await this.getClass("govuk-filter-background").isVisible();
     await this.getQA("myCasesCard").isVisible();
+  }
+
+  async assertCaseColumnNames(data: DataTable) {
+    for (const row of data.rows()) {
+      const label = row[0];
+
+      switch (label) {
+        case "Cases":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(0),
+          ).toContainText(label);
+          break;
+
+        case "Main Sentence":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(1),
+          ).toContainText(label);
+          break;
+
+        case "Last Appointment":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(2),
+          ).toContainText(label);
+          break;
+
+        case "Next Appointment":
+          await expect(
+            this.page.locator(`[class=govuk-table__header]`).nth(3),
+          ).toContainText("Next Appointment");
+          break;
+      }
+    }
   }
 
   async checkNoRecentCases() {
