@@ -19,6 +19,22 @@ Then("the cases page is populated", async ({ ctx }) => {
   await casePage.checkSections();
 });
 
+Then(
+  "the case page has yellow {string} label",
+  async ({ ctx }, expectedText: string) => {
+    const casePage = new CasesPage(ctx.base.page);
+    await casePage.assertYellowLabelOnPage(expectedText);
+  },
+);
+
+Then(
+  "I can view below columns on the cases page:",
+  async ({ ctx }, data: DataTable) => {
+    const casePage = new CasesPage(ctx.base.page);
+    await casePage.assertCaseColumnNames(data);
+  },
+);
+
 Then("the cases page links work correctly", async ({ ctx }) => {
   const casePage = new CasesPage(ctx.base.page);
   await casePage.assertOnPage();
