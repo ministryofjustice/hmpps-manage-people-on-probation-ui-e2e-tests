@@ -156,8 +156,7 @@ export default class AppointmentsPage extends CasePage {
         .locator(".govuk-table__row")
         .filter({ hasText: new RegExp(` ${date}`) })
         .filter({ hasText: new RegExp(` ${time}`) })
-        .filter({ hasText: appointment.appointmentType });
-
+        .filter({ hasText: appointment.appointmentType || appointment.type });
       console.log(
         "Past appointment section after filter row count::",
         await row.count(),
