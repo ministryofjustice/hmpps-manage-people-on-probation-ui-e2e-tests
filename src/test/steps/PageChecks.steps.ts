@@ -25,7 +25,7 @@ import ManageCheckInsPage from "../pageObjects/Case/Contacts/Checkins/manage.pag
 import RiskFlagPage from "../pageObjects/Case/Contacts/risk-flag.page";
 import StopCheckInsPage from "../pageObjects/Case/Contacts/Checkins/stop.page";
 import UpdateAddressPage from "../pageObjects/Case/Contacts/update-address.page";
-import ManageAppointmentsPage from "../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import { ManageAppointmentsPage } from "../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import AddNotePage from "../pageObjects/Case/Contacts/Appointments/add-note.page";
 import NextAppointmentPage from "../pageObjects/Case/Contacts/Appointments/next-appointment.page";
 import NotePage from "../pageObjects/Case/Contacts/Appointments/note.page";

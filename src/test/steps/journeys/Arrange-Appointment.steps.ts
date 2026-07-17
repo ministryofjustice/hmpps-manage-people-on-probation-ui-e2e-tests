@@ -7,7 +7,7 @@ import {
 import { testContext } from "../../features/Fixtures";
 import LocationNotInListPage from "../../pageObjects/Case/Contacts/Appointments/location-not-in-list.page";
 import ConfirmationPage from "../../pageObjects/Case/Contacts/Appointments/confirmation/confirmation.page";
-import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import { ManageAppointmentsPage } from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import { getClientToken } from "../../util/API";
 import { DateTime } from "luxon";
 import {
@@ -35,7 +35,12 @@ import * as fs from "fs";
 import { expect } from "@playwright/test";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import { login as loginToDelius } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login";
-import { toNDeliusSearchResponseDateTimeFormat } from "../../util/Delius";
+import {
+  deliusDeepLinkUrl,
+  expectSummaryValue,
+  toNDeliusDate,
+  toNDeliusSearchResponseDateTimeFormat,
+} from "../../util/Delius";
 
 const { When, Then } = createBdd(testContext);
 
@@ -106,6 +111,19 @@ When(
 );
 
 When(
+  "I complete the location and datetime page with date in the {string} at {string}",
+  async ({ ctx }, appointmentDateType: string, location: string) => {
+    const page = ctx.base.page;
+    const dateTime = randomAppointmentDateTime(appointmentDateType);
+    const locationDateTimePage = new LocationDateTimePage(page);
+    await locationDateTimePage.assertOnPage();
+    await locationDateTimePage.completePage(dateTime, location);
+    ctx.appointments[ctx.appointments.length - 1].location = location;
+    ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
+  },
+);
+
+When(
   "I complete the location and datetime page with date {string}, startTime {string}, endTime {string} and location {string}",
   async (
     { ctx },
@@ -115,6 +133,36 @@ When(
     location: string,
   ) => {
     const page = ctx.base.page;
+
+    const dateTime: MpopDateTime = {
+      date: luxonString(dateTimeMapping[date]),
+      startTime: startTime,
+      endTime: endTime,
+    };
+    const locationDateTimePage = new LocationDateTimePage(page);
+    await locationDateTimePage.assertOnPage();
+    await locationDateTimePage.completePage(dateTime, location);
+    ctx.appointments[ctx.appointments.length - 1].location = location;
+    ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
+  },
+);
+
+When(
+  "I complete the location and datetime page with date {string} and location {string}",
+  async ({ ctx }, date: string, location: string) => {
+    const page = ctx.base.page;
+
+    const now = DateTime.now();
+
+    const start =
+      now.second >= 50
+        ? now.plus({ minutes: 2 }).startOf("minute")
+        : now.plus({ minutes: 1 }).startOf("minute");
+
+    const end = now.plus({ minutes: 30 }).startOf("minute");
+    const startTime = start.toFormat("HH:mm");
+    const endTime = end.toFormat("HH:mm");
+
     const dateTime: MpopDateTime = {
       date: luxonString(dateTimeMapping[date]),
       startTime,
@@ -362,18 +410,74 @@ When("I access the created appointment", async ({ ctx }) => {
     ctx.appointments[ctx.appointments.length - 1];
   const appointmentsPage = new AppointmentsPage(page);
   await appointmentsPage.assertOnPage();
+
   await appointmentsPage.manageAppointment(appointment);
+});
+
+Then("I wait until the appointment is in the past", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const appointmentsPage = new AppointmentsPage(page);
+
+  const appointment = ctx.appointments[ctx.appointments.length - 1];
+
+  await appointmentsPage.waitForAppointmentInPastAppointments(appointment);
+
+  await appointmentsPage.manageAppointment(appointment);
+});
+
+Then("I click on log an outcome for the appointment", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const managePage = new ManageAppointmentsPage(page);
+  await managePage.clickLogAppointmentOutcomeLink();
 });
 
 Then("I can see the Manage page", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
+  ctx.contact.contactId = await managePage.getContactId();
   await managePage.assertOnPage();
 });
 
 Then(
-  "I confirm I can see the contact log on nDelius with appointment type {string} and outcome type {string}",
-  async ({ ctx }, appointmentType: string, outcomeType: string) => {
+  "I can see the contact on nDelius with {string}",
+  async ({ ctx }, nDeliusOutcomeType: string) => {
+    const page = ctx.base.page;
+    await loginToDelius(page);
+    const url = deliusDeepLinkUrl(ctx.case.crn, ctx.contact.contactId);
+
+    await page.goto(url);
+    await page.waitForLoadState("networkidle");
+
+    await expectSummaryValue(
+      page,
+      "Contact Type:",
+      ctx.appointments[ctx.appointments.length - 1].appointmentType,
+    );
+    await expectSummaryValue(
+      page,
+      "Date:",
+      toNDeliusDate(
+        ctx.appointments[ctx.appointments.length - 1].dateTime.date,
+      ),
+    );
+    await expectSummaryValue(
+      page,
+      "Start Time:",
+      ctx.appointments[ctx.appointments.length - 1].dateTime.startTime,
+    );
+    await expectSummaryValue(page, "Officer:", "TestUser, MPOP");
+    await expectSummaryValue(page, "Contact Outcome:", nDeliusOutcomeType);
+  },
+);
+
+Then(
+  "I confirm I can see the contact log on nDelius with appointment type {string} and outcome type {string} and contact created with date {string}",
+  async (
+    { ctx },
+    appointmentType: string,
+    outcomeType: string,
+    appointmentDateType: string,
+  ) => {
     const page = ctx.base.page;
     await loginToDelius(page);
     await page.locator("a", { hasText: "National search" }).click();
@@ -387,27 +491,36 @@ Then(
     await page.waitForTimeout(2000);
     await page.getByRole("link", { name: "Contact List" }).click();
 
-    await page
-      .getByLabel("From date")
-      .fill(ctx.appointments[ctx.appointments.length - 1].dateTime.date);
-    await page
-      .getByLabel("To date")
-      .fill(ctx.appointments[ctx.appointments.length - 1].dateTime.date);
+    let dateToUseForDeliusSearch =
+      ctx.appointments[ctx.appointments.length - 1].dateTime.date;
+    let startTimeToUseForDeliusSearch =
+      ctx.appointments[ctx.appointments.length - 1].dateTime.startTime;
+
+    if (!appointmentType) {
+      appointmentType =
+        ctx.appointments[ctx.appointments.length - 1].appointmentType;
+    }
+
+    if (appointmentDateType === "TODAY") {
+      dateToUseForDeliusSearch = luxonString(today);
+      startTimeToUseForDeliusSearch = "10:00";
+    }
+
+    await page.getByLabel("From date").fill(dateToUseForDeliusSearch);
+    await page.getByLabel("To date").fill(dateToUseForDeliusSearch);
     await page.getByLabel("To date").press("Tab");
 
     await page.locator('input[type="submit"][value="Search"]').click();
 
     const deliusSearchResponseDateTime = toNDeliusSearchResponseDateTimeFormat(
-      ctx.appointments[ctx.appointments.length - 1].dateTime.date,
-      ctx.appointments[ctx.appointments.length - 1].dateTime.startTime,
+      dateToUseForDeliusSearch,
+      startTimeToUseForDeliusSearch,
     );
+
     const row = page
       .locator("#contactTable tbody tr")
       .filter({
         has: page.locator("td", { hasText: appointmentType }),
-      })
-      .filter({
-        has: page.locator("td", { hasText: outcomeType }),
       })
       .filter({
         has: page.locator("td", { hasText: deliusSearchResponseDateTime }),
@@ -415,6 +528,7 @@ Then(
       .filter({
         has: page.locator("td", { hasText: "TestUser, MPOP" }),
       });
+
     await expect(row).toBeVisible();
   },
 );
@@ -589,3 +703,55 @@ Then(
     ]);
   },
 );
+
+export function randomAppointmentDateTime(type: string): MpopDateTime {
+  const start = new Date();
+
+  switch (type) {
+    case "PAST": {
+      // Random time in the last 24 hours
+      const millisAgo = Math.floor(Math.random() * 24 * 60 * 60 * 1000);
+      start.setTime(Date.now() - millisAgo);
+      break;
+    }
+
+    case "TODAY": {
+      // Random time today
+      start.setHours(
+        Math.floor(Math.random() * 24),
+        Math.floor(Math.random() * 60),
+        0,
+        0,
+      );
+      break;
+    }
+
+    case "FUTURE": {
+      // Random time in the next 24 hours
+      const millisAhead = Math.floor(Math.random() * 24 * 60 * 60 * 1000);
+      start.setTime(Date.now() + millisAhead);
+      break;
+    }
+  }
+
+  const end = new Date(start);
+  end.setMinutes(end.getMinutes() + 5);
+
+  const formatTime = (date: Date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    // Convert 24-hour time to 12-hour time
+    const twelveHour = hours % 12 || 12;
+
+    return `${twelveHour.toString().padStart(2, "0")}:${minutes
+      .toString()
+      .padStart(2, "0")}`;
+  };
+
+  return {
+    date: `${start.getDate()}/${start.getMonth() + 1}/${start.getFullYear()}`,
+    startTime: formatTime(start),
+    endTime: formatTime(end),
+  };
+}

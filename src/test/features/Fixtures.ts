@@ -42,7 +42,8 @@ export interface CheckIns {
   restart?: MpopSetupRestart;
 }
 export interface Contact {
-  uuid: string;
+  uuid?: string;
+  contactId: string;
 }
 export interface Cases {
   count: number;

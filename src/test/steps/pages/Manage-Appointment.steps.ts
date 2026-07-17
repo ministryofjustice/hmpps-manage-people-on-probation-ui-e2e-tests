@@ -3,7 +3,7 @@ import { createBdd } from "playwright-bdd";
 import { testCrn } from "../../util/Data";
 import AppointmentsPage from "../../pageObjects/Case/appointments.page";
 import { testContext } from "../../features/Fixtures";
-import ManageAppointmentsPage from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import { ManageAppointmentsPage } from "../../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import AddNotePage from "../../pageObjects/Case/Contacts/Appointments/add-note.page";
 import HomePage from "../../pageObjects/home.page";
 import LogOutcomesPage from "../../pageObjects/Case/log-outcomes.page";

@@ -20,9 +20,12 @@ import {
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data";
 
 import { ROOT_DIR } from "./Paths";
+import * as dotenv from "dotenv";
 
 const USER_FILE = path.join(ROOT_DIR, "temp-offender.json");
 const TMP_FILE = USER_FILE + ".tmp";
+dotenv.config({ path: ".env" });
+const deliusUrl: string = process.env.DELIUS_URL!;
 
 export const loginDeliusAndCreateOffender = async (
   page: Page,
@@ -141,3 +144,28 @@ export const toNDeliusSearchResponseDateTimeFormat = (
   const [day, month, year] = date.split("/");
   return `${day.padStart(2, "0")}/${month.padStart(2, "0")}/${year} ${time}`;
 };
+
+export function deliusDeepLinkUrl(crn: string, contactId: string) {
+  const idParamKey = "contactID";
+  const idParam = contactId ? `&${idParamKey}=${contactId}` : "";
+  const nDeliusContactUrl = `${deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=Contact&CRN=${crn}${idParam}`;
+  return nDeliusContactUrl;
+}
+
+export async function expectSummaryValue(
+  page: Page,
+  label: string,
+  expected: string,
+) {
+  if (!expected) return;
+
+  const value = page.locator(`label:text-is("${label}") + span`);
+  const escapedExpected = expected.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  await expect(value).toContainText(new RegExp(escapedExpected, "i"));
+}
+
+export function toNDeliusDate(dateString: string) {
+  const [month, day, year] = dateString.split("/");
+
+  return `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year}`;
+}

@@ -1,5 +1,5 @@
 import { expect } from "@playwright/test";
-import ManageAppointmentsPage from "../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
+import { ManageAppointmentsPage } from "../pageObjects/Case/Contacts/Appointments/manage-appointment.page";
 import MPopPage from "../pageObjects/page";
 
 export const searchForAppointment = async (

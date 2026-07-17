@@ -18,7 +18,16 @@ export default class AddNotePage extends ContactPage {
     if (file) {
       console.log("not yet implemented"); //file
     }
-    if (sensitivity != undefined && !sensitivitySet) {
+
+    const sensitivityQuestion = this.page.getByText(
+      "Does this contact include sensitive information?",
+    );
+
+    if (
+      (await sensitivityQuestion.isVisible()) &&
+      sensitivity != undefined &&
+      !sensitivitySet
+    ) {
       await this.clickRadioByName("sensitiveInformation", sensitivity);
     }
     await this.submit();
