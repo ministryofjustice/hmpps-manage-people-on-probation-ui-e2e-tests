@@ -454,32 +454,6 @@ Then("I click on log an outcome for the appointment", async ({ ctx }) => {
   await managePage.clickLogAppointmentOutcomeLink();
 });
 
-// Then("I wait until the appointment is in the past", async ({ ctx }) => {
-//   const page = ctx.base.page;
-//
-//   const interval = 2_000;
-//   await page.waitForTimeout(interval);
-//
-//   const manageLink = page
-//     .locator('[data-qa="pastAppointmentsSection"] tbody tr')
-//     .filter({
-//       has: page.locator('[data-qa^="pastAppointmentType"]', {
-//         hasText: "Planned office visit (NS)",
-//       }),
-//     })
-//     .filter({
-//       has: page.locator('[data-qa^="pastAppointmentDate"]', {
-//         hasText: "14 July 2026",
-//       }),
-//     })
-//
-//     .getByRole("link", { name: "Manage" });
-//
-//   if (!(await manageLink.isVisible())) {
-//     throw new Error("Manage link did not appear within 80 seconds.");
-//   }
-// });
-
 Then("I can see the Manage page", async ({ ctx }) => {
   const page = ctx.base.page;
   const managePage = new ManageAppointmentsPage(page);
@@ -752,7 +726,6 @@ Then(
     ]);
   },
 );
-export type AppointmentDateType = "PAST" | "TODAY" | "FUTURE";
 
 export function randomAppointmentDateTime(type: string): MpopDateTime {
   const start = new Date();
