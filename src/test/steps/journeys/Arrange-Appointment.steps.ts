@@ -175,29 +175,6 @@ When(
     ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
   },
 );
-//
-// When(
-//     "I complete the location and datetime page with date {string}, startTime {string}, endTime {string} and location {string}",
-//     async (
-//         { ctx },
-//         date: string,
-//         startTime: string,
-//         endTime: string,
-//         location: string,
-//     ) => {
-//         const page = ctx.base.page;
-//         const dateTime: MpopDateTime = {
-//             date: luxonString(dateTimeMapping[date]),
-//             startTime,
-//             endTime,
-//         };
-//         const locationDateTimePage = new LocationDateTimePage(page);
-//         await locationDateTimePage.assertOnPage();
-//         await locationDateTimePage.completePage(dateTime, location);
-//         ctx.appointments[ctx.appointments.length - 1].location = location;
-//         ctx.appointments[ctx.appointments.length - 1].dateTime = dateTime;
-//     },
-// );
 
 When(
   "I complete the location and datetime page with date {string}, startTime {string}, endTime {string} and locationID {int}",
