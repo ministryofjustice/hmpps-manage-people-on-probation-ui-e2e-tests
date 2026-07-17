@@ -77,7 +77,7 @@ export class ManageAppointmentsPage extends ContactPage {
 
     if (!match) throw new Error(`Unexpected format: ${text}`);
 
-    const [datePart, startPart, endPart] = match;
+    const [, datePart, startPart, endPart] = match;
 
     const dateTime: MpopDateTime = {
       date: DateTime.fromFormat(datePart, "d MMMM yyyy").toFormat("d/M/yyyy"),
