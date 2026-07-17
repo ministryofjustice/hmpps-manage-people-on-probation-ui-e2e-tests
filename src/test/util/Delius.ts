@@ -164,7 +164,7 @@ export async function expectSummaryValue(
   await expect(value).toContainText(new RegExp(escapedExpected, "i"));
 }
 
-export function toNDeliusDate(dateString) {
+export function toNDeliusDate(dateString: string) {
   const [month, day, year] = dateString.split("/");
 
   return `${month.padStart(2, "0")}/${day.padStart(2, "0")}/${year}`;
