@@ -139,3 +139,23 @@ export const convertFeatureDateToString = (date: string): string => {
 
   return luxonString(dateTime);
 };
+
+export const getDateTimeWithImmediateExpiry = (
+  date: string = "TODAY",
+  durationMinutes = 30,
+): MpopDateTime => {
+  const now = DateTime.now();
+
+  const start =
+    now.second >= 40
+      ? now.plus({ minutes: 2 }).startOf("minute")
+      : now.plus({ minutes: 1 }).startOf("minute");
+
+  const end = start.plus({ minutes: durationMinutes });
+
+  return {
+    date: luxonString(dateTimeMapping[date]),
+    startTime: start.toFormat("HH:mm"),
+    endTime: end.toFormat("HH:mm"),
+  };
+};
