@@ -12,6 +12,7 @@ import { getClientToken } from "../../util/API";
 import { DateTime } from "luxon";
 import {
   dateTimeMapping,
+  getDateTimeWithImmediateExpiry,
   luxonString,
   MpopDateTime,
   today,
@@ -32,7 +33,7 @@ import ArrangeAnotherPage from "../../pageObjects/Case/Contacts/Appointments/arr
 import ReschedulePage from "../../pageObjects/Case/Contacts/Appointments/reschedule.page";
 import RescheduleDetailsPage from "../../pageObjects/Case/Contacts/Appointments/reschedule-details";
 import * as fs from "fs";
-import { expect } from "@playwright/test";
+import { expect, Page } from "@playwright/test";
 import AttendedCompliedPage from "../../pageObjects/Case/Contacts/Appointments/attended-complied.page";
 import { login as loginToDelius } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login";
 import {
@@ -152,22 +153,7 @@ When(
   async ({ ctx }, date: string, location: string) => {
     const page = ctx.base.page;
 
-    const now = DateTime.now();
-
-    const start =
-      now.second >= 50
-        ? now.plus({ minutes: 2 }).startOf("minute")
-        : now.plus({ minutes: 1 }).startOf("minute");
-
-    const end = now.plus({ minutes: 30 }).startOf("minute");
-    const startTime = start.toFormat("HH:mm");
-    const endTime = end.toFormat("HH:mm");
-
-    const dateTime: MpopDateTime = {
-      date: luxonString(dateTimeMapping[date]),
-      startTime,
-      endTime,
-    };
+    const dateTime: MpopDateTime = getDateTimeWithImmediateExpiry();
     const locationDateTimePage = new LocationDateTimePage(page);
     await locationDateTimePage.assertOnPage();
     await locationDateTimePage.completePage(dateTime, location);
@@ -704,6 +690,78 @@ Then(
   },
 );
 
+When(
+  "I create a contact in nDelius with type {string} with immediate expiry",
+  async ({ ctx }, contactType: string) => {
+    const page = ctx.base.page;
+
+    await page.locator("a", { hasText: "National search" }).click();
+    await page.fill("#crn\\:inputText", ctx.case.crn);
+    await page.click("#searchButton");
+    await page.waitForTimeout(2000);
+    await page
+      .locator("#offendersTable tbody tr")
+      .first()
+      .getByRole("link", { name: "Add Contact" })
+      .click();
+    await expect(page).toHaveTitle("Add Contact Details", { timeout: 10000 });
+    const dateTimeWithImmediateExpiry = getDateTimeWithImmediateExpiry();
+
+    await page
+      .locator("#RelatedTo\\:selectOneMenu")
+      .selectOption({ label: "Event 1 - Adult Custody < 12m (6 Months)" });
+    await waitForAjax(page);
+
+    await page
+      .locator("#ContactCategory\\:selectOneMenu")
+      .selectOption({ label: "Community Management" });
+    await waitForAjax(page);
+
+    const contactTypeTest = page.locator(
+      '[id="ContactType:selectOneMenu-autocomplete"]',
+    );
+    await contactTypeTest.pressSequentially("Planned Office Visit");
+    await page
+      .getByRole("option", {
+        name: "Planned Office Visit (NS)",
+      })
+      .click();
+    await waitForAjax(page);
+
+    await page.fill(
+      "#StartDate\\:datePicker",
+      dateTimeWithImmediateExpiry.date,
+    );
+    await page.fill(
+      "#StartTime\\:timePicker",
+      dateTimeWithImmediateExpiry.startTime,
+    );
+    await page.fill(
+      "#EndTime\\:timePicker",
+      dateTimeWithImmediateExpiry.endTime,
+    );
+
+    await page.locator("#Provider\\:selectOneMenu").selectOption({ index: 1 });
+    await waitForAjax(page);
+    await page.locator("#Team\\:selectOneMenu").selectOption({ index: 1 });
+    // await waitForAjax(page)
+    // await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
+    await page.waitForFunction(() => {
+      const select = document.querySelector(
+        "#Location\\:selectOneMenu",
+      ) as HTMLSelectElement | null;
+      return select !== null && select.options.length > 1;
+    });
+
+    await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
+    await waitForAjax(page);
+    await page.locator("#Officer\\:selectOneMenu").selectOption({ index: 1 });
+    await waitForAjax(page);
+
+    await page.locator('input[value="Save"]').click();
+  },
+);
+
 export function randomAppointmentDateTime(type: string): MpopDateTime {
   const start = new Date();
 
@@ -755,3 +813,14 @@ export function randomAppointmentDateTime(type: string): MpopDateTime {
     endTime: formatTime(end),
   };
 }
+
+export const waitForAjax = async (page: Page): Promise<void> => {
+  try {
+    // wait up to 500ms for a request to start
+    await expect(page.locator(".ajax-loading")).toBeAttached({ timeout: 500 });
+  } catch {
+    // no request fired - maybe the previous value didn't change, or this is not a dynamic field
+  }
+  // wait for request to finish
+  await expect(page.locator(".ajax-loading")).not.toBeAttached();
+};

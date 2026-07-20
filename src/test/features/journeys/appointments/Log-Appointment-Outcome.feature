@@ -146,3 +146,12 @@ Feature: Log appointment outcome
     Examples:
       |  outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend             |nDeliusOutcomeType    |
       | Attended - complied          |                      |                   |                    |                         |Attended - complied   |
+
+  @logoutcome @test
+  Scenario Outline: Create contact in nDelius and record outcome in mpop
+    Given Context has been created for "appointments" test
+    And A new offender has been created or existing made available
+    When I create a contact in nDelius with type "<contactType>" with immediate expiry
+    Examples:
+      |  contactType                 |
+      | Planned office visit (NS)    |
