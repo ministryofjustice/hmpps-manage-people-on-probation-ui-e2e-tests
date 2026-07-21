@@ -168,7 +168,7 @@ jobs:
 
     - name: Notify Slack
       if: always() && github.ref == 'refs/heads/main'
-      uses: slackapi/slack-github-action@v3.0.3
+      uses: slackapi/slack-github-action@v3.0.5
       with:
         method: chat.postMessage
         token: ${{ secrets.HMPPS_SLACK_BOT_TOKEN }}
