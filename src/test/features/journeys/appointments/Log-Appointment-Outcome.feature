@@ -147,7 +147,7 @@ Feature: Log appointment outcome
       |  outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend             |nDeliusOutcomeType    |
       | Attended - complied          |                      |                   |                    |                         |Attended - complied   |
 
-  @logoutcome @futureappointment @ndelius @test
+  @logoutcome @futureappointment @ndelius
   Scenario Outline: Create contact in nDelius and record outcome in mpop
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
