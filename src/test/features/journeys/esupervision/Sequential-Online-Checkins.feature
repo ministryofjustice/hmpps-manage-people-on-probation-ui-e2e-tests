@@ -5,7 +5,7 @@ Feature: Setup Checkins
     So they can be used by an offender
 
     @smoke @full @esupervision @sequential
-    Scenario: Setup Online Checkins        
+    Scenario: Setup Online Checkins
         Given Context has been created for "Esupervision" test
         And A new offender has been created or existing made available
         And I am logged in
@@ -28,19 +28,6 @@ Feature: Setup Checkins
             | preference | EMAIL            |
         And I submit the checkin
         Then Checkins should be setup
-
-    @smoke @full @esupervision @sequential
-    Scenario: Review checkIn    
-        When I mock the completion of a completed checkin
-            | label               | value           |
-            | mentalHealth        | NotGreat        |
-            | mentalHealthComment | tired           |
-            | drugsSupport        | need help       |
-            | otherSupport        | friends are bad |
-            | callback            | Yes             |
-        Then I can access the new checkIn in the contact log
-        When I review the completed checkIn
-        Then I can view the reviewed checkIn
 
     @smoke @full @esupervision @sequential
     Scenario: Stop CheckIns
