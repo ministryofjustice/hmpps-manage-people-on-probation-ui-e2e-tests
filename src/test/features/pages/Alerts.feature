@@ -7,6 +7,8 @@ Feature: Alerts page
     Scenario: Verify alerts page functionality
         Given Context has been created for "Alerts" test
         And I am logged in
+        And I have navigated to alerts
+        And I select and clear all alerts over 60
         And I have noted the alerts count
         And A new offender has been created or existing made available
         And The offender has been given an alert
