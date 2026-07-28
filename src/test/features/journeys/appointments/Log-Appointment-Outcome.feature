@@ -147,11 +147,30 @@ Feature: Log appointment outcome
       |  outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend             |nDeliusOutcomeType    |
       | Attended - complied          |                      |                   |                    |                         |Attended - complied   |
 
-  @logoutcome @test
+  @logoutcome @futureappointment @ndelius
   Scenario Outline: Create contact in nDelius and record outcome in mpop
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
     When I create a contact in nDelius with type "<contactType>" with immediate expiry
+    And I am logged in
+    When I navigate to the appointments page
+    And I wait until the appointment is in the past
+    And I click on log an outcome for the appointment
+    When I select the option "Attended - complied" and continue
+    And I complete the acceptable absence reason page if applicable "Attended - complied"
+    Then I am navigated to the "<enforcementPage>" page
+    When I select the enforcement action "<enforcementAction>" and continue
+    Then I am navigated to the "<breachOrRecallPage>" page and I select the radio option "<whoWillSend>"
+    Then I complete the add a note page
+    And I complete the next appointment page
+    Then I am on the check your answers page
+    And I confirm the appointment outcome
+    Then I am on the confirmation page with content "Appointment outcome updated"
+
     Examples:
-      |  contactType                 |
-      | Planned office visit (NS)    |
+    Examples:
+      | contactType               | enforcementAction | enforcementPage | breachOrRecallPage | whoWillSend |
+      | Planned office visit (NS) |                   |                 |                    |             |
+
+
+

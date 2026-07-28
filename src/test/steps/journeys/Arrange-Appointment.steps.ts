@@ -723,7 +723,7 @@ When(
     await contactTypeTest.pressSequentially("Planned Office Visit");
     await page
       .getByRole("option", {
-        name: "Planned Office Visit (NS)",
+        name: contactType,
       })
       .click();
     await waitForAjax(page);
@@ -740,25 +740,43 @@ When(
       "#EndTime\\:timePicker",
       dateTimeWithImmediateExpiry.endTime,
     );
-
-    await page.locator("#Provider\\:selectOneMenu").selectOption({ index: 1 });
+    await page.locator("#EndTime\\:timePicker").press("Tab");
     await waitForAjax(page);
-    await page.locator("#Team\\:selectOneMenu").selectOption({ index: 1 });
-    // await waitForAjax(page)
-    // await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
-    await page.waitForFunction(() => {
-      const select = document.querySelector(
-        "#Location\\:selectOneMenu",
-      ) as HTMLSelectElement | null;
-      return select !== null && select.options.length > 1;
-    });
+
+    const provider = page.locator("#TransferToTrust\\:selectOneMenu");
+    await provider.pressSequentially("London");
+    await waitForAjax(page);
+
+    await page
+      .locator("#TransferToTeam\\:selectOneMenu")
+      .selectOption({ index: 1 });
+    await waitForAjax(page);
 
     await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
     await waitForAjax(page);
-    await page.locator("#Officer\\:selectOneMenu").selectOption({ index: 1 });
+
+    await page
+      .locator("#TransferToOfficer\\:selectOneMenu")
+      .selectOption({ index: 1 });
     await waitForAjax(page);
 
     await page.locator('input[value="Save"]').click();
+    await waitForAjax(page);
+
+    if (!ctx.appointments) {
+      ctx.appointments = [];
+    }
+
+    ctx.appointments.push({
+      sentence: "Event 1 - Adult Custody < 12m (6 Months)",
+      type: "Planned Office Visit (NS)",
+      dateTime: dateTimeWithImmediateExpiry,
+      location: "",
+      text: "Planned Office Visit (NS)",
+      sensitivity: "Standard",
+      appointmentType: "Planned Office Visit (NS)",
+      outcomeType: "",
+    });
   },
 );
 

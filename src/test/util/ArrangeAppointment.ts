@@ -16,6 +16,13 @@ export interface MpopArrangeAppointment {
   outcomeType: string;
 }
 
+export interface NDeliusAppointment {
+  dateTime: MpopDateTime;
+  appointmentType: string;
+  outcomeType?: string;
+  type?: string;
+}
+
 export interface MpopAppointmentChanges {
   sentenceId?: number | "person";
   typeId?: number;
