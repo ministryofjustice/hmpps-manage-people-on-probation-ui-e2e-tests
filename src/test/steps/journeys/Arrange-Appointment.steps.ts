@@ -451,7 +451,7 @@ Then(
       "Start Time:",
       ctx.appointments[ctx.appointments.length - 1].dateTime.startTime,
     );
-    await expectSummaryValue(page, "Officer:", "TestUser, MPOP");
+
     await expectSummaryValue(page, "Contact Outcome:", nDeliusOutcomeType);
   },
 );

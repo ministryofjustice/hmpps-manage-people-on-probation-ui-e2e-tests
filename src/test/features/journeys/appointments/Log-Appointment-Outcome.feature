@@ -147,7 +147,7 @@ Feature: Log appointment outcome
       |  outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend             |nDeliusOutcomeType    |
       | Attended - complied          |                      |                   |                    |                         |Attended - complied   |
 
-  @logoutcome @futureappointment @ndelius
+  @logoutcome @futureappointment @ndelius @test
   Scenario Outline: Create contact in nDelius and record outcome in mpop
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
@@ -166,11 +166,14 @@ Feature: Log appointment outcome
     Then I am on the check your answers page
     And I confirm the appointment outcome
     Then I am on the confirmation page with content "Appointment outcome updated"
+    When I navigate to the appointments page
+    And I access the created appointment
+    Then I can see the Manage page
+    Then I can see the contact on nDelius with "<nDeliusOutcomeType>"
 
     Examples:
-    Examples:
-      | contactType               | enforcementAction | enforcementPage | breachOrRecallPage | whoWillSend |
-      | Planned office visit (NS) |                   |                 |                    |             |
+      | contactType               | enforcementAction | enforcementPage | breachOrRecallPage | whoWillSend | nDeliusOutcomeType  |
+      | Planned office visit (NS) |                   |                 |                    |             | Attended - complied |
 
 
 

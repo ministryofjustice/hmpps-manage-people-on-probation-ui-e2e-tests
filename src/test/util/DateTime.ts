@@ -147,7 +147,7 @@ export const getDateTimeWithImmediateExpiry = (
   const now = DateTime.now();
 
   const start =
-    now.second >= 40
+    now.second >= 45
       ? now.plus({ minutes: 2 }).startOf("minute")
       : now.plus({ minutes: 1 }).startOf("minute");
 
