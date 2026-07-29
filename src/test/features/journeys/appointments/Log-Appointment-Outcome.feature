@@ -147,7 +147,7 @@ Feature: Log appointment outcome
       |  outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend             |nDeliusOutcomeType    |
       | Attended - complied          |                      |                   |                    |                         |Attended - complied   |
 
-  @logoutcome @futureappointment @ndelius
+  @logoutcome @futureappointment @ndelius @test
   Scenario Outline: Create contact in nDelius and record outcome in mpop
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
@@ -176,4 +176,21 @@ Feature: Log appointment outcome
       | Planned office visit (NS) |                   |                 |                    |             | Attended - complied |
 
 
-
+  @logoutcome @futureappointment @wip
+  Scenario: Create future contact in mpop and record outcome
+    Given Context has been created for "appointments" test
+    And A new offender has been created or existing made available
+    And I am logged in
+    When I navigate to the appointments page
+    And I click to arrange an appointment
+    And I complete the type attendance page with type "Planned office visit (NS)" and default attendee
+    And I complete the location and datetime page with date in the "FUTURE" at "Wrexham Team Office"
+    Then I confirm the text message preview
+    When I complete the text message confirmation page with option "No"
+    And I complete the supporting information page with note "" and sensitivity "Yes"
+    Then I can see the correct information on the CYA page for a future appointment
+    When I submit the appointment
+    When I navigate to the appointments page
+    And I access the created appointment
+    Then I can see the Manage page
+    And I click on log an outcome for the appointment

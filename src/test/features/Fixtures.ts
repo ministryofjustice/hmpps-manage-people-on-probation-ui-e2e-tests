@@ -9,7 +9,6 @@ import { Person } from "@ministryofjustice/hmpps-probation-integration-e2e-tests
 import AlertsPage from "../pageObjects/alerts";
 import {
   MpopArrangeAppointment,
-  NDeliusAppointment,
 } from "../util/ArrangeAppointment";
 import MPopPage from "../pageObjects/page";
 
@@ -26,7 +25,6 @@ export interface Ctx {
   details: Details;
   addressTypes: AddressType[];
   documents: Documents;
-  nDeliusAppointment: NDeliusAppointment;
 }
 export interface Documents {
   count: number;

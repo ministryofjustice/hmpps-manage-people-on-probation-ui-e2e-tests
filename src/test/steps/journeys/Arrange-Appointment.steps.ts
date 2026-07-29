@@ -698,7 +698,9 @@ When(
     await page.locator("a", { hasText: "National search" }).click();
     await page.fill("#crn\\:inputText", ctx.case.crn);
     await page.click("#searchButton");
-    await page.waitForTimeout(2000);
+    await expect(page.locator("#offendersTable tbody tr").first()).toBeVisible({
+      timeout: 10_000,
+    });
     await page
       .locator("#offendersTable tbody tr")
       .first()
