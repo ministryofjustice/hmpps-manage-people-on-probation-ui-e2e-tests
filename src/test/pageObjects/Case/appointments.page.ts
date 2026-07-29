@@ -147,20 +147,12 @@ export default class AppointmentsPage extends CasePage {
       await this.page.reload();
 
       const section = this.page.locator('[data-qa="pastAppointmentsSection"]');
-      console.log(
-        "Past appointment section before filter row count:",
-        await section.count(),
-      );
 
       const row = section
         .locator(".govuk-table__row")
         .filter({ hasText: new RegExp(` ${date}`) })
         .filter({ hasText: new RegExp(` ${time}`) })
         .filter({ hasText: appointment.appointmentType || appointment.type });
-      console.log(
-        "Past appointment section after filter row count::",
-        await row.count(),
-      );
 
       if (await row.getByRole("link", { name: "Manage" }).first().isVisible()) {
         return;

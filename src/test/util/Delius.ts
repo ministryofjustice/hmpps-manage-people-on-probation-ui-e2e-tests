@@ -149,6 +149,7 @@ export function deliusDeepLinkUrl(crn: string, contactId: string) {
   const idParamKey = "contactID";
   const idParam = contactId ? `&${idParamKey}=${contactId}` : "";
   const nDeliusContactUrl = `${deliusUrl}/NDelius-war/delius/JSP/deeplink.xhtml?component=Contact&CRN=${crn}${idParam}`;
+  console.info(`nDeliusContactUrl ${nDeliusContactUrl}`);
   return nDeliusContactUrl;
 }
 
