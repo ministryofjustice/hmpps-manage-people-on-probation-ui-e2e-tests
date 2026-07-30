@@ -59,8 +59,8 @@ Then("The appointment does not exist", async ({ ctx }) => {
   const appointment: MpopArrangeAppointment =
     ctx.appointments[ctx.appointments.length - 1];
   const appointmentsPage = new AppointmentsPage(page);
-  await appointmentsPage.assertOnPage();
   const dateTime = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy");
+  const date = dateTime.toFormat("d MMMM yyyy");
   const time = mpopTime(
     appointment.dateTime.startTime,
     appointment.dateTime.endTime,

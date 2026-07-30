@@ -175,7 +175,7 @@ Feature: Log appointment outcome
       | Planned office visit (NS) |                    |                   |                 |             | Attended - complied |
 
 
-  @logoutcome @futureappointment @test
+  @logoutcome @futureappointment
   Scenario: Create future contact in mpop and record outcome
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
