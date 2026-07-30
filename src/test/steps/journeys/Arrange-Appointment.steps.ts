@@ -15,6 +15,7 @@ import {
   getDateTimeWithImmediateExpiry,
   luxonString,
   MpopDateTime,
+  mpopTime,
   today,
 } from "../../util/DateTime";
 import { checkOutlook } from "../../util/Outlook";
@@ -51,6 +52,27 @@ When("I navigate to the appointments page", async ({ ctx }) => {
   const appointments: AppointmentsPage = new AppointmentsPage(page, crn);
   await appointments.navigateTo();
   await appointments.assertOnPage();
+});
+
+Then("The appointment does not exist", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const appointment: MpopArrangeAppointment =
+    ctx.appointments[ctx.appointments.length - 1];
+  const appointmentsPage = new AppointmentsPage(page);
+  const dateTime = DateTime.fromFormat(appointment.dateTime.date, "d/M/yyyy");
+  const date = dateTime.toFormat("d MMMM yyyy");
+  const time = mpopTime(
+    appointment.dateTime.startTime,
+    appointment.dateTime.endTime,
+  );
+
+  const row = appointmentsPage
+    .getClass("govuk-table__row")
+    .filter({ hasText: new RegExp(" " + date) })
+    .filter({ hasText: new RegExp(" " + time) })
+    .filter({ hasText: appointment.appointmentType });
+
+  await expect(row).toHaveCount(0);
 });
 
 When("I click to arrange an appointment", async ({ ctx }) => {
@@ -113,7 +135,7 @@ When(
 
 When(
   "I complete the location and datetime page with date in the {string} at {string}",
-  async ({ ctx }, appointmentDateType: string, location: string) => {
+  async ({ ctx }, appointmentDateType, location: string) => {
     const page = ctx.base.page;
     const dateTime = randomAppointmentDateTime(appointmentDateType);
     const locationDateTimePage = new LocationDateTimePage(page);
@@ -782,19 +804,19 @@ When(
   },
 );
 
-export function randomAppointmentDateTime(type: string): MpopDateTime {
+export function randomAppointmentDateTime(
+  type: "PAST" | "TODAY" | "FUTURE",
+): MpopDateTime {
   const start = new Date();
 
   switch (type) {
-    case "PAST": {
-      // Random time in the last 24 hours
-      const millisAgo = Math.floor(Math.random() * 24 * 60 * 60 * 1000);
-      start.setTime(Date.now() - millisAgo);
+    case "PAST":
+      start.setTime(
+        Date.now() - Math.floor(Math.random() * 24 * 60 * 60 * 1000),
+      );
       break;
-    }
 
-    case "TODAY": {
-      // Random time today
+    case "TODAY":
       start.setHours(
         Math.floor(Math.random() * 24),
         Math.floor(Math.random() * 60),
@@ -802,33 +824,28 @@ export function randomAppointmentDateTime(type: string): MpopDateTime {
         0,
       );
       break;
-    }
 
-    case "FUTURE": {
-      // Random time in the next 24 hours
-      const millisAhead = Math.floor(Math.random() * 24 * 60 * 60 * 1000);
-      start.setTime(Date.now() + millisAhead);
+    case "FUTURE":
+      start.setTime(
+        Date.now() + Math.floor(Math.random() * 24 * 60 * 60 * 1000),
+      );
       break;
-    }
   }
 
   const end = new Date(start);
   end.setMinutes(end.getMinutes() + 5);
 
-  const formatTime = (date: Date) => {
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
-
-    // Convert 24-hour time to 12-hour time
-    const twelveHour = hours % 12 || 12;
-
-    return `${twelveHour.toString().padStart(2, "0")}:${minutes
+  const formatTime = (date: Date) =>
+    `${date.getHours().toString().padStart(2, "0")}:${date
+      .getMinutes()
       .toString()
       .padStart(2, "0")}`;
-  };
+
+  const formatDate = (date: Date) =>
+    `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 
   return {
-    date: `${start.getDate()}/${start.getMonth() + 1}/${start.getFullYear()}`,
+    date: formatDate(start),
     startTime: formatTime(start),
     endTime: formatTime(end),
   };

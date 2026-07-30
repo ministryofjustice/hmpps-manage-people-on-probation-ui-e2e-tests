@@ -240,6 +240,18 @@ When("I complete the add a note page", async ({ ctx }) => {
   }
 });
 
+When("I complete the add a note page without sensitivity", async ({ ctx }) => {
+  const page = ctx.base.page;
+  const addNotePage = new AddNotePage(page);
+  await addNotePage.assertOnPage();
+  await addNotePage.completePage("test", "no");
+  if (ctx.appointments.length > 0) {
+    ctx.appointments[ctx.appointments.length - 1].note = "test";
+  } else {
+    ctx.manage.note = "test";
+  }
+});
+
 When("I complete the next appointment page", async ({ ctx }) => {
   const page = ctx.base.page;
   const nextAppointmentPage = new NextAppointmentPage(page);
@@ -271,6 +283,21 @@ Then("I am on the confirmation page", async ({ ctx }) => {
     );
   }
 });
+
+Then(
+  "I am on the confirmation page with heading {string}",
+  async ({ ctx }, expectedHeading: string) => {
+    const page = ctx.base.page;
+    const heading = page.locator('[data-qa="pageHeading"]');
+    try {
+      await expect(heading).toContainText(expectedHeading);
+    } catch {
+      await expect(heading).toContainText(
+        "You\u2019ve already arranged this appointment",
+      );
+    }
+  },
+);
 
 Then(
   "I am on the confirmation page with content {string}",

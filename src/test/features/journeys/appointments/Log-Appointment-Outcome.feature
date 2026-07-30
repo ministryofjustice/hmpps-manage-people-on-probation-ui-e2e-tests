@@ -169,9 +169,35 @@ Feature: Log appointment outcome
     When I navigate to the appointments page
     And I access the created appointment
     Then I can see the Manage page
-    Then I can see the contact on nDelius with "<nDeliusOutcomeType>"
-
+    And I can see the contact on nDelius with "<nDeliusOutcomeType>"
     Examples:
       | contactType               | breachOrRecallPage | enforcementAction | enforcementPage | whoWillSend | nDeliusOutcomeType  |
       | Planned office visit (NS) |                    |                   |                 |             | Attended - complied |
 
+
+  @logoutcome @futureappointment @test
+  Scenario: Create future contact in mpop and record outcome
+    Given Context has been created for "appointments" test
+    And A new offender has been created or existing made available
+    And I am logged in
+    When I navigate to the appointments page
+    And I click to arrange an appointment
+    And I complete the type attendance page with type "Planned office visit (NS)" and default attendee
+    And I complete the location and datetime page with date in the "FUTURE" at "Wrexham Team Office"
+    When I complete the text message confirmation page with option "No"
+    And I complete the supporting information page with note "" and sensitivity "Yes"
+    Then I can see the correct information on the CYA page for a future appointment
+    When I submit the appointment
+    When I navigate to the appointments page
+    And I access the created appointment
+    Then I can see the Manage page
+    And I click on log an outcome for the appointment
+    When I select the option "Acceptable absence" and continue
+    And I select the option "Court / legal" and continue
+    And I complete the add a note page without sensitivity
+    And I complete the next appointment page
+    And I confirm the appointment outcome
+    Then I am on the confirmation page with heading "Appointment outcome updated"
+    When I navigate to the appointments page
+    Then The appointment does not exist
+    And I can see the contact on nDelius with "Acceptable Absence - Court/Legal"
