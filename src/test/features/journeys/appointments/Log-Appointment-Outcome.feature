@@ -6,7 +6,7 @@ Feature: Log appointment outcome
 
   # TODO -> Initiate a breach and send a letter / recall
   # TODO - Initiate a recall and send a letter option - select - any of the 3 set of radio options
-  @pastappointment @logoutcome 
+  @pastappointment @logoutcome @full
   Scenario Outline: Validate appointment outcome journeys - <appointmentType> for <case_crn> - <outcomeType>
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
@@ -47,7 +47,7 @@ Feature: Log appointment outcome
       | Home visit to case (NS)        | Wrexham Team Office | Attended - failed to comply | failure to comply    | No further action |                    |                          | Attended - Failed to Comply    |
 
 
-  @pastappointment @logoutcome 
+  @pastappointment @logoutcome @full
   Scenario Outline: Validate appointment outcome journeys - <appointmentType> for <case_crn> - <outcomeType>
     Given Context has been created for "appointments" test
     And A new dual offender has been created in Ndelius
@@ -87,7 +87,7 @@ Feature: Log appointment outcome
       | SA2020 Community Order (6 Months) | 3 way meeting (NS)                       | Wrexham Team Office | Attended - sent home (behaviour) | failure to comply    | Send a letter     | Send a letter      | Case administrator |                                |
 
 
-  @pastappointment @logoutcome 
+  @pastappointment @logoutcome @full
   Scenario Outline: Log outcome from the home page
     Given Context has been created for "appointments" test
     And I am logged in
@@ -112,7 +112,7 @@ Feature: Log appointment outcome
       | Attended - complied          |                      |                   |                    |                         |                  |
       | Acceptable absence           |                      |                   |                    |                         |                  |
 
-  @pastappointment @logoutcome
+  @pastappointment @logoutcome @full
   Scenario Outline: Log outcome from appointment which has just been logged
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
@@ -147,7 +147,7 @@ Feature: Log appointment outcome
       |  outcomeType                 | enforcementPage      | enforcementAction | breachOrRecallPage | whoWillSend             |nDeliusOutcomeType    |
       | Attended - complied          |                      |                   |                    |                         |Attended - complied   |
 
-  @logoutcome @futureappointment @ndelius
+  @logoutcome @futureappointment @ndelius @full
   Scenario Outline: Create contact in nDelius and record outcome in mpop
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
@@ -175,7 +175,7 @@ Feature: Log appointment outcome
       | Planned office visit (NS) |                    |                   |                 |             | Attended - complied |
 
 
-  @logoutcome @futureappointment
+  @logoutcome @futureappointment @full
   Scenario: Create future contact in mpop and record outcome
     Given Context has been created for "appointments" test
     And A new offender has been created or existing made available
