@@ -32,8 +32,8 @@ Feature: As a practitioner
       | PNC number    |
       | Prison number |
     And Staff contacts section contains below data
-      | Probation practitioner        |
-      | Prison offender manager (POM) |
+      | Probation practitioner                             |
+      | Prison offender manager (pom)(responsible officer) |
     And Equality monitoring section contains below data
       | Religion or belief    |
       | Sex                   |

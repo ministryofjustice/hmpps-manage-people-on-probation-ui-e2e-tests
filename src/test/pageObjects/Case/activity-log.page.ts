@@ -52,7 +52,11 @@ export default class ActivityLogPage extends CasePage {
     // for (let i=0; i<filters.category_filters.length; i++){
     //     await this.toggleFilter(filters.category_filters[i]-1, 'category')
     // }
-    await this.page.getByRole("button", { name: "Apply filters" }).click();
+    //await this.page.getByRole("button", { name: "Apply filters" }).click();
+    await this.page
+      .getByRole("button", { name: "Apply filters" })
+      .first()
+      .click();
     if (filters.hide_system_generated) {
       await this.toggleFilter(0, "hideContact");
       await this.getQA("submit-apply-button").click();

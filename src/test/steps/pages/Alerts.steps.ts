@@ -187,11 +187,21 @@ When("I select and clear all alerts over 60", async ({ ctx }) => {
   const page = ctx.base.page;
   await alerts.navigateTo(page);
   const fullCount = await alerts.getAlertsCount(true);
+  const confirmClear = async () => {
+    const dialog = alerts.page.locator("dialog[open]");
+    await dialog.waitFor({ state: "visible" });
+    await dialog.getByRole("button", { name: "Yes, clear" }).click();
+    await dialog.waitFor({ state: "hidden" }); // confirm it actually closed
+  };
   if (fullCount > 60) {
     let diff = fullCount - 60;
     while (diff > 10) {
       await alerts.getQA("selectAllAlertsBtn").click();
       await alerts.getQA("clearSelectedAlerts").click();
+      await alerts.page
+        .locator("#confirm-clear-btn")
+        .waitFor({ state: "visible" });
+      await alerts.page.locator("#confirm-clear-btn").click();
       await alerts.page.waitForTimeout(1000);
       await expect(alerts.getClass("moj-alert--success")).toContainText(
         "You've cleared 10 alerts.",
@@ -202,6 +212,10 @@ When("I select and clear all alerts over 60", async ({ ctx }) => {
       await alerts.page.getByRole("checkbox").nth(i).click();
     }
     await alerts.getQA("clearSelectedAlerts").click();
+    await alerts.page
+      .locator("#confirm-clear-btn")
+      .waitFor({ state: "visible" });
+    await alerts.page.locator("#confirm-clear-btn").click();
     await alerts.page.waitForTimeout(1000);
   }
 });

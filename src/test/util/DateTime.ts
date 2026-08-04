@@ -111,13 +111,21 @@ export const stringToDate = (datetimeString: string): DateTime => {
 
 export const futureTimes = [tomorrow, nextWeek];
 
+// export const to12Hour = (time: string) => {
+//   const hour = Number(time.substring(0, 2));
+//   if (hour < 12) {
+//     return hour + time.substring(2) + "am";
+//   } else {
+//     return (hour === 12 ? 12 : hour - 12) + time.substring(2) + "pm";
+//   }
+// };
+
 export const to12Hour = (time: string) => {
   const hour = Number(time.substring(0, 2));
-  if (hour < 12) {
-    return hour + time.substring(2) + "am";
-  } else {
-    return (hour === 12 ? 12 : hour - 12) + time.substring(2) + "pm";
-  }
+  const rest = time.substring(2); // e.g. ":21"
+  const period = hour < 12 ? "am" : "pm";
+  const hour12 = hour % 12 === 0 ? 12 : hour % 12;
+  return hour12 + rest + period;
 };
 
 export const mpopTime = (start: string, end: string) => {

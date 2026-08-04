@@ -13,7 +13,7 @@ Feature: As a practitioner
     And the link 'Probation history' at sentence page works correctly
     And the link 'CJA - Deferred Sentence' at sentence page works correctly
     And the link 'ORA Community Order' at sentence page works correctly
-    And the link 'Adult Custody < 12m' at sentence page works correctly
+    And the link 'ORA Adult Custody (not PSS)' at sentence page works correctly
     And I close the context
     Examples:
       | case_crn |
