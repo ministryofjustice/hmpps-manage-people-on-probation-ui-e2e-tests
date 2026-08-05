@@ -153,6 +153,16 @@ Then("I receive success message {string}", async ({ ctx }, message) => {
   await page.getByRole("heading", { name: message, level: 2 }).isVisible();
 });
 
+Then(
+  "I receive refresh message {string}",
+  async ({ ctx }, expectedText: string) => {
+    const page = ctx.base.page;
+    await expect(page.locator(".moj-banner__message").first()).toContainText(
+      expectedText,
+    );
+  },
+);
+
 Then("I note down the POP name", async ({ ctx }) => {
   const page = ctx.base.page;
   const casePage = new CasePage(page);
