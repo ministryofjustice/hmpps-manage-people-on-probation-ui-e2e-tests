@@ -46,7 +46,7 @@ Feature: As a practitioner
       | alert_practitioner | <alert_practitioner> |
     And I save the contact details
     Then I receive success message 'Contact created'
-
+    Then I receive refresh message 'You may need to refresh the page to see it in the contacts list.'
 
     Examples:
       | description                                | frequent_contact                           | contact_related_to | contact_title | date     | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
