@@ -20,10 +20,20 @@ export default class TierPage extends CasePage {
     }
   }
 
+  // async checkTier(tier: string) {
+  //   await expect(this.page.locator("p").first()).toContainText(
+  //     `has a tier of ${tier}`,
+  //   );
+  // }
+
   async checkTier(tier: string) {
-    await expect(this.page.locator("p").first()).toContainText(
-      `has a tier of ${tier}`,
-    );
+    const isMissing = tier.trim().toLowerCase() === "missing";
+
+    const expected = isMissing
+      ? "has a missing tier, as no reoffending risk predictors are available"
+      : `has a tier of ${tier}`;
+
+    await expect(this.page.locator("p").first()).toContainText(expected);
   }
 
   async checkTierLink() {
