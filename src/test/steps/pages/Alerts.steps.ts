@@ -187,12 +187,7 @@ When("I select and clear all alerts over 60", async ({ ctx }) => {
   const page = ctx.base.page;
   await alerts.navigateTo(page);
   const fullCount = await alerts.getAlertsCount(true);
-  const confirmClear = async () => {
-    const dialog = alerts.page.locator("dialog[open]");
-    await dialog.waitFor({ state: "visible" });
-    await dialog.getByRole("button", { name: "Yes, clear" }).click();
-    await dialog.waitFor({ state: "hidden" }); // confirm it actually closed
-  };
+
   if (fullCount > 60) {
     let diff = fullCount - 60;
     while (diff > 10) {
