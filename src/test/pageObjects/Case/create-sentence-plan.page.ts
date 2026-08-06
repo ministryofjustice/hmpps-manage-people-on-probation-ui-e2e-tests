@@ -15,7 +15,7 @@ export default class CreateSentencePlanPage extends CasePage {
   }
 
   async customiseScenario(crn: string) {
-    await this.page.getByRole("button", { name: "Customize scenario" }).click();
+    await this.page.getByRole("button", { name: "Customise scenario" }).click();
     const randomizeCheckbox = this.page.locator("#crn-randomize-checkbox");
     const crnInput = this.page.locator("#crn");
 

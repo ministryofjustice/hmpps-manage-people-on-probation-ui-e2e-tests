@@ -23,7 +23,7 @@ Feature: As a practitioner
     And I navigate to '<case>'
     Then the pop header is correct
     And the overview page is populated
-    And I can see the text 'You have appointments that need attention'
+    And I can see the text 'Information that needs your attention'
     And link with href '/case/X756510/record-an-outcome/outcome'
     When I select the outcome link
     Then I land at the page with title 'Record an outcome - Outcome - Manage people on probation'
