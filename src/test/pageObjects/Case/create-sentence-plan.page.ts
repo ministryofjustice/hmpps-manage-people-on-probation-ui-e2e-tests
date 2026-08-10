@@ -36,6 +36,10 @@ export default class CreateSentencePlanPage extends CasePage {
   async createGoal() {
     await this.page.getByRole("button", { name: "Create goal" }).click();
 
+    await this.page.getByRole("radio", { name: "Accommodation" }).click();
+
+    await this.page.getByRole("button", { name: "Continue" }).click();
+
     await this.page.locator("#goal_title").fill("tenancy");
 
     await this.page.locator("#is_related_to_other_areas").click();
