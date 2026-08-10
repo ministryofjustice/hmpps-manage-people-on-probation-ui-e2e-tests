@@ -38,7 +38,7 @@ export default class TierPage extends CasePage {
 
   async checkTierLink() {
     const link = this.getQA("tierLink");
-    const tier = (await link.allTextContents())[0];
+    const tier = (await link.allTextContents())[0].split(" ")[1];
     await link.click();
     await this.assertOnPage();
     await this.checkTier(tier!);

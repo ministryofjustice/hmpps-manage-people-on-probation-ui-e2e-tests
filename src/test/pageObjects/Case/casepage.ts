@@ -94,15 +94,14 @@ export default class CasePage extends MPopPage {
 
   async assertLinkTextOnOverviewPage(expectedHref: string) {
     const href = await this.page
-      .locator(".govuk-notification-banner__content ul li a")
-      .first()
+      .getByRole("link", { name: /You need to record an outcome/ })
       .getAttribute("href");
     expect(href).toEqual(expectedHref);
   }
 
   async selectOutcomeLink() {
     await this.page
-      .locator(".govuk-notification-banner__content ul li a")
+      .getByRole("link", { name: /You need to record an outcome/ })
       .click();
   }
 
