@@ -725,79 +725,9 @@ When(
       deliusContact(contactType, dateTime),
     );
 
-    // await page.locator("a", { hasText: "National search" }).click();
-    // await page.fill("#crn\\:inputText", ctx.case.crn);
-    // await page.click("#searchButton");
-    // await expect(page.locator("#offendersTable tbody tr").first()).toBeVisible({
-    //   timeout: 10_000,
-    // });
-    // await page
-    //   .locator("#offendersTable tbody tr")
-    //   .first()
-    //   .getByRole("link", { name: "Add Contact" })
-    //   .click();
-    // await expect(page).toHaveTitle("Add Contact Details", { timeout: 10000 });
-    // const dateTimeWithImmediateExpiry = getDateTimeWithImmediateExpiry();
-
-    // await page
-    //   .locator("#RelatedTo\\:selectOneMenu")
-    //   .selectOption({ label: "Event 1 - Adult Custody < 12m (6 Months)" });
-    // await waitForAjax(page);
-
-    // await page
-    //   .locator("#ContactCategory\\:selectOneMenu")
-    //   .selectOption({ label: "Community Management" });
-    // await waitForAjax(page);
-
-    // const contactTypeTest = page.locator(
-    //   '[id="ContactType:selectOneMenu-autocomplete"]',
-    // );
-    // await contactTypeTest.pressSequentially("Planned Office Visit");
-    // await page
-    //   .getByRole("option", {
-    //     name: contactType,
-    //   })
-    //   .click();
-    // await waitForAjax(page);
-
-    // await page.fill(
-    //   "#StartDate\\:datePicker",
-    //   dateTimeWithImmediateExpiry.date,
-    // );
-    // await page.fill(
-    //   "#StartTime\\:timePicker",
-    //   dateTimeWithImmediateExpiry.startTime,
-    // );
-    // await page.fill(
-    //   "#EndTime\\:timePicker",
-    //   dateTimeWithImmediateExpiry.endTime,
-    // );
-    // await page.locator("#EndTime\\:timePicker").press("Tab");
-    // await waitForAjax(page);
-
-    // const provider = page.locator("#TransferToTrust\\:selectOneMenu");
-    // await provider.pressSequentially("London");
-    // await waitForAjax(page);
-
-    // await page
-    //   .locator("#TransferToTeam\\:selectOneMenu")
-    //   .selectOption({ index: 1 });
-    // await waitForAjax(page);
-
-    // await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
-    // await waitForAjax(page);
-
-    // await page
-    //   .locator("#TransferToOfficer\\:selectOneMenu")
-    //   .selectOption({ index: 1 });
-    // await waitForAjax(page);
-
-    // await page.locator('input[value="Save"]').click();
-    // await waitForAjax(page);
-
-    // if (!ctx.appointments) {
-    //   ctx.appointments = [];
-    // }
+    if (!ctx.appointments) {
+      ctx.appointments = [];
+    }
 
     ctx.appointments.push({
       sentence: "Event 1 - Adult Custody < 12m (6 Months)",
