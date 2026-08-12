@@ -43,6 +43,8 @@ import {
   toNDeliusDate,
   toNDeliusSearchResponseDateTimeFormat,
 } from "../../util/Delius";
+import { createContact } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/contact/create-contact";
+import { deliusContact } from "../../util/Data";
 
 const { When, Then } = createBdd(testContext);
 
@@ -715,86 +717,92 @@ Then(
 When(
   "I create a contact in nDelius with type {string} with immediate expiry",
   async ({ ctx }, contactType: string) => {
-    const page = ctx.base.page;
-
-    await page.locator("a", { hasText: "National search" }).click();
-    await page.fill("#crn\\:inputText", ctx.case.crn);
-    await page.click("#searchButton");
-    await expect(page.locator("#offendersTable tbody tr").first()).toBeVisible({
-      timeout: 10_000,
-    });
-    await page
-      .locator("#offendersTable tbody tr")
-      .first()
-      .getByRole("link", { name: "Add Contact" })
-      .click();
-    await expect(page).toHaveTitle("Add Contact Details", { timeout: 10000 });
-    const dateTimeWithImmediateExpiry = getDateTimeWithImmediateExpiry();
-
-    await page
-      .locator("#RelatedTo\\:selectOneMenu")
-      .selectOption({ label: "Event 1 - Adult Custody < 12m (6 Months)" });
-    await waitForAjax(page);
-
-    await page
-      .locator("#ContactCategory\\:selectOneMenu")
-      .selectOption({ label: "Community Management" });
-    await waitForAjax(page);
-
-    const contactTypeTest = page.locator(
-      '[id="ContactType:selectOneMenu-autocomplete"]',
+    await loginToDelius(ctx.base.page);
+    const dateTime = getDateTimeWithImmediateExpiry();
+    await createContact(
+      ctx.base.page,
+      ctx.case.crn,
+      deliusContact(contactType, dateTime),
     );
-    await contactTypeTest.pressSequentially("Planned Office Visit");
-    await page
-      .getByRole("option", {
-        name: contactType,
-      })
-      .click();
-    await waitForAjax(page);
 
-    await page.fill(
-      "#StartDate\\:datePicker",
-      dateTimeWithImmediateExpiry.date,
-    );
-    await page.fill(
-      "#StartTime\\:timePicker",
-      dateTimeWithImmediateExpiry.startTime,
-    );
-    await page.fill(
-      "#EndTime\\:timePicker",
-      dateTimeWithImmediateExpiry.endTime,
-    );
-    await page.locator("#EndTime\\:timePicker").press("Tab");
-    await waitForAjax(page);
+    // await page.locator("a", { hasText: "National search" }).click();
+    // await page.fill("#crn\\:inputText", ctx.case.crn);
+    // await page.click("#searchButton");
+    // await expect(page.locator("#offendersTable tbody tr").first()).toBeVisible({
+    //   timeout: 10_000,
+    // });
+    // await page
+    //   .locator("#offendersTable tbody tr")
+    //   .first()
+    //   .getByRole("link", { name: "Add Contact" })
+    //   .click();
+    // await expect(page).toHaveTitle("Add Contact Details", { timeout: 10000 });
+    // const dateTimeWithImmediateExpiry = getDateTimeWithImmediateExpiry();
 
-    const provider = page.locator("#TransferToTrust\\:selectOneMenu");
-    await provider.pressSequentially("London");
-    await waitForAjax(page);
+    // await page
+    //   .locator("#RelatedTo\\:selectOneMenu")
+    //   .selectOption({ label: "Event 1 - Adult Custody < 12m (6 Months)" });
+    // await waitForAjax(page);
 
-    await page
-      .locator("#TransferToTeam\\:selectOneMenu")
-      .selectOption({ index: 1 });
-    await waitForAjax(page);
+    // await page
+    //   .locator("#ContactCategory\\:selectOneMenu")
+    //   .selectOption({ label: "Community Management" });
+    // await waitForAjax(page);
 
-    await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
-    await waitForAjax(page);
+    // const contactTypeTest = page.locator(
+    //   '[id="ContactType:selectOneMenu-autocomplete"]',
+    // );
+    // await contactTypeTest.pressSequentially("Planned Office Visit");
+    // await page
+    //   .getByRole("option", {
+    //     name: contactType,
+    //   })
+    //   .click();
+    // await waitForAjax(page);
 
-    await page
-      .locator("#TransferToOfficer\\:selectOneMenu")
-      .selectOption({ index: 1 });
-    await waitForAjax(page);
+    // await page.fill(
+    //   "#StartDate\\:datePicker",
+    //   dateTimeWithImmediateExpiry.date,
+    // );
+    // await page.fill(
+    //   "#StartTime\\:timePicker",
+    //   dateTimeWithImmediateExpiry.startTime,
+    // );
+    // await page.fill(
+    //   "#EndTime\\:timePicker",
+    //   dateTimeWithImmediateExpiry.endTime,
+    // );
+    // await page.locator("#EndTime\\:timePicker").press("Tab");
+    // await waitForAjax(page);
 
-    await page.locator('input[value="Save"]').click();
-    await waitForAjax(page);
+    // const provider = page.locator("#TransferToTrust\\:selectOneMenu");
+    // await provider.pressSequentially("London");
+    // await waitForAjax(page);
 
-    if (!ctx.appointments) {
-      ctx.appointments = [];
-    }
+    // await page
+    //   .locator("#TransferToTeam\\:selectOneMenu")
+    //   .selectOption({ index: 1 });
+    // await waitForAjax(page);
+
+    // await page.locator("#Location\\:selectOneMenu").selectOption({ index: 1 });
+    // await waitForAjax(page);
+
+    // await page
+    //   .locator("#TransferToOfficer\\:selectOneMenu")
+    //   .selectOption({ index: 1 });
+    // await waitForAjax(page);
+
+    // await page.locator('input[value="Save"]').click();
+    // await waitForAjax(page);
+
+    // if (!ctx.appointments) {
+    //   ctx.appointments = [];
+    // }
 
     ctx.appointments.push({
       sentence: "Event 1 - Adult Custody < 12m (6 Months)",
       type: "Planned Office Visit (NS)",
-      dateTime: dateTimeWithImmediateExpiry,
+      dateTime: dateTime,
       location: "",
       text: "Planned Office Visit (NS)",
       sensitivity: "Standard",
