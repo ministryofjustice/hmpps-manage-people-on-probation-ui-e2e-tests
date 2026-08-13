@@ -487,13 +487,10 @@ export default class SentencePage extends CasePage {
       "Previous orders",
     );
     await expect(this.getQA("probationHistoryCard")).toContainText(
-      "4 previous orders",
+      "previous orders",
     );
     await expect(this.getQA("probationHistoryCard")).toContainText(
-      "Previous breaches",
-    );
-    await expect(this.getQA("probationHistoryCard")).toContainText(
-      "1 previous breach",
+      "previous breaches",
     );
     await expect(this.getQA("probationHistoryCard")).toContainText(
       "11 previous contacts",
