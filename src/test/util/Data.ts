@@ -7,6 +7,7 @@ import path from "path";
 import { luxonString, MpopDateTime, tomorrow } from "./DateTime";
 import * as dotenv from "dotenv";
 import { MpopAttendee } from "./ArrangeAppointment";
+import { DateTime } from "luxon";
 
 dotenv.config({ path: ".env" });
 
@@ -37,6 +38,16 @@ export const deliusAlert: Contact = {
   alert: true,
   note: "Words ".repeat(500),
 };
+
+export const deliusContact = (type: string, date: MpopDateTime): Contact => ({
+  relatesTo: `Event 1 - Adult Custody < 12m (6 Months)`,
+  date: DateTime.fromFormat(date.date, "d/M/yyyy").toJSDate(),
+  startTime: DateTime.fromISO(date.startTime).toJSDate(),
+  endTime: DateTime.fromISO(date.endTime).toJSDate(),
+  allocation: { team: data.teams.allocationsTestTeam },
+  category: "All/Always",
+  type: type,
+});
 
 export const photo_1_path = path.join(
   process.cwd(),
