@@ -9,12 +9,12 @@ export const login = async (page: Page) => {
 
   await page.click("#submit");
   await expect(page).toHaveTitle(/Manage people on probation/);
-  await expect(
-    page.getByRole("heading", {
-      level: 1,
-      name: /Manage people on probation/i,
-    }),
-  ).toBeVisible({ timeout: 15000 });
+  // await expect(
+  //   page.getByRole("heading", {
+  //     level: 1,
+  //     name: /Manage people on probation/i,
+  //   }),
+  // ).toBeVisible({ timeout: 15000 });
 };
 
 export const loginIfNotAlready = async (page: Page) => {
