@@ -7,13 +7,13 @@ Feature: As a practitioner
     And I navigate to cases page
 
   @full @cases @integration
-  Scenario: View my cases page
+  Scenario: View my cases page @raj
     Then I can view below columns on the cases page:
       | Title            |
       | Cases            |
-      | Main Sentence    |
-      | Last Appointment |
-      | Next Appointment |
+      | Main sentence    |
+      | Last appointment |
+      | Next appointment |
     Then the cases page is populated
     And the case page has yellow 'New case' label
     And the cases page links work correctly
