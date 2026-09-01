@@ -1,4 +1,8 @@
-import { data } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
+import {
+  data,
+  Staff,
+  Team,
+} from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
 import {
   createCommunityEvent,
   createCustodialEvent,
@@ -108,6 +112,30 @@ Given("A new dual offender has been created in Ndelius", async ({ ctx }) => {
   ctx.case.person = person;
   ctx.case.created = true;
 });
+
+Given(
+  "A new offender has been created for provider {string}, team {string} and username {string}",
+  async ({ ctx }, provider: string, team: string, username: string) => {
+    const [person, crn] = await loginDeliusAndCreateOffender(
+      ctx.base.page,
+      provider,
+      { name: username } as unknown as Staff,
+      { provider: provider, name: team } as unknown as Team,
+      true,
+    );
+    await createCustodialEvent(ctx.base.page, {
+      crn,
+      allocation: { team: data.teams.approvedPremisesTestTeam },
+    });
+    await createCommunityEvent(ctx.base.page, {
+      crn,
+      allocation: { team: data.teams.approvedPremisesTestTeam },
+    });
+    ctx.case.crn = crn;
+    ctx.case.person = person;
+    ctx.case.created = true;
+  },
+);
 
 Given("I clear the contact details if set", async ({ ctx }) => {
   const created = ctx.case.created;
