@@ -86,6 +86,102 @@ export const getExternalReference = async (
   return body.appointment.externalReference;
 };
 
+export interface CaseloadAppointment {
+  id: number;
+  date: string;
+  description: string;
+}
+
+export interface CaseloadEntry {
+  caseName: {
+    forename: string;
+    middleName: string;
+    surname: string;
+  };
+  crn: string;
+  dob: string;
+  nextAppointment?: CaseloadAppointment;
+  previousAppointment?: CaseloadAppointment;
+  latestSentence: string;
+  numberOfAdditionalSentences: number;
+  limitedAccess: boolean;
+  allocatedOn: string;
+}
+
+const CASELOAD_SEARCH_BODY = {
+  nameOrCrn: null,
+  sentenceCode: null,
+  nextContactCode: null,
+};
+
+export const getCaseloadTotalElements = async (
+  username: string,
+  token: string,
+): Promise<number> => {
+  const context = await request.newContext({
+    baseURL: MAS_API_URL,
+  });
+  const response = await context.post(`/caseload/user/${username}/search`, {
+    headers: {
+      Authorization: "Bearer " + token,
+    },
+    data: CASELOAD_SEARCH_BODY,
+  });
+  const body = await response.json();
+  if (!response.ok() || typeof body.totalElements !== "number") {
+    throw new Error(
+      `Unexpected response from caseload search (status ${response.status()}): ${JSON.stringify(body)}`,
+    );
+  }
+  return body.totalElements;
+};
+
+export const getCaseload = async (
+  username: string,
+  token: string,
+  totalElements: number,
+): Promise<CaseloadEntry[]> => {
+  if (totalElements <= 0) {
+    return [];
+  }
+
+  const context = await request.newContext({
+    baseURL: MAS_API_URL,
+  });
+
+  const response = await context.post(
+    `/caseload/user/${username}/search?size=${totalElements}`,
+    {
+      headers: {
+        Authorization: "Bearer " + token,
+      },
+      data: CASELOAD_SEARCH_BODY,
+    },
+  );
+  const body = await response.json();
+  if (!response.ok() || !Array.isArray(body.caseload)) {
+    throw new Error(
+      `Unexpected response from caseload search (status ${response.status()}): ${JSON.stringify(body)}`,
+    );
+  }
+  return body.caseload;
+};
+
+// Returns caseload entries (crn + allocatedOn), ordered by allocatedOn
+// ascending (oldest allocations first).
+// TODO Ask API team to add allocated on as a sort param.
+export const getCaseloadOrderedByAllocatedOn = async (
+  username: string,
+  token: string,
+  totalElements: number,
+): Promise<CaseloadEntry[]> => {
+  const caseload = await getCaseload(username, token, totalElements);
+  return [...caseload].sort(
+    (a, b) =>
+      new Date(a.allocatedOn).getTime() - new Date(b.allocatedOn).getTime(),
+  );
+};
+
 export const getProbationPractitioner = async (crn: string, token: string) => {
   const context = await request.newContext({
     baseURL: MAS_API_URL,

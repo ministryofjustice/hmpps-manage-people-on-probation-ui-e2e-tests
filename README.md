@@ -27,6 +27,9 @@ npx bddgen && npx playwright test --workers=1
 
 # Or, run in debug mode to enable breakpoints and test recorder
 npx bddgen && npx playwright test --debug
+
+# Delete records, house keeping.  Timeout is set to 2000000ms to allow for large number of records to be deleted
+npx playwright test -g "@delete-pop" --timeout=2000000
 ```
 
 ### See the Run Reports
