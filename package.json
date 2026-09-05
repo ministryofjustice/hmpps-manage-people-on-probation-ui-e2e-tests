@@ -39,7 +39,7 @@
     "@playwright/test": "1.62.1",
     "@types/luxon": "^3.7.5",
     "@types/node": "^22.20.1",
-    "@typescript-eslint/eslint-plugin": "^8.68.0",
+    "@typescript-eslint/eslint-plugin": "^8.69.0",
     "dotenv": "^17.4.2",
     "eslint": "^10.9.1",
     "eslint-config-prettier": "^10.1.8",
@@ -50,7 +50,7 @@
     "playwright-bdd": "9.2.0",
     "playwright-core": "1.62.1",
     "prettier": "^3.9.6",
-    "tsx": "^4.23.12"
+    "tsx": "^4.23.13"
   },
   "dependencies": {
     "@gatling.io/core": "^3.15.104",
