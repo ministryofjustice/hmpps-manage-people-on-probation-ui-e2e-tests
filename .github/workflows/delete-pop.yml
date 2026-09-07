@@ -16,9 +16,13 @@ on:
         required: false
         type: string
 
+concurrency:
+  group: delete-pop
+  cancel-in-progress: false
+
 jobs:
   delete-pop:
-    timeout-minutes: 60
+    timeout-minutes: 40
     runs-on: moj-cloud-platform
 
     steps:
@@ -42,7 +46,7 @@ jobs:
 
       - name: Run Playwright tests
         id: tests
-        run: npx bddgen && npx playwright test -g "@delete-pop" --workers=1 --retries=0 --timeout=200000
+        run: npx bddgen && npx playwright test -g "@delete-pop" --workers=1 --retries=0 --timeout=2000000
         env:
           TZ: Europe/London
           ENV: test

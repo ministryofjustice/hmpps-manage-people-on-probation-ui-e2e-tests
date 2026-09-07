@@ -6,16 +6,11 @@ import {
   dismissModals,
   findOffenderByCRN,
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/offender/find-offender.mjs";
-import {
-  getCaseloadOrderedByAllocatedOn,
-  getCaseloadTotalElements,
-  getClientToken,
-} from "../../util/API";
+import { getCaseloadTotalElements, getClientToken } from "../../util/API";
+import { getCaseloadCrnsForDeletion, PROTECTED_CRNS } from "./delete-pop.util";
 
 const { When } = createBdd(testContext);
 
-// CRNs reserved/protected test records.
-const PROTECTED_CRNS = ["X979340"];
 // Keep at least this many records in the caseload after deletion.
 const DEFAULT_MIN_REMAINING = 70;
 // Default cap on how many offenders to delete in a single run.
@@ -40,16 +35,9 @@ When("I delete offender with CRNs", async ({ page }) => {
     // Fetching the caseload from the MAS API (ordered by
     // allocatedOn ascending) instead of requiring CRNS to be populated
     // manually.
-    const caseload = await getCaseloadOrderedByAllocatedOn(
-      username,
-      token,
-      totalElements,
-    );
-    crns = caseload
-      .filter(({ limitedAccess }) => limitedAccess !== true)
-      .map(({ crn }) => crn);
+    crns = await getCaseloadCrnsForDeletion(username, token, totalElements);
   }
-  crns = crns.filter((crn) => !PROTECTED_CRNS.includes(crn));
+  crns = crns.filter((crn) => !PROTECTED_CRNS.has(crn));
 
   if (crns.length === 0) {
     throw new Error(

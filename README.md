@@ -64,6 +64,17 @@ or the below command to see login page
 PERF_COOKIE_HEADER="$(npx tsx src/performance/scripts/test-auth-cookie.ts)" npm run perf:home
 ```
 
+helper scripts
+```shell
+# Preview the CRNs delete-pop would select for deletion (filtered:
+# excludes limitedAccess and PROTECTED_CRNS), ordered oldest-allocated first
+npx tsx helper-scripts/get-delete-pop-candidates.ts
+
+# Preview the full caseload ordered by allocatedOn ascending, with dates
+# shown against each CRN (unfiltered - includes limited-access cases)
+npx tsx helper-scripts/get-caseload-ordered-by-allocated-on.ts
+```
+
 
 
 

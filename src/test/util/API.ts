@@ -175,9 +175,11 @@ export interface CaseloadEntryWithAllocatedOn extends CaseloadEntry {
 }
 
 // Returns caseload entries (crn + allocatedOn), ordered by allocatedOn
-// ascending (oldest allocations first). Limited-access cases (returned by
-// the API without an allocatedOn) will not be sorted, and will remain in
-// the position returned by the API.
+// ascending (oldest allocations first). Entries without a usable
+// allocatedOn are placed after all dated entries, rather than being left
+// in their original position (new Date(missing).getTime() is NaN, which
+// Array.sort treats as "equal" and can leave dated entries either side of
+// it out of order).
 // TODO Ask API team to add allocated on as a sort param.
 export const getCaseloadOrderedByAllocatedOn = async (
   username: string,
@@ -185,10 +187,12 @@ export const getCaseloadOrderedByAllocatedOn = async (
   totalElements: number,
 ): Promise<CaseloadEntry[]> => {
   const caseload = await getCaseload(username, token, totalElements);
+  const allocatedOnTime = (allocatedOn?: string | null): number => {
+    const time = new Date(allocatedOn ?? "").getTime();
+    return Number.isNaN(time) ? Infinity : time;
+  };
   return [...caseload].sort(
-    (a, b) =>
-      new Date(a.allocatedOn ?? "").getTime() -
-      new Date(b.allocatedOn ?? "").getTime(),
+    (a, b) => allocatedOnTime(a.allocatedOn) - allocatedOnTime(b.allocatedOn),
   );
 };
 
