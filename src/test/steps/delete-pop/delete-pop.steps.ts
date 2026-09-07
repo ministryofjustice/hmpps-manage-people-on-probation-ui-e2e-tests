@@ -29,8 +29,7 @@ When("I delete offender with CRNs", async ({ page }) => {
   }
   const token = await getClientToken();
   const totalElements = await getCaseloadTotalElements(username, token);
-  console.log(totalElements);
-
+  console.log(`Caseload totalElements: ${totalElements}`);
   let crns: string[];
   if (crnsEnv?.trim()) {
     crns = crnsEnv
