@@ -1,0 +1,81 @@
+name: Delete PoP
+
+on:
+  workflow_dispatch:
+    inputs:
+      delete_limit:
+        description: "Max number of offenders to delete this run"
+        required: false
+        type: string
+      min_remaining_records:
+        description: "Minimum number of caseload records to keep"
+        required: false
+        type: string
+      crns:
+        description: "Optional comma-separated list of CRNs to delete (overrides caseload lookup)"
+        required: false
+        type: string
+
+concurrency:
+  group: delete-pop
+  cancel-in-progress: false
+
+jobs:
+  delete-pop:
+    timeout-minutes: 40
+    runs-on: moj-cloud-platform
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+
+      - name: Clean npm cache
+        run: npm cache clean --force
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright Browsers
+        run: npx playwright install
+
+      - name: Remove Stale Features-gen files
+        run: rm -rf .features-gen
+
+      - name: Run Playwright tests
+        id: tests
+        run: npx bddgen && npx playwright test -g "@delete-pop" --workers=1 --retries=0 --timeout=2000000
+        env:
+          TZ: Europe/London
+          ENV: test
+
+          # URLs
+          DELIUS_URL: https://ndelius.test.probation.service.justice.gov.uk
+          MANAGE_PEOPLE_ON_PROBATION_URL: https://manage-people-on-probation-dev.hmpps.service.justice.gov.uk
+          MAS_API_URL: https://manage-supervision-and-delius-dev.hmpps.service.justice.gov.uk
+          E_SUPERVISION_API_URL: https://esupervision-api-dev.hmpps.service.justice.gov.uk
+          SIGN_IN_URL: https://sign-in-dev.hmpps.service.justice.gov.uk
+          OUTLOOK_API_URL: https://probation-supervision-appointments-api-dev.hmpps.service.justice.gov.uk
+          REMINDERS_UI_URL: https://probation-supervision-reminders-ui-dev.hmpps.service.justice.gov.uk
+          ARNS_SENTENCE_PLAN_URL: https://arns-assessment-platform-dev.hmpps.service.justice.gov.uk/training-session-launcher/browse?scenario=default
+
+          # Credentials
+          DELIUS_USERNAME: ${{ secrets.E2E_DELIUS_USERNAME }}
+          DELIUS_PASSWORD: ${{ secrets.E2E_DELIUS_PASSWORD }}
+          API_USERNAME: ${{ secrets.API_USERNAME }}
+          API_PASSWORD: ${{ secrets.API_PASSWORD }}
+
+          # Delete-pop specific overrides
+          DELETE_LIMIT: ${{ inputs.delete_limit }}
+          MIN_REMAINING_RECORDS: ${{ inputs.min_remaining_records }}
+          CRNS: ${{ inputs.crns }}
+
+      - name: Publish JUnit report
+        if: always()
+        uses: mikepenz/action-junit-report@a9170d5795813c01ab4901ffb045b52bab4ab09d # v6.5.0
+        id: junit
+        with:
+          check_name: Delete PoP results
+          report_paths: junit.xml
