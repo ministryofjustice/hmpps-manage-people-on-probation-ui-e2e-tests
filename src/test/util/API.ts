@@ -105,7 +105,9 @@ export interface CaseloadEntry {
   latestSentence: string;
   numberOfAdditionalSentences: number;
   limitedAccess: boolean;
-  allocatedOn: string;
+  // Limited-access cases are returned by the API without an allocation
+  // date.
+  allocatedOn: string | null;
 }
 
 const CASELOAD_SEARCH_BODY = {
@@ -167,19 +169,31 @@ export const getCaseload = async (
   return body.caseload;
 };
 
-// Returns caseload entries (crn + allocatedOn), ordered by allocatedOn
-// ascending (oldest allocations first).
+export interface CaseloadEntryWithAllocatedOn extends CaseloadEntry {
+  allocatedOn: string;
+}
+
+// Returns caseload entries with a non-null allocatedOn, ordered by
+// allocatedOn ascending (oldest allocations first). Limited-access cases
+// are returned by the API without an allocation date, so they are excluded
+// here rather than sorting them (they would otherwise sort ahead of every real
+// allocation, since new Date(null) is treated as the Unix epoch).
 // TODO Ask API team to add allocated on as a sort param.
 export const getCaseloadOrderedByAllocatedOn = async (
   username: string,
   token: string,
   totalElements: number,
-): Promise<CaseloadEntry[]> => {
+): Promise<CaseloadEntryWithAllocatedOn[]> => {
   const caseload = await getCaseload(username, token, totalElements);
-  return [...caseload].sort(
-    (a, b) =>
-      new Date(a.allocatedOn).getTime() - new Date(b.allocatedOn).getTime(),
-  );
+  return caseload
+    .filter(
+      (entry): entry is CaseloadEntryWithAllocatedOn =>
+        entry.allocatedOn !== null,
+    )
+    .sort(
+      (a, b) =>
+        new Date(a.allocatedOn).getTime() - new Date(b.allocatedOn).getTime(),
+    );
 };
 
 export const getProbationPractitioner = async (crn: string, token: string) => {
