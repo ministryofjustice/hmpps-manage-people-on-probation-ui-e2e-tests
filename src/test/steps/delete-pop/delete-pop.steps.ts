@@ -1,7 +1,7 @@
 import { login } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/steps/delius/login.mjs";
 import { createBdd } from "playwright-bdd";
 import { testContext } from "../../features/Fixtures";
-import { expect, Page } from "@playwright/test";
+import { expect, Page, test } from "@playwright/test";
 import {
   dismissModals,
   findOffenderByCRN,
@@ -84,10 +84,14 @@ When("I delete offender with CRNs", async ({ page }) => {
   }
 
   if (crns.length === 0) {
-    console.log(
-      "No CRNs left to delete after applying DELETE_LIMIT/MIN_REMAINING_RECORDS constraints",
+    // Mark as skipped (not a failure) so a housekeeping run that deleted
+    // nothing is visibly distinct in reports from one that actually
+    // deleted offenders, instead of silently reporting a plain pass.
+    test.skip(
+      true,
+      "No CRNs left to delete after applying DELETE_LIMIT/MIN_REMAINING_RECORDS constraints " +
+        `(totalElements=${totalElements}, deleteLimit=${deleteLimit})`,
     );
-    return;
   }
 
   await login(page);
