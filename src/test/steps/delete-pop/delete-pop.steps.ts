@@ -45,7 +45,9 @@ When("I delete offender with CRNs", async ({ page }) => {
       token,
       totalElements,
     );
-    crns = caseload.map((entry) => entry.crn);
+    crns = caseload
+      .filter(({ limitedAccess }) => limitedAccess !== true)
+      .map(({ crn }) => crn);
   }
   crns = crns.filter((crn) => !PROTECTED_CRNS.includes(crn));
 
