@@ -1,6 +1,6 @@
 // Standalone script to preview the full caseload ordered by allocatedOn
 // ascending, with dates shown against each CRN. Unlike
-// get-caseload-crns.ts, this does not apply the delete-pop
+// get-delete-pop-candidates.ts, this does not apply the delete-pop
 // limitedAccess/PROTECTED_CRNS filtering - it's a raw view of the ordered
 // caseload, useful for inspecting allocation dates directly.
 //
