@@ -93,21 +93,22 @@ export interface CaseloadAppointment {
 }
 
 export interface CaseloadEntry {
-  caseName: {
+  // Limited-access cases are returned by the API with only crn and
+  // limitedAccess populated - every other field is omitted entirely
+  // (not null, just absent), hence all fields below being optional.
+  caseName?: {
     forename: string;
     middleName: string;
     surname: string;
   };
   crn: string;
-  dob: string;
+  dob?: string;
   nextAppointment?: CaseloadAppointment;
   previousAppointment?: CaseloadAppointment;
-  latestSentence: string;
-  numberOfAdditionalSentences: number;
+  latestSentence?: string;
+  numberOfAdditionalSentences?: number;
   limitedAccess: boolean;
-  // Limited-access cases are returned by the API without an allocation
-  // date.
-  allocatedOn: string | null;
+  allocatedOn?: string | null;
 }
 
 const CASELOAD_SEARCH_BODY = {
@@ -173,27 +174,22 @@ export interface CaseloadEntryWithAllocatedOn extends CaseloadEntry {
   allocatedOn: string;
 }
 
-// Returns caseload entries with a non-null allocatedOn, ordered by
-// allocatedOn ascending (oldest allocations first). Limited-access cases
-// are returned by the API without an allocation date, so they are excluded
-// here rather than sorting them (they would otherwise sort ahead of every real
-// allocation, since new Date(null) is treated as the Unix epoch).
+// Returns caseload entries (crn + allocatedOn), ordered by allocatedOn
+// ascending (oldest allocations first). Limited-access cases (returned by
+// the API without an allocatedOn) will not be sorted, and will remain in
+// the position returned by the API.
 // TODO Ask API team to add allocated on as a sort param.
 export const getCaseloadOrderedByAllocatedOn = async (
   username: string,
   token: string,
   totalElements: number,
-): Promise<CaseloadEntryWithAllocatedOn[]> => {
+): Promise<CaseloadEntry[]> => {
   const caseload = await getCaseload(username, token, totalElements);
-  return caseload
-    .filter(
-      (entry): entry is CaseloadEntryWithAllocatedOn =>
-        entry.allocatedOn !== null,
-    )
-    .sort(
-      (a, b) =>
-        new Date(a.allocatedOn).getTime() - new Date(b.allocatedOn).getTime(),
-    );
+  return [...caseload].sort(
+    (a, b) =>
+      new Date(a.allocatedOn ?? "").getTime() -
+      new Date(b.allocatedOn ?? "").getTime(),
+  );
 };
 
 export const getProbationPractitioner = async (crn: string, token: string) => {

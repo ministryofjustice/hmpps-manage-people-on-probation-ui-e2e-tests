@@ -34,5 +34,5 @@ const caseload = await getCaseloadOrderedByAllocatedOn(
 console.log(`caseload (${caseload.length}, oldest allocatedOn first):`);
 console.dir(
   caseload.map(({ crn, allocatedOn }) => `${crn} (${allocatedOn})`),
-  { depth: null },
+  { depth: null, maxArrayLength: null },
 );
