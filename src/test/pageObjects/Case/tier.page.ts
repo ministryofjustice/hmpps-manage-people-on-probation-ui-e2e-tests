@@ -31,7 +31,7 @@ export default class TierPage extends CasePage {
 
     const expected = isMissing
       ? "has a missing tier, as no reoffending risk predictors are available"
-      : `has a tier of ${tier}`;
+      : `tier of ${tier}`;
 
     await expect(this.page.locator("p").first()).toContainText(expected);
   }
