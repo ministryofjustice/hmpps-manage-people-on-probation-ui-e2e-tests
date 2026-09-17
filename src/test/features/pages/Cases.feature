@@ -33,7 +33,7 @@ Scenario Outline: Filter the cases page - '<description>'
     Examples:
       | description      | text    | type | sentence | count    |
       | no filters       |         |      |          | full     |
-      | CRN filter       | Y013288 |      |          | 1        |
+      | CRN filter       | Y029484 |      |          | 1        |
       | sentence filter  |         |      | 307      | filtered |
       | type filter      |         | COAP |          | filtered |
       | no cases         | RANDOM  |      |          | 0        |

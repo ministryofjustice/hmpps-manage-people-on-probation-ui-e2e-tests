@@ -2,8 +2,8 @@ Feature: As a practitioner
   I want to view the risk details for a Pop
 
   @full @risk @integration
-  Scenario Outline: View overview for a case - '<case>'
-    Given Context has been created for "Overview" test
+  Scenario Outline: View risk for a case - '<case>'
+    Given Context has been created for "Risk" test
     And I am logged in
     And I navigate to '<case>'
     And I navigate to risk page
