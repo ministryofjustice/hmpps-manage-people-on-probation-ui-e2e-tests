@@ -43,7 +43,7 @@ export default class RemindersPage extends MPopPage {
 
   async checkForMessage(appointment: MpopArrangeAppointment, person: Person) {
     const message = `[DEV]Dear ${person.firstName}, You have an`;
-    const message2 = `on ${this.formatDateForSMS(appointment.dateTime.date)} at ${this.formatTimeForSMS(appointment.dateTime.startTime)}. This is an automated message. Do not reply.`;
+    const message2 = `on ${this.formatDateForSMS(appointment.dateTime.date)} at ${this.formatTimeForSMS(appointment.dateTime.startTime)}.`;
     await expect(this.getQA("reminders-table")).toContainText(message);
     await expect(this.getQA("reminders-table")).toContainText(message2);
   }

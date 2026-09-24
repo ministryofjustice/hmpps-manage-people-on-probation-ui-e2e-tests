@@ -13,7 +13,7 @@ Feature: As a practitioner
 
     Examples:
       | case    |
-      | X793504 |
+      | Y005508 |
 
 
   @full @outcomes @integration
