@@ -10,4 +10,5 @@ Feature: As a practitioner
     And I see "Is this page useful?" text
     And I see "Yes (opens in new tab)" link at the footer
     And I see "No (opens in new tab)" link at the footer
+    And I see "Get help with an issue or question (opens in new tab)" link at the footer
     And I close the context

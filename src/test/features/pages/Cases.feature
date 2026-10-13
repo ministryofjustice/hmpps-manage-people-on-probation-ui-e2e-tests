@@ -7,7 +7,7 @@ Feature: As a practitioner
     And I navigate to cases page
 
   @full @cases @integration
-  Scenario: View my cases page @raj
+  Scenario: View my cases page
     Then I can view below columns on the cases page:
       | Title            |
       | Cases            |
@@ -33,7 +33,7 @@ Scenario Outline: Filter the cases page - '<description>'
     Examples:
       | description      | text    | type | sentence | count    |
       | no filters       |         |      |          | full     |
-      | CRN filter       | Y013288 |      |          | 1        |
+      | CRN filter       | Y049694 |      |          | 1        |
       | sentence filter  |         |      | 307      | filtered |
       | type filter      |         | COAP |          | filtered |
       | no cases         | RANDOM  |      |          | 0        |
