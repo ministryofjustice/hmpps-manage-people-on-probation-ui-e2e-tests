@@ -27,9 +27,9 @@ Feature: As a practitioner
     And link with href '/case/X756510/record-an-outcome/outcome'
     When I select the outcome link
     Then I land at the page with title 'Record an outcome - Outcome - Manage people on probation'
-    And radio filter PAST_TWO_YEARS is selected by default on record an outcome page
-    When I select the Older than 2 years radio and apply filter
-    Then I validate the results are more than 2 years old
+    And radio filter PAST_THREE_MONTHS is selected by default on record an outcome page
+    When I select the Older than 3 months radio and apply filter
+    Then I validate the results are more than 3 months old
     When I select the all filter option and apply filter
     Then 'All' radio is selected
     And I close the context
