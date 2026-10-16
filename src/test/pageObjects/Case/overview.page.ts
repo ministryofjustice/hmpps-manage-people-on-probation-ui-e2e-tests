@@ -33,7 +33,7 @@ export default class OverviewPage extends CasePage {
   async checkOnlineCheckInsSetup(): Promise<boolean> {
     try {
       await expect(this.getQA("checkinCard").getByRole("link")).toHaveText(
-        "View all online check in details",
+        "Manage online check ins",
         { timeout: 1000 },
       );
       return true;
@@ -82,7 +82,7 @@ export default class OverviewPage extends CasePage {
     if (setup) {
       await this.checkLink(
         "checkinCard",
-        "View all online check in details",
+        "Manage online check ins",
         new ManageCheckInsPage(this.page),
         back,
       );

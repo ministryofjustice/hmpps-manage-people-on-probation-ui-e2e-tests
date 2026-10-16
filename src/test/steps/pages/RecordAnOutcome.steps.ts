@@ -13,7 +13,7 @@ Then(
 );
 
 Then(
-  "radio filter PAST_TWO_YEARS is selected by default on record an outcome page",
+  "radio filter PAST_THREE_MONTHS is selected by default on record an outcome page",
   async ({ ctx }) => {
     const recordAnOutcomePage = new RecordAnOutcomePage(ctx.base.page);
     await recordAnOutcomePage.assertDefaultRadioSelection();
@@ -21,19 +21,19 @@ Then(
 );
 
 When(
-  "I select the Older than {int} years radio and apply filter",
+  "I select the Older than {int} months radio and apply filter",
   async ({ ctx }, years: number) => {
     const recordAnOutcomePage = new RecordAnOutcomePage(ctx.base.page);
-    await recordAnOutcomePage.selectOlderThanYearsRadio(years);
+    await recordAnOutcomePage.selectOlderThanMonthsRadio(years);
     await recordAnOutcomePage.selectApplyFilter();
   },
 );
 
 Then(
-  "I validate the results are more than {int} years old",
-  async ({ ctx }, years: number) => {
+  "I validate the results are more than {int} months old",
+  async ({ ctx }, months: number) => {
     const recordAnOutcomePage = new RecordAnOutcomePage(ctx.base.page);
-    await recordAnOutcomePage.assertOlderThanYearsResults(years);
+    await recordAnOutcomePage.assertOlderThanMonthsResults(months);
   },
 );
 

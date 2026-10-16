@@ -99,7 +99,7 @@ export default class HomePage extends MPopPage {
   async checkFooterLinks(linkName: string) {
     const [newPage] = await Promise.all([
       this.page.context().waitForEvent("page"),
-      this.page.getByRole("link", { name: linkName }).click(),
+      this.page.getByRole("link", { name: linkName }).first().click(),
     ]);
     await newPage.waitForLoadState();
     expect(newPage.url()).not.toBeNull();

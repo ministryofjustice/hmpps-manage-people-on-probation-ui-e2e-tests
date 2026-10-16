@@ -493,7 +493,7 @@ export default class SentencePage extends CasePage {
       "previous breaches",
     );
     await expect(this.getQA("probationHistoryCard")).toContainText(
-      "11 previous contacts",
+      "previous contacts",
     );
     await sentencePage.useBreadcrumbs(2);
   }

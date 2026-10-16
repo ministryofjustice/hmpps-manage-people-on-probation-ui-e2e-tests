@@ -17,20 +17,20 @@ export default class RecordAnOutcomePage extends CasePage {
 
   async assertDefaultRadioSelection() {
     const radioButton = this.page.locator(
-      'input[type="radio"][value="PAST_TWO_YEARS"]',
+      'input[type="radio"][value="PAST_THREE_MONTHS"]',
     );
     await radioButton.isVisible();
     await expect(radioButton).toBeChecked();
   }
 
-  async selectOlderThanYearsRadio(years: number) {
-    if (years === 2) {
+  async selectOlderThanMonthsRadio(months: number) {
+    if (months === 3) {
       await this.page
-        .locator('input[type="radio"][value="OLDER_THAN_TWO_YEARS"]')
+        .locator('input[type="radio"][value="OLDER_THAN_THREE_MONTHS"]')
         .click();
     } else {
       throw new Error(
-        `Radio button for Older than ${years} years not implemented`,
+        `Radio button for Older than ${months} months not implemented`,
       );
     }
   }
@@ -39,15 +39,15 @@ export default class RecordAnOutcomePage extends CasePage {
     await this.page.locator('[data-qa="submit-button"]').click();
   }
 
-  async assertOlderThanYearsResults(years: number) {
+  async assertOlderThanMonthsResults(months: number) {
     const labels = await this.page
       .locator(".govuk-radios__item label")
       .allInnerTexts();
-    // The first few labels are filter options (Past 2 years, Older than 2 years, All)
+    // The first few labels are filter options (Past 3 months, Older than 3 months, All)
     // We need to skip them and look at the actual results.
     const results = labels.filter((text) => text.includes("\n"));
 
-    const thresholdDate = today.minus({ years });
+    const thresholdDate = today.minus({ months });
 
     for (const result of results) {
       // Example result: "AL Contact Type for RAR\nFriday 26 April 2024 from 9am"
@@ -65,7 +65,7 @@ export default class RecordAnOutcomePage extends CasePage {
       ).toBeTruthy();
       expect(
         parsedDate < thresholdDate,
-        `Date ${parsedDate.toISODate()} is not older than ${years} years (threshold: ${thresholdDate.toISODate()})`,
+        `Date ${parsedDate.toISODate()} is not older than ${months} months (threshold: ${thresholdDate.toISODate()})`,
       ).toBeTruthy();
     }
   }

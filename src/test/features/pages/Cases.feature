@@ -7,7 +7,7 @@ Feature: As a practitioner
     And I navigate to cases page
 
   @full @cases @integration
-  Scenario: View my cases page @raj
+  Scenario: View my cases page
     Then I can view below columns on the cases page:
       | Title            |
       | Cases            |
