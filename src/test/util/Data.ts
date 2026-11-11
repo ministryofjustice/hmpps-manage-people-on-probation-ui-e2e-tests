@@ -4,7 +4,7 @@ import {
   data,
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
 import path from "path";
-import {luxonString, MpopDateTime, today, tomorrow} from "./DateTime";
+import { luxonString, MpopDateTime, today, tomorrow } from "./DateTime";
 import * as dotenv from "dotenv";
 import { MpopAttendee } from "./ArrangeAppointment";
 import { DateTime } from "luxon";
