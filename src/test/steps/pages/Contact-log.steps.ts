@@ -117,6 +117,11 @@ Then(
       await expect(contactsPage.getQA("no-results")).toContainText(
         "0 search results",
       );
+    } else if (count === ">1") {
+      const totalResultsCount = await contactsPage
+        .getQA("results-count-total")
+        .textContent();
+      expect(Number(totalResultsCount)).toBeGreaterThan(1);
     } else {
       await expect(contactsPage.getQA("results-count-total")).toHaveText(count);
     }

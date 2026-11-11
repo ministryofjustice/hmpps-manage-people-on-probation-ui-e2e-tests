@@ -24,7 +24,7 @@ export default class CasePage extends MPopPage {
   }
 
   async getName(): Promise<string> {
-    const nameLocator = this.page.locator(`[data-qa="name"]`);
+    const nameLocator = this.page.locator(`[data-qa="personName"]`);
     await expect(nameLocator).toBeVisible();
     const nameText = (await nameLocator.textContent())?.trim() || "";
     return nameText;
