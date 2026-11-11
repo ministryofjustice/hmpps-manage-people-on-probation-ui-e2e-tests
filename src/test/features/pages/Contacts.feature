@@ -23,8 +23,8 @@ Feature: As a practitioner
     And I close the context
 
     Examples:
-      | description           | case    | from      | to        | keywords | hide | compliance             | categories                                 | count    | errors                  |
-      | date range            | X793504 | 11/2/2026 | 15/2/2026 |          |      |                        |                                            | filtered | no errors               |
+      | description | case    | from      | to        | keywords | hide | compliance | categories | count    | errors    |
+      | date range  | X793504 | 11/2/2026 | 15/2/2026 |          |      |            |            | filtered | no errors |
 
 
   @full @contacts @add_frequent_contact
@@ -49,8 +49,8 @@ Feature: As a practitioner
     Then I receive refresh message 'You may need to refresh the page to see it in the contacts list.'
 
     Examples:
-      | description                                | frequent_contact                           | contact_related_to | contact_title | date     | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
-      | Text or Email from other                   | Email or text from other                   | MPoP               |               | TODAY    | 10:01 | This is test message | test.pdf  | true         | true           | true               |
+      | description              | frequent_contact         | contact_related_to | contact_title | date  | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Text or Email from other | Email or text from other | MPoP               |               | TODAY | 10:01 | This is test message | test.pdf  | true         | true           | true               |
 
 
   @full @contacts @add_contact_by_category
@@ -77,8 +77,8 @@ Feature: As a practitioner
 
 
     Examples:
-      | description                                           | category                                              | contact                                           | contact_related_to | contact_title | date     | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
-      | Case management and meetings                          | Case management and meetings                          | Case reviewed by case manager                     | MPoP               |               | TODAY    | 10:01 | This is test message |           | true         | true           | true               |
+      | description                  | category                     | contact                       | contact_related_to | contact_title | date  | time  | contact_details      | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings | Case management and meetings | Case reviewed by case manager | MPoP               |               | TODAY | 10:01 | This is test message |           | true         | true           | true               |
 
 
   @full @contacts @add_contact_by_category
@@ -106,8 +106,8 @@ Feature: As a practitioner
 
 
     Examples:
-      | description                                           | category                                              | contact                                           | contact_related_to | contact_title | date     | time  | contact_details      | outcome                                           | file_name | visor_report | sensitive_info | alert_practitioner |
-      | Case management and meetings                          | Case management and meetings                          | Case decisions                                    | Sentence           |               | TODAY    | 10:01 | This is test message | Contact frequency                                 | test.pdf  | true         | true           | true               |
+      | description                  | category                     | contact        | contact_related_to | contact_title | date  | time  | contact_details      | outcome           | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings | Case management and meetings | Case decisions | Sentence           |               | TODAY | 10:01 | This is test message | Contact frequency | test.pdf  | true         | true           | true               |
 
   @integration @contacts @filter_contacts
   Scenario Outline: View contacts for a Pop - '<description>'
@@ -242,3 +242,23 @@ Feature: As a practitioner
       | Safeguarding and victim liaison                       | Safeguarding and victim liaison                       | Safeguarding enquiries requested                  | Sentence           |               | TODAY    | 10:01 | This is test message | Request not sent - up to date information already |           | true         | true           | true               |
       | Sentence management                                   | Sentence management                                   | Death under supervision category and notification | Sentence           |               | TODAY    | 10:01 | This is test message | Alcohol poisoning                                 |           | true         | false          | true               |
       | Sentence management, Case management and meetings     | Sentence management, Case management and meetings     | Management oversight                              | Sentence           |               | TODAY    | 10:01 | This is test message | Management oversight decision                     | test.pdf  | true         | true           | true               |
+
+
+  @contacts
+  Scenario: Keyword Search - Newly created ET contacts
+    And I navigate to 'Y090299'
+    And I navigate to contact log
+    When I filter the contact log with values
+      | label    | value             |
+      | keywords | Early Termination |
+    Then the contact log contains '1' entries
+
+  @contacts
+  Scenario: Date Range Search - Newly created ET contacts
+    And I navigate to 'Y090299'
+    And I navigate to contact log
+    When I filter the contact log with values
+      | label              | value        |
+      | date_from          | 10/11/2026   |
+      | date_to            | 10/11/2026   |
+    Then the contact log contains '>1' entries

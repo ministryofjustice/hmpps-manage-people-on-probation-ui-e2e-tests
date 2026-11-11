@@ -4,7 +4,7 @@ import {
   data,
 } from "@ministryofjustice/hmpps-probation-integration-e2e-tests/test-data/test-data.mjs";
 import path from "path";
-import { luxonString, MpopDateTime, tomorrow } from "./DateTime";
+import {luxonString, MpopDateTime, today, tomorrow} from "./DateTime";
 import * as dotenv from "dotenv";
 import { MpopAttendee } from "./ArrangeAppointment";
 import { DateTime } from "luxon";
@@ -36,7 +36,7 @@ export const deliusAlert: Contact = {
   category: "All/Always",
   type: "3 Way Meeting (Non NS)",
   alert: true,
-  note: "Words ".repeat(500),
+  note: today.toJSDate() + "Words ".repeat(490),
 };
 
 export const deliusContact = (type: string, date: MpopDateTime): Contact => ({
