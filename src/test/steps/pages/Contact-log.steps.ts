@@ -47,11 +47,11 @@ When("I click on add contact", async ({ ctx }) => {
 
 When("I click on {string} tab", async ({ ctx }, contact) => {
   const page = ctx.base.page;
-  const contactByCategory = page.getByRole("link", {
+  const tabLink = page.getByRole("link", {
     name: contact,
   });
-  await expect(contactByCategory).toBeVisible();
-  await contactByCategory.click();
+  await expect(tabLink).toBeVisible();
+  await tabLink.click();
 });
 
 When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
@@ -154,3 +154,44 @@ Then("there are {string} on contacts page", async ({ ctx }, error: string) => {
     );
   }
 });
+
+When("I select {string} checkbox and search button", async ({ ctx }, cat) => {
+  const page = ctx.base.page;
+  const category = page.getByLabel(cat);
+  await expect(category).toBeVisible();
+  if (!(await category.isChecked())) {
+    await category.check();
+  }
+  const search = page.getByRole("button", { name: "Search" });
+  await expect(search).toBeVisible();
+  await search.click();
+});
+
+Then(
+  "I see the link {string} at add frequently used contact page",
+  async ({ ctx }, expectedLinkText: string) => {
+    const page = ctx.base.page;
+    const addContactPage = new AddContactPage(page);
+
+    await addContactPage.assertRequestEarlyTerminationLink(expectedLinkText);
+  },
+);
+
+When("I search {string} phrase", async ({ ctx }, cat) => {
+  const page = ctx.base.page;
+  const addContactPage = new AddContactPage(page);
+  await addContactPage.enterSearchKeyword(cat);
+  const search = page.getByRole("button", { name: "Search" });
+  await expect(search).toBeVisible();
+  await search.click();
+});
+
+Then(
+  "I see the link {string} in the search results",
+  async ({ ctx }, expectedLinkText: string) => {
+    const page = ctx.base.page;
+    const addContactPage = new AddContactPage(page);
+
+    await addContactPage.assertRequestEarlyTerminationLink(expectedLinkText);
+  },
+);

@@ -244,7 +244,7 @@ Feature: As a practitioner
       | Sentence management, Case management and meetings     | Sentence management, Case management and meetings     | Management oversight                              | Sentence           |               | TODAY    | 10:01 | This is test message | Management oversight decision                     | test.pdf  | true         | true           | true               |
 
 
-  @contacts
+  @contacts @MAN-3678
   Scenario: Keyword Search - Newly created ET contacts
     And I navigate to 'Y090299'
     And I navigate to contact log
@@ -253,7 +253,7 @@ Feature: As a practitioner
       | keywords | Early Termination |
     Then the contact log contains '1' entries
 
-  @contacts
+  @contacts @MAN-3678
   Scenario: Date Range Search - Newly created ET contacts
     And I navigate to 'Y090299'
     And I navigate to contact log
@@ -262,3 +262,16 @@ Feature: As a practitioner
       | date_from          | 10/11/2026   |
       | date_to            | 10/11/2026   |
     Then the contact log contains '>1' entries
+
+  @contacts @MAN-3679
+  Scenario: Early Termination - Find a Contact to Add
+    And I navigate to 'Y090299'
+    And I navigate to contact log
+    When I click on add contact
+    Then I see the link 'Request early termination' at add frequently used contact page
+    And I click on 'Search by category' tab
+    And I select 'Sentence management' checkbox and search button
+    Then I see the link 'Request early termination' in the search results
+    And I click on 'Search by keyword' tab
+    When I search 'Request early termination' phrase
+    Then I see the link 'Request early termination' in the search results
