@@ -265,4 +265,3 @@ export default class AddContactPage extends ContactPage {
     await this.page.locator("#keyword").fill(keyword);
   }
 }
-
