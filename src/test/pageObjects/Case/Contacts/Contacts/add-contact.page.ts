@@ -256,4 +256,12 @@ export default class AddContactPage extends ContactPage {
       return false;
     }
   }
+
+  async assertRequestEarlyTerminationLink(expectedLinkText: string) {
+    await expect(this.getLink(expectedLinkText)).toBeVisible();
+  }
+
+  async enterSearchKeyword(keyword: string) {
+    await this.page.locator("#keyword").fill(keyword);
+  }
 }
