@@ -208,7 +208,6 @@ export default class AddContactPage extends ContactPage {
     await expect(outcome).toBeChecked();
   }
 
-
   async selectSensitiveInformation(value?: string): Promise<void> {
     await this.selectOptionalBinaryQuestion(
       "Does this contact include sensitive information?",
