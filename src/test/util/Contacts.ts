@@ -15,6 +15,7 @@ export interface ContactData {
   date: string;
   time: string;
   contact_details: string;
+  contact_outcome?: string;
   visor_report: boolean;
   sensitive_info: boolean;
   alert_practitioner: boolean;
@@ -103,6 +104,9 @@ export const addContactDataTable = (data: DataTable): ContactData => {
         newContactData.contact = value;
         break;
 
+      case "contact_outcome":
+        newContactData.contact_outcome = value;
+        break;
       case "relation_to":
         newContactData.relation_to = value;
         break;

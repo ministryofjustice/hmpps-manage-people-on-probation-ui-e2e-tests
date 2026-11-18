@@ -9,6 +9,7 @@ export type AddContactDetails = {
   date?: string;
   time?: string;
   contactDetails?: string;
+  contactOutcome?: string;
   outcome?: string;
   fileName?: string;
   visorReport?: string;
@@ -197,6 +198,17 @@ export default class AddContactPage extends ContactPage {
     }
   }
 
+  async selectContactOutcome(value?: string): Promise<void> {
+    if (!value || value.trim() === "") return;
+
+    const outcome = this.page.getByLabel(value);
+
+    await expect(outcome).toBeVisible();
+    await outcome.check();
+    await expect(outcome).toBeChecked();
+  }
+
+
   async selectSensitiveInformation(value?: string): Promise<void> {
     await this.selectOptionalBinaryQuestion(
       "Does this contact include sensitive information?",
@@ -237,6 +249,7 @@ export default class AddContactPage extends ContactPage {
     await this.enterDate(data.date);
     await this.enterTime(data.time);
     await this.enterContactDetails(data.contactDetails);
+    await this.selectContactOutcome(data.contactOutcome);
     await this.selectOutcome(data.outcome);
     await this.uploadFile(data.fileName);
     await this.selectVisorReport(data.visorReport);
@@ -259,6 +272,10 @@ export default class AddContactPage extends ContactPage {
 
   async assertRequestEarlyTerminationLink(expectedLinkText: string) {
     await expect(this.getLink(expectedLinkText)).toBeVisible();
+  }
+
+  async clickRequestEarlyTerminationLink(expectedLinkText: string) {
+    await this.clickLink(expectedLinkText);
   }
 
   async enterSearchKeyword(keyword: string) {
