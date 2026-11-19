@@ -258,9 +258,9 @@ Feature: As a practitioner
     And I navigate to 'Y090299'
     And I navigate to contact log
     When I filter the contact log with values
-      | label              | value        |
-      | date_from          | 10/11/2026   |
-      | date_to            | 10/11/2026   |
+      | label     | value      |
+      | date_from | 10/11/2026 |
+      | date_to   | 10/11/2026 |
     Then the contact log contains '>1' entries
 
   @contacts @MAN-3679
@@ -268,10 +268,92 @@ Feature: As a practitioner
     And I navigate to 'Y090299'
     And I navigate to contact log
     When I click on add contact
-    Then I see the link 'Request early termination' at add frequently used contact page
+    Then I see the link 'Early termination request' at add frequently used contact page
     And I click on 'Search by category' tab
     And I select 'Sentence management' checkbox and search button
-    Then I see the link 'Request early termination' in the search results
+    Then I see the link 'Early termination request' in the search results
     And I click on 'Search by keyword' tab
-    When I search 'Request early termination' phrase
-    Then I see the link 'Request early termination' in the search results
+    When I search 'Early termination request' phrase
+    Then I see the link 'Early termination request' in the search results
+
+
+  @contacts @MAN-3636  @full
+  Scenario: Early Termination - create a contact using frequently used contacts - Checklist in progress
+    And I navigate to 'Y090299'
+    And I navigate to contact log
+    When I click on add contact
+    And I select the link 'Early termination request' at the frequently used contact page
+    And I provide Contact details for ET
+      | label              | value                |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | contact_outcome    | <contact_outcome>    |
+      | file_name          | <file_name>          |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+
+    And I save the contact details
+    Then I receive success message 'Contact created'
+    Examples:
+      | description                  | category                     | contact_outcome       | contact_related_to | contact_title | date  | time  | contact_details      | outcome               | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings | Case management and meetings | Checklist in progress | sentence           |               | TODAY | 07:01 | This is test message | Checklist in progress | test.pdf  | true         | true           | true               |
+
+
+  @contacts @MAN-3636 @full
+  Scenario: Early Termination - create a contact  - Deferred by Practitioner
+    And I navigate to 'Y090299'
+    And I navigate to contact log
+    When I click on add contact
+    And I click on 'Search by category' tab
+    And I select 'Sentence management' checkbox and search button
+    And I select the link 'Early termination request' at the frequently used contact page
+    And I provide Contact details for ET
+      | label              | value                |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | contact_outcome    | <contact_outcome>    |
+      | file_name          | <file_name>          |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+
+    And I save the contact details
+    Then I receive success message 'Contact created'
+    Examples:
+      | description                  | category                     | contact_outcome          | contact_related_to | contact_title | date  | time  | contact_details      |  file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings | Case management and meetings | Deferred by Practitioner | sentence           |               | TODAY | 07:01 | This is test message |  test.pdf  | true         | true           | true               |
+
+
+  @contacts @MAN-3636 @full
+  Scenario: Early Termination - create a contact  - Referred to panel
+    And I navigate to 'Y090299'
+    And I navigate to contact log
+    When I click on add contact
+    And I click on 'Search by keyword' tab
+    When I search 'Early termination request' phrase
+    And I select the link 'Early termination request' at the frequently used contact page
+    And I provide Contact details for ET
+      | label              | value                |
+      | relation_to        | <contact_related_to> |
+      | title              | <contact_title>      |
+      | date               | <date>               |
+      | time               | <time>               |
+      | contact_details    | <contact_details>    |
+      | contact_outcome    | <contact_outcome>    |
+      | file_name          | <file_name>          |
+      | visor_report       | <visor_report>       |
+      | sensitive_info     | <sensitive_info>     |
+      | alert_practitioner | <alert_practitioner> |
+
+    And I save the contact details
+    Then I receive success message 'Contact created'
+    Examples:
+      | description                  | category                     | contact_outcome   | contact_related_to | contact_title | date  | time  | contact_details      | outcome               | file_name | visor_report | sensitive_info | alert_practitioner |
+      | Case management and meetings | Case management and meetings | Referred to panel | sentence           |               | TODAY | 07:01 | This is test message | Checklist in progress | test.pdf  | true         | true           | true               |

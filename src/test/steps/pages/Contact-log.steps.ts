@@ -74,6 +74,7 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
         title: data.title,
         date: convertFeatureDateToString(data.date),
         time: data.time,
+        contactOutcome: data.contact_outcome,
         outcome: data.outcome,
         contactDetails: data.contact_details,
         fileName: data.file_name,
@@ -85,6 +86,29 @@ When("I provide Contact details", async ({ ctx }, dataTable: DataTable) => {
     }
   }
 });
+
+When(
+  "I provide Contact details for ET",
+  async ({ ctx }, dataTable: DataTable) => {
+    const page = ctx.base.page;
+    const addContact = new AddContactPage(page);
+    await addContact.contactDetails();
+    const data = dataTable.rowsHash();
+    await addContact.provideContactDetails({
+      contact: data.contact,
+      relationTo: data.relation_to,
+      title: data.title,
+      date: convertFeatureDateToString(data.date),
+      time: data.time,
+      contactOutcome: data.contact_outcome,
+      contactDetails: data.contact_details,
+      fileName: data.file_name,
+      visorReport: data.visor_report,
+      sensitiveInfo: data.sensitive_info,
+      alertPractitioner: data.alert_practitioner,
+    });
+  },
+);
 
 When("I save the contact details", async ({ ctx }) => {
   const page = ctx.base.page;
@@ -193,5 +217,15 @@ Then(
     const addContactPage = new AddContactPage(page);
 
     await addContactPage.assertRequestEarlyTerminationLink(expectedLinkText);
+  },
+);
+
+When(
+  "I select the link {string} at the frequently used contact page",
+  async ({ ctx }, expectedLinkText: string) => {
+    const page = ctx.base.page;
+    const addContactPage = new AddContactPage(page);
+
+    await addContactPage.clickRequestEarlyTerminationLink(expectedLinkText);
   },
 );
